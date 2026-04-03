@@ -1,0 +1,63 @@
+{
+  "datasetId": "quelattes-questions-v1",
+  "domain": "lattes-cv",
+  "language": "en",
+  "questions": [
+    {
+      "id": "q_exact_001",
+      "question": "How many publications does the researcher have in 2026?",
+      "classification": "exact_match",
+      "evaluationType": "exact_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "number"
+    },
+    {
+      "id": "q_exact_002",
+      "question": "What is the researcher’s current institutional affiliation?",
+      "classification": "exact_match",
+      "evaluationType": "semantic_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "string"
+    },
+    {
+      "id": "q_exact_003",
+      "question": "In which year did the researcher obtain their Ph.D.?",
+      "classification": "exact_match",
+      "evaluationType": "exact_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "number"
+    },
+    {
+      "id": "q_analytical_001",
+      "question": "What skills or areas of expertise can be inferred from the researcher’s teaching and research activities?",
+      "classification": "analytical_interpretative",
+      "evaluationType": "semantic_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "summary"
+    },
+    {
+      "id": "q_analytical_002",
+      "question": "What trend can be observed in the researcher’s research topics over time?",
+      "classification": "analytical_interpretative",
+      "evaluationType": "semantic_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "summary"
+    },
+    {
+      "id": "q_oos_001",
+      "question": "How many children does the researcher have?",
+      "classification": "out_of_scope",
+      "evaluationType": "unanswerable",
+      "answerability": "unanswerable",
+      "expectedAnswerType": "refusal"
+    },
+    {
+      "id": "q_oos_002",
+      "question": "What is the researcher’s favorite programming language?",
+      "classification": "out_of_scope",
+      "evaluationType": "unanswerable",
+      "answerability": "unanswerable",
+      "expectedAnswerType": "refusal"
+    }
+  ]
+}

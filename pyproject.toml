@@ -1,0 +1,27 @@
+[project]
+name = "copa"
+version = "0.1.0"
+description = "Strict uv + Nix (uv2nix) template"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "requests>=2.31",
+  "jsonschema>=4.22",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+]
+
+[project.scripts]
+copa = "copa.cli:main"
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.20",
+]

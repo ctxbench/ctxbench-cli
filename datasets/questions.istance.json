@@ -1,0 +1,158 @@
+{
+  "datasetId": "quelattes-question-instances-v2",
+  "domain": "lattes-cv",
+  "instances": [
+    {
+      "questionId": "q_exact_001",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": 3,
+      "acceptedAnswers": [3, "3", "Three"],
+      "notes": "Includes three accepted publications in 2026."
+    },
+    {
+      "questionId": "q_exact_001",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": 0,
+      "acceptedAnswers": [0, "0", "Zero"],
+      "notes": "No publications listed for 2026."
+    },
+
+    {
+      "questionId": "q_exact_002",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": "Universidade de Fortaleza (UNIFOR)",
+      "acceptedAnswers": [
+        "Universidade de Fortaleza",
+        "UNIFOR",
+        "Professor at Universidade de Fortaleza"
+      ]
+    },
+    {
+      "questionId": "q_exact_002",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": "Universidade Estadual do Ceará (UECE)",
+      "acceptedAnswers": [
+        "Universidade Estadual do Ceará",
+        "UECE",
+        "Professor at Universidade Estadual do Ceará"
+      ]
+    },
+
+    {
+      "questionId": "q_exact_003",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": 1999,
+      "acceptedAnswers": [1999, "1999"]
+    },
+    {
+      "questionId": "q_exact_003",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": 2011,
+      "acceptedAnswers": [2011, "2011"]
+    },
+
+    {
+      "questionId": "q_analytical_001",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": "Expertise in software engineering, distributed systems, cloud computing, microservices, resilience, self-adaptive systems, DevOps, and generative AI applications.",
+      "acceptedAnswers": [
+        "Software engineering, distributed systems, cloud computing, microservices, resilience, and DevOps.",
+        "Expertise in software architecture, cloud, microservices, and adaptive systems."
+      ]
+    },
+    {
+      "questionId": "q_analytical_001",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": "Expertise in software engineering, distributed systems, self-adaptive systems, model-driven engineering, microservices, and AI for software engineering.",
+      "acceptedAnswers": [
+        "Software engineering, distributed systems, model-driven engineering, and AI.",
+        "Expertise in adaptive systems, software architecture, and microservices."
+      ]
+    },
+
+    {
+      "questionId": "q_analytical_002",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": "Evolution from distributed systems to software architecture, then cloud computing, and recently microservices, resilience, and generative AI.",
+      "acceptedAnswers": [
+        "From distributed systems to cloud computing and microservices.",
+        "Trend toward cloud-native systems and AI-related topics."
+      ]
+    },
+    {
+      "questionId": "q_analytical_002",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": "Evolution from distributed systems and formal methods to software engineering, self-adaptive systems, microservices, and AI for software engineering.",
+      "acceptedAnswers": [
+        "From distributed systems to adaptive systems and AI.",
+        "Trend toward software engineering and AI-related topics."
+      ]
+    },
+
+    {
+      "questionId": "q_oos_001",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": "Not enough information.",
+      "acceptedAnswers": [
+        "Not enough information.",
+        "The provided context does not contain this information."
+      ]
+    },
+    {
+      "questionId": "q_oos_001",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": "Not enough information.",
+      "acceptedAnswers": [
+        "Not enough information.",
+        "The provided context does not contain this information."
+      ]
+    },
+
+    {
+      "questionId": "q_oos_002",
+      "cvId": "cv_nabor",
+      "researcherName": "Nabor das Chagas Mendonça",
+      "lattesId": "5660469902738038",
+      "goldAnswer": "Not enough information.",
+      "acceptedAnswers": [
+        "Not enough information.",
+        "The provided context does not contain this information."
+      ]
+    },
+    {
+      "questionId": "q_oos_002",
+      "cvId": "cv_paulo_henrique",
+      "researcherName": "Paulo Henrique Mendes Maia",
+      "lattesId": "7227955029154651",
+      "goldAnswer": "Not enough information.",
+      "acceptedAnswers": [
+        "Not enough information.",
+        "The provided context does not contain this information."
+      ]
+    }
+  ]
+}
