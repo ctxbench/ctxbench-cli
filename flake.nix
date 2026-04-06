@@ -52,29 +52,24 @@
           ]
         );
 
-        copaLib = pyPkgs.copa.overrideAttrs (old: {
-          postInstall = (old.postInstall or "") + ''
-            schemaDst="$out/${python.sitePackages}/schemas"
-            mkdir -p "$schemaDst"
-            cp -r ${./src/schemas}/. "$schemaDst/"
-          '';
-        });
-
         runtimePython = python.withPackages (
           ps: with ps; [
             requests
             jsonschema
+            pydantic
           ]
         );
 
         copaPkg = pkgs.symlinkJoin {
           name = "copa";
-          paths = [ copaLib ];
+          paths = [ runtimePython ];
           nativeBuildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
-            rm "$out/bin/copa"
+            if [ -e "$out/bin/copa" ]; then
+              rm "$out/bin/copa"
+            fi
             makeWrapper "${runtimePython}/bin/python" "$out/bin/copa" \
-              --prefix PYTHONPATH : "${copaLib}/${python.sitePackages}" \
+              --prefix PYTHONPATH : "${./src}" \
               --add-flags "-m" \
               --add-flags "copa.cli"
           '';
@@ -105,7 +100,7 @@
 
           shellHook = ''
             export REPO_ROOT="$(pwd)"
-            unset PYTHONPATH
+            export PYTHONPATH="$REPO_ROOT/src"
             export VIRTUAL_ENV="${venv}"
             export PATH="${copaPkg}/bin:${venv}/bin:$PATH"
 
@@ -114,7 +109,7 @@
               ln -sfn "${venv}" .venv
             fi
 
-            echo "Strict dev shell ready (from uv.lock)."
+            echo "COPA dev shell ready (from uv.lock)."
             echo "Python: $(which python)"
             python -m debugpy --version || true
           '';

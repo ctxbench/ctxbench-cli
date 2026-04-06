@@ -1,0 +1,13 @@
+{
+  "datasetId": "basic-question-instances-v1",
+  "domain": "demo",
+  "instances": [
+    {
+      "questionId": "q_exact_001",
+      "cvId": "cv_demo",
+      "researcherName": "Demo Researcher",
+      "goldAnswer": 3,
+      "acceptedAnswers": [3, "3", "three"]
+    }
+  ]
+}

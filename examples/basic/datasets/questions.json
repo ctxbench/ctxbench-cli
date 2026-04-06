@@ -1,0 +1,15 @@
+{
+  "datasetId": "basic-questions-v1",
+  "domain": "demo",
+  "language": "en",
+  "questions": [
+    {
+      "id": "q_exact_001",
+      "question": "How many publications does the researcher have in 2026?",
+      "classification": "exact_match",
+      "evaluationType": "exact_match",
+      "answerability": "answerable",
+      "expectedAnswerType": "number"
+    }
+  ]
+}
