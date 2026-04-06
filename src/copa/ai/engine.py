@@ -51,7 +51,7 @@ class Engine:
         lowered = name.lower()
         if lowered.startswith("gpt") or lowered.startswith("openai"):
             return OpenAIModel(params=params)
-        if lowered.startswith("gemini"):
+        if lowered.startswith("gemini") or lowered.startswith("google"):
             return GeminiModel(params=params)
         if lowered.startswith("claude") or lowered.startswith("anthropic"):
             return ClaudeModel(params=params)
