@@ -18,14 +18,17 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     request = AIRequest(
         question=question.question,
         context=context,
-        model_name=runspec.model,
+        provider_name=runspec.provider,
+        model_name=str(runspec.params.get("model_name", "")),
         strategy_name=runspec.strategy,
+        context_format=runspec.format,
         params=runspec.params,
         metadata={
             "question_id": runspec.questionId,
             "context_id": runspec.contextId,
             "experiment_id": runspec.experimentId,
             "format": runspec.format,
+            "provider": runspec.provider,
         },
     )
 
@@ -37,6 +40,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
 
     trace = RunTrace()
     if runspec.trace.enabled:
+        trace.aiTrace = ai_result.trace
         if runspec.trace.save_tool_calls:
             trace.toolCalls = ai_result.tool_calls
         if runspec.trace.save_raw_response:
@@ -51,7 +55,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         dataset=runspec.dataset,
         questionId=runspec.questionId,
         contextId=runspec.contextId,
-        model=runspec.model,
+        provider=runspec.provider,
         strategy=runspec.strategy,
         format=runspec.format,
         repeatIndex=runspec.repeatIndex,

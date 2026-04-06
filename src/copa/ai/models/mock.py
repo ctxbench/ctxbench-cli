@@ -3,22 +3,28 @@ from __future__ import annotations
 import json
 import re
 
-from copa.ai.models.base import AIRequest, AIResult, ModelAdapter
+from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse
 
 
 class MockModel(ModelAdapter):
     name = "mock"
 
-    def generate(self, prompt: str, request: AIRequest) -> AIResult:
+    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
         question_id = request.metadata.get("question_id", "")
         answer = self._extract_answer(request.context, question_id)
-        return AIResult(
-            answer=answer,
-            usage={
-                "inputTokens": len(prompt.split()),
-                "outputTokens": len(answer.split()),
+        input_tokens = len(model_input.prompt.split())
+        output_tokens = len(answer.split())
+        return ModelResponse(
+            text=answer,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            total_tokens=input_tokens + output_tokens,
+            duration_ms=0,
+            raw_response={
+                "system_instruction_preview": model_input.system_instruction[:200],
+                "prompt_preview": model_input.prompt[:200],
             },
-            raw_response={"prompt_preview": prompt[:200]},
+            metadata={"provider": "mock"},
         )
 
     def _extract_answer(self, context: str, question_id: str) -> str:

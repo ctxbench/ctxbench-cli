@@ -6,12 +6,12 @@ from typing import Any
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse
 
 
-class OpenAIModel(ModelAdapter):
+class ClaudeModel(ModelAdapter):
     def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
         client = self._create_client()
         payload = self._build_payload(model_input, request)
         started_at = perf_counter()
-        response = client.responses.create(**payload)
+        response = client.messages.create(**payload)
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         return ModelResponse(
@@ -21,49 +21,39 @@ class OpenAIModel(ModelAdapter):
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             duration_ms=duration_ms,
-            metadata={"provider": "openai", "model": request.model_name},
+            metadata={"provider": "claude", "model": request.model_name},
         )
 
     def _create_client(self) -> Any:
         try:
-            from openai import OpenAI
+            from anthropic import Anthropic
         except ImportError as exc:  # pragma: no cover
-            raise RuntimeError("OpenAI SDK is not installed.") from exc
-        return OpenAI(api_key=self.params.get("api_key"))
+            raise RuntimeError("Anthropic SDK is not installed.") from exc
+        return Anthropic(api_key=self.params.get("api_key"))
 
     def _build_payload(self, model_input: ModelInput, request: AIRequest) -> dict[str, Any]:
         params = self._merged_params(request)
         payload: dict[str, Any] = {
             "model": request.model_name,
-            "instructions": model_input.system_instruction,
-            "input": model_input.prompt,
+            "system": model_input.system_instruction,
+            "messages": [{"role": "user", "content": model_input.prompt}],
+            "max_tokens": params.get("max_tokens", 1024),
         }
         if "temperature" in params:
             payload["temperature"] = params["temperature"]
-        if "max_tokens" in params:
-            payload["max_output_tokens"] = params["max_tokens"]
-        if "max_output_tokens" in params:
-            payload["max_output_tokens"] = params["max_output_tokens"]
         return payload
 
     def _extract_text(self, response: Any) -> str:
-        text = getattr(response, "output_text", None)
-        if isinstance(text, str):
-            return text
-        output = getattr(response, "output", None)
-        if isinstance(output, list):
+        content = getattr(response, "content", None)
+        if isinstance(content, list):
             parts: list[str] = []
-            for item in output:
-                content = getattr(item, "content", None)
-                if not isinstance(content, list):
-                    continue
-                for block in content:
-                    value = getattr(block, "text", None)
-                    if isinstance(value, str):
-                        parts.append(value)
+            for block in content:
+                value = getattr(block, "text", None)
+                if isinstance(value, str):
+                    parts.append(value)
             if parts:
                 return "\n".join(parts).strip()
-        raise ValueError("OpenAI response did not contain text output.")
+        raise ValueError("Claude response did not contain text output.")
 
     def _extract_usage(self, response: Any) -> tuple[int | None, int | None, int | None]:
         usage = getattr(response, "usage", None)
@@ -79,8 +69,8 @@ class OpenAIModel(ModelAdapter):
     def _normalize_raw_response(self, response: Any) -> Any:
         if hasattr(response, "model_dump"):
             return response.model_dump(mode="json")
-        if hasattr(response, "dict"):
-            return response.dict()
+        if hasattr(response, "to_dict"):
+            return response.to_dict()
         return response
 
     def _merged_params(self, request: AIRequest) -> dict[str, Any]:

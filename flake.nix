@@ -52,31 +52,23 @@
           ]
         );
 
-        runtimePython = python.withPackages (
-          ps: with ps; [
-            requests
-            jsonschema
-            pydantic
-          ]
-        );
+        venv = pyPkgs.mkVirtualEnv "copa-venv" {
+          copa = [ "dev" ];
+        };
 
         copaPkg = pkgs.symlinkJoin {
           name = "copa";
-          paths = [ runtimePython ];
+          paths = [ venv ];
           nativeBuildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
             if [ -e "$out/bin/copa" ]; then
               rm "$out/bin/copa"
             fi
-            makeWrapper "${runtimePython}/bin/python" "$out/bin/copa" \
+            makeWrapper "${venv}/bin/python" "$out/bin/copa" \
               --prefix PYTHONPATH : "${./src}" \
               --add-flags "-m" \
               --add-flags "copa.cli"
           '';
-        };
-
-        venv = pyPkgs.mkVirtualEnv "copa-venv" {
-          copa = [ "dev" ];
         };
 
       in
@@ -102,7 +94,7 @@
             export REPO_ROOT="$(pwd)"
             export PYTHONPATH="$REPO_ROOT/src"
             export VIRTUAL_ENV="${venv}"
-            export PATH="${copaPkg}/bin:${venv}/bin:$PATH"
+            export PATH="${venv}/bin:${copaPkg}/bin:$PATH"
 
             # opcional: ajuda plugins que procuram uma pasta .venv no projeto
             if [ ! -e .venv ]; then

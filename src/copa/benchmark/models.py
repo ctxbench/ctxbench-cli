@@ -13,7 +13,7 @@ class ExperimentDataset(BaseModel):
 
 class ExperimentParams(BaseModel):
     common: dict[str, Any] = Field(default_factory=dict)
-    model: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    provider: dict[str, dict[str, Any]] = Field(default_factory=dict)
 
 
 class ExperimentExecution(BaseModel):
@@ -45,7 +45,7 @@ class Experiment(BaseModel):
     execution: ExperimentExecution = Field(default_factory=ExperimentExecution)
 
     def _validate_model(self) -> None:
-        required = {"model", "strategy", "format"}
+        required = {"provider", "strategy", "format"}
         missing = [name for name in sorted(required) if name not in self.factors]
         if missing:
             raise ValueError(f"Experiment factors missing required keys: {', '.join(missing)}")
@@ -54,6 +54,9 @@ class Experiment(BaseModel):
             raise ValueError(f"Experiment factors must not be empty: {', '.join(sorted(empty))}")
         if self.execution.repeats < 1:
             raise ValueError("Experiment execution.repeats must be >= 1.")
+        model_name = self.params.common.get("model_name")
+        if not isinstance(model_name, str) or not model_name.strip():
+            raise ValueError("Experiment params.common.model_name must be a non-empty string.")
 
 
 class RunSpec(BaseModel):
@@ -62,7 +65,7 @@ class RunSpec(BaseModel):
     dataset: ExperimentDataset
     questionId: str
     contextId: str
-    model: str
+    provider: str
     strategy: str
     format: str
     params: dict[str, Any] = Field(default_factory=dict)
@@ -79,6 +82,7 @@ class RunTiming(BaseModel):
 
 
 class RunTrace(BaseModel):
+    aiTrace: dict[str, Any] = Field(default_factory=dict)
     toolCalls: list[dict[str, Any]] = Field(default_factory=list)
     rawResponse: Any | None = None
     error: str | None = None
@@ -99,7 +103,7 @@ class RunResult(BaseModel):
     dataset: ExperimentDataset
     questionId: str
     contextId: str
-    model: str
+    provider: str
     strategy: str
     format: str
     repeatIndex: int

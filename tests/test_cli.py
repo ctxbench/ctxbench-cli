@@ -34,7 +34,8 @@ def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
     files = sorted(out_dir.glob("*.json"))
     assert len(files) == 2
     first = json.loads(files[0].read_text(encoding="utf-8"))
-    assert first["model"] == "mock"
+    assert first["provider"] == "mock"
+    assert first["params"]["model_name"] == "mock"
     assert first["strategy"] == "inline"
     assert first["format"] in {"json", "text"}
     assert jsonl_path.exists()
@@ -80,6 +81,8 @@ def test_run_and_eval_jsonl_flow(tmp_path):
     result = json.loads(result_files[0].read_text(encoding="utf-8"))
     assert result["status"] == "success"
     assert result["evaluation"]["status"] == "evaluated"
+    assert result["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
+    assert result["trace"]["aiTrace"]["events"][-1]["name"] == "engine.execute"
     assert results_jsonl.exists()
 
     assert (

@@ -12,7 +12,7 @@
     "task",
     "instance",
     "strategy",
-    "model",
+    "provider",
     "budgets",
     "factorLevels"
   ],
@@ -86,13 +86,12 @@
       }
     },
 
-    "model": {
+    "provider": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["provider", "model"],
+      "required": ["provider", "params"],
       "properties": {
         "provider": { "type": "string", "minLength": 1 },
-        "model": { "type": "string", "minLength": 1 },
         "params": { "$ref": "#/$defs/ModelParams" }
       }
     },
@@ -169,6 +168,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "model_name": { "type": "string", "minLength": 1 },
         "temperature": { "type": "number", "minimum": 0, "maximum": 2 },
         "topP": { "type": "number", "minimum": 0, "maximum": 1 },
         "maxOutputTokens": { "type": "integer", "minimum": 1 },

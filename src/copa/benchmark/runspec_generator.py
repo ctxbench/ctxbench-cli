@@ -7,16 +7,16 @@ from copa.dataset.provider import DatasetProvider
 from copa.util.ids import runspec_id
 
 
-def resolve_params(experiment: Experiment, model_name: str) -> dict:
+def resolve_params(experiment: Experiment, provider_name: str) -> dict:
     common = dict(experiment.params.common)
-    model_specific = experiment.params.model.get(model_name, {})
-    return {**common, **model_specific}
+    provider_specific = experiment.params.provider.get(provider_name, {})
+    return {**common, **provider_specific}
 
 
 def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunSpec]:
     provider = DatasetProvider.from_experiment(experiment, base_dir)
     questions = provider.list_question_ids()
-    models = experiment.factors.get("model", [])
+    providers = experiment.factors.get("provider", [])
     strategies = experiment.factors.get("strategy", [])
     formats = experiment.factors.get("format", [])
     output_root = str((Path(base_dir) / experiment.execution.output).resolve())
@@ -25,9 +25,9 @@ def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunS
     for question_id in questions:
         for format_name in formats:
             for context_id in provider.list_context_ids(format_name):
-                for model_name in models:
+                for provider_name in providers:
                     for strategy_name in strategies:
-                        params = resolve_params(experiment, model_name)
+                        params = resolve_params(experiment, provider_name)
                         for repeat_index in range(1, experiment.execution.repeats + 1):
                             runspecs.append(
                                 RunSpec(
@@ -35,7 +35,7 @@ def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunS
                                         experiment.id,
                                         question_id,
                                         context_id,
-                                        model_name,
+                                        provider_name,
                                         strategy_name,
                                         format_name,
                                         repeat_index,
@@ -44,7 +44,7 @@ def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunS
                                     dataset=provider.dataset_paths,
                                     questionId=question_id,
                                     contextId=context_id,
-                                    model=model_name,
+                                    provider=provider_name,
                                     strategy=strategy_name,
                                     format=format_name,
                                     params=params,
