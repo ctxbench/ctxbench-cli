@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import json
 from time import perf_counter
 from typing import Any
 
-from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse
+from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
 
 
 class ClaudeModel(ModelAdapter):
@@ -16,12 +17,14 @@ class ClaudeModel(ModelAdapter):
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         return ModelResponse(
             text=self._extract_text(response),
+            requested_tool_calls=self._extract_tool_calls(response),
             raw_response=self._normalize_raw_response(response),
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             duration_ms=duration_ms,
             metadata={"provider": "claude", "model": request.model_name},
+            continuation_state=self._build_continuation_state(response),
         )
 
     def _create_client(self) -> Any:
@@ -36,24 +39,90 @@ class ClaudeModel(ModelAdapter):
         payload: dict[str, Any] = {
             "model": request.model_name,
             "system": model_input.system_instruction,
-            "messages": [{"role": "user", "content": model_input.prompt}],
+            "messages": self._build_messages(model_input),
             "max_tokens": params.get("max_tokens", 1024),
         }
+        if model_input.tools:
+            payload["tools"] = [
+                {
+                    "name": tool.name,
+                    "description": tool.description,
+                    "input_schema": tool.input_schema,
+                }
+                for tool in model_input.tools
+            ]
         if "temperature" in params:
             payload["temperature"] = params["temperature"]
         return payload
+
+    def _build_messages(self, model_input: ModelInput) -> list[dict[str, Any]]:
+        messages: list[dict[str, Any]] = [{"role": "user", "content": model_input.prompt}]
+        assistant_content = model_input.continuation_state.get("assistant_content")
+        if isinstance(assistant_content, list) and assistant_content:
+            messages.append({"role": "assistant", "content": assistant_content})
+        elif model_input.previous_tool_calls:
+            messages.append(
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "tool_use",
+                            "id": tool_call.id,
+                            "name": tool_call.name,
+                            "input": tool_call.arguments,
+                        }
+                        for tool_call in model_input.previous_tool_calls
+                    ],
+                }
+            )
+        if model_input.tool_results:
+            messages.append(
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": result.tool_call_id,
+                            "content": json.dumps(result.content),
+                            "is_error": result.is_error,
+                        }
+                        for result in model_input.tool_results
+                    ],
+                }
+            )
+        return messages
 
     def _extract_text(self, response: Any) -> str:
         content = getattr(response, "content", None)
         if isinstance(content, list):
             parts: list[str] = []
             for block in content:
+                block_type = getattr(block, "type", None)
+                if block_type and block_type != "text":
+                    continue
                 value = getattr(block, "text", None)
                 if isinstance(value, str):
                     parts.append(value)
             if parts:
                 return "\n".join(parts).strip()
-        raise ValueError("Claude response did not contain text output.")
+        return ""
+
+    def _extract_tool_calls(self, response: Any) -> list[ToolCall]:
+        content = getattr(response, "content", None)
+        if not isinstance(content, list):
+            return []
+        tool_calls: list[ToolCall] = []
+        for block in content:
+            if getattr(block, "type", None) != "tool_use":
+                continue
+            tool_calls.append(
+                ToolCall(
+                    id=getattr(block, "id", None),
+                    name=str(getattr(block, "name", "")),
+                    arguments=getattr(block, "input", {}) or {},
+                )
+            )
+        return tool_calls
 
     def _extract_usage(self, response: Any) -> tuple[int | None, int | None, int | None]:
         usage = getattr(response, "usage", None)
@@ -71,7 +140,24 @@ class ClaudeModel(ModelAdapter):
             return response.model_dump(mode="json")
         if hasattr(response, "to_dict"):
             return response.to_dict()
+        if isinstance(response, list):
+            return [self._normalize_raw_response(item) for item in response]
+        if isinstance(response, dict):
+            return {key: self._normalize_raw_response(value) for key, value in response.items()}
+        if hasattr(response, "__dict__"):
+            return {
+                key: self._normalize_raw_response(value)
+                for key, value in vars(response).items()
+                if not key.startswith("_")
+            }
         return response
+
+    def _build_continuation_state(self, response: Any) -> dict[str, Any]:
+        content = getattr(response, "content", None)
+        normalized = self._normalize_raw_response(content)
+        if isinstance(normalized, list):
+            return {"assistant_content": normalized}
+        return {}
 
     def _merged_params(self, request: AIRequest) -> dict[str, Any]:
         params = dict(self.params)

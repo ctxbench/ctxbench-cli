@@ -71,7 +71,7 @@ class TraceCollector:
     ) -> None:
         self.events.append(
             TraceEvent(
-                type="model",
+                type="model.generate",
                 name="model.generate",
                 duration_ms=duration_ms,
                 metadata=metadata or {},
@@ -86,6 +86,39 @@ class TraceCollector:
             derived_total = input_tokens + output_tokens
         self.metrics.total_tokens = self._sum_optional(self.metrics.total_tokens, derived_total)
 
+    def record_tool_call(self, *, name: str, arguments: dict[str, Any] | None = None) -> None:
+        self.events.append(
+            TraceEvent(
+                type="mcp.tool_call",
+                name="mcp.tool_call",
+                metadata={"tool_name": name, "arguments": arguments or {}},
+            )
+        )
+        self.metrics.mcp_tool_calls += 1
+
+    def record_tool_result(
+        self,
+        *,
+        name: str,
+        result: Any,
+        is_error: bool = False,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        event_metadata: dict[str, Any] = {
+            "tool_name": name,
+            "result": result,
+            "is_error": is_error,
+        }
+        if metadata:
+            event_metadata.update(metadata)
+        self.events.append(
+            TraceEvent(
+                type="mcp.tool_result",
+                name="mcp.tool_result",
+                metadata=event_metadata,
+            )
+        )
+
     def record_error(self, error: str, metadata: dict[str, Any] | None = None) -> None:
         event_metadata = {"error": error}
         if metadata:
@@ -98,7 +131,7 @@ class TraceCollector:
     def _apply_span_metrics(self, event: TraceEvent) -> None:
         if event.name == "engine.execute":
             self.metrics.total_duration_ms = event.duration_ms
-        elif event.name == "strategy.inline.execute":
+        elif event.name in {"strategy.inline.execute", "strategy.mcp.execute"}:
             self.metrics.strategy_duration_ms = event.duration_ms
 
     def _sum_optional(self, current: int | None, value: int | None) -> int | None:

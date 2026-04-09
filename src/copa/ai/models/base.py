@@ -5,6 +5,26 @@ from typing import Any
 from copa._compat import BaseModel, Field
 
 
+class ToolSpec(BaseModel):
+    name: str
+    description: str = ""
+    input_schema: dict[str, Any] = Field(default_factory=dict)
+
+
+class ToolCall(BaseModel):
+    id: str | None = None
+    name: str
+    arguments: dict[str, Any] = Field(default_factory=dict)
+
+
+class ToolResult(BaseModel):
+    name: str
+    content: Any
+    tool_call_id: str | None = None
+    is_error: bool = False
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
 class AIRequest(BaseModel):
     question: str
     context: str
@@ -17,18 +37,24 @@ class AIRequest(BaseModel):
 
 
 class ModelInput(BaseModel):
-    system_instruction: str
+    system_instruction: str = ""
     prompt: str
+    tools: list[ToolSpec] = Field(default_factory=list)
+    previous_tool_calls: list[ToolCall] = Field(default_factory=list)
+    tool_results: list[ToolResult] = Field(default_factory=list)
+    continuation_state: dict[str, Any] = Field(default_factory=dict)
 
 
 class ModelResponse(BaseModel):
-    text: str
+    text: str = ""
+    requested_tool_calls: list[ToolCall] = Field(default_factory=list)
     raw_response: Any | None = None
     input_tokens: int | None = None
     output_tokens: int | None = None
     total_tokens: int | None = None
     duration_ms: int | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
+    continuation_state: dict[str, Any] = Field(default_factory=dict)
 
 
 class AIResult(BaseModel):

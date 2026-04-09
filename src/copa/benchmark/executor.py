@@ -6,7 +6,9 @@ from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest
 from copa.benchmark.evaluation import evaluate_result
 from copa.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
+from copa.dataset.contexts import context_path
 from copa.dataset.provider import DatasetProvider
+from copa.datasets.lattes.provider import create_lattes_mcp_runtime
 from copa.util.clock import utc_now_iso
 
 
@@ -29,12 +31,22 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             "experiment_id": runspec.experimentId,
             "format": runspec.format,
             "provider": runspec.provider,
+            "context_path": str(context_path(runspec.dataset.contexts, runspec.contextId, runspec.format).resolve()),
         },
     )
 
     started_at = utc_now_iso()
     start = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
-    ai_result = engine.execute(request)
+    active_engine = engine
+    owned_engine: Engine | None = None
+    if runspec.strategy == "mcp" and not engine.has_mcp_runtime():
+        owned_engine = engine.copy_with_mcp_runtime(create_lattes_mcp_runtime())
+        active_engine = owned_engine
+    try:
+        ai_result = active_engine.execute(request)
+    finally:
+        if owned_engine is not None:
+            owned_engine.close()
     finished_at = utc_now_iso()
     finish = datetime.fromisoformat(finished_at.replace("Z", "+00:00"))
 

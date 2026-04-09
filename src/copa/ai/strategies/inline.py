@@ -17,8 +17,9 @@ DEFAULT_SYSTEM_INSTRUCTION = (
 
 class InlineStrategy(StrategyAdapter):
     def execute(self, model: ModelAdapter, request: AIRequest, trace: TraceCollector) -> AIResult:
-        with trace.span("strategy", "strategy.inline.execute"):
+        with trace.span("strategy.inline.execute", "strategy.inline.execute"):
             prompt = (
+                f"Context format: {request.context_format}\n\n"
                 f"Question:\n{request.question}\n\n"
                 f"Context:\n{request.context}\n"
             )
