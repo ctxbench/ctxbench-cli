@@ -75,15 +75,17 @@ def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
 
     assert exit_code == 0
     files = sorted(out_dir.glob("*.json"))
-    assert len(files) == 40
+    assert len(files) == 120
+    assert all(path.name.startswith("rs_exp_basic_001_") for path in files)
     first = json.loads(files[0].read_text(encoding="utf-8"))
     assert first["provider"] in {"openai", "google"}
     assert first["params"]["model_name"] in {"gpt-5.4-nano", "gemini-3.1-flash-lite-preview"}
     assert first["strategy"] in {"inline", "mcp"}
-    assert first["format"] in {"json", "text"}
+    assert first["format"] in {"json", "html"}
     assert "temperature" in first["params"]
+    assert "|" in first["id"]
     assert jsonl_path.exists()
-    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 40
+    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 120
 
 
 def test_example_lattes_dataset_shape_is_supported():
@@ -146,11 +148,13 @@ def test_run_and_eval_jsonl_flow(tmp_path):
 
     result_files = sorted(results_dir.glob("*.json"))
     assert len(result_files) == 2
+    assert all(path.name.startswith("rr_exp_test_mock_001_") for path in result_files)
     result = json.loads(result_files[0].read_text(encoding="utf-8"))
     assert result["status"] == "success"
     assert result["evaluation"]["status"] == "evaluated"
     assert result["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
     assert result["trace"]["aiTrace"]["events"][-1]["name"] == "engine.execute"
+    assert "|" in result["runId"]
     assert results_jsonl.exists()
 
     assert (
@@ -169,7 +173,34 @@ def test_run_and_eval_jsonl_flow(tmp_path):
 
     evaluated_files = sorted(eval_dir.glob("*.json"))
     assert len(evaluated_files) == 2
+    assert all(path.name.startswith("re_exp_test_mock_001_") for path in evaluated_files)
     evaluated = json.loads(evaluated_files[0].read_text(encoding="utf-8"))
     assert evaluated["evaluation"]["status"] == "evaluated"
     assert evaluated["evaluation"]["passed"] is True
     assert eval_jsonl.exists()
+
+
+def test_run_verbose_and_progress_logging(tmp_path, capsys):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    runspecs_dir = tmp_path / "runspecs"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
+
+    exit_code = main(
+        [
+            "run",
+            str(runspecs_dir),
+            "--out",
+            str(tmp_path / "results"),
+            "--verbose",
+            "--progress",
+        ]
+    )
+
+    assert exit_code == 0
+    stderr = capsys.readouterr().err
+    assert "[PLAN]" in stderr
+    assert "[EXECUTE]" in stderr
+    assert "[WRITE]" in stderr
+    assert "[DONE]" in stderr
+    assert "Processing runs:" in stderr

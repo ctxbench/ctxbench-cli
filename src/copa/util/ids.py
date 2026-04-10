@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import re
 
+from copa.util.artifacts import canonical_run_identity
+
 
 def slugify(value: str) -> str:
     normalized = re.sub(r"[^a-zA-Z0-9]+", "_", value).strip("_").lower()
@@ -18,16 +20,13 @@ def runspec_id(
     format_name: str,
     repeat_index: int,
 ) -> str:
-    return "_".join(
-        [
-            "run",
-            slugify(experiment_id),
-            slugify(question_id),
-            slugify(context_id),
-            slugify(provider),
-            slugify(model_name),
-            slugify(strategy),
-            slugify(format_name),
-            f"r{repeat_index}",
-        ]
+    return canonical_run_identity(
+        experiment_id=experiment_id,
+        question_id=question_id,
+        instance_id=context_id,
+        provider=provider,
+        model_name=model_name,
+        strategy=strategy,
+        format_name=format_name,
+        repeat_index=repeat_index,
     )

@@ -68,6 +68,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         questionId=runspec.questionId,
         contextId=runspec.contextId,
         provider=runspec.provider,
+        modelName=runspec.modelName,
         strategy=runspec.strategy,
         format=runspec.format,
         repeatIndex=runspec.repeatIndex,

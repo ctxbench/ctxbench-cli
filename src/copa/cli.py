@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import sys
 
 from copa.commands.eval import eval_command
 from copa.commands.experiment import expand_experiment, validate_experiment
 from copa.commands.run import run_command
+from copa.util.logging import PhaseLogger
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -26,21 +28,49 @@ def build_parser() -> argparse.ArgumentParser:
     expand_parser.add_argument("path", help="Path to the experiment JSON file")
     expand_parser.add_argument("--out", help="Directory to write runspec JSON files")
     expand_parser.add_argument("--jsonl", help="Optional JSONL file for all runspecs")
+    expand_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    expand_parser.add_argument("--progress", action="store_true", help="Show batch progress")
     expand_parser.set_defaults(
-        func=lambda args: expand_experiment(args.path, out_dir=args.out, jsonl_path=args.jsonl)
+        func=lambda args: expand_experiment(
+            args.path,
+            out_dir=args.out,
+            jsonl_path=args.jsonl,
+            verbose=args.verbose,
+            progress=args.progress,
+        )
     )
 
     run_parser = subparsers.add_parser("run", help="Run one or many runspecs")
     run_parser.add_argument("path", help="RunSpec JSON file, directory, or JSONL file")
     run_parser.add_argument("--out", help="Directory to write result JSON files")
     run_parser.add_argument("--jsonl", help="Optional JSONL file for run results")
-    run_parser.set_defaults(func=lambda args: run_command(args.path, out_dir=args.out, jsonl_path=args.jsonl))
+    run_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    run_parser.add_argument("--progress", action="store_true", help="Show batch progress")
+    run_parser.set_defaults(
+        func=lambda args: run_command(
+            args.path,
+            out_dir=args.out,
+            jsonl_path=args.jsonl,
+            verbose=args.verbose,
+            progress=args.progress,
+        )
+    )
 
     eval_parser = subparsers.add_parser("eval", help="Evaluate one or many run results")
     eval_parser.add_argument("path", help="Result JSON file, directory, or JSONL file")
     eval_parser.add_argument("--out", help="Directory to write evaluated result JSON files")
     eval_parser.add_argument("--jsonl", help="Optional JSONL file for evaluated results")
-    eval_parser.set_defaults(func=lambda args: eval_command(args.path, out_dir=args.out, jsonl_path=args.jsonl))
+    eval_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    eval_parser.add_argument("--progress", action="store_true", help="Show batch progress")
+    eval_parser.set_defaults(
+        func=lambda args: eval_command(
+            args.path,
+            out_dir=args.out,
+            jsonl_path=args.jsonl,
+            verbose=args.verbose,
+            progress=args.progress,
+        )
+    )
 
     return parser
 
@@ -51,7 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         return args.func(args)
     except Exception as exc:
-        print(str(exc))
+        PhaseLogger(stream=sys.stderr).error(str(exc), code=1)
         return 1
 
 

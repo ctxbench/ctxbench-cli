@@ -97,6 +97,7 @@ class RunSpec(BaseModel):
     questionId: str
     contextId: str
     provider: str
+    modelName: str | None = None
     strategy: str
     format: str
     params: dict[str, Any] = Field(default_factory=dict)
@@ -135,6 +136,7 @@ class RunResult(BaseModel):
     questionId: str
     contextId: str
     provider: str
+    modelName: str | None = None
     strategy: str
     format: str
     repeatIndex: int

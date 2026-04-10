@@ -61,6 +61,7 @@ def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunS
                                     questionId=question_id,
                                     contextId=context_id,
                                     provider=provider_name,
+                                    modelName=model_name,
                                     strategy=strategy_name,
                                     format=format_name,
                                     params=params,
