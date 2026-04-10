@@ -4,7 +4,50 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from copa.benchmark.models import ExperimentDataset
 from copa.cli import main
+
+
+def write_mock_experiment(path: Path) -> Path:
+    example_root = Path(__file__).resolve().parents[1] / "examples" / "basic" / "datasets"
+    path.write_text(
+        json.dumps(
+            {
+                "id": "exp_test_mock_001",
+                "dataset": {
+                    "questions": str((example_root / "questions.json").resolve()),
+                    "contexts": str((example_root / "contexts").resolve()),
+                    "question_instances": str((example_root / "questions.instance.json").resolve()),
+                },
+                "factors": {
+                    "model": [{"provider": "mock", "name": "mock"}],
+                    "strategy": ["inline"],
+                    "format": ["json", "text"],
+                },
+                "params": {
+                    "common": {
+                        "temperature": 0,
+                    }
+                },
+                "evaluation": {
+                    "enabled": True,
+                },
+                "trace": {
+                    "enabled": True,
+                    "save_raw_response": True,
+                    "save_tool_calls": True,
+                    "save_usage": True,
+                    "save_errors": True,
+                },
+                "execution": {
+                    "repeats": 1,
+                    "output": "outputs",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
 
 
 def test_experiment_validate_example(capsys):
@@ -32,17 +75,42 @@ def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
 
     assert exit_code == 0
     files = sorted(out_dir.glob("*.json"))
-    assert len(files) == 2
+    assert len(files) == 40
     first = json.loads(files[0].read_text(encoding="utf-8"))
-    assert first["provider"] == "mock"
-    assert first["params"]["model_name"] == "mock"
-    assert first["strategy"] == "inline"
+    assert first["provider"] in {"openai", "google"}
+    assert first["params"]["model_name"] in {"gpt-5.4-nano", "gemini-3.1-flash-lite-preview"}
+    assert first["strategy"] in {"inline", "mcp"}
     assert first["format"] in {"json", "text"}
+    assert "temperature" in first["params"]
     assert jsonl_path.exists()
-    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 2
+    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 40
+
+
+def test_example_lattes_dataset_shape_is_supported():
+    from copa.dataset.provider import DatasetProvider
+
+    provider = DatasetProvider.from_dataset(
+        ExperimentDataset(
+            questions=str((Path("examples/basic/datasets/lattes/questions.json")).resolve()),
+            contexts=str((Path("examples/basic/datasets/lattes/cvs")).resolve()),
+            question_instances=str(
+                (Path("examples/basic/datasets/lattes/questions.instance.json")).resolve()
+            ),
+        )
+    )
+
+    instance = provider.get_question_instance("q_oos_002", "5660469902738038")
+
+    assert instance is not None
+    assert instance.cvId == "5660469902738038"
+    assert instance.lattesId == "5660469902738038"
+    assert instance.researcherName == "Nabor das Chagas Mendonça"
+    assert instance.evaluationType == "unanswerable"
+    assert instance.metadata["researcherName"] == "Nabor das Chagas Mendonça"
 
 
 def test_run_and_eval_jsonl_flow(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
     runspecs_dir = tmp_path / "runspecs"
     results_dir = tmp_path / "results"
     eval_dir = tmp_path / "eval"
@@ -51,14 +119,14 @@ def test_run_and_eval_jsonl_flow(tmp_path):
 
     assert (
         main(
-            [
-                "experiment",
-                "expand",
-                "examples/basic/experiment.json",
-                "--out",
-                str(runspecs_dir),
-            ]
-        )
+                [
+                    "experiment",
+                    "expand",
+                    str(experiment_path),
+                    "--out",
+                    str(runspecs_dir),
+                ]
+            )
         == 0
     )
 

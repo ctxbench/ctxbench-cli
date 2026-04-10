@@ -2,23 +2,28 @@
   "id": "exp_basic_001",
   "name": "basic benchmark example",
   "dataset": {
-    "questions": "datasets/questions.json",
-    "contexts": "datasets/contexts",
-    "question_instances": "datasets/questions.instance.json"
+    "questions": "datasets/lattes/questions.json",
+    "contexts": "datasets/lattes/cvs",
+    "question_instances": "datasets/lattes/questions.instance.json"
   },
   "factors": {
-    "provider": ["mock"],
-    "strategy": ["inline"],
-    "format": ["json", "text"]
+    "model": [
+      { "provider": "openai", "name": "gpt-5.4-nano" },
+      { "provider": "google", "name": "gemini-3.1-flash-lite-preview" }
+    ],
+    "strategy": ["inline", "mcp"],
+    "format": ["json", "html"]
   },
   "params": {
     "common": {
-      "model_name": "mock",
       "temperature": 0
+    },
+    "gemini-3.1-flash-lite-preview": {
+      "temperature": 0.3
     }
   },
   "evaluation": {
-    "enabled": true
+    "enabled": false
   },
   "trace": {
     "enabled": true,

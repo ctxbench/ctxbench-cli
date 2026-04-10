@@ -30,6 +30,8 @@ class QuestionInstance(BaseModel):
     acceptedAnswers: list[Any] = Field(default_factory=list)
     notes: str | None = None
     evaluationType: str = "exact_match"
+    judgeReference: dict[str, Any] | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class QuestionInstanceDataset(BaseModel):

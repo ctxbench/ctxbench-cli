@@ -65,7 +65,7 @@ class DatasetProvider:
     def _load_question_instances(self, path: str | None) -> QuestionInstanceDataset:
         if not path:
             return QuestionInstanceDataset(datasetId="missing", instances=[])
-        raw = load_json(path)
+        raw = self._normalize_question_instance_dataset(load_json(path), path)
         for instance in raw.get("instances", []):
             if "evaluationType" not in instance:
                 question = next(
@@ -75,3 +75,47 @@ class DatasetProvider:
                 if question is not None:
                     instance["evaluationType"] = question.evaluationType
         return QuestionInstanceDataset.model_validate(raw)
+
+    def _normalize_question_instance_dataset(
+        self, raw: object, path: str
+    ) -> dict[str, object]:
+        if isinstance(raw, list):
+            payload: dict[str, object] = {
+                "datasetId": Path(path).stem,
+                "instances": raw,
+            }
+        elif isinstance(raw, dict):
+            payload = dict(raw)
+        else:
+            raise ValueError("Question instances dataset must be an object or an array.")
+
+        raw_instances = payload.get("instances", [])
+        if not isinstance(raw_instances, list):
+            raise ValueError("Question instances dataset field 'instances' must be a list.")
+
+        payload["instances"] = [self._normalize_question_instance(item) for item in raw_instances]
+        return payload
+
+    def _normalize_question_instance(self, raw: object) -> dict[str, object]:
+        if not isinstance(raw, dict):
+            raise ValueError("Question instance entries must be objects.")
+
+        metadata = raw.get("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+
+        normalized = dict(raw)
+        normalized["cvId"] = str(
+            raw.get("cvId")
+            or raw.get("instanceId")
+            or raw.get("contextId")
+            or raw.get("lattesId")
+            or ""
+        )
+        if raw.get("researcherName") is None and metadata.get("researcherName") is not None:
+            normalized["researcherName"] = metadata["researcherName"]
+        if raw.get("lattesId") is None and raw.get("instanceId") is not None:
+            normalized["lattesId"] = raw["instanceId"]
+        normalized["metadata"] = metadata
+        normalized.pop("instanceId", None)
+        return normalized
