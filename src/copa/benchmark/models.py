@@ -42,9 +42,62 @@ class ExperimentExecution(BaseModel):
     output: str = "outputs"
 
 
+class EvaluationModelConfig(BaseModel):
+    provider: str
+    model: str
+    temperature: float | int | None = None
+    params: dict[str, Any] = Field(default_factory=dict)
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "EvaluationModelConfig":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("Evaluation model config requires an object input.")
+        params = {
+            key: value
+            for key, value in data.items()
+            if key not in {"provider", "model", "temperature"}
+        }
+        return cls(
+            provider=str(data.get("provider", "")),
+            model=str(data.get("model", "")),
+            temperature=data.get("temperature"),
+            params=params,
+        )
+
+
 class ExperimentEvaluation(BaseModel):
     enabled: bool = False
+    output: str | None = None
+    jsonl: str | None = None
+    judge: EvaluationModelConfig | None = None
+    fallback: EvaluationModelConfig | None = None
     config: dict[str, Any] = Field(default_factory=dict)
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "ExperimentEvaluation":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("ExperimentEvaluation requires an object input.")
+        config = {
+            key: value
+            for key, value in data.items()
+            if key not in {"enabled", "output", "jsonl", "judge", "fallback"}
+        }
+        return cls(
+            enabled=bool(data.get("enabled", False)),
+            output=data.get("output"),
+            jsonl=data.get("jsonl"),
+            judge=EvaluationModelConfig.model_validate(data["judge"])
+            if isinstance(data.get("judge"), dict)
+            else None,
+            fallback=EvaluationModelConfig.model_validate(data["fallback"])
+            if isinstance(data.get("fallback"), dict)
+            else None,
+            config=config,
+        )
 
 
 class ExperimentTrace(BaseModel):
@@ -94,6 +147,7 @@ class RunSpec(BaseModel):
     id: str
     experimentId: str
     dataset: ExperimentDataset
+    experimentPath: str | None = None
     questionId: str
     contextId: str
     provider: str
@@ -147,3 +201,68 @@ class RunResult(BaseModel):
     usage: dict[str, Any] = Field(default_factory=dict)
     trace: RunTrace = Field(default_factory=RunTrace)
     evaluation: EvaluationResult = Field(default_factory=EvaluationResult)
+
+
+class EvaluationTrace(BaseModel):
+    aiTrace: dict[str, Any] = Field(default_factory=dict)
+    rawResponse: Any | None = None
+    error: str | None = None
+
+
+class EvaluationJudgeInfo(BaseModel):
+    used: bool = False
+    role: str | None = None
+    provider: str | None = None
+    model: str | None = None
+    inputTokens: int | None = None
+    outputTokens: int | None = None
+    durationMs: int | None = None
+    fallbackUsed: bool = False
+
+
+class EvaluationItemResult(BaseModel):
+    experimentId: str
+    runId: str
+    questionId: str
+    question: str
+    evaluationMode: str
+    score: float
+    label: str
+    details: dict[str, Any] = Field(default_factory=dict)
+    executionModel: str | None = None
+    executionStrategy: str | None = None
+    executionFormat: str | None = None
+    executionInputTokens: int | None = None
+    executionOutputTokens: int | None = None
+    executionDurationMs: int | None = None
+    executionToolCalls: int | None = None
+    evaluationJudgeUsed: bool = False
+    evaluationJudgeRole: str | None = None
+    evaluationJudgeProvider: str | None = None
+    evaluationJudgeModel: str | None = None
+    evaluationInputTokens: int | None = None
+    evaluationOutputTokens: int | None = None
+    evaluationDurationMs: int | None = None
+    evaluationTrace: EvaluationTrace = Field(default_factory=EvaluationTrace)
+
+
+class EvaluationRunSummary(BaseModel):
+    itemCount: int = 0
+    meanScore: float = 0.0
+    labels: dict[str, int] = Field(default_factory=dict)
+
+
+class EvaluationRunResult(BaseModel):
+    experimentId: str
+    runId: str
+    questionId: str
+    items: list[EvaluationItemResult] = Field(default_factory=list)
+    summary: EvaluationRunSummary = Field(default_factory=EvaluationRunSummary)
+
+
+class EvaluationBatchSummary(BaseModel):
+    experimentId: str
+    runCount: int = 0
+    itemCount: int = 0
+    meanScore: float = 0.0
+    labels: dict[str, int] = Field(default_factory=dict)

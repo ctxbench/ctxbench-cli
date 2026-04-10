@@ -4,15 +4,15 @@ from datetime import datetime
 
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest
-from copa.benchmark.evaluation import evaluate_result
 from copa.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
 from copa.dataset.contexts import context_path
-from copa.dataset.provider import DatasetProvider
 from copa.datasets.lattes.provider import create_lattes_mcp_runtime
 from copa.util.clock import utc_now_iso
 
 
 def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
+    from copa.dataset.provider import DatasetProvider
+
     provider = DatasetProvider.from_dataset(runspec.dataset)
     question = provider.get_question(runspec.questionId)
     context = provider.get_context(runspec.contextId, runspec.format)
@@ -84,6 +84,4 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         trace=trace,
         evaluation=EvaluationResult(),
     )
-    if runspec.evaluationEnabled:
-        result.evaluation = evaluate_result(result, provider)
     return result

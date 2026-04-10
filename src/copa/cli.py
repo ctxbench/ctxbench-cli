@@ -57,16 +57,33 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     eval_parser = subparsers.add_parser("eval", help="Evaluate one or many run results")
-    eval_parser.add_argument("path", help="Result JSON file, directory, or JSONL file")
-    eval_parser.add_argument("--out", help="Directory to write evaluated result JSON files")
-    eval_parser.add_argument("--jsonl", help="Optional JSONL file for evaluated results")
+    eval_inputs = eval_parser.add_mutually_exclusive_group(required=True)
+    eval_inputs.add_argument("--run-results-dir", help="Directory containing run result JSON files")
+    eval_inputs.add_argument("--run-results-json", help="Run result JSON or JSONL file")
+    eval_parser.add_argument("--experiment", required=True, help="Experiment JSON file")
+    eval_parser.add_argument("--output-dir", help="Directory to write evaluation JSON files")
+    eval_parser.add_argument("--output-jsonl", help="Optional JSONL file for flattened evaluation rows")
+    eval_parser.add_argument("--only", help="Evaluate only one question id")
+    eval_parser.add_argument(
+        "--mode",
+        choices=["exact", "analytical", "unanswerable"],
+        help="Evaluate only one evaluation mode",
+    )
+    eval_parser.add_argument("--continue-on-error", action="store_true", help="Keep evaluating after an item error")
+    eval_parser.add_argument("--fail-on-missing-gold", action="store_true", help="Fail when exact-mode gold data is missing")
     eval_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     eval_parser.add_argument("--progress", action="store_true", help="Show batch progress")
     eval_parser.set_defaults(
         func=lambda args: eval_command(
-            args.path,
-            out_dir=args.out,
-            jsonl_path=args.jsonl,
+            run_results_dir=args.run_results_dir,
+            run_results_json=args.run_results_json,
+            experiment_path=args.experiment,
+            output_dir=args.output_dir,
+            output_jsonl=args.output_jsonl,
+            only=args.only,
+            mode=args.mode,
+            continue_on_error=args.continue_on_error,
+            fail_on_missing_gold=args.fail_on_missing_gold,
             verbose=args.verbose,
             progress=args.progress,
         )

@@ -26,7 +26,12 @@ def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
     return models
 
 
-def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunSpec]:
+def generate_runspecs(
+    experiment: Experiment,
+    base_dir: str | Path,
+    *,
+    experiment_path: str | Path | None = None,
+) -> list[RunSpec]:
     provider = DatasetProvider.from_experiment(experiment, base_dir)
     questions = provider.list_question_ids()
     models = resolve_models(experiment)
@@ -58,6 +63,9 @@ def generate_runspecs(experiment: Experiment, base_dir: str | Path) -> list[RunS
                                     ),
                                     experimentId=experiment.id,
                                     dataset=provider.dataset_paths,
+                                    experimentPath=str(Path(experiment_path).resolve())
+                                    if experiment_path
+                                    else None,
                                     questionId=question_id,
                                     contextId=context_id,
                                     provider=provider_name,

@@ -23,7 +23,19 @@
     }
   },
   "evaluation": {
-    "enabled": false
+    "enabled": true,
+    "output": "outputs/eval",
+    "jsonl": "outputs/eval/evaluation-results.jsonl",
+    "judge": {
+      "provider": "openai",
+      "model": "gpt-5.4",
+      "temperature": 0
+    },
+    "fallback": {
+      "provider": "openai",
+      "model": "gpt-5.4-mini",
+      "temperature": 0
+    }
   },
   "trace": {
     "enabled": true,
@@ -34,6 +46,6 @@
   },
   "execution": {
     "repeats": 1,
-    "output": "outputs"
+    "output": "outputs/"
   }
 }

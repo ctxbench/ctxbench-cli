@@ -2,12 +2,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from copa.benchmark.evaluation import (
+    build_evaluation_summary,
+    evaluate_run_results,
+    evaluation_output_paths,
+    load_experiment_for_evaluation,
+    write_evaluation_files,
+    write_evaluation_jsonl,
+)
 from copa.ai.engine import Engine
 from copa.benchmark.executor import execute_runspec
 from copa.benchmark.models import RunSpec
 from copa.benchmark.results import write_result_files, write_results_jsonl
 from copa.util.artifacts import build_short_ids, canonical_identity_from_run, runresult_filename
-from copa.util.fs import load_json
+from copa.util.fs import load_json, write_json
 from copa.util.jsonl import read_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
@@ -40,41 +48,28 @@ def run_command(
     short_ids = build_short_ids([canonical_identity_from_run(runspec) for runspec in runspecs])
     progress_tracker.start()
     results = []
-    for runspec, short_id in zip(runspecs, short_ids):
-        model_name = runspec.modelName or ""
-        logger.phase(
-            "EXECUTE",
-            "Starting answer generation",
-            run=short_id,
-            model=model_name,
-            question=runspec.questionId,
-        )
-        result = execute_runspec(runspec, engine)
-        logger.phase(
-            "EXECUTE",
-            "Answer generation completed",
-            run=short_id,
-            model=model_name,
-            question=runspec.questionId,
-        )
-        if result.evaluation.status == "evaluated":
+    try:
+        for runspec, short_id in zip(runspecs, short_ids):
+            model_name = runspec.modelName or ""
             logger.phase(
-                "EVALUATE",
-                "Starting evaluation",
+                "EXECUTE",
+                "Starting answer generation",
                 run=short_id,
-                question=result.questionId,
-                evaluation=result.evaluation.evaluator or "unknown",
+                model=model_name,
+                question=runspec.questionId,
             )
+            result = execute_runspec(runspec, engine)
             logger.phase(
-                "EVALUATE",
-                "Evaluation completed",
+                "EXECUTE",
+                "Answer generation completed",
                 run=short_id,
-                question=result.questionId,
-                evaluation=result.evaluation.evaluator or "unknown",
-                score=result.evaluation.passed,
+                model=model_name,
+                question=runspec.questionId,
             )
-        results.append(result)
-        progress_tracker.advance()
+            results.append(result)
+            progress_tracker.advance()
+    finally:
+        engine.close()
 
     if results:
         output_root = (
@@ -100,6 +95,20 @@ def run_command(
             print(f"Wrote {len(results)} result(s) to {target_dir} and {jsonl_path}")
         else:
             print(f"Wrote {len(results)} result(s) to {target_dir}")
+
+        experiment_path = runspecs[0].experimentPath if runspecs else None
+        if experiment_path and runspecs[0].evaluationEnabled:
+            logger.phase("EVALUATE", "Starting evaluation batch", experiment=experiment_path)
+            experiment, base_dir = load_experiment_for_evaluation(experiment_path)
+            evaluations = evaluate_run_results(results, experiment=experiment)
+            eval_dir, eval_jsonl = evaluation_output_paths(experiment, base_dir)
+            write_evaluation_files(evaluations, eval_dir)
+            summary_path = eval_dir / "evaluation-summary.json"
+
+            write_json(summary_path, build_evaluation_summary(evaluations).model_dump(mode="json"))
+            if eval_jsonl is not None:
+                write_evaluation_jsonl(evaluations, eval_jsonl)
+            logger.phase("EVALUATE", "Evaluation completed", runs=len(evaluations), output=eval_dir)
     else:
         print("No runspecs found.")
     return 0

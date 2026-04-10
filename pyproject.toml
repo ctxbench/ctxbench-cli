@@ -35,5 +35,9 @@ where = ["src"]
 [dependency-groups]
 dev = [
     "debugpy>=1.8.20",
+    "jupyter>=1.1.1",
+    "lab>=8.9",
+    "numpy>=2.4.4",
     "openai>=2.30.0",
+    "pandas>=3.0.2",
 ]

@@ -2,87 +2,94 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from copa.benchmark.evaluation import evaluate_result
+from copa.benchmark.evaluation import (
+    build_evaluation_summary,
+    evaluate_run_results,
+    evaluation_output_paths,
+    load_experiment_for_evaluation,
+    write_evaluation_files,
+    write_evaluation_jsonl,
+)
 from copa.benchmark.models import RunResult
-from copa.benchmark.results import write_result_files, write_results_jsonl
-from copa.dataset.provider import DatasetProvider
-from copa.util.artifacts import build_short_ids, canonical_identity_from_run, evalresult_filename
-from copa.util.fs import load_json
+from copa.util.fs import load_json, write_json
 from copa.util.jsonl import read_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
 
-def load_results(path: str) -> list[RunResult]:
-    source = Path(path)
-    if source.is_dir():
+def load_results_from_input(
+    *,
+    run_results_dir: str | None = None,
+    run_results_json: str | None = None,
+) -> list[RunResult]:
+    if bool(run_results_dir) == bool(run_results_json):
+        raise ValueError("Provide exactly one of --run-results-dir or --run-results-json.")
+    if run_results_dir:
+        source = Path(run_results_dir)
         return [RunResult.model_validate(load_json(item)) for item in sorted(source.glob("*.json"))]
+    source = Path(run_results_json or "")
     if source.suffix == ".jsonl":
         return [RunResult.model_validate(item) for item in read_jsonl(source)]
     return [RunResult.model_validate(load_json(source))]
 
 
 def eval_command(
-    path: str,
-    out_dir: str | None = None,
-    jsonl_path: str | None = None,
     *,
+    run_results_dir: str | None,
+    run_results_json: str | None,
+    experiment_path: str,
+    output_dir: str | None = None,
+    output_jsonl: str | None = None,
+    only: str | None = None,
+    mode: str | None = None,
+    continue_on_error: bool = False,
+    fail_on_missing_gold: bool = False,
     verbose: bool = False,
     progress: bool = False,
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
-    logger.phase("LOAD", "Loading run results", path=path)
-    results = load_results(path)
+    logger.phase("LOAD", "Loading experiment", path=experiment_path)
+    experiment, base_dir = load_experiment_for_evaluation(experiment_path)
+    input_path = run_results_dir or run_results_json or ""
+    logger.phase("LOAD", "Loading run results", path=input_path)
+    results = load_results_from_input(
+        run_results_dir=run_results_dir,
+        run_results_json=run_results_json,
+    )
     progress_tracker = ProgressTracker(total=len(results), enabled=progress)
     logger.progress = progress_tracker
-    logger.phase("LOAD", "Run result loading completed", runs=len(results))
-    logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(results))
-    short_ids = build_short_ids([canonical_identity_from_run(result) for result in results])
+    logger.phase("PLAN", "Starting evaluation batch", input=input_path, discoveredRuns=len(results))
     progress_tracker.start()
-    for result, short_id in zip(results, short_ids):
-        provider = DatasetProvider.from_dataset(result.dataset)
-        evaluation_type = provider.get_question(result.questionId).evaluationType
-        logger.phase(
-            "EVALUATE",
-            "Starting evaluation",
-            run=short_id,
-            question=result.questionId,
-            evaluation=evaluation_type,
-        )
-        result.evaluation = evaluate_result(result, provider)
-        logger.phase(
-            "EVALUATE",
-            "Evaluation completed",
-            run=short_id,
-            question=result.questionId,
-            evaluation=result.evaluation.evaluator or evaluation_type,
-            score=result.evaluation.passed,
-        )
+
+    evaluations = evaluate_run_results(
+        results,
+        experiment=experiment,
+        only=only,
+        mode=mode,
+        continue_on_error=continue_on_error,
+        fail_on_missing_gold=fail_on_missing_gold,
+    )
+    for _ in evaluations:
         progress_tracker.advance()
 
-    if results:
-        output_root = (
-            Path(results[0].outputRoot).resolve()
-            if results[0].outputRoot
-            else Path(results[0].dataset.contexts).resolve().parent.parent / "outputs"
-        )
-        default_dir = output_root / results[0].experimentId / "eval"
-        target_dir = Path(out_dir).resolve() if out_dir else default_dir
-        for result, short_id in zip(results, short_ids):
-            logger.phase(
-                "WRITE",
-                "Writing artifact",
-                run=short_id,
-                path=target_dir / evalresult_filename(result.experimentId, short_id),
-            )
-        result_paths = write_result_files(results, target_dir, artifact_kind="evaluation")
-        for path_item, short_id in zip(result_paths, short_ids):
-            logger.phase("WRITE", "Artifact written", run=short_id, path=path_item)
-            logger.phase("DONE", "Completed successfully", run=short_id)
-        if jsonl_path:
-            write_results_jsonl(results, jsonl_path)
-            print(f"Wrote {len(results)} evaluated result(s) to {target_dir} and {jsonl_path}")
-        else:
-            print(f"Wrote {len(results)} evaluated result(s) to {target_dir}")
+    target_dir, target_jsonl = evaluation_output_paths(
+        experiment,
+        base_dir,
+        output_dir=output_dir,
+        output_jsonl=output_jsonl,
+    )
+    written_files = write_evaluation_files(evaluations, target_dir)
+    for path_item in written_files:
+        logger.phase("WRITE", "Artifact written", path=path_item)
+
+    summary = build_evaluation_summary(evaluations)
+    summary_path = target_dir / "evaluation-summary.json"
+    write_json(summary_path, summary.model_dump(mode="json"))
+    logger.phase("WRITE", "Artifact written", path=summary_path)
+
+    if target_jsonl is not None:
+        write_evaluation_jsonl(evaluations, target_jsonl)
+        logger.phase("WRITE", "Artifact written", path=target_jsonl)
+        print(f"Wrote {len(evaluations)} evaluation result(s) to {target_dir} and {target_jsonl}")
     else:
-        print("No results found.")
+        print(f"Wrote {len(evaluations)} evaluation result(s) to {target_dir}")
     return 0
