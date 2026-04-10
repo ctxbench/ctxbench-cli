@@ -9,6 +9,7 @@ from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest
 from copa.benchmark.experiment_loader import load_experiment
 from copa.benchmark.models import (
+    EvaluationResult,
     EvaluationBatchSummary,
     EvaluationItemResult,
     EvaluationJudgeInfo,
@@ -18,15 +19,13 @@ from copa.benchmark.models import (
     EvaluationTrace,
     Experiment,
     RunResult,
+    RunTrace,
 )
+from copa.benchmark.paths import resolve_eval_jsonl_path, resolve_eval_output_dir
+from copa.benchmark.results import write_evaluation_files, write_evaluation_jsonl
+from copa.benchmark.runspec_generator import generate_runspecs
 from copa.dataset.provider import DatasetProvider
 from copa.dataset.questions import EvaluationRubricCriterion, Question
-from copa.util.artifacts import (
-    build_short_ids,
-    evalresult_filename,
-)
-from copa.util.fs import write_json
-from copa.util.jsonl import write_jsonl
 
 ABSTENTION_PATTERNS = (
     "not enough information",
@@ -302,6 +301,7 @@ def evaluate_run_result(
 
     instance = provider.get_question_instance(result.questionId, result.contextId)
     expected = None if instance is None else instance.goldAnswer
+    accepted_answers = [] if instance is None else list(instance.acceptedAnswers)
     if fail_on_missing_gold and evaluation_mode == "exact" and expected is None:
         raise ValueError(f"Missing gold answer for question '{result.questionId}' and context '{result.contextId}'.")
 
@@ -325,6 +325,9 @@ def evaluate_run_result(
         score, label, details, judge_info, trace = _evaluate_unanswerable(result)
     else:
         raise ValueError(f"Unsupported evaluation mode: {evaluation_mode}")
+
+    details.setdefault("expected", expected)
+    details.setdefault("acceptedAnswers", accepted_answers)
 
     item = EvaluationItemResult(
         experimentId=result.experimentId,
@@ -362,6 +365,7 @@ def evaluate_run_result(
         questionId=result.questionId,
         items=[item],
         summary=summary,
+        metadata=result.metadata,
     )
 
 
@@ -400,21 +404,29 @@ def evaluate_run_results(
 
 
 def _experiment_base_dir(experiment: Experiment) -> Path:
-    questions_path = Path(experiment.dataset.questions)
-    return questions_path.parent if questions_path.is_absolute() else questions_path.resolve().parent
+    dataset_root = Path(experiment.dataset.root)
+    return dataset_root.parent if dataset_root.is_absolute() else dataset_root.resolve().parent
 
 
 def load_experiment_for_evaluation(path: str | Path) -> tuple[Experiment, Path]:
     experiment_path = Path(path).resolve()
     experiment = load_experiment(experiment_path)
     base_dir = experiment_path.parent
-    if not Path(experiment.dataset.questions).is_absolute():
-        experiment.dataset.questions = str((base_dir / experiment.dataset.questions).resolve())
-    if not Path(experiment.dataset.contexts).is_absolute():
-        experiment.dataset.contexts = str((base_dir / experiment.dataset.contexts).resolve())
-    if experiment.dataset.question_instances and not Path(experiment.dataset.question_instances).is_absolute():
-        experiment.dataset.question_instances = str((base_dir / experiment.dataset.question_instances).resolve())
+    if not Path(experiment.dataset.root).is_absolute():
+        experiment.dataset.root = str((base_dir / experiment.dataset.root).resolve())
     return experiment, base_dir
+
+
+def runspec_index_for_experiment(
+    experiment: Experiment,
+    base_dir: Path,
+    *,
+    experiment_path: str | Path | None = None,
+) -> dict[str, Any]:
+    return {
+        runspec.runId: runspec
+        for runspec in generate_runspecs(experiment, base_dir, experiment_path=experiment_path)
+    }
 
 
 def evaluation_output_paths(
@@ -427,45 +439,52 @@ def evaluation_output_paths(
     resolved_output_dir = (
         Path(output_dir).resolve()
         if output_dir
-        else (base_dir / (experiment.evaluation.output or "outputs/eval")).resolve()
+        else resolve_eval_output_dir(experiment, base_dir)
     )
     resolved_jsonl = None
     if output_jsonl:
         resolved_jsonl = Path(output_jsonl).resolve()
-    elif experiment.evaluation.jsonl:
-        resolved_jsonl = (base_dir / experiment.evaluation.jsonl).resolve()
+    else:
+        resolved_jsonl = resolve_eval_jsonl_path(experiment, base_dir)
     return resolved_output_dir, resolved_jsonl
 
 
-def write_evaluation_files(
+def update_run_results_with_evaluation(
+    results: Iterable[RunResult],
     evaluations: Iterable[EvaluationRunResult],
-    out_dir: str | Path,
-) -> list[Path]:
-    evaluation_list = list(evaluations)
-    target = Path(out_dir)
-    target.mkdir(parents=True, exist_ok=True)
-    identities = [f"{item.experimentId}|{item.runId}|{item.questionId}" for item in evaluation_list]
-    short_ids = build_short_ids(identities)
-    paths: list[Path] = []
-    for item, short_id in zip(evaluation_list, short_ids):
-        path = target / evalresult_filename(item.experimentId, short_id)
-        write_json(path, item.model_dump(mode="json"))
-        paths.append(path)
-    return paths
+) -> list[RunResult]:
+    evaluation_by_run_id = {item.runId: item for item in evaluations}
+    updated: list[RunResult] = []
+    for result in results:
+        evaluated = evaluation_by_run_id.get(result.runId)
+        if evaluated is None:
+            updated.append(result)
+            continue
+        item = evaluated.items[0] if evaluated.items else None
+        details = item.details if item is not None else {}
+        expected = details.get("expected")
+        accepted_answers = details.get("acceptedAnswers", [])
+        passed = None
+        if item is not None:
+            passed = item.score >= 1.0
+        result.evaluation = EvaluationResult(
+            status="evaluated",
+            passed=passed,
+            expected=expected,
+            acceptedAnswers=list(accepted_answers) if isinstance(accepted_answers, list) else [],
+            reason=item.label if item is not None else None,
+            evaluator=item.evaluationJudgeModel if item is not None else None,
+        )
+        updated.append(result)
+    return updated
 
 
 def flatten_evaluation_rows(evaluations: Iterable[EvaluationRunResult]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for run_result in evaluations:
         for item in run_result.items:
-            rows.append(item.model_dump(mode="json"))
+            rows.append(item.to_persisted_artifact())
     return rows
-
-
-def write_evaluation_jsonl(evaluations: Iterable[EvaluationRunResult], path: str | Path) -> Path:
-    rows = flatten_evaluation_rows(evaluations)
-    write_jsonl(path, rows)
-    return Path(path)
 
 
 def build_evaluation_summary(evaluations: Iterable[EvaluationRunResult]) -> EvaluationBatchSummary:

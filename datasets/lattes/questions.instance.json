@@ -1,5 +1,135 @@
 [
   {
+    "questionId": "q_exact_001",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "3",
+    "acceptedAnswers": [
+      "3"
+    ]
+  },
+  {
+    "questionId": "q_exact_001",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "0",
+    "acceptedAnswers": [
+      "0"
+    ]
+  },
+  {
+    "questionId": "q_exact_002",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "Universidade de Fortaleza (UNIFOR), professor titular",
+    "acceptedAnswers": [
+      "Universidade de Fortaleza (UNIFOR), professor titular"
+    ]
+  },
+  {
+    "questionId": "q_exact_002",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "Universidade Estadual do Ceará (UECE), professor adjunto",
+    "acceptedAnswers": [
+      "Universidade Estadual do Ceará (UECE), professor adjunto"
+    ]
+  },
+  {
+    "questionId": "q_exact_003",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "1999",
+    "acceptedAnswers": [
+      "1999"
+    ]
+  },
+  {
+    "questionId": "q_exact_003",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "2011",
+    "acceptedAnswers": [
+      "2011"
+    ]
+  },
+  {
+    "questionId": "q_analytical_001",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "Software engineering, software architecture, distributed systems, cloud computing, microservices, resilience engineering, self-adaptive systems, DevOps, and graduate teaching/advising.",
+    "acceptedAnswers": []
+  },
+  {
+    "questionId": "q_analytical_001",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "Software engineering, software architecture, distributed systems, self-adaptive systems, model-driven engineering, software patterns, software analysis, static analysis for microservices, and graduate teaching/advising.",
+    "acceptedAnswers": []
+  },
+  {
+    "questionId": "q_analytical_002",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "The research trajectory moves from distributed systems, replication, and software architecture toward cloud computing, cloud migration, microservices, resilience, and self-adaptive cloud-native systems; more recently it also includes generative AI applications.",
+    "acceptedAnswers": []
+  },
+  {
+    "questionId": "q_analytical_002",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "The research evolves from aspect-oriented programming, formal specification/verification, and distributed systems toward software architecture, self-adaptive systems, model-driven engineering, and, more recently, microservices, software analysis, and AI for software engineering.",
+    "acceptedAnswers": []
+  },
+  {
+    "questionId": "q_oos_001",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "Not enough information.",
+    "acceptedAnswers": [
+      "Not enough information.",
+      "The provided context does not contain this information.",
+      "This information is not available in the provided context.",
+      "I cannot determine this from the provided context."
+    ]
+  },
+  {
+    "questionId": "q_oos_001",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "Not enough information.",
+    "acceptedAnswers": [
+      "Not enough information.",
+      "The provided context does not contain this information.",
+      "This information is not available in the provided context.",
+      "I cannot determine this from the provided context."
+    ]
+  },
+  {
     "questionId": "q_oos_002",
     "instanceId": "5660469902738038",
     "goldAnswer": "Not enough information.",
@@ -27,16 +157,83 @@
       "researcherName": "Paulo Henrique Mendes Maia"
     }
   },
-
+  {
+    "questionId": "q_summary_001",
+    "instanceId": "5660469902738038",
+    "metadata": {
+      "researcherName": "Nabor das Chagas Mendonça"
+    },
+    "goldAnswer": "The researcher’s main fields of research are software engineering and distributed systems, with strong emphasis on software architecture, cloud computing, microservices, resilience, self-adaptive systems, DevOps, and related applications of generative AI.",
+    "acceptedAnswers": [],
+    "judgeReference": {
+      "mustBeGrounded": true,
+      "shouldBeConcise": true,
+      "targetFocus": "main fields of research",
+      "preferredThemes": [
+        "software engineering",
+        "software architecture",
+        "distributed systems",
+        "microservices",
+        "resilience",
+        "self-adaptive systems"
+      ]
+    }
+  },
+  {
+    "questionId": "q_summary_001",
+    "instanceId": "7227955029154651",
+    "metadata": {
+      "researcherName": "Paulo Henrique Mendes Maia"
+    },
+    "goldAnswer": "The researcher’s main fields of research are software engineering, especially distributed software engineering, software architecture, self-adaptive systems, model-driven engineering, microservices, software repository mining, and more recently AI for software engineering and software engineering for AI.",
+    "acceptedAnswers": [],
+    "judgeReference": {
+      "mustBeGrounded": true,
+      "shouldBeConcise": true,
+      "targetFocus": "main fields of research",
+      "preferredThemes": [
+        "software engineering",
+        "distributed systems",
+        "self-adaptive systems",
+        "software architecture",
+        "model-driven engineering",
+        "graduate teaching"
+      ]
+    }
+  },
   {
     "questionId": "q_recommendation_001",
     "instanceId": "5660469902738038",
-    "goldAnswer": "Good answers should recommend 3 publications clearly related to microservices architecture, cloud-native applications, resilience in microservices, or software architecture for microservices, and justify each choice.",
-    "acceptedAnswers": [],
+    "goldAnswer": [
+      {
+        "title": "Developing Self-Adaptive Microservice Systems: Challenges and Directions",
+        "year": 2021,
+        "justification": "Directly addresses microservice systems and focuses on self-adaptation challenges and research directions, making it highly relevant to microservices architecture."
+      },
+      {
+        "title": "Microservices: The Journey So Far and Challenges Ahead",
+        "year": 2018,
+        "justification": "Provides a broad architectural view of microservices, including the state of the field and key open challenges, which makes it a foundational recommendation for this topic."
+      },
+      {
+        "title": "Building orchestrated microservice systems using declarative business processes",
+        "year": 2020,
+        "justification": "Focuses on how to structure and orchestrate microservice systems, which is directly relevant to architectural design and implementation concerns."
+      }
+    ],
+    "acceptedAnswers": [
+      "Developing Self-Adaptive Microservice Systems: Challenges and Directions (2021)",
+      "Microservices: The Journey So Far and Challenges Ahead (2018)",
+      "Building orchestrated microservice systems using declarative business processes (2020)"
+    ],
     "judgeReference": {
       "targetTopic": "microservices architecture",
       "expectedCount": 3,
-      "mustIncludePerItem": ["title", "year", "justification"],
+      "mustIncludePerItem": [
+        "title",
+        "year",
+        "justification"
+      ],
       "preferredThemes": [
         "microservices",
         "software architecture",
@@ -44,7 +241,13 @@
         "resilience",
         "self-adaptive systems"
       ],
-      "mustBeGrounded": true
+      "mustBeGrounded": true,
+      "allowAlternativePicks": true,
+      "preferredPublications": [
+        "Developing Self-Adaptive Microservice Systems: Challenges and Directions",
+        "Microservices: The Journey So Far and Challenges Ahead",
+        "Building orchestrated microservice systems using declarative business processes"
+      ]
     },
     "metadata": {
       "researcherName": "Nabor das Chagas Mendonça"
@@ -53,12 +256,36 @@
   {
     "questionId": "q_recommendation_001",
     "instanceId": "7227955029154651",
-    "goldAnswer": "Good answers should recommend 3 publications clearly related to microservices architecture, resilient composition of microservices, software architecture for distributed systems, or analysis techniques for microservice-based systems, and justify each choice.",
-    "acceptedAnswers": [],
+    "goldAnswer": [
+      {
+        "title": "Self-Adaptive Microservice-based Systems - Landscape and Research Opportunities",
+        "year": 2021,
+        "justification": "Directly targets self-adaptive microservice-based systems and discusses the research landscape, which is central to microservices architecture."
+      },
+      {
+        "title": "Building orchestrated microservice systems using declarative business processes",
+        "year": 2020,
+        "justification": "Presents an architectural approach for orchestrated microservice systems, making it a strong and directly relevant publication for the topic."
+      },
+      {
+        "title": "MicroGraphQL: a Unified Communication Approach for Systems of Systems using Microservices and GraphQL",
+        "year": 2022,
+        "justification": "Addresses communication and integration in systems built with microservices, which is an important architectural concern in distributed microservice-based systems."
+      }
+    ],
+    "acceptedAnswers": [
+      "Self-Adaptive Microservice-based Systems - Landscape and Research Opportunities (2021)",
+      "Building orchestrated microservice systems using declarative business processes (2020)",
+      "MicroGraphQL: a Unified Communication Approach for Systems of Systems using Microservices and GraphQL (2022)"
+    ],
     "judgeReference": {
       "targetTopic": "microservices architecture",
       "expectedCount": 3,
-      "mustIncludePerItem": ["title", "year", "justification"],
+      "mustIncludePerItem": [
+        "title",
+        "year",
+        "justification"
+      ],
       "preferredThemes": [
         "microservices",
         "software architecture",
@@ -66,13 +293,18 @@
         "resilience",
         "software analysis"
       ],
-      "mustBeGrounded": true
+      "mustBeGrounded": true,
+      "allowAlternativePicks": true,
+      "preferredPublications": [
+        "Self-Adaptive Microservice-based Systems - Landscape and Research Opportunities",
+        "Building orchestrated microservice systems using declarative business processes",
+        "MicroGraphQL: a Unified Communication Approach for Systems of Systems using Microservices and GraphQL"
+      ]
     },
     "metadata": {
       "researcherName": "Paulo Henrique Mendes Maia"
     }
   },
-
   {
     "questionId": "q_judgment_001",
     "instanceId": "5660469902738038",

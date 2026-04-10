@@ -1,11 +1,8 @@
 {
   "id": "exp_basic_001",
   "name": "basic benchmark example",
-  "dataset": {
-    "questions": "datasets/lattes/questions.json",
-    "contexts": "datasets/lattes/cvs",
-    "question_instances": "datasets/lattes/questions.instance.json"
-  },
+  "output": "/home/michel/repos/doutorado/copa-benchmark/outputs",
+  "dataset": ".",
   "factors": {
     "model": [
       { "provider": "openai", "name": "gpt-5.4-nano" },
@@ -24,11 +21,9 @@
   },
   "evaluation": {
     "enabled": true,
-    "output": "outputs/eval",
-    "jsonl": "outputs/eval/evaluation-results.jsonl",
     "judge": {
       "provider": "openai",
-      "model": "gpt-5.4",
+      "model": "gpt-5.4-mini",
       "temperature": 0
     },
     "fallback": {
@@ -45,7 +40,6 @@
     "save_errors": true
   },
   "execution": {
-    "repeats": 1,
-    "output": "outputs/"
+    "repeats": 1
   }
 }

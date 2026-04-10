@@ -3,12 +3,20 @@ from __future__ import annotations
 from pathlib import Path
 
 from copa.benchmark.experiment_loader import load_experiment
+from copa.benchmark.paths import resolve_expand_jsonl_path, resolve_expand_output_dir
 from copa.benchmark.runspec_generator import generate_runspecs
 from copa.dataset.provider import DatasetProvider
-from copa.util.artifacts import build_short_ids, canonical_identity_from_run, runspec_filename
+from copa.util.artifacts import runspec_filename
 from copa.util.fs import ensure_dir, write_json
 from copa.util.jsonl import write_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
+
+
+def _manifest_targets(target_dir: Path, target_jsonl: Path | None) -> list[Path]:
+    candidates = {target_dir / "runs.manifest.json"}
+    if target_jsonl is not None:
+        candidates.add(target_jsonl.parent / "runs.manifest.json")
+    return sorted(candidates)
 
 
 def validate_experiment(path: str) -> int:
@@ -39,29 +47,32 @@ def expand_experiment(
     )
     runspecs = generate_runspecs(experiment, base_dir, experiment_path=path)
     logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(runspecs))
-    payloads = [runspec.model_dump(mode="json") for runspec in runspecs]
-    identities = [canonical_identity_from_run(runspec) for runspec in runspecs]
-    short_ids = build_short_ids(identities)
-
-    output_root = Path(experiment.execution.output)
-    default_dir = (base_dir / output_root / experiment.id / "runspecs").resolve()
+    payloads = [runspec.to_persisted_artifact() for runspec in runspecs]
+    default_dir = resolve_expand_output_dir(experiment, base_dir)
     target_dir = Path(out_dir).resolve() if out_dir else default_dir
+    target_jsonl = Path(jsonl_path).resolve() if jsonl_path else resolve_expand_jsonl_path(experiment, base_dir)
     ensure_dir(target_dir)
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
     logger.progress = progress_tracker
     progress_tracker.start()
 
-    for runspec, short_id in zip(runspecs, short_ids):
-        artifact_path = target_dir / runspec_filename(runspec.experimentId, short_id)
-        logger.phase("WRITE", "Writing artifact", run=short_id, path=artifact_path)
-        write_json(artifact_path, runspec.model_dump(mode="json"))
-        logger.phase("WRITE", "Artifact written", run=short_id, path=artifact_path)
-        logger.phase("DONE", "Completed successfully", run=short_id)
+    for runspec in runspecs:
+        artifact_path = target_dir / runspec_filename(runspec.experimentId, runspec.runId)
+        logger.phase("WRITE", "Writing artifact", run=runspec.runId, path=artifact_path)
+        write_json(artifact_path, runspec.to_persisted_artifact())
+        logger.phase("WRITE", "Artifact written", run=runspec.runId, path=artifact_path)
+        logger.phase("DONE", "Completed successfully", run=runspec.runId)
         progress_tracker.advance()
 
-    if jsonl_path:
-        write_jsonl(jsonl_path, payloads)
-        print(f"Wrote {len(runspecs)} runspec(s) to {target_dir} and {jsonl_path}")
+    if target_jsonl is not None:
+        write_jsonl(target_jsonl, payloads)
+    manifest_payload = {"experimentPath": str(Path(path).resolve())}
+    for manifest_path in _manifest_targets(target_dir, target_jsonl):
+        write_json(manifest_path, manifest_payload)
+        logger.phase("WRITE", "Artifact written", path=manifest_path)
+
+    if target_jsonl is not None:
+        print(f"Wrote {len(runspecs)} runspec(s) to {target_dir} and {target_jsonl}")
     else:
         print(f"Wrote {len(runspecs)} runspec(s) to {target_dir}")
     return 0

@@ -15,13 +15,13 @@ from copa.datasets.lattes.tools import call_lattes_tool
 
 
 def _fixture(name: str) -> Path:
-    return Path.cwd() / "datasets" / "lattes" / "cvs" / name
+    return Path.cwd() / "datasets" / "lattes" / "context" / name
 
 
 def test_json_reader_extracts_publications_and_profile():
     reader = JsonLattesReader()
 
-    curriculum = reader.read(str(_fixture("nabor.json")))
+    curriculum = reader.read(str(_fixture("5660469902738038.json")))
 
     assert curriculum.profile.name == "Nabor das Chagas Mendonça"
     assert curriculum.publications
@@ -58,7 +58,7 @@ def test_json_reader_tolerates_malformed_publications(tmp_path: Path):
 def test_html_reader_extracts_publications_research_and_education():
     reader = HtmlLattesReader()
 
-    curriculum = reader.read(str(_fixture("nabor.html")))
+    curriculum = reader.read(str(_fixture("5660469902738038.html")))
 
     assert curriculum.profile.name == "Nabor das Chagas Mendonça"
     assert "Arquitetura de software" in curriculum.research.lines_of_research
@@ -69,7 +69,7 @@ def test_html_reader_extracts_publications_research_and_education():
 
 
 def test_html_reader_supports_latin1_documents(tmp_path: Path):
-    source = _fixture("nabor.html").read_text(encoding="utf-8")
+    source = _fixture("5660469902738038.html").read_text(encoding="utf-8")
     latin1_path = tmp_path / "latin1.html"
     latin1_path.write_bytes(source.encode("latin-1", errors="ignore"))
 
@@ -91,7 +91,7 @@ def test_provider_binds_once_and_filters_publications_and_projects():
 
     reader = CountingReader()
     provider = LattesProvider(readers={"json": reader})
-    path = str(_fixture("nabor.json"))
+    path = str(_fixture("5660469902738038.json"))
 
     provider.bind(path=path, fmt="json")
     provider.bind(path=path, fmt="json")
@@ -108,14 +108,14 @@ def test_provider_binds_once_and_filters_publications_and_projects():
 def test_provider_skips_entries_without_year_when_filtering():
     class NoYearReader:
         def read(self, path: str):
-            curriculum = JsonLattesReader().read(str(_fixture("nabor.json")))
+            curriculum = JsonLattesReader().read(str(_fixture("5660469902738038.json")))
             curriculum.publications.append(
                 curriculum.publications[0].model_copy(update={"year": None, "title": "No year"})
             )
             return curriculum
 
     provider = LattesProvider(readers={"json": NoYearReader()})
-    provider.bind(path=str(_fixture("nabor.json")), fmt="json")
+    provider.bind(path=str(_fixture("5660469902738038.json")), fmt="json")
 
     filtered = provider.get_publications(start_year=2024)
 
@@ -125,7 +125,7 @@ def test_provider_skips_entries_without_year_when_filtering():
 
 def test_list_publications_tool_supports_all_filter_modes():
     provider = LattesProvider()
-    provider.bind(path=str(_fixture("nabor.json")), fmt="json")
+    provider.bind(path=str(_fixture("5660469902738038.json")), fmt="json")
 
     all_items = call_lattes_tool(provider, "listPublications", {}).content
     start_only = call_lattes_tool(provider, "listPublications", {"startYear": 2026}).content
@@ -151,7 +151,7 @@ def test_mcp_server_binds_provider_using_context_path():
         strategy_name="mcp",
         context_format="json",
         params={},
-        metadata={"context_path": str(_fixture("nabor.json"))},
+        metadata={"context_path": str(_fixture("5660469902738038.json"))},
     )
 
     server.bind(request)

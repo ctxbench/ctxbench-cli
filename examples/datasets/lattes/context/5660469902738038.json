@@ -23,18 +23,12 @@
       "MENDONC'A, NABOR C.",
       "MENDONÇA, NABOR C."
     ],
-    "extraFields": [
-      "Nome: Nabor das Chagas Mendonça"
-    ],
+    "extraFields": ["Nome: Nabor das Chagas Mendonça"],
     "addresses": [
       {
         "type": "Profissional",
-        "phones": [
-          "(85) 34773268"
-        ],
-        "fax": [
-          "(85) 34773061"
-        ],
+        "phones": ["(85) 34773268"],
+        "fax": ["(85) 34773061"],
         "emails": [],
         "extra": [],
         "organization": "Universidade de Fortaleza",
@@ -60,9 +54,7 @@
         "title": "Software Architecture Recovery for Distributed Systems",
         "institution": "Imperial College of Science, Technology and Medicine, University of London, IC, Grã-Bretanha",
         "country": "Grã-Bretanha.",
-        "advisors": [
-          "Jeffrey Kramer."
-        ],
+        "advisors": ["Jeffrey Kramer."],
         "funding": [
           "Conselho Nacional de Desenvolvimento Científico e Tecnológico, CNPq, Brasil."
         ],
@@ -83,9 +75,7 @@
         "title": "Protocolos para Controlar Dados Replicados em Sistemas de Computação Distribuídos",
         "institution": "Universidade Estadual de Campinas, UNICAMP, Brasil",
         "country": "Brasil.",
-        "advisors": [
-          "Ricardo de Oliveira Anido."
-        ],
+        "advisors": ["Ricardo de Oliveira Anido."],
         "funding": [
           "Coordenação de Aperfeiçoamento de Pessoal de Nível Superior, CAPES, Brasil."
         ],
@@ -349,10 +339,7 @@
             "raw": "9/1995 - 11/1999"
           },
           "description": "Pesquisa e desenvolvimento, Department of Computing.",
-          "details": [
-            "Linhas de pesquisa",
-            "Arquitetura de software"
-          ]
+          "details": ["Linhas de pesquisa", "Arquitetura de software"]
         },
         {
           "interval": {
@@ -385,10 +372,7 @@
             "raw": "3/1992 - 12/1993"
           },
           "description": "Pesquisa e desenvolvimento, Instituto de Matemática Estatística e Ciência da Computação, Departamento de Ciência da Computação.",
-          "details": [
-            "Linhas de pesquisa",
-            "Replicação de dados"
-          ]
+          "details": ["Linhas de pesquisa", "Replicação de dados"]
         }
       ]
     },
@@ -559,9 +543,7 @@
       },
       "name": "Descrição: Este projeto de pesquisa tem como foco investigar novos modelos, técnicas e soluções tecnológicas voltadas para apoiar as organizações no desenvolvimento, implantação, gerenciamento, e evolução de aplicações baseadas na arquitetura de microsserviços.. Situação: Concluído; Natureza: Pesquisa. Alunos envolvidos: Graduação: (1)  / Mestrado acadêmico: (2)  / Doutorado: (2) . Integrantes: Nabor das Chagas Mendonça - Coordenador / Paulo Henrique Mendes Maia - Integrante / Lincoln S Rocha - Integrante / Américo Sampaio - Integrante.Financiador(es): Conselho Nacional de Desenvolvimento Científico e Tecnológico - Auxílio\n\t\t\t\t\t\t\t\t\t\tfinanceiro.",
       "description": "",
-      "details": [
-        "Autoadaptação Arquitetural para Aplicações Nativas de Nuvem"
-      ]
+      "details": ["Autoadaptação Arquitetural para Aplicações Nativas de Nuvem"]
     },
     {
       "type": "research",
@@ -746,9 +728,7 @@
       },
       "name": "Descrição: O objetivo geral do projeto é desenvolver soluções para otimizar os aspectos de segurança de dados e comunicação\nvia rede GPRS do Sistema de Fatura Imediata da COELCE. Com isso, espera-se aumentar a confiabilidade desse\nsistema e garantir uma maior robustez na sua utilização.. Situação: Concluído; Natureza: Pesquisa. Alunos envolvidos: Graduação: (1)  / Mestrado acadêmico: (1) . Integrantes: Nabor das Chagas Mendonça - Coordenador / Maria Andréia Formico Rodrigues - Integrante / Daniel Thomazini - Integrante / Juan Carlos Alvarado Alcócer - Integrante.Financiador(es): Companhia Energética do Ceará - Auxílio\n\t\t\t\t\t\t\t\t\t\tfinanceiro / Synapsis Brasil - Cooperação.",
       "description": "",
-      "details": [
-        "OW2 Open Source Middleware"
-      ]
+      "details": ["OW2 Open Source Middleware"]
     },
     {
       "type": "research",
@@ -757,9 +737,7 @@
       },
       "name": "Descrição: Este projeto tem como objetivos investigar, propor e avaliar novas tecnologias de middleware, com ênfase na plataforma Java EE e no paradigma de computação em nuvem. O projeto é fruto de uma parceria entre a Universidade de  Fortaleza e a Bull-Grenoble, França, e está sendo desenvolvido no contexto do consórcio internacional OW2.. Situação: Concluído; Natureza: Pesquisa. Alunos envolvidos: Graduação: (2)  / Mestrado acadêmico: (2) . Integrantes: Nabor das Chagas Mendonça - Integrante / Américo Sampaio - Coordenador.Financiador(es): Universidade de Fortaleza - Bolsa / Bull Grenoble - Cooperação.Número de produções C, T & A: 1",
       "description": "",
-      "details": [
-        "Centro de Formação e Desenvolvimento Palm"
-      ]
+      "details": ["Centro de Formação e Desenvolvimento Palm"]
     },
     {
       "type": "research",
@@ -768,9 +746,7 @@
       },
       "name": "Descrição: Implantação e operação de um Centro de Formação e Desenvolvimento Palm na Universidade de Fortaleza. Situação: Concluído; Natureza: Pesquisa. Alunos envolvidos: Graduação: (6)  / Especialização: (0)  / Mestrado acadêmico: (2)  / Mestrado profissional: (0)  / Doutorado: (0) . Integrantes: Nabor das Chagas Mendonça - Integrante / Angelo Brayner - Coordenador.Financiador(es): Celestica do Brasil - Auxílio\n\t\t\t\t\t\t\t\t\t\tfinanceiro.Número de produções C, T & A: 1",
       "description": "",
-      "details": [
-        "AdaWeb"
-      ]
+      "details": ["AdaWeb"]
     },
     {
       "type": "research",
@@ -1056,9 +1032,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2024,
-        "authors": [
-          "MENDONÇA, NABOR C"
-        ],
+        "authors": ["MENDONÇA, NABOR C"],
         "title": "Evaluating ChatGPT-4 Vision on Brazil?s National Undergraduate Computer Science Exam",
         "venue": "ACM Transactions on Computing Education",
         "volume": "24",
@@ -1193,11 +1167,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2016,
-        "authors": [
-          "JAMSHIDI, POOYAN",
-          "PAHL, CLAUS",
-          "MENDONCA, NABOR C"
-        ],
+        "authors": ["JAMSHIDI, POOYAN", "PAHL, CLAUS", "MENDONCA, NABOR C"],
         "title": "Managing Uncertainty in Autonomic Cloud Elasticity Controllers",
         "venue": "IEEE Cloud Computing",
         "volume": "3",
@@ -1209,11 +1179,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2016,
-        "authors": [
-          "CUNHA, M.",
-          "MENDONÇA, N. C.",
-          "SAMPAIO, A"
-        ],
+        "authors": ["CUNHA, M.", "MENDONÇA, N. C.", "SAMPAIO, A"],
         "title": "Cloud Crawler : a declarative performance evaluation environment for infrastructure-as-a-service clouds",
         "venue": "CONCURRENCY AND COMPUTATION-PRACTICE & EXPERIENCE",
         "volume": "29",
@@ -1225,11 +1191,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2016,
-        "authors": [
-          "JAMSHIDI, POOYAN",
-          "PAHL, CLAUS",
-          "MENDONÇA, NABOR C"
-        ],
+        "authors": ["JAMSHIDI, POOYAN", "PAHL, CLAUS", "MENDONÇA, NABOR C"],
         "title": "Pattern-based multi-cloud architecture migration",
         "venue": "SOFTWARE-PRACTICE & EXPERIENCE",
         "volume": "47",
@@ -1241,9 +1203,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2014,
-        "authors": [
-          "MENDONCA, NABOR C"
-        ],
+        "authors": ["MENDONCA, NABOR C"],
         "title": "Architectural Options for Cloud Migration",
         "venue": "COMPUTER",
         "volume": "47",
@@ -1304,11 +1264,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2012,
-        "authors": [
-          "RODRIGUES, M. A. F.",
-          "BARBOSA, R. G.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["RODRIGUES, M. A. F.", "BARBOSA, R. G.", "MENDONÇA, N. C"],
         "title": "Interactive Navigation and Exploration of Virtual Environments on Handheld Devices",
         "venue": "International Journal of Handheld Computing Research",
         "volume": "3",
@@ -1357,11 +1313,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2008,
-        "authors": [
-          "MENDONÇA, N. C",
-          "SILVA, J. A. F.",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "SILVA, J. A. F.", "ANIDO, R. O"],
         "title": "Client-side Selection of Replicated Web Services: An Empirical Assessment",
         "venue": "JOURNAL OF SYSTEMS AND SOFTWARE",
         "volume": "81",
@@ -1408,10 +1360,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2006,
-        "authors": [
-          "MENDONÇA, N. C",
-          "SILVA, C. F"
-        ],
+        "authors": ["MENDONÇA, N. C", "SILVA, C. F"],
         "title": "A Unified Model for Service- and Aspect-Oriented Software Development",
         "venue": "International Journal of Web Services Practice",
         "volume": "2",
@@ -1421,10 +1370,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2003,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Reverse Engineering of Distributed System Architecture - A Case Study",
         "venue": "Revista Tecnologia (UNIFOR)",
         "volume": "24, n.1",
@@ -1434,10 +1380,7 @@
       {
         "category": "Artigos completos publicados em periódicos",
         "year": 2001,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "An Approach for Recovering Distributed System Architectures",
         "venue": "Automated Software Engineering",
         "volume": "8",
@@ -1449,10 +1392,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2026,
-        "authors": [
-          "OLIVEIRA, G. Q.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["OLIVEIRA, G. Q.", "MENDONÇA, N. C"],
         "title": "How Good is ChatGPT-4o in Assessing Architecture Diagrams? An Exploratory Study with Four Software Engineering Tools.",
         "venue": "1st ICSE International Workshop on AI for Software Quality Evaluation - Judgment, Metrics, Benchmarks, and Beyond (AI-SQE), 2026, Rio de Janeiro, RJ"
       },
@@ -1502,10 +1442,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2025,
-        "authors": [
-          "OLIVEIRA, G. Q.",
-          "MENDONCA, N. C"
-        ],
+        "authors": ["OLIVEIRA, G. Q.", "MENDONCA, N. C"],
         "title": "LLM-Based Quality Assessment of Software Architecture Diagrams: A Preliminary Study with Four Open-Source Projects.",
         "venue": "19th European Conference on Software Architecture (ECSA), 2025, Limassol, Chipre",
         "pages": "116-123"
@@ -1513,10 +1450,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2025,
-        "authors": [
-          "ADERALDO, CARLOS M.",
-          "MENDONÇA, NABOR C"
-        ],
+        "authors": ["ADERALDO, CARLOS M.", "MENDONÇA, NABOR C"],
         "title": "ResilienceBench-Operator: A Kubernetes Extension for Orchestrating Resilience Experiments on Microservice Applications.",
         "venue": "Simpósio Brasileiro de Engenharia de Software, 2025, Brasil",
         "pages": "983-989",
@@ -1526,10 +1460,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2024,
-        "authors": [
-          "MENDONCA FILHO, R. C.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["MENDONCA FILHO, R. C.", "MENDONÇA, N. C"],
         "title": "Impacto de Desempenho da Granularidade de Microsserviços: Uma Avaliação com o Arcabouço Service Weaver.",
         "venue": "XLII Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC), 2024, Niterói, RJ",
         "pages": "644-657",
@@ -1559,10 +1490,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2024,
-        "authors": [
-          "MENDONCA FILHO, R. C.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["MENDONCA FILHO, R. C.", "MENDONÇA, N. C"],
         "title": "Performance Impact of Microservice Granularity Decisions: An Empirical Evaluation Using the Service Weaver Framework.",
         "venue": "18th European Conference on Software Architecture (ECSA), 2024, Luxemburgo, Luxemburgo",
         "pages": "191-206"
@@ -1584,10 +1512,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2023,
-        "authors": [
-          "ADERALDO, CARLOS MENDES",
-          "MENDONCA, NABOR DAS CHAGAS"
-        ],
+        "authors": ["ADERALDO, CARLOS MENDES", "MENDONCA, NABOR DAS CHAGAS"],
         "title": "How The Retry Pattern Impacts Application Performance: A Controlled Experiment.",
         "venue": "SBES 2023: XXXVII Brazilian Symposium on Software Engineering, 2023, Campo Grande Brazil",
         "pages": "47-56",
@@ -1632,10 +1557,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2022,
-        "authors": [
-          "ADERALDO, CARLOS M.",
-          "MENDONC'A, NABOR C"
-        ],
+        "authors": ["ADERALDO, CARLOS M.", "MENDONC'A, NABOR C"],
         "title": "ResilienceBench: Um Ambiente para Avaliação Experimental de Padrões de Resiliência para Microsservic¿os.",
         "venue": "Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos, 2022, Brasil",
         "pages": "65-72",
@@ -1645,10 +1567,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2021,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ADERALDO, C. M"
-        ],
+        "authors": ["MENDONÇA, N. C", "ADERALDO, C. M"],
         "title": "Towards First-Class Architectural Connectors: The Case for Self-Adaptive Service Meshes.",
         "venue": "XXXV Brazilian Symposium on Software Engineering (SBES), Insightful Ideas and Emerging Results Track, 2021, Joinville, SC",
         "doi": "http://dx.doi.org/10.1145/3474624.3477072",
@@ -1713,10 +1632,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2019,
-        "authors": [
-          "ADERALDO, C. M.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["ADERALDO, C. M.", "MENDONÇA, N. C"],
         "title": "Kubow: Um Serviço de Autoadaptação Baseada em Arquitetura para Aplicações Nativas da Nuvem.",
         "venue": "X Congresso Brasileiro de Software: Teoria e Prática (CBSoft), 2019, Salvador, BA"
       },
@@ -1798,12 +1714,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2016,
-        "authors": [
-          "ROLIM, T.",
-          "SAMPAIO, A.",
-          "MENDONÇA, N. C.",
-          "CUNHA, M"
-        ],
+        "authors": ["ROLIM, T.", "SAMPAIO, A.", "MENDONÇA, N. C.", "CUNHA, M"],
         "title": "Uma Abordagem para Avaliação de Topologias de Aplicações em Nuvem Baseado em TOSCA.",
         "venue": "XIV Workshop em Clouds e Aplicações (WCGA 2016), 2016, Salvador, BA"
       },
@@ -1897,11 +1808,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2015,
-        "authors": [
-          "VASCONCELOS, M.",
-          "MENDONÇA, N. C.",
-          "MAIA, P. H. M"
-        ],
+        "authors": ["VASCONCELOS, M.", "MENDONÇA, N. C.", "MAIA, P. H. M"],
         "title": "Cloud Detours: A Non-intrusive Approach for Automatic Software Adaptation to the Cloud.",
         "venue": "4th European Conference on Service-Oriented and Cloud Computing (ESOCC), 2015, Taormina, Itália",
         "volume": "9306",
@@ -1936,22 +1843,14 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2013,
-        "authors": [
-          "CUNHA, M.",
-          "MENDONÇA, N. C.",
-          "SAMPAIO, A"
-        ],
+        "authors": ["CUNHA, M.", "MENDONÇA, N. C.", "SAMPAIO, A"],
         "title": "Cloud Crawler: Um Ambiente Programável para Avaliar o Desempenho de Aplicações em Nuvens de Infraestrutura.",
         "venue": "XXXI Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC2013), 2013, Brasília - DF"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2013,
-        "authors": [
-          "LIMA JR., R. C.",
-          "SAMPAIO, A.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["LIMA JR., R. C.", "SAMPAIO, A.", "MENDONÇA, N. C"],
         "title": "TREXCloud: Facilitando a Implantação de Aplicações Java Enterprise em Nuvens IaaS.",
         "venue": "XI Workshop em Clouds, Grids e Aplicações (WCGA2013), 2013, Brasília - DF"
       },
@@ -1973,11 +1872,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2013,
-        "authors": [
-          "CUNHA, MATHEUS",
-          "MENDONCA, NABOR",
-          "SAMPAIO, AMERICO"
-        ],
+        "authors": ["CUNHA, MATHEUS", "MENDONCA, NABOR", "SAMPAIO, AMERICO"],
         "title": "A Declarative Environment for Automatic Performance Evaluation in IaaS Clouds.",
         "venue": "2013 IEEE 6th International Conference on Cloud Computing (CLOUD), 2013, Santa Clara",
         "pages": "285-292",
@@ -2000,11 +1895,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2012,
-        "authors": [
-          "LIMA JR., R. C.",
-          "SAMPAIO, A.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["LIMA JR., R. C.", "SAMPAIO, A.", "MENDONÇA, N. C"],
         "title": "TREX Cloud Framework: Uma Ferramenta para Implantação Automatizada de Aplicações Web JEE em Provedores de Nuvem de Infraestrutura.",
         "venue": "Salão de Ferramentas do XXX Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC 2012), 2012, Outro Preto - MG"
       },
@@ -2027,10 +1918,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2011,
-        "authors": [
-          "SAMPAIO, A.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SAMPAIO, A.", "MENDONÇA, N. C"],
         "title": "Uni4Cloud: An Approach based on Open Standards for Deployment and Management of Multi-cloud Applications.",
         "venue": "ICSE 2011 Software Engineering for Cloud Computing Workshop (SECLOUD), 2011, Honolulu, Hawaii, EUA",
         "pages": "15-21",
@@ -2040,10 +1928,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2011,
-        "authors": [
-          "SOUSA, W. E. Q.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SOUSA, W. E. Q.", "MENDONÇA, N. C"],
         "title": "Novas Políticas de Invocação Paralela para Seleção Dinâmica de Servidores Replicados.",
         "venue": "XXIX Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC2011), 2011, Campo Grande - MS",
         "pages": "689-702"
@@ -2051,11 +1936,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2011,
-        "authors": [
-          "CUNHA, M.",
-          "MENDONÇA, N. C.",
-          "SAMPAIO, A"
-        ],
+        "authors": ["CUNHA, M.", "MENDONÇA, N. C.", "SAMPAIO, A"],
         "title": "Avaliação do Custo por Usuário de uma Aplicação de Rede Social na Amazon EC2.",
         "venue": "IX Workshop em Clouds, Grids e Aplicações (WCGA2011), 2011, Campo Grande - MS",
         "pages": "73-85"
@@ -2095,11 +1976,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2011,
-        "authors": [
-          "CUNHA, M.",
-          "MENDONÇA, N. C.",
-          "SAMPAIO, A"
-        ],
+        "authors": ["CUNHA, M.", "MENDONÇA, N. C.", "SAMPAIO, A"],
         "title": "Investigating the Impact of Deployment Configuration and User Demand on a Social Network Application in the Amazon EC2 Cloud.",
         "venue": "3rd IEEE International Conference on Cloud Computing Technology and Science (IEEE CloudCom 2011), Workshop on Network Infrastructure Services as part of Cloud Computing (NetCloud), 2011, Atenas, Grécia",
         "pages": "746-751",
@@ -2109,11 +1986,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2010,
-        "authors": [
-          "SALES, L.",
-          "TEOFILO, H.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SALES, L.", "TEOFILO, H.", "MENDONÇA, N. C"],
         "title": "Development and Evaluation of a Generic Group Communication Layer.",
         "venue": "XXVIII Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC2010), 2010, Gramado - RS",
         "pages": "929-942"
@@ -2121,11 +1994,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2010,
-        "authors": [
-          "SALES, L.",
-          "TEOFILO, H.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SALES, L.", "TEOFILO, H.", "MENDONÇA, N. C"],
         "title": "G2CL: A Generic Group Communication Layer for Clustered Applications.",
         "venue": "10th IFIP International Conference on Distributed Applications and Interoperable Systems (DAIS2010), 2010, Amsterdam, Holanda",
         "volume": "6115",
@@ -2150,20 +2019,14 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2010,
-        "authors": [
-          "MIRANDA, B. H.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["MIRANDA, B. H.", "MENDONÇA, N. C"],
         "title": "Implementação de um Combinador de Aspectos para a Linguagem WSAL Utilizando o Padrão ESB.",
         "venue": "IV Latin American Workshop on Aspect-Oriented Software Development (LA-WASP2010), 2010, Salvador - BA"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2010,
-        "authors": [
-          "BARROS, M.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["BARROS, M.", "MENDONÇA, N. C"],
         "title": "Gridificação Semi-automática de Aplicações Multi-thread.",
         "venue": "4th Workshop on Languages and Tools for Multithreaded, Parallel and Distributed Programming (LTPD2010), 2010, Salvador - BA"
       },
@@ -2245,10 +2108,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2007,
-        "authors": [
-          "FREITAS NETO, J. J.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["FREITAS NETO, J. J.", "MENDONÇA, N. C"],
         "title": "RedoX-UML: Uma Visão Atualizada.",
         "venue": "IV Workshop de Manutenção de Software Moderna (WMSWM'07), evento integrante do VI Simpósio Brasileiro de Qualidade de Software (SBQS'07), 2007, Porto de Galinhas, PE",
         "pages": "1-15"
@@ -2256,10 +2116,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2007,
-        "authors": [
-          "SOUSA, F. C.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SOUSA, F. C.", "MENDONÇA, N. C"],
         "title": "Um Ambiente para Detecção de Cenários Implícitos a partir de Rastros de Execução.",
         "venue": "XXI Simpósio Brasileiro de Engenharia de Software (SBES'07), 2007, João Pessoa, PB",
         "pages": "306-322"
@@ -2295,11 +2152,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2007,
-        "authors": [
-          "MELO JUNIOR, L. S.",
-          "MENDONÇA, N. C.",
-          "MENEZES, R. S"
-        ],
+        "authors": ["MELO JUNIOR, L. S.", "MENDONÇA, N. C.", "MENEZES, R. S"],
         "title": "Uma Ferramenta de Refatoração para AspectJ utilizando AspectJML e XSLT.",
         "venue": "XIV Sessão de Ferramentas, evento integrante do XXI Simpósio Brasileiro de Engenharia de Software (SBES'07), 2007, João Pessoa, PB",
         "pages": "83-89"
@@ -2323,11 +2176,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2006,
-        "authors": [
-          "RODRIGUES, M. A. F.",
-          "BARBOSA, R. G.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["RODRIGUES, M. A. F.", "BARBOSA, R. G.", "MENDONÇA, N. C"],
         "title": "Interactive Mobile 3D Graphics for On-the-go Visualization and Walkthroughs.",
         "venue": "21st Annual ACM Symposium on Applied Computing (ACM SAC'06), Special Track on Handheld Computing, 2006, Dijon, França",
         "pages": "1002-1007",
@@ -2337,40 +2186,28 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2006,
-        "authors": [
-          "FREITAS NETO, J. J.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["FREITAS NETO, J. J.", "MENDONÇA, N. C"],
         "title": "RedoX-UML: Redocumentação de Aplicações Legadas COBOL Usando XML e UML.",
         "venue": "III Workshop de Manutenção de Software Moderna (WMSWM'06), evento integrante do V Simpósio Brasileiro de Qualidade de Software (SBQS'06), 2006, Vila Velha - ES"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2006,
-        "authors": [
-          "DIÓGENES, F. A.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["DIÓGENES, F. A.", "MENDONÇA, N. C"],
         "title": "LogMiddle: Um Middleware P2P para Replicação de Dados em Redes Móveis Ad Hoc.",
         "venue": "II Workshop sobre Redes Peer-to-Peer (WP2P'06), evento integrante do XXIV Simpósio Brasileiro de Redes de Computadores (SBRC'06), 2006, Curitiba - PR"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2006,
-        "authors": [
-          "DIÓGENES, F. A.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["DIÓGENES, F. A.", "MENDONÇA, N. C"],
         "title": "LogMiddle: Uma Solução Eficiente para o Compartilhamento de Dados em Redes Móveis Ad Hoc.",
         "venue": "XXXII Conferência Latinoamericana de Informática (CLEI'06), evento integrante do 19th IFIP World Computer Congress (WCC'06), 2006, Santiago - Chile"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "MENDONÇA, N. C",
-          "SILVA, J. A. F"
-        ],
+        "authors": ["MENDONÇA, N. C", "SILVA, J. A. F"],
         "title": "An Empirical Evaluation of Client-side Server Selection Policies for Accessing Replicated Web Services.",
         "venue": "20th Annual ACM Symposium on Applied Computing (ACM SAC'05), Special Track on Web Technologies and Applications, 2005, Santa Fé, New Mexico, EUA",
         "pages": "1704-1708",
@@ -2393,10 +2230,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "MENDONÇA, N. C",
-          "SILVA, C. F"
-        ],
+        "authors": ["MENDONÇA, N. C", "SILVA, C. F"],
         "title": "Aspectual Services: Unifying Service- and Aspect-Oriented Software Development.",
         "venue": "International Conference on Next Generation Web Services Practices (NWeSP'05), 2005, Seul, Coréia do Sul",
         "pages": "351-356",
@@ -2406,42 +2240,28 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "MAIA, P. H. M.",
-          "MENDONÇA, N. C.",
-          "FURTADO, V"
-        ],
+        "authors": ["MAIA, P. H. M.", "MENDONÇA, N. C.", "FURTADO, V"],
         "title": "Um Processo para Implementação de Aplicações Baseadas em Grades Computacionais Utilizando Aspectos.",
         "venue": "2o"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "MELO JUNIOR, L. S.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["MELO JUNIOR, L. S.", "MENDONÇA, N. C"],
         "title": "AspectJML: Uma Linguagem de Marcação para AspectJ.",
         "venue": "2o"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "BARBOSA, R. G.",
-          "RODRIGUES, M. A. F.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["BARBOSA, R. G.", "RODRIGUES, M. A. F.", "MENDONÇA, N. C"],
         "title": "Ambientes Virtuais Colaborativos para Dispositivos Móveis.",
         "venue": "IV Workshop de Teses e Dissertações em Computação Gráfica e Processamento de Imagens (WTDCGPI'05), evento integrante do XVIII Simpósio Brasileiro de Computação Gráfica e Processamento de Imagens (SIBGRAPI'05), 2005, Natal - RN"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2004,
-        "authors": [
-          "SILVA, J. A. F.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SILVA, J. A. F.", "MENDONÇA, N. C"],
         "title": "Uma Avaliação Empírica de Políticas de Invocação para Serviços Web Replicados.",
         "venue": "XXII Simpósio Brasileiro de Redes de Computadores (SBRC'04), 2004, Gramado, RS",
         "pages": "691-704"
@@ -2477,10 +2297,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2004,
-        "authors": [
-          "SILVA, J. A. F.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SILVA, J. A. F.", "MENDONÇA, N. C"],
         "title": "Dynamic Invocation of Replicated Web Services.",
         "venue": "2nd Latin American Web Congress and 10th Brazilian Symposium on Multimedia and the Web (WebMedia & LA-Web 2004 Joint Conference), 2004, Ribeirão Preto, SP",
         "pages": "22-29",
@@ -2502,10 +2319,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2004,
-        "authors": [
-          "SILVA, C. F.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SILVA, C. F.", "MENDONÇA, N. C"],
         "title": "Uma Abordagem para Integrar Aspectos e Serviços Web.",
         "venue": "1o"
       },
@@ -2530,21 +2344,14 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2004,
-        "authors": [
-          "FONSECA, L. A.",
-          "MENDONÇA, N. C.",
-          "MAIA, P. H. M"
-        ],
+        "authors": ["FONSECA, L. A.", "MENDONÇA, N. C.", "MAIA, P. H. M"],
         "title": "Towards Reusable Code Analysis Tools Using Standard XML Technologies.",
         "venue": "I Workshop de Ciências da Computação e Sistemas da Informação da Região Sul (WORKCOMP-SUL'04), 2004, Palhoça, SC"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2003,
-        "authors": [
-          "SOUSA, A. G.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SOUSA, A. G.", "MENDONÇA, N. C"],
         "title": "RLime: Uma Camada de Replicação para o Lime.",
         "venue": "V Workshop de Comunicação Sem Fio e Computação Móvel (WCSF'03), 2003, São Lourenço, MG",
         "pages": "20-31"
@@ -2552,11 +2359,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2002,
-        "authors": [
-          "RODRIGUES, M. A. F.",
-          "MAIA, J. G. R.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["RODRIGUES, M. A. F.", "MAIA, J. G. R.", "MENDONÇA, N. C"],
         "title": "Simulação de Procedimentos Médicos Usando Java e Tecnologias da Web.",
         "venue": "II Workshop de Informática Médica (WIM'02), evento integrante do XVI Simpósio Brasileiro de Engenharia de Software (SBES'02), 2002, Gramado, Rio Grande do Sul"
       },
@@ -2576,18 +2379,14 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2001,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C.. Software de Código Móvel: Tecnologias, Padrões de Arquitetura, e Aplicações.",
         "venue": "XV Simpósio Brasileiro de Engenharia de Software (SBES'01), 2001, Rio de Janeiro, RJ"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 2000,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C.. Padrões de Arquitetura de Software para Sistemas Distribuídos.",
         "venue": "XIV Simpósio Brasileiro de Engenharia de Software (SBES'00), 2000, João Pessoa, PB",
         "pages": "379-409"
@@ -2595,10 +2394,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1999,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Component Module Classification for Distributed Software Understanding.",
         "venue": "IEEE International Conference on Software Maintenance (ICSM'99), 1999, Oxford, U.K",
         "pages": "119-127",
@@ -2608,10 +2404,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1998,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Developing an Approach for the Recovery of Distributed Software Architectures.",
         "venue": "IEEE International Workshop on Program Comprehension (IWPC'98), 1998, Ischia, Italy",
         "pages": "28-36",
@@ -2621,10 +2414,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1998,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "An Experiment in Distributed Software Architecture Recovery.",
         "venue": "Second International ESPRIT ARES Workshop on Development and Evolution of Software Architectures for Product Families, 1998, Las Palmas, Spain",
         "pages": "106-114"
@@ -2632,10 +2422,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1997,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "A Quality-Based Analysis of Architecture Recovery Environments.",
         "venue": "First European Working Conference on Software Maintenance and Reengineering (CSMR'97), 1997, Berlin, Germany",
         "pages": "54-59",
@@ -2645,10 +2432,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1996,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Requirements for an Effective Architecture Recovery Framework.",
         "venue": "4th ACM SIGSOFT Symposium on the Foundations of Software Engineering (FSE'96), 2nd International Software Architecture Workshop (ISAW'96), 1996, San Francisco, U.S.A",
         "pages": "101-105",
@@ -2658,9 +2442,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1995,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C.. Um Algoritmo de Baixo Custo para Exclusão Mútua Distribuída com Balanceamento Eficiente de Carga.",
         "venue": "XXII Seminário Integrado de Software e Hardware (SEMISH'95), evento integrante da XXI Conferencia Latino-Americana de Informática (CLEI'95) & XIV Congresso da Sociedade Brasileira de Computação (SBC'95), 1995, Canela, RS",
         "pages": "301-312"
@@ -2668,10 +2450,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1994,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Using Extended Hierarchical Quorum Consensus to Control Replicated Data: From Traditional Voting to Logical Structures.",
         "venue": "27th Hawaii International Conference on Systems Sciences (HICSS-27), Minitrack on Parallel and Distributed Databases, 1994, Maui, Hawaii, U.S.A",
         "pages": "303-312",
@@ -2681,10 +2460,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1994,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Um Protocolo Geral para Controlar Dados Replicados em Sistemas de Computação Distribuídos.",
         "venue": "XXI Seminário Integrado de Software e Hardware, 1994, Caxambu, MG",
         "pages": "427-442"
@@ -2692,10 +2468,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Usando Votação Hierárquica Estendida para Controlar Dados Replicados: de Votação Simples a Estruturas Lógicas.",
         "venue": "V Simpósio de Computadores Tolerantes a Falhas (SCTF'93), 1993, São José dos Campos, SP",
         "pages": "18-36"
@@ -2703,10 +2476,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Utilizando uma Estrutura de Grade com Anéis para Reduzir o Custo de Acesso a Dados Replicados.",
         "venue": "XX Seminário Integrado de Software e Hardware (SEMISH'93), evento integrante do XII Congresso da Sociedade Brasileira de Computação (SBC'93), 1993, Florianópolis, SC",
         "pages": "490-502"
@@ -2714,10 +2484,7 @@
       {
         "category": "Trabalhos completos publicados em anais de congressos",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Protocolo Hierárquico em Anel: um Esquema Eficiente para Leitura de Dados Replicados.",
         "venue": "XI Simpósio Brasileiro de Redes de Computadores (SBRC'93), 1993, Campinas, SP",
         "pages": "119-138"
@@ -2725,9 +2492,7 @@
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 2021,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C.. Abertura e Internacionalização do SBES: Um Oximoro Irreconciliável?.",
         "venue": "1st Workshop on Open Science Practices for Software Engineering (OpenScienSE 2021), 2021",
         "doi": "http://dx.doi.org/10.5281/zenodo.5373522",
@@ -2790,41 +2555,28 @@
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 2008,
-        "authors": [
-          "BEZERRA, C. I.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["BEZERRA, C. I.", "MENDONÇA, N. C"],
         "title": "Um Metamodelo para Definição de Modelos de Desempenho de Processos Utilizando a Metodologia DMAIC.",
         "venue": "VI Workshop de Teses e Dissertações em Qualidade de Software (WTDQS), 2008, Florianópolis - SC"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "SILVA, J. A. F.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SILVA, J. A. F.", "MENDONÇA, N. C"],
         "title": "Implementation and Empirical Evaluation of Server Selection Policies for Accessing Replicated Web Services.",
         "venue": "XVIII Concurso de Teses e Dissertações (CTD'05), evento integrante do XXV Congresso da Sociedade Brasileira de Computação (SBC'05), 2005, São Leopoldo - RS"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 2005,
-        "authors": [
-          "SOUSA, F. C.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["SOUSA, F. C.", "MENDONÇA, N. C"],
         "title": "Detecção e Análise de Cenários Implícitos como Suporte à Manutenção de Software.",
         "venue": "X Workshop de Teses e Dissertações em Engenharia de Software (WTES'05), evento integrante do XIX Simpósio Brasileiro de Engenharia de Software (SBES'05), 2005, Uberlândia - MG"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 2003,
-        "authors": [
-          "MAIA, P. H. M.",
-          "MENDONÇA, N. C.",
-          "ANDRADE, R. M. C"
-        ],
+        "authors": ["MAIA, P. H. M.", "MENDONÇA, N. C.", "ANDRADE, R. M. C"],
         "title": "Implementação de Ferramentas Abertas de Reestruturação de Código Utilizando Tecnologias e Padrões Baseados em XML.",
         "venue": "VIII Workshop de Teses e Dissertações em Engenharia de Software (WTES'03), evento integrante do XVII Simpósio Brasileiro de Engenharia de Software (SBES'03), 2003, Manaus - AM",
         "pages": "53-58"
@@ -2832,10 +2584,7 @@
       {
         "category": "Resumos expandidos publicados em anais de congressos",
         "year": 1994,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Protocolos para Controlar Dados Replicados em Sistemas de Computação Distribuídos.",
         "venue": "VII Concurso de Teses e Dissertações (CTD'94), evento integrante do XIII Congresso da Sociedade Brasileira de Computação (SBC'94), 1994, Caxambu, MG",
         "pages": "707-715"
@@ -2843,20 +2592,14 @@
       {
         "category": "Resumos publicados em anais de congressos",
         "year": 2001,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C.. Architecture Recovery for Distributed Systems (Position Paper).",
         "venue": "IEEE Working Conference on Reverse Engineering (WCRE'01), Workshop on Software Architecture Recovery and Modelling (SWARM'01), 2001, Stuttgart, Alemanha"
       },
       {
         "category": "Artigos aceitos para publicação",
         "year": 2026,
-        "authors": [
-          "MENDONÇA, N. C",
-          "RODRIGUES, M. A. F.",
-          "MENDONCA, L. R"
-        ],
+        "authors": ["MENDONÇA, N. C", "RODRIGUES, M. A. F.", "MENDONCA, L. R"],
         "title": "Design, Implementation and Community Impact of QLattes: An Open Source Browser Extension for Qualis Annotation and Visualization in the Lattes Platform",
         "venue": "JOURNAL OF THE BRAZILIAN COMPUTER SOCIETY (ONLINE)",
         "issn": "16784804"
@@ -2864,21 +2607,14 @@
       {
         "category": "Outras produções bibliográficas",
         "year": 2002,
-        "authors": [
-          "MENDONÇA, N. C",
-          "BRAYNER, A.",
-          "MONTEIRO, J. M"
-        ],
+        "authors": ["MENDONÇA, N. C", "BRAYNER, A.", "MONTEIRO, J. M"],
         "title": "Mobile Database Communities: An Approach for Sharing Autonomous Mobile Databases in Ad Hoc Networks",
         "venue": "Mestrado em Informática Aplicada - UNIFOR"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 2002,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Static Recovery of Architectural Runtime Abstractions: A Case Study",
         "venue": "Mestrado em Informática Aplicada - UNIFOR"
       },
@@ -2897,68 +2633,49 @@
       {
         "category": "Outras produções bibliográficas",
         "year": 2002,
-        "authors": [
-          "MENDONÇA, N. C",
-          "KRAMER, J"
-        ],
+        "authors": ["MENDONÇA, N. C", "KRAMER, J"],
         "title": "Recovering Runtime Abstractions from Source Code: A Case Study in Architectural Reverse Engineering",
         "venue": "Mestrado em Informática Aplicada - UNIFOR"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 2001,
-        "authors": [
-          "MORAES FILHO, J. A.",
-          "FONSECA, L.",
-          "MENDONÇA, N. C"
-        ],
+        "authors": ["MORAES FILHO, J. A.", "FONSECA, L.", "MENDONÇA, N. C"],
         "title": "Engenharia de Aplicações Web: O Estado da Arte de uma Nova Disciplina",
         "venue": "Mestrado em Informática Aplicada - UNIFOR"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 1999,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C",
         "venue": "Software Architecture Recovery for Distributed Systems. Londres"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 1995,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C",
         "venue": "Protocols for Maintaining Consistency of Replicated Data. Campinas"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N"
-        ],
+        "authors": ["MENDONÇA, N"],
         "title": "C",
         "venue": "Protocolos para Controlar Dados Replicados em Sistemas de Computação Distribuídos. Campinas"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "Using Extended Hierarchical Quorum Consensus to Control Replicated Data: From Traditional Voting to Logical Structures",
         "venue": "Capinas"
       },
       {
         "category": "Outras produções bibliográficas",
         "year": 1993,
-        "authors": [
-          "MENDONÇA, N. C",
-          "ANIDO, R. O"
-        ],
+        "authors": ["MENDONÇA, N. C", "ANIDO, R. O"],
         "title": "The Hierarchical Ring Protocol: An Efficient Scheme for Reading Replicated Data",
         "venue": "Campinas"
       }
@@ -3335,3 +3052,4 @@
   },
   "warnings": []
 }
+

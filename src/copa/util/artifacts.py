@@ -6,6 +6,7 @@ from typing import Protocol
 
 
 class RunIdentity(Protocol):
+    runId: str
     experimentId: str
     questionId: str
     contextId: str
@@ -69,17 +70,21 @@ def build_short_ids(identities: list[str], min_length: int = 10) -> list[str]:
     return digests
 
 
-def artifact_filename(prefix: str, experiment_id: str, short_id: str) -> str:
-    return f"{prefix}_{sanitize_experiment_id(experiment_id)}_{short_id}.json"
+def run_id_from_identity(identity: str, min_length: int = 10) -> str:
+    return build_short_ids([identity], min_length=min_length)[0]
 
 
-def runspec_filename(experiment_id: str, short_id: str) -> str:
-    return artifact_filename("rs", experiment_id, short_id)
+def artifact_filename(prefix: str, experiment_id: str, run_id: str) -> str:
+    return f"{prefix}_{sanitize_experiment_id(experiment_id)}_{run_id}.json"
 
 
-def runresult_filename(experiment_id: str, short_id: str) -> str:
-    return artifact_filename("rr", experiment_id, short_id)
+def runspec_filename(experiment_id: str, run_id: str) -> str:
+    return artifact_filename("rs", experiment_id, run_id)
 
 
-def evalresult_filename(experiment_id: str, short_id: str) -> str:
-    return artifact_filename("re", experiment_id, short_id)
+def runresult_filename(experiment_id: str, run_id: str) -> str:
+    return artifact_filename("rr", experiment_id, run_id)
+
+
+def evalresult_filename(experiment_id: str, run_id: str) -> str:
+    return artifact_filename("re", experiment_id, run_id)

@@ -1,14 +1,43 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from copa._compat import BaseModel, Field, ValidationError
 
 
 class ExperimentDataset(BaseModel):
-    questions: str
-    contexts: str
-    question_instances: str | None = None
+    root: str
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "ExperimentDataset":
+        if isinstance(data, cls):
+            return data
+        if isinstance(data, str):
+            return cls(root=data)
+        if isinstance(data, dict):
+            if "root" in data:
+                return cls(root=str(data["root"]))
+            legacy_paths = {"questions", "contexts", "question_instances"}
+            if legacy_paths & set(data):
+                raise ValidationError(
+                    "Experiment dataset must be a dataset directory path. "
+                    "Put questions.json and questions.instance.json in the dataset root "
+                    "and context files in <dataset>/context."
+                )
+        raise ValidationError("ExperimentDataset requires a dataset directory path.")
+
+    @property
+    def questions(self) -> str:
+        return str(Path(self.root) / "questions.json")
+
+    @property
+    def contexts(self) -> str:
+        return str(Path(self.root) / "context")
+
+    @property
+    def question_instances(self) -> str:
+        return str(Path(self.root) / "questions.instance.json")
 
 
 class ExperimentParams(BaseModel):
@@ -39,7 +68,13 @@ class ExperimentParams(BaseModel):
 
 class ExperimentExecution(BaseModel):
     repeats: int = 1
-    output: str = "outputs"
+    output: str | None = None
+    jsonl: str | None = None
+
+
+class ExperimentExpansion(BaseModel):
+    output: str | None = None
+    jsonl: str | None = None
 
 
 class EvaluationModelConfig(BaseModel):
@@ -111,12 +146,28 @@ class ExperimentTrace(BaseModel):
 class Experiment(BaseModel):
     id: str
     name: str | None = None
+    output: str = "outputs"
     dataset: ExperimentDataset
     factors: dict[str, list[Any]]
     params: ExperimentParams = Field(default_factory=ExperimentParams)
+    expansion: ExperimentExpansion = Field(default_factory=ExperimentExpansion)
     evaluation: ExperimentEvaluation = Field(default_factory=ExperimentEvaluation)
     trace: ExperimentTrace = Field(default_factory=ExperimentTrace)
     execution: ExperimentExecution = Field(default_factory=ExperimentExecution)
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "Experiment":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("Experiment requires an object input.")
+        payload = dict(data)
+        if "dataset" in payload:
+            payload["dataset"] = ExperimentDataset.model_validate(payload["dataset"])
+        execution = payload.get("execution")
+        if not payload.get("output") and isinstance(execution, dict) and execution.get("output"):
+            payload["output"] = execution.get("output")
+        return super().model_validate(payload)
 
     def _validate_model(self) -> None:
         required = {"model", "strategy", "format"}
@@ -143,8 +194,20 @@ class Experiment(BaseModel):
                 raise ValueError(f"Experiment factors.{factor_name} entries must be non-empty strings.")
 
 
+class RunMetadata(BaseModel):
+    canonicalId: str
+    questionId: str
+    contextId: str
+    provider: str
+    modelName: str | None = None
+    strategy: str
+    format: str
+    repeatIndex: int
+
+
 class RunSpec(BaseModel):
     id: str
+    runId: str
     experimentId: str
     dataset: ExperimentDataset
     experimentPath: str | None = None
@@ -159,6 +222,46 @@ class RunSpec(BaseModel):
     outputRoot: str | None = None
     evaluationEnabled: bool = False
     trace: ExperimentTrace = Field(default_factory=ExperimentTrace)
+    metadata: RunMetadata
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "RunSpec":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("RunSpec requires an object input.")
+        payload = dict(data)
+        if "modelName" not in payload and "model" in payload:
+            payload["modelName"] = payload.get("model")
+        original_id = str(payload.get("id") or "")
+        run_id = str(payload.get("runId") or payload.get("id") or "")
+        payload["runId"] = run_id
+        payload["id"] = run_id
+        if "metadata" not in payload:
+            payload["metadata"] = {
+                "canonicalId": original_id or run_id,
+                "questionId": payload.get("questionId", ""),
+                "contextId": payload.get("contextId", ""),
+                "provider": payload.get("provider", ""),
+                "modelName": payload.get("modelName"),
+                "strategy": payload.get("strategy", ""),
+                "format": payload.get("format", ""),
+                "repeatIndex": payload.get("repeatIndex", 1),
+            }
+        return super().model_validate(payload)
+
+    def to_persisted_artifact(self) -> dict[str, Any]:
+        return {
+            "runId": self.runId,
+            "experimentId": self.experimentId,
+            "questionId": self.questionId,
+            "contextId": self.contextId,
+            "model": self.modelName,
+            "provider": self.provider,
+            "strategy": self.strategy,
+            "format": self.format,
+            "repeatIndex": self.repeatIndex,
+        }
 
 
 class RunTiming(BaseModel):
@@ -200,7 +303,44 @@ class RunResult(BaseModel):
     timing: RunTiming
     usage: dict[str, Any] = Field(default_factory=dict)
     trace: RunTrace = Field(default_factory=RunTrace)
+    traceRef: str | None = None
     evaluation: EvaluationResult = Field(default_factory=EvaluationResult)
+    metadata: RunMetadata
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "RunResult":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("RunResult requires an object input.")
+        payload = dict(data)
+        if "modelName" not in payload and "model" in payload:
+            payload["modelName"] = payload.get("model")
+        original_id = str(payload.get("id") or "")
+        run_id = str(payload.get("runId") or payload.get("id") or "")
+        payload["runId"] = run_id
+        if "metadata" not in payload:
+            payload["metadata"] = {
+                "canonicalId": original_id or run_id,
+                "questionId": payload.get("questionId", ""),
+                "contextId": payload.get("contextId", ""),
+                "provider": payload.get("provider", ""),
+                "modelName": payload.get("modelName"),
+                "strategy": payload.get("strategy", ""),
+                "format": payload.get("format", ""),
+                "repeatIndex": payload.get("repeatIndex", 1),
+            }
+        return super().model_validate(payload)
+
+    def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
+        return {
+            "runId": self.runId,
+            "status": self.status,
+            "answer": self.answer,
+            "timing": self.timing.model_dump(mode="json"),
+            "usage": self.usage,
+            "traceRef": trace_ref,
+        }
 
 
 class EvaluationTrace(BaseModel):
@@ -245,6 +385,15 @@ class EvaluationItemResult(BaseModel):
     evaluationDurationMs: int | None = None
     evaluationTrace: EvaluationTrace = Field(default_factory=EvaluationTrace)
 
+    def to_persisted_artifact(self) -> dict[str, Any]:
+        return {
+            "runId": self.runId,
+            "questionId": self.questionId,
+            "score": self.score,
+            "label": self.label,
+            "details": self.details,
+        }
+
 
 class EvaluationRunSummary(BaseModel):
     itemCount: int = 0
@@ -258,6 +407,27 @@ class EvaluationRunResult(BaseModel):
     questionId: str
     items: list[EvaluationItemResult] = Field(default_factory=list)
     summary: EvaluationRunSummary = Field(default_factory=EvaluationRunSummary)
+    metadata: RunMetadata
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "EvaluationRunResult":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("EvaluationRunResult requires an object input.")
+        payload = dict(data)
+        if "metadata" not in payload:
+            payload["metadata"] = {
+                "canonicalId": str(payload.get("runId", "")),
+                "questionId": payload.get("questionId", ""),
+                "contextId": "",
+                "provider": "",
+                "modelName": None,
+                "strategy": "",
+                "format": "",
+                "repeatIndex": 1,
+            }
+        return super().model_validate(payload)
 
 
 class EvaluationBatchSummary(BaseModel):

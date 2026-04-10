@@ -22,13 +22,7 @@ class DatasetProvider:
     @classmethod
     def from_experiment(cls, experiment: Experiment, base_dir: str | Path) -> "DatasetProvider":
         base = Path(base_dir)
-        dataset = ExperimentDataset(
-            questions=str((base / experiment.dataset.questions).resolve()),
-            contexts=str((base / experiment.dataset.contexts).resolve()),
-            question_instances=str((base / experiment.dataset.question_instances).resolve())
-            if experiment.dataset.question_instances
-            else None,
-        )
+        dataset = ExperimentDataset(root=str((base / experiment.dataset.root).resolve()))
         return cls(dataset)
 
     @classmethod
@@ -63,7 +57,7 @@ class DatasetProvider:
         return None if question is None else None
 
     def _load_question_instances(self, path: str | None) -> QuestionInstanceDataset:
-        if not path:
+        if not path or not Path(path).exists():
             return QuestionInstanceDataset(datasetId="missing", instances=[])
         raw = self._normalize_question_instance_dataset(load_json(path), path)
         for instance in raw.get("instances", []):

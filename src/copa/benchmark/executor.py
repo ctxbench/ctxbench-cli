@@ -62,7 +62,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
 
     usage = ai_result.usage if runspec.trace.save_usage or ai_result.error else {}
     result = RunResult(
-        runId=runspec.id,
+        runId=runspec.runId,
         experimentId=runspec.experimentId,
         dataset=runspec.dataset,
         questionId=runspec.questionId,
@@ -83,5 +83,6 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         usage=usage,
         trace=trace,
         evaluation=EvaluationResult(),
+        metadata=runspec.metadata,
     )
     return result

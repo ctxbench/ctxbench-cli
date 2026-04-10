@@ -1,0 +1,50 @@
+{
+  "id": "exp_basic_001",
+  "name": "basic benchmark example",
+  "output": "outputs",
+  "dataset": ".",
+  "factors": {
+    "model": [
+      { "provider": "openai", "name": "gpt-5.4-nano" },
+      { "provider": "google", "name": "gemini-3.1-flash-lite-preview" }
+    ],
+    "strategy": ["inline", "mcp"],
+    "format": ["json", "html"]
+  },
+  "params": {
+    "common": {
+      "temperature": 0
+    },
+    "gemini-3.1-flash-lite-preview": {
+      "temperature": 0.3
+    }
+  },
+  "expansion": {
+    "jsonl": "run-spec/run-specs.jsonl"
+  },
+  "evaluation": {
+    "enabled": true,
+    "jsonl": "eval/evaluation-results.jsonl",
+    "judge": {
+      "provider": "openai",
+      "model": "gpt-5.4",
+      "temperature": 0
+    },
+    "fallback": {
+      "provider": "openai",
+      "model": "gpt-5.4-mini",
+      "temperature": 0
+    }
+  },
+  "trace": {
+    "enabled": true,
+    "save_raw_response": true,
+    "save_tool_calls": true,
+    "save_usage": true,
+    "save_errors": true
+  },
+  "execution": {
+    "repeats": 1,
+    "jsonl": "run-result/run-results.jsonl"
+  }
+}

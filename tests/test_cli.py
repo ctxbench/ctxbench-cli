@@ -10,7 +10,7 @@ from copa.cli import main
 
 def write_mock_experiment(path: Path) -> Path:
     dataset_root = path.parent / "datasets"
-    contexts_dir = dataset_root / "contexts"
+    contexts_dir = dataset_root / "context"
     contexts_dir.mkdir(parents=True, exist_ok=True)
 
     questions_path = dataset_root / "questions.json"
@@ -125,11 +125,8 @@ def write_mock_experiment(path: Path) -> Path:
         json.dumps(
             {
                 "id": "exp_test_mock_001",
-                "dataset": {
-                    "questions": str(questions_path.resolve()),
-                    "contexts": str(contexts_dir.resolve()),
-                    "question_instances": str(question_instances_path.resolve()),
-                },
+                "output": "outputs",
+                "dataset": str(dataset_root.resolve()),
                 "factors": {
                     "model": [{"provider": "mock", "name": "mock"}],
                     "strategy": ["inline"],
@@ -140,11 +137,8 @@ def write_mock_experiment(path: Path) -> Path:
                         "temperature": 0,
                     }
                 },
-                "evaluation": {
-                    "enabled": True,
-                    "output": "outputs/eval",
-                    "jsonl": "outputs/eval/evaluation-results.jsonl",
-                },
+                "expansion": {},
+                "evaluation": {"enabled": True},
                 "trace": {
                     "enabled": True,
                     "save_raw_response": True,
@@ -152,10 +146,7 @@ def write_mock_experiment(path: Path) -> Path:
                     "save_usage": True,
                     "save_errors": True,
                 },
-                "execution": {
-                    "repeats": 1,
-                    "output": "outputs",
-                },
+                "execution": {"repeats": 1},
             }
         ),
         encoding="utf-8",
@@ -164,7 +155,7 @@ def write_mock_experiment(path: Path) -> Path:
 
 
 def test_experiment_validate_example(capsys):
-    exit_code = main(["experiment", "validate", "examples/basic/experiment.json"])
+    exit_code = main(["experiment", "validate", "examples/datasets/lattes/experiment.json"])
     out = capsys.readouterr().out
     assert exit_code == 0
     assert "valid experiment" in out
@@ -188,17 +179,18 @@ def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
     )
 
     assert exit_code == 0
-    files = sorted(out_dir.glob("*.json"))
+    files = sorted(path for path in out_dir.glob("rs_*.json"))
     assert len(files) == 6
     assert all(path.name.startswith("rs_exp_test_mock_001_") for path in files)
     first = json.loads(files[0].read_text(encoding="utf-8"))
     assert first["provider"] == "mock"
-    assert first["params"]["model_name"] == "mock"
+    assert first["model"] == "mock"
     assert first["strategy"] == "inline"
     assert first["format"] in {"json", "text"}
-    assert "temperature" in first["params"]
-    assert "|" in first["id"]
-    assert first["experimentPath"] == str(experiment_path.resolve())
+    assert "|" not in first["runId"]
+    assert first["questionId"]
+    assert first["contextId"] == "cv_demo"
+    assert (out_dir / "runs.manifest.json").exists()
     assert jsonl_path.exists()
     assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 6
 
@@ -207,13 +199,7 @@ def test_example_lattes_dataset_shape_is_supported():
     from copa.dataset.provider import DatasetProvider
 
     provider = DatasetProvider.from_dataset(
-        ExperimentDataset(
-            questions=str((Path("examples/basic/datasets/lattes/questions.json")).resolve()),
-            contexts=str((Path("examples/basic/datasets/lattes/cvs")).resolve()),
-            question_instances=str(
-                (Path("examples/basic/datasets/lattes/questions.instance.json")).resolve()
-            ),
-        )
+        ExperimentDataset(root=str((Path("examples/datasets/lattes")).resolve()))
     )
 
     instance = provider.get_question_instance("q_oos_002", "5660469902738038")
@@ -222,7 +208,6 @@ def test_example_lattes_dataset_shape_is_supported():
     assert instance.cvId == "5660469902738038"
     assert instance.lattesId == "5660469902738038"
     assert instance.researcherName == "Nabor das Chagas Mendonça"
-    assert instance.evaluationType == "unanswerable"
     assert instance.metadata["researcherName"] == "Nabor das Chagas Mendonça"
 
 
@@ -266,17 +251,19 @@ def test_run_and_eval_jsonl_flow(tmp_path):
     assert all(path.name.startswith("rr_exp_test_mock_001_") for path in result_files)
     result = json.loads(result_files[0].read_text(encoding="utf-8"))
     assert result["status"] == "success"
-    assert result["evaluation"]["status"] == "not_evaluated"
-    assert result["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
-    assert result["trace"]["aiTrace"]["events"][-1]["name"] == "engine.execute"
-    assert "|" in result["runId"]
+    assert "|" not in result["runId"]
+    assert result["traceRef"].startswith("traces/exp_test_mock_001/")
+    trace_path = results_jsonl.parent / result["traceRef"]
+    trace = json.loads(trace_path.read_text(encoding="utf-8"))
+    assert trace["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
+    assert trace["trace"]["aiTrace"]["events"][-1]["name"] == "engine.execute"
     assert results_jsonl.exists()
 
-    auto_eval_dir = experiment_path.parent / "outputs" / "eval"
+    auto_eval_dir = experiment_path.parent / "outputs" / "exp_test_mock_001" / "evaluation"
     auto_eval_files = sorted(path for path in auto_eval_dir.glob("re_*.json"))
     assert len(auto_eval_files) == 6
     assert (auto_eval_dir / "evaluation-summary.json").exists()
-    assert (auto_eval_dir / "evaluation-results.jsonl").exists()
+    assert (experiment_path.parent / "outputs" / "exp_test_mock_001" / "evaluation.jsonl").exists()
 
     assert (
         main(
@@ -304,14 +291,14 @@ def test_run_and_eval_jsonl_flow(tmp_path):
         if path.name.startswith("re_")
         and json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_exact_001"
     )
-    assert exact_eval["items"][0]["evaluationMode"] == "exact"
-    assert exact_eval["items"][0]["score"] == 1.0
-    assert exact_eval["items"][0]["label"] == "correct"
-    assert exact_eval["items"][0]["details"]["extractedAnswer"] == 2018
+    assert exact_eval["score"] == 1.0
+    assert exact_eval["label"] == "correct"
+    assert exact_eval["details"]["extractedAnswer"] == 2018
+    assert exact_eval["runId"]
     assert eval_jsonl.exists()
     rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
     assert len(rows) == 6
-    assert {"exact", "analytical", "unanswerable"} <= {row["evaluationMode"] for row in rows}
+    assert {row["label"] for row in rows} >= {"correct", "correct-abstention", "strong"}
 
 
 def test_run_verbose_and_progress_logging(tmp_path, capsys):

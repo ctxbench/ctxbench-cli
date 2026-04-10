@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from copa.benchmark.evaluation import (
     build_evaluation_summary,
     evaluate_run_results,
     evaluation_output_paths,
     load_experiment_for_evaluation,
+    runspec_index_for_experiment,
     write_evaluation_files,
     write_evaluation_jsonl,
 )
@@ -16,20 +18,82 @@ from copa.util.jsonl import read_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
 
-def load_results_from_input(
+def _read_result_payloads(
     *,
     run_results_dir: str | None = None,
     run_results_json: str | None = None,
-) -> list[RunResult]:
+) -> tuple[list[dict[str, Any]], Path]:
     if bool(run_results_dir) == bool(run_results_json):
         raise ValueError("Provide exactly one of --run-results-dir or --run-results-json.")
     if run_results_dir:
         source = Path(run_results_dir)
-        return [RunResult.model_validate(load_json(item)) for item in sorted(source.glob("*.json"))]
+        payloads = [load_json(item) for item in sorted(source.glob("*.json"))]
+        return payloads, source
     source = Path(run_results_json or "")
     if source.suffix == ".jsonl":
-        return [RunResult.model_validate(item) for item in read_jsonl(source)]
-    return [RunResult.model_validate(load_json(source))]
+        return [dict(item) for item in read_jsonl(source)], source
+    return [load_json(source)], source
+
+
+def _load_trace_payload(source_root: Path, trace_ref: str | None) -> dict[str, Any]:
+    if not trace_ref:
+        return {}
+    trace_path = source_root / trace_ref
+    if not trace_path.exists():
+        return {}
+    payload = load_json(trace_path)
+    trace = payload.get("trace", {})
+    return trace if isinstance(trace, dict) else {}
+
+
+def load_results_from_input(
+    *,
+    run_results_dir: str | None = None,
+    run_results_json: str | None = None,
+    experiment_path: str,
+) -> list[RunResult]:
+    payloads, source = _read_result_payloads(
+        run_results_dir=run_results_dir,
+        run_results_json=run_results_json,
+    )
+    if not payloads:
+        return []
+    if "questionId" in payloads[0]:
+        return [RunResult.model_validate(item) for item in payloads]
+
+    experiment, base_dir = load_experiment_for_evaluation(experiment_path)
+    runspecs_by_id = runspec_index_for_experiment(experiment, base_dir, experiment_path=experiment_path)
+    source_root = source if source.is_dir() else source.parent
+    results: list[RunResult] = []
+    for payload in payloads:
+        run_id = str(payload.get("runId") or "")
+        runspec = runspecs_by_id.get(run_id)
+        if runspec is None:
+            raise ValueError(f"Run '{run_id}' not found when regenerating execution context from experiment.")
+        trace_payload = _load_trace_payload(source_root, payload.get("traceRef"))
+        results.append(
+            RunResult(
+                runId=runspec.runId,
+                experimentId=runspec.experimentId,
+                dataset=runspec.dataset,
+                questionId=runspec.questionId,
+                contextId=runspec.contextId,
+                provider=runspec.provider,
+                modelName=runspec.modelName,
+                strategy=runspec.strategy,
+                format=runspec.format,
+                repeatIndex=runspec.repeatIndex,
+                outputRoot=runspec.outputRoot,
+                answer=str(payload.get("answer", "")),
+                status=str(payload.get("status", "")),
+                timing=payload.get("timing", {}),
+                usage=payload.get("usage", {}),
+                trace=trace_payload,
+                traceRef=payload.get("traceRef"),
+                metadata=runspec.metadata,
+            )
+        )
+    return results
 
 
 def eval_command(
@@ -54,6 +118,7 @@ def eval_command(
     results = load_results_from_input(
         run_results_dir=run_results_dir,
         run_results_json=run_results_json,
+        experiment_path=experiment_path,
     )
     progress_tracker = ProgressTracker(total=len(results), enabled=progress)
     logger.progress = progress_tracker
