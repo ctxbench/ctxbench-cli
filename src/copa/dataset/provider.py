@@ -51,7 +51,8 @@ class DatasetProvider:
 
     def get_question_instance(self, question_id: str, context_id: str) -> QuestionInstance | None:
         for instance in self._question_instances.instances:
-            if instance.questionId == question_id and instance.cvId == context_id:
+            instance_key = instance.instanceId or instance.cvId
+            if instance.questionId == question_id and instance_key == context_id:
                 return instance
         question = self.get_question(question_id)
         return None if question is None else None
@@ -99,6 +100,14 @@ class DatasetProvider:
             metadata = {}
 
         normalized = dict(raw)
+        instance_id = str(
+            raw.get("instanceId")
+            or raw.get("cvId")
+            or raw.get("contextId")
+            or raw.get("lattesId")
+            or ""
+        )
+        normalized["instanceId"] = instance_id or None
         normalized["cvId"] = str(
             raw.get("cvId")
             or raw.get("instanceId")
@@ -108,10 +117,9 @@ class DatasetProvider:
         )
         if raw.get("researcherName") is None and metadata.get("researcherName") is not None:
             normalized["researcherName"] = metadata["researcherName"]
-        if raw.get("lattesId") is None and raw.get("instanceId") is not None:
-            normalized["lattesId"] = raw["instanceId"]
+        if raw.get("lattesId") is None and instance_id:
+            normalized["lattesId"] = instance_id
         normalized["metadata"] = metadata
         if raw.get("evaluationContext") is None and metadata.get("evaluationContext") is not None:
             normalized["evaluationContext"] = metadata["evaluationContext"]
-        normalized.pop("instanceId", None)
         return normalized

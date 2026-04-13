@@ -120,6 +120,7 @@ class QuestionDataset(BaseModel):
 
 class QuestionInstance(BaseModel):
     questionId: str
+    instanceId: str | None = None
     cvId: str
     researcherName: str | None = None
     lattesId: str | None = None

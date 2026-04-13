@@ -1,12 +1,22 @@
 {
   "id": "lattes_simple_001",
-  "name": "lattes subset benchmark using only openai model",
   "output": "/home/michel/repos/doutorado/copa-benchmark/outputs",
   "dataset": "lattes-simple",
   "factors": {
-    "model": [{ "provider": "openai", "name": "gpt-5.4-nano" }],
-    "strategy": ["inline", "mcp"],
-    "format": ["json", "html"]
+    "model": [
+      {
+        "provider": "openai",
+        "name": "gpt-5.4-nano"
+      }
+    ],
+    "strategy": [
+      "inline",
+      "mcp"
+    ],
+    "format": [
+      "json",
+      "html"
+    ]
   },
   "params": {
     "common": {

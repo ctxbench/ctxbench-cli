@@ -205,10 +205,11 @@ def test_example_lattes_dataset_shape_is_supported():
     instance = provider.get_question_instance("q_exact_001", "5660469902738038")
 
     assert instance is not None
+    assert instance.instanceId == "5660469902738038"
     assert instance.cvId == "5660469902738038"
     assert instance.lattesId == "5660469902738038"
     assert instance.researcherName == "Nabor das Chagas Mendonça"
-    assert instance.metadata["researcherName"] == "Nabor das Chagas Mendonça"
+    assert instance.metadata == {}
 
 
 def test_experiment_preserves_model_specific_params():

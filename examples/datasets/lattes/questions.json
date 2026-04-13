@@ -1,7 +1,4 @@
 {
-  "datasetId": "quelattes-questions-v3",
-  "domain": "lattes-cv",
-  "language": "en",
   "questions": [
     {
       "id": "q_exact_001",
@@ -32,7 +29,6 @@
       "question": "What skills or areas of expertise can be inferred from the researcher’s teaching and research activities?",
       "evaluation": {
         "mode": "analytical",
-        "kind": "inference",
         "rubric": [
           {
             "id": "research-expertise",
@@ -67,7 +63,6 @@
       "question": "What trend can be observed in the researcher’s research topics over time?",
       "evaluation": {
         "mode": "analytical",
-        "kind": "trend",
         "rubric": [
           {
             "id": "main-topics",
@@ -111,7 +106,6 @@
       "question": "Summarize the researcher’s main fields of research in one concise paragraph based only on the provided information.",
       "evaluation": {
         "mode": "analytical",
-        "kind": "summary",
         "rubric": [
           {
             "id": "main-fields",
@@ -141,7 +135,6 @@
       "question": "You are conducting research on microservices architecture. List 3 publications from this researcher that are most relevant to this topic. For each publication, include title, year, and a brief justification.",
       "evaluation": {
         "mode": "analytical",
-        "kind": "recommendation",
         "rubric": [
           {
             "id": "count",
@@ -176,7 +169,6 @@
       "question": "Assess whether this researcher would be a suitable senior advisor for a research project on adaptive software architecture. Provide a clear conclusion and a brief justification based on the researcher’s experience and publications.",
       "evaluation": {
         "mode": "analytical",
-        "kind": "judgment",
         "rubric": [
           {
             "id": "clear-conclusion",
