@@ -37,8 +37,11 @@ def serialize_evaluation_result(result: EvaluationRunResult) -> dict[str, Any]:
     item = result.items[0] if result.items else None
     if item is None:
         return {
+            "experimentId": result.experimentId,
             "runId": result.runId,
             "questionId": result.questionId,
+            "status": "not_evaluated",
+            "evaluationMethod": None,
             "score": 0.0,
             "label": "not_evaluated",
             "details": {},

@@ -9,7 +9,7 @@ from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelRespon
 class MockModel(ModelAdapter):
     name = "mock"
 
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: object | None = None) -> ModelResponse:
         question_id = request.metadata.get("question_id", "")
         answer = self._extract_answer(request.context, question_id)
         input_tokens = len(model_input.prompt.split())

@@ -7,7 +7,7 @@ from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelRespon
 
 
 class GeminiModel(ModelAdapter):
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: Any | None = None) -> ModelResponse:
         client = self._create_client()
         generation_config = self._build_generation_config(request, model_input)
         started_at = perf_counter()

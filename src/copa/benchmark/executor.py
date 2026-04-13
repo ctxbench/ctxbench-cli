@@ -75,6 +75,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         outputRoot=runspec.outputRoot,
         answer=ai_result.answer,
         status="success" if ai_result.error is None else "error",
+        errorMessage=ai_result.error,
         timing=RunTiming(
             startedAt=started_at,
             finishedAt=finished_at,

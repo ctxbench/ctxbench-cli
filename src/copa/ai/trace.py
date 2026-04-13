@@ -27,6 +27,12 @@ class AIMetrics(BaseModel):
     context_size_bytes: int | None = None
     question_size_chars: int | None = None
     prompt_size_chars: int | None = None
+    estimated_input_tokens: int | None = None
+    estimated_output_tokens: int | None = None
+    reserved_tokens: int | None = None
+    rate_limit_wait_ms: int | None = None
+    retry_count: int = 0
+    retry_sleep_ms: int | None = None
 
 
 class AITrace(BaseModel):
@@ -124,6 +130,144 @@ class TraceCollector:
         if metadata:
             event_metadata.update(metadata)
         self.events.append(TraceEvent(type="error", name="error", metadata=event_metadata))
+
+    def record_rate_limit_reservation(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        estimated_input_tokens: int,
+        estimated_output_tokens: int,
+        reserved_tokens: int,
+    ) -> None:
+        self.metrics.estimated_input_tokens = estimated_input_tokens
+        self.metrics.estimated_output_tokens = estimated_output_tokens
+        self.metrics.reserved_tokens = reserved_tokens
+        self.events.append(
+            TraceEvent(
+                type="rate_limit.reserve",
+                name="rate_limit.reserve",
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "estimated_input_tokens": estimated_input_tokens,
+                    "estimated_output_tokens": estimated_output_tokens,
+                    "reserved_tokens": reserved_tokens,
+                },
+            )
+        )
+
+    def record_rate_limit_wait(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        wait_ms: int,
+        reason: str,
+    ) -> None:
+        self.metrics.rate_limit_wait_ms = self._sum_optional(self.metrics.rate_limit_wait_ms, wait_ms)
+        self.events.append(
+            TraceEvent(
+                type="rate_limit.wait",
+                name="rate_limit.wait",
+                duration_ms=wait_ms,
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "reason": reason,
+                },
+            )
+        )
+
+    def record_rate_limit_reconcile(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        reserved_tokens: int,
+        actual_tokens: int | None,
+    ) -> None:
+        self.events.append(
+            TraceEvent(
+                type="rate_limit.reconcile",
+                name="rate_limit.reconcile",
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "reserved_tokens": reserved_tokens,
+                    "actual_tokens": actual_tokens,
+                },
+            )
+        )
+
+    def record_retry_attempt(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        attempt: int,
+        error_kind: str,
+        error: str,
+    ) -> None:
+        self.metrics.retry_count += 1
+        self.events.append(
+            TraceEvent(
+                type="retry.attempt",
+                name="retry.attempt",
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "attempt": attempt,
+                    "error_kind": error_kind,
+                    "error": error,
+                },
+            )
+        )
+
+    def record_retry_sleep(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        attempt: int,
+        sleep_ms: int,
+    ) -> None:
+        self.metrics.retry_sleep_ms = self._sum_optional(self.metrics.retry_sleep_ms, sleep_ms)
+        self.events.append(
+            TraceEvent(
+                type="retry.sleep",
+                name="retry.sleep",
+                duration_ms=sleep_ms,
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "attempt": attempt,
+                },
+            )
+        )
+
+    def record_retry_give_up(
+        self,
+        *,
+        provider_name: str,
+        model_name: str,
+        attempt: int,
+        error_kind: str,
+        error: str,
+    ) -> None:
+        self.events.append(
+            TraceEvent(
+                type="retry.give_up",
+                name="retry.give_up",
+                metadata={
+                    "provider_name": provider_name,
+                    "model_name": model_name,
+                    "attempt": attempt,
+                    "error_kind": error_kind,
+                    "error": error,
+                },
+            )
+        )
 
     def to_trace(self) -> AITrace:
         return AITrace(events=list(self.events), metrics=self.metrics)

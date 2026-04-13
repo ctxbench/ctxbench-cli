@@ -60,6 +60,14 @@ def _extract_year(answer: str) -> int | None:
     return int(match.group(0)) if match else None
 
 
+def _normalize_expected_exact(expected: Any, answer_type: str | None) -> Any:
+    if answer_type == "number":
+        return _extract_number(str(expected))
+    if answer_type == "year":
+        return _extract_year(str(expected))
+    return expected
+
+
 def _is_abstention(answer: str) -> bool:
     normalized = _normalize(answer)
     return any(pattern in normalized for pattern in ABSTENTION_PATTERNS)
@@ -116,34 +124,52 @@ def _evaluate_exact(
     result: RunResult,
     question: Question,
     expected: Any,
+    accepted_answers: list[Any],
     engine: Engine,
     experiment: Experiment,
 ) -> tuple[float, str, dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
     answer_type = question.evaluation.answerType if question.evaluation else None
     details: dict[str, Any] = {
         "expected": expected,
+        "acceptedAnswers": accepted_answers,
         "answerType": answer_type or "string",
     }
     judge_info = EvaluationJudgeInfo()
     trace = EvaluationTrace()
-
-    extracted: Any
+    extracted: Any = None
+    is_extractable = False
+    evaluation_method = "no-extraction"
     comparator = "string-normalized-equality"
     if answer_type == "number":
-        extracted = _extract_number(result.answer)
         comparator = "numeric-equality"
     elif answer_type == "year":
-        extracted = _extract_year(result.answer)
         comparator = "year-equality"
-    else:
-        extracted = result.answer.strip()
 
-    if extracted is None and experiment.evaluation.judge is not None:
-        prompt = (
-            "Extract the canonical answer from the model answer.\n"
-            "Return JSON with one field named extractedAnswer.\n"
-            "If extraction is not possible, use null."
-        )
+    prompt = (
+        "You are extracting the final answer to an exact benchmark question.\n\n"
+        f"Question:\n{question.question}\n\n"
+        f"Expected answer type:\n{answer_type}\n\n"
+        f"Model answer:\n{result.answer}\n\n"
+        "Rules:\n"
+        "- Extract only the final answer supported by the model answer.\n"
+        "- Do not use external knowledge.\n"
+        "- Do not infer information that is not explicitly present.\n"
+        "- If no reliable extraction is possible, return null.\n"
+        "- Do not decide whether the answer is correct.\n"
+        "- Do not assign a score or label.\n\n"
+        "Output requirements:\n"
+        "- Return valid JSON only.\n"
+        "- Do not include markdown.\n"
+        "- Do not include extra text.\n"
+        "- Use exactly these fields:\n"
+        "  - extractedAnswer\n"
+        "  - isExtractable\n"
+        "  - justification\n\n"
+        "Return:\n"
+        '{\n  "extractedAnswer": null,\n  "isExtractable": false,\n  "justification": ""\n}'
+    )
+
+    if experiment.evaluation.judge is not None:
         judge_payload, judge_info, trace = _judge_request(
             role="exact-extractor",
             config=experiment.evaluation.judge,
@@ -157,14 +183,60 @@ def _evaluate_exact(
         )
         if judge_payload is not None:
             extracted = judge_payload.get("extractedAnswer")
+            is_extractable = bool(judge_payload.get("isExtractable"))
+            evaluation_method = "judge-extraction"
+        elif experiment.evaluation.fallback is not None:
+            judge_payload, judge_info, trace = _judge_request(
+                role="exact-extractor",
+                config=experiment.evaluation.fallback,
+                prompt=prompt,
+                context={
+                    "question": question.question,
+                    "answerType": answer_type,
+                    "modelAnswer": result.answer,
+                },
+                engine=engine,
+            )
+            judge_info.fallbackUsed = True
+            if judge_payload is not None:
+                extracted = judge_payload.get("extractedAnswer")
+                is_extractable = bool(judge_payload.get("isExtractable"))
+                evaluation_method = "fallback-judge-extraction"
+
+    if extracted is None:
+        if answer_type == "number":
+            extracted = _extract_number(result.answer)
+        elif answer_type == "year":
+            extracted = _extract_year(result.answer)
+        else:
+            extracted = result.answer.strip()
+        if extracted is not None and not (isinstance(extracted, str) and not extracted):
+            is_extractable = True
+            evaluation_method = "rule-fallback-extraction"
 
     details["extractedAnswer"] = extracted
-    details["comparator"] = comparator
+    details["isExtractable"] = is_extractable
+    details["comparisonMethod"] = comparator
+    details["evaluationMethod"] = evaluation_method
+
+    expected_normalized = _normalize_expected_exact(expected, answer_type)
+    details["expectedNormalized"] = expected_normalized
 
     if answer_type in {"number", "year"}:
-        score = 1.0 if extracted == expected else 0.0
+        accepted_normalized = [
+            _normalize_expected_exact(item, answer_type)
+            for item in accepted_answers
+        ]
+        candidates = [item for item in [expected_normalized, *accepted_normalized] if item is not None]
+        score = 1.0 if extracted in candidates else 0.0
     else:
-        score = 1.0 if _normalize(extracted) == _normalize(expected) else 0.0
+        normalized_extracted = _normalize(extracted)
+        normalized_candidates = [
+            _normalize(item)
+            for item in [expected, *accepted_answers]
+            if item is not None
+        ]
+        score = 1.0 if normalized_extracted in normalized_candidates else 0.0
     return score, "correct" if score == 1.0 else "incorrect", details, judge_info, trace
 
 
@@ -182,37 +254,113 @@ def _evaluate_analytical_heuristic(
     normalized_answer = _normalize(answer)
     matched: list[str] = []
     missing: list[str] = []
-    total_weight = sum(max(criterion.weight, 0.0) for criterion in rubric) or 1.0
-    matched_weight = 0.0
-
     for criterion in rubric:
         keywords = _criterion_keywords(criterion)
         hit = any(keyword and keyword in normalized_answer for keyword in keywords)
         if hit:
             matched.append(criterion.id)
-            matched_weight += max(criterion.weight, 0.0)
         else:
             missing.append(criterion.id)
 
-    score = round(matched_weight / total_weight, 4)
-    return score, {
+    return 0.0, {
         "matchedCriteria": matched,
         "missingCriteria": missing,
         "justification": "Heuristic rubric matching used.",
+        "evaluationMethod": "heuristic-rubric",
+    }
+
+
+def _score_analytical_criteria(
+    matched_criteria: list[str],
+    rubric: list[EvaluationRubricCriterion],
+) -> tuple[float, str, float, float]:
+    weights = {criterion.id: max(criterion.weight, 0.0) for criterion in rubric}
+    total_weight = sum(weights.values())
+    matched_weight = sum(weights.get(item, 0.0) for item in matched_criteria)
+    score = round(matched_weight / total_weight, 4) if total_weight > 0 else 0.0
+    label = "strong" if score >= 0.8 else "partial" if score > 0 else "weak"
+    return score, label, matched_weight, total_weight
+
+
+def _invalid_analytical_result(
+    reason: str,
+    rubric: list[EvaluationRubricCriterion],
+) -> tuple[float | None, str | None, str, dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
+    return None, None, "invalid-evaluation-config", {
+        "reason": reason,
+        "rubric": [item.model_dump(mode="json") for item in rubric],
+        "matchedCriteria": [],
+        "missingCriteria": [],
+        "justification": "",
+        "evaluationMethod": "invalid-evaluation-config",
+    }, EvaluationJudgeInfo(), EvaluationTrace()
+
+
+def _normalize_judge_criteria_payload(
+    payload: dict[str, Any] | None,
+    rubric: list[EvaluationRubricCriterion],
+    *,
+    evaluation_method: str,
+) -> dict[str, Any] | None:
+    if payload is None:
+        return None
+    rubric_ids = {item.id for item in rubric}
+    matched = payload.get("matchedCriteria", [])
+    missing = payload.get("missingCriteria", [])
+    if not isinstance(matched, list) or not isinstance(missing, list):
+        return None
+    matched_ids = [str(item) for item in matched]
+    missing_ids = [str(item) for item in missing]
+    if any(item not in rubric_ids for item in matched_ids + missing_ids):
+        return None
+    if set(matched_ids) & set(missing_ids):
+        return None
+    resolved_missing = [item.id for item in rubric if item.id not in set(matched_ids)]
+    return {
+        "matchedCriteria": [item.id for item in rubric if item.id in set(matched_ids)],
+        "missingCriteria": resolved_missing if not missing_ids else [item.id for item in rubric if item.id in set(missing_ids)],
+        "justification": str(payload.get("justification", "")),
+        "evaluationMethod": evaluation_method,
     }
 
 
 def _evaluate_analytical(
     result: RunResult,
     question: Question,
+    judge_reference: dict[str, Any] | None,
+    evaluation_context: dict[str, Any] | None,
     engine: Engine,
     experiment: Experiment,
-) -> tuple[float, str, dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
+) -> tuple[float | None, str | None, str, dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
     rubric = question.evaluation.rubric if question.evaluation else []
+    if not rubric:
+        return _invalid_analytical_result("Missing analytical rubric.", rubric)
+    if sum(max(item.weight, 0.0) for item in rubric) <= 0:
+        return _invalid_analytical_result("Analytical rubric has no positive weight.", rubric)
     if experiment.evaluation.judge is not None and rubric:
         prompt = (
-            "Evaluate the answer against the rubric.\n"
-            "Return JSON with: score (0..1), label, matchedCriteria, missingCriteria, justification."
+            "You are evaluating an answer to a benchmark question using a rubric.\n\n"
+            "Task:\n"
+            "Determine which rubric criteria are clearly satisfied by the answer.\n\n"
+            "Rules:\n"
+            "- Evaluate the answer only against the provided rubric.\n"
+            "- Use the provided evaluation context only to understand the valid candidate space and the available evidence.\n"
+            "- Do not use external knowledge.\n"
+            "- Do not infer that a criterion is satisfied unless the answer clearly supports it.\n"
+            "- Be conservative: if unsure, do not match the criterion.\n"
+            "- Only use criterion ids that exist in the rubric.\n"
+            "- Do not compute the final score.\n"
+            "- Do not assign the final label.\n\n"
+            "Output requirements:\n"
+            "- Return valid JSON only.\n"
+            "- Do not include markdown.\n"
+            "- Do not include extra text.\n"
+            "- Use exactly these fields:\n"
+            "  - matchedCriteria\n"
+            "  - missingCriteria\n"
+            "  - justification\n\n"
+            "Return this JSON structure:\n"
+            '{\n  "matchedCriteria": [],\n  "missingCriteria": [],\n  "justification": ""\n}'
         )
         judge_payload, judge_info, trace = _judge_request(
             role="analytical-judge",
@@ -222,19 +370,21 @@ def _evaluate_analytical(
                 "question": question.question,
                 "rubric": [item.model_dump(mode="json") for item in rubric],
                 "modelAnswer": result.answer,
+                "judgeReference": judge_reference,
+                "evaluationContext": evaluation_context,
             },
             engine=engine,
         )
-        if judge_payload is not None:
-            score = float(judge_payload.get("score", 0.0))
-            details = {
-                "matchedCriteria": list(judge_payload.get("matchedCriteria", [])),
-                "missingCriteria": list(judge_payload.get("missingCriteria", [])),
-                "justification": judge_payload.get("justification", ""),
-                "rubric": [item.model_dump(mode="json") for item in rubric],
-            }
-            label = str(judge_payload.get("label", "analytical"))
-            return score, label, details, judge_info, trace
+        details = _normalize_judge_criteria_payload(judge_payload, rubric, evaluation_method="judge-rubric")
+        if details is not None:
+            score, label, matched_weight, total_weight = _score_analytical_criteria(
+                details["matchedCriteria"],
+                rubric,
+            )
+            details["rubric"] = [item.model_dump(mode="json") for item in rubric]
+            details["matchedWeight"] = matched_weight
+            details["totalWeight"] = total_weight
+            return score, label, "evaluated", details, judge_info, trace
         if experiment.evaluation.fallback is not None:
             judge_payload, fallback_info, fallback_trace = _judge_request(
                 role="analytical-judge",
@@ -244,41 +394,60 @@ def _evaluate_analytical(
                     "question": question.question,
                     "rubric": [item.model_dump(mode="json") for item in rubric],
                     "modelAnswer": result.answer,
+                    "judgeReference": judge_reference,
+                    "evaluationContext": evaluation_context,
                 },
                 engine=engine,
             )
             fallback_info.fallbackUsed = True
-            if judge_payload is not None:
-                score = float(judge_payload.get("score", 0.0))
-                details = {
-                    "matchedCriteria": list(judge_payload.get("matchedCriteria", [])),
-                    "missingCriteria": list(judge_payload.get("missingCriteria", [])),
-                    "justification": judge_payload.get("justification", ""),
-                    "rubric": [item.model_dump(mode="json") for item in rubric],
-                }
-                label = str(judge_payload.get("label", "analytical"))
-                return score, label, details, fallback_info, fallback_trace
+            details = _normalize_judge_criteria_payload(judge_payload, rubric, evaluation_method="fallback-judge-rubric")
+            if details is not None:
+                score, label, matched_weight, total_weight = _score_analytical_criteria(
+                    details["matchedCriteria"],
+                    rubric,
+                )
+                details["rubric"] = [item.model_dump(mode="json") for item in rubric]
+                details["matchedWeight"] = matched_weight
+                details["totalWeight"] = total_weight
+                return score, label, "evaluated", details, fallback_info, fallback_trace
 
-    score, details = _evaluate_analytical_heuristic(result.answer, rubric)
+    _, details = _evaluate_analytical_heuristic(result.answer, rubric)
     details["rubric"] = [item.model_dump(mode="json") for item in rubric]
-    label = "strong" if score >= 0.8 else "partial" if score > 0 else "weak"
-    return score, label, details, EvaluationJudgeInfo(), EvaluationTrace()
+    score, label, matched_weight, total_weight = _score_analytical_criteria(
+        details["matchedCriteria"],
+        rubric,
+    )
+    details["matchedWeight"] = matched_weight
+    details["totalWeight"] = total_weight
+    return score, label, "evaluated", details, EvaluationJudgeInfo(), EvaluationTrace()
 
 
 def _evaluate_unanswerable(
     result: RunResult,
 ) -> tuple[float, str, dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
     if _is_abstention(result.answer):
+        matched_pattern = next((pattern for pattern in ABSTENTION_PATTERNS if pattern in _normalize(result.answer)), None)
         if _partial_abstention(result.answer):
             label = "partial-abstention"
             score = 0.5
+            reason = "Matched abstention language but included hedging."
         else:
             label = "correct-abstention"
             score = 1.0
+            reason = "Matched abstention language."
     else:
         label = "fabrication"
         score = 0.0
-    return score, label, {"answer": result.answer}, EvaluationJudgeInfo(), EvaluationTrace()
+        matched_pattern = None
+        reason = "Answer did not abstain despite unsupported question."
+    details = {
+        "answer": result.answer,
+        "classificationReason": reason,
+        "evaluationMethod": "rule-unanswerable",
+    }
+    if matched_pattern is not None:
+        details["matchedPattern"] = matched_pattern
+    return score, label, details, EvaluationJudgeInfo(), EvaluationTrace()
 
 
 def evaluate_run_result(
@@ -291,6 +460,8 @@ def evaluate_run_result(
     fail_on_missing_gold: bool = False,
     engine: Engine | None = None,
 ) -> EvaluationRunResult | None:
+    if result.status != "success":
+        return None
     if only and result.questionId != only:
         return None
 
@@ -311,23 +482,29 @@ def evaluate_run_result(
             result,
             question,
             expected,
+            accepted_answers,
             active_engine,
             experiment,
         )
+        evaluation_status = "evaluated"
     elif evaluation_mode == "analytical":
-        score, label, details, judge_info, trace = _evaluate_analytical(
+        score, label, evaluation_status, details, judge_info, trace = _evaluate_analytical(
             result,
             question,
+            instance.judgeReference if instance is not None else None,
+            instance.evaluationContext if instance is not None else None,
             active_engine,
             experiment,
         )
     elif evaluation_mode == "unanswerable":
         score, label, details, judge_info, trace = _evaluate_unanswerable(result)
+        evaluation_status = "evaluated"
     else:
         raise ValueError(f"Unsupported evaluation mode: {evaluation_mode}")
 
     details.setdefault("expected", expected)
     details.setdefault("acceptedAnswers", accepted_answers)
+    evaluation_method = details.get("evaluationMethod")
 
     item = EvaluationItemResult(
         experimentId=result.experimentId,
@@ -335,6 +512,8 @@ def evaluate_run_result(
         questionId=result.questionId,
         question=question.question,
         evaluationMode=evaluation_mode,
+        status=evaluation_status,
+        evaluationMethod=str(evaluation_method) if evaluation_method is not None else None,
         score=score,
         label=label,
         details=details,
@@ -357,7 +536,7 @@ def evaluate_run_result(
     summary = EvaluationRunSummary(
         itemCount=1,
         meanScore=score,
-        labels={label: 1},
+        labels={label: 1} if label is not None else {},
     )
     return EvaluationRunResult(
         experimentId=result.experimentId,
@@ -377,9 +556,10 @@ def evaluate_run_results(
     mode: str | None = None,
     continue_on_error: bool = False,
     fail_on_missing_gold: bool = False,
+    event_logger: Any | None = None,
 ) -> list[EvaluationRunResult]:
     provider = DatasetProvider.from_experiment(experiment, _experiment_base_dir(experiment))
-    engine = Engine()
+    engine = Engine(event_logger=event_logger)
     evaluation_results: list[EvaluationRunResult] = []
     try:
         for result in results:
@@ -466,9 +646,9 @@ def update_run_results_with_evaluation(
         accepted_answers = details.get("acceptedAnswers", [])
         passed = None
         if item is not None:
-            passed = item.score >= 1.0
+            passed = item.score is not None and item.score >= 1.0
         result.evaluation = EvaluationResult(
-            status="evaluated",
+            status=item.status if item is not None else "not_evaluated",
             passed=passed,
             expected=expected,
             acceptedAnswers=list(accepted_answers) if isinstance(accepted_answers, list) else [],
@@ -492,16 +672,20 @@ def build_evaluation_summary(evaluations: Iterable[EvaluationRunResult]) -> Eval
     labels: dict[str, int] = {}
     score_total = 0.0
     item_count = 0
+    scored_item_count = 0
     experiment_id = evaluation_list[0].experimentId if evaluation_list else ""
     for run_result in evaluation_list:
         for item in run_result.items:
-            labels[item.label] = labels.get(item.label, 0) + 1
-            score_total += item.score
+            if item.label is not None:
+                labels[item.label] = labels.get(item.label, 0) + 1
+            if item.score is not None:
+                score_total += item.score
+                scored_item_count += 1
             item_count += 1
     return EvaluationBatchSummary(
         experimentId=experiment_id,
         runCount=len(evaluation_list),
         itemCount=item_count,
-        meanScore=round(score_total / item_count, 4) if item_count else 0.0,
+        meanScore=round(score_total / scored_item_count, 4) if scored_item_count else None,
         labels=labels,
     )

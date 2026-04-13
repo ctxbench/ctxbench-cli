@@ -13,9 +13,21 @@ from copa.ai.mcp.runtime import MCPRuntime
 from copa.ai.models.claude import ClaudeModel
 from copa.ai.models.gemini import GeminiModel
 from copa.ai.models.openai import OpenAIModel
+from copa.ai.rate_control import (
+    ConcurrencyLimiter,
+    RateLimitCapacityError,
+    RateControlRegistry,
+    RateLimitedModelAdapter,
+    TokenRateLimiter,
+    estimate_tokens,
+    extract_rate_limit_config,
+)
 from copa.ai.strategies.inline import DEFAULT_SYSTEM_INSTRUCTION
+from copa.ai.trace import TraceCollector
 from copa.benchmark.executor import execute_runspec
-from copa.benchmark.models import ExperimentDataset, ExperimentTrace, RunMetadata, RunSpec
+from copa.benchmark.models import Experiment, ExperimentDataset, ExperimentTrace, RunMetadata, RunSpec
+from copa.benchmark.evaluation import _evaluate_analytical, _evaluate_exact, _evaluate_unanswerable, evaluate_run_results
+from copa.dataset.questions import EvaluationRubricCriterion, Question, QuestionEvaluation
 
 
 def make_request(**overrides: object) -> AIRequest:
@@ -33,12 +45,35 @@ def make_request(**overrides: object) -> AIRequest:
     return AIRequest(**payload)
 
 
+def make_experiment(*, judge: dict[str, object] | None = None, fallback: dict[str, object] | None = None) -> Experiment:
+    payload: dict[str, object] = {
+        "id": "exp-test",
+        "output": "outputs",
+        "dataset": str((Path.cwd() / "examples" / "datasets" / "lattes").resolve()),
+        "factors": {
+            "model": [{"provider": "mock", "name": "mock"}],
+            "strategy": ["inline"],
+            "format": ["json"],
+        },
+        "evaluation": {
+            "enabled": True,
+        },
+    }
+    evaluation = dict(payload["evaluation"])
+    if judge is not None:
+        evaluation["judge"] = judge
+    if fallback is not None:
+        evaluation["fallback"] = fallback
+    payload["evaluation"] = evaluation
+    return Experiment.model_validate(payload)
+
+
 class RecordingModel(ModelAdapter):
     def __init__(self) -> None:
         super().__init__()
         self.last_input: ModelInput | None = None
 
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
         self.last_input = model_input
         return ModelResponse(
             text="3",
@@ -52,7 +87,7 @@ class RecordingModel(ModelAdapter):
 
 
 class FailingModel(ModelAdapter):
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
         raise RuntimeError("provider exploded")
 
 
@@ -62,11 +97,48 @@ class ScriptedMCPModel(ModelAdapter):
         self.responses = list(responses)
         self.inputs: list[ModelInput] = []
 
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
         self.inputs.append(model_input)
         if not self.responses:
             raise AssertionError("No scripted response left.")
         return self.responses.pop(0)
+
+
+class FlakyRateLimitModel(ModelAdapter):
+    def __init__(self, failures: int, *, error: Exception | None = None) -> None:
+        super().__init__()
+        self.failures = failures
+        self.calls = 0
+        self.error = error or RuntimeError("429 too many requests")
+
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
+        self.calls += 1
+        if self.calls <= self.failures:
+            raise self.error
+        return ModelResponse(
+            text="ok",
+            input_tokens=10,
+            output_tokens=2,
+            total_tokens=12,
+            duration_ms=3,
+            metadata={"provider": request.provider_name},
+        )
+
+
+class JSONModel(ModelAdapter):
+    def __init__(self, text: str) -> None:
+        super().__init__()
+        self.text = text
+
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
+        return ModelResponse(
+            text=self.text,
+            input_tokens=10,
+            output_tokens=5,
+            total_tokens=15,
+            duration_ms=2,
+            metadata={"provider": request.provider_name},
+        )
 
 
 class FakeMCPServer:
@@ -201,6 +273,390 @@ def test_engine_mcp_executes_tool_loop_and_records_trace():
         "strategy.mcp.execute",
         "engine.execute",
     ]
+
+
+def test_rate_limited_model_retries_on_429_and_records_trace():
+    model = FlakyRateLimitModel(
+        1,
+        error=RuntimeError("429 too many requests"),
+    )
+    wrapper = RateLimitedModelAdapter(
+        model,
+        RateControlRegistry(),
+        provider_name="openai",
+        model_name="gpt-5",
+    )
+    trace = TraceCollector()
+
+    response = wrapper.generate(
+        ModelInput(system_instruction="s", prompt="prompt"),
+        make_request(
+            provider_name="openai",
+            model_name="gpt-5",
+            params={
+                "rate_limit": {
+                    "max_attempts": 2,
+                    "base_delay_ms": 0,
+                    "max_delay_ms": 0,
+                    "estimated_output_tokens": 20,
+                }
+            },
+        ),
+        trace=trace,
+    )
+
+    assert response.text == "ok"
+    assert model.calls == 2
+    assert trace.metrics.retry_count == 1
+    assert trace.metrics.estimated_output_tokens == 20
+    assert "retry.attempt" in [event.name for event in trace.events]
+    assert "retry.sleep" in [event.name for event in trace.events]
+    assert "rate_limit.reserve" in [event.name for event in trace.events]
+    assert "rate_limit.reconcile" in [event.name for event in trace.events]
+
+
+def test_rate_limited_model_honors_tpm_budget_and_tracks_wait():
+    clock = {"now": 0.0}
+
+    def fake_clock() -> float:
+        return clock["now"]
+
+    def fake_sleep(seconds: float) -> None:
+        clock["now"] += seconds
+
+    limiter = TokenRateLimiter(60, clock=fake_clock, sleeper=fake_sleep)
+    first_wait = limiter.acquire(60)
+    second_wait = limiter.acquire(60)
+
+    assert first_wait == 0
+    assert second_wait >= 60000
+
+
+def test_engine_applies_rate_control_wrapper_to_registered_models():
+    engine = Engine()
+    model = RecordingModel()
+    engine._models["recording"] = model
+
+    result = engine.execute(
+        make_request(
+            provider_name="recording",
+            model_name="recording-v1",
+            params={"rate_limit": {"estimated_output_tokens": 9}},
+        )
+    )
+
+    assert result.answer == "3"
+    metrics = result.trace["metrics"]
+    assert metrics["estimated_output_tokens"] == 9
+    assert metrics["reserved_tokens"] is not None
+    assert "rate_limit.reserve" in [event["name"] for event in result.trace["events"]]
+
+
+def test_concurrency_limiter_releases_slot_after_exception():
+    limiter = ConcurrencyLimiter(1)
+
+    try:
+        with limiter.slot():
+            raise RuntimeError("boom")
+    except RuntimeError:
+        pass
+
+    with limiter.slot():
+        acquired = True
+
+    assert acquired is True
+
+
+def test_rate_limited_model_fails_fast_when_single_request_exceeds_tpm_budget():
+    model = RecordingModel()
+    wrapper = RateLimitedModelAdapter(
+        model,
+        RateControlRegistry(),
+        provider_name="openai",
+        model_name="gpt-5",
+    )
+
+    try:
+        wrapper.generate(
+            ModelInput(system_instruction="s", prompt="x" * 5000),
+            make_request(
+                provider_name="openai",
+                model_name="gpt-5",
+                params={
+                    "rate_limit": {
+                        "tpm": 100,
+                        "estimated_output_tokens": 600,
+                    }
+                },
+                metadata={
+                    "question_id": "q1",
+                    "context_id": "ctx1",
+                    "experiment_id": "exp1",
+                },
+            ),
+            trace=TraceCollector(),
+        )
+        assert False, "Expected RateLimitCapacityError"
+    except RateLimitCapacityError as exc:
+        text = str(exc)
+        assert "Single request exceeds configured TPM budget" in text
+        assert "phase=execution" in text
+        assert "question_id=q1" in text
+        assert "context_id=ctx1" in text
+
+
+def test_estimate_tokens_does_not_double_count_inline_context():
+    context = Path("examples/datasets/lattes/context/5660469902738038.html").read_text(
+        encoding="utf-8",
+        errors="ignore",
+    )
+    prompt = f"Context format: html\n\nQuestion:\nHow many?\n\nContext:\n{context}\n"
+    request = make_request(
+        question="How many?",
+        context=context,
+        provider_name="openai",
+        model_name="gpt-5.4-nano",
+        strategy_name="inline",
+        context_format="html",
+        params={"rate_limit": {"tpm": 200000, "estimated_output_tokens": 600}},
+    )
+    config = extract_rate_limit_config(request, None)
+
+    estimated_input, estimated_output, reserved_tokens = estimate_tokens(
+        ModelInput(system_instruction="sys", prompt=prompt),
+        request,
+        config,
+    )
+
+    assert estimated_input < 120000
+    assert estimated_output == 600
+    assert reserved_tokens < 120000
+
+
+def test_execute_runspec_sets_error_message_on_failure():
+    runspec = RunSpec(
+        id="run-fail-1",
+        runId="run-fail-1",
+        experimentId="exp-fail-1",
+        dataset=ExperimentDataset(root=str((Path.cwd() / "examples" / "datasets" / "lattes").resolve())),
+        questionId="q_exact_001",
+        contextId="5660469902738038",
+        provider="failing",
+        strategy="inline",
+        format="json",
+        repeatIndex=1,
+        outputRoot=None,
+        evaluationEnabled=True,
+        params={"model_name": "mock"},
+        metadata=RunMetadata(
+            canonicalId="exp-fail-1|q_exact_001|5660469902738038|failing|mock|inline|json|1",
+            questionId="q_exact_001",
+            contextId="5660469902738038",
+            provider="failing",
+            modelName="mock",
+            strategy="inline",
+            format="json",
+            repeatIndex=1,
+        ),
+        trace=ExperimentTrace(
+            enabled=True,
+            save_raw_response=True,
+            save_tool_calls=True,
+            save_usage=True,
+            save_errors=True,
+        ),
+    )
+    engine = Engine()
+    engine._models["failing"] = FailingModel()
+
+    result = execute_runspec(runspec, engine)
+
+    assert result.status == "error"
+    assert result.errorMessage == "provider exploded"
+
+
+def test_evaluate_run_results_skips_failed_execution_runs():
+    experiment = make_experiment()
+    engine = Engine()
+    engine._models["failing"] = FailingModel()
+    failed = execute_runspec(
+        RunSpec(
+            id="run-fail-2",
+            runId="run-fail-2",
+            experimentId="exp-fail-2",
+            dataset=ExperimentDataset(root=str((Path.cwd() / "examples" / "datasets" / "lattes").resolve())),
+            questionId="q_exact_001",
+            contextId="5660469902738038",
+            provider="failing",
+            strategy="inline",
+            format="json",
+            repeatIndex=1,
+            outputRoot=None,
+            evaluationEnabled=True,
+            params={"model_name": "mock"},
+            metadata=RunMetadata(
+                canonicalId="exp-fail-2|q_exact_001|5660469902738038|failing|mock|inline|json|1",
+                questionId="q_exact_001",
+                contextId="5660469902738038",
+                provider="failing",
+                modelName="mock",
+                strategy="inline",
+                format="json",
+                repeatIndex=1,
+            ),
+            trace=ExperimentTrace(enabled=True, save_errors=True),
+        ),
+        engine,
+    )
+
+    evaluations = evaluate_run_results([failed], experiment=experiment)
+
+    assert evaluations == []
+
+
+def test_evaluate_exact_normalizes_numeric_expected_values():
+    experiment = make_experiment(
+        judge={"provider": "judge", "model": "judge-model", "temperature": 0},
+    )
+    result = SimpleNamespace(answer="The researcher has **3 publications** in **2026**.")
+    question = Question(
+        id="q_exact_001",
+        question="How many publications?",
+        evaluation=QuestionEvaluation(mode="exact", answerType="number"),
+    )
+    engine = Engine()
+    engine._models["judge"] = JSONModel(
+        json.dumps(
+            {
+                "extractedAnswer": 3,
+                "isExtractable": True,
+                "justification": "The answer explicitly states 3 publications.",
+            }
+        )
+    )
+
+    score, label, details, _, _ = _evaluate_exact(
+        result,
+        question,
+        "3",
+        [],
+        engine,
+        experiment,
+    )
+
+    assert score == 1.0
+    assert label == "correct"
+    assert details["extractedAnswer"] == 3
+    assert details["expectedNormalized"] == 3
+    assert details["evaluationMethod"] == "judge-extraction"
+    assert details["isExtractable"] is True
+    assert details["comparisonMethod"] == "numeric-equality"
+
+
+def test_evaluate_exact_matches_accepted_answers_for_strings():
+    experiment = make_experiment()
+    result = SimpleNamespace(answer="Federal University of Bahia")
+    question = Question(
+        id="q_exact_002",
+        question="What is the current affiliation?",
+        evaluation=QuestionEvaluation(mode="exact", answerType="string"),
+    )
+
+    score, label, details, _, _ = _evaluate_exact(
+        result,
+        question,
+        "UFBA",
+        ["Federal University of Bahia"],
+        Engine(),
+        experiment,
+    )
+
+    assert score == 1.0
+    assert label == "correct"
+    assert details["evaluationMethod"] == "rule-fallback-extraction"
+
+
+def test_evaluate_analytical_uses_judge_for_criteria_but_scores_deterministically():
+    question = Question(
+        id="q_analytical_001",
+        question="Summarize the researcher profile.",
+        evaluation=QuestionEvaluation(
+            mode="analytical",
+            rubric=[
+                EvaluationRubricCriterion(id="teaching", description="Mentions teaching", weight=1),
+                EvaluationRubricCriterion(id="research", description="Mentions research", weight=1),
+                EvaluationRubricCriterion(id="impact", description="Mentions impact", weight=1),
+            ],
+        ),
+    )
+    experiment = make_experiment(
+        judge={"provider": "judge", "model": "judge-model", "temperature": 0},
+    )
+    engine = Engine()
+    engine._models["judge"] = JSONModel(
+        json.dumps(
+            {
+                "matchedCriteria": ["teaching", "research"],
+                "missingCriteria": ["impact"],
+                "justification": "The answer covers teaching and research only.",
+            }
+        )
+    )
+
+    score, label, status, details, judge_info, _ = _evaluate_analytical(
+        SimpleNamespace(answer="The profile shows teaching and research expertise."),
+        question,
+        None,
+        {"availableThemes": ["teaching", "research", "impact"]},
+        engine,
+        experiment,
+    )
+
+    assert score == 0.6667
+    assert label == "partial"
+    assert status == "evaluated"
+    assert details["matchedCriteria"] == ["teaching", "research"]
+    assert details["missingCriteria"] == ["impact"]
+    assert details["evaluationMethod"] == "judge-rubric"
+    assert details["matchedWeight"] == 2
+    assert details["totalWeight"] == 3
+    assert judge_info.used is True
+
+
+def test_evaluate_analytical_missing_rubric_is_invalid_config():
+    experiment = make_experiment()
+    question = Question(
+        id="q_analytical_002",
+        question="Summarize the profile.",
+        evaluation=QuestionEvaluation(mode="analytical", rubric=[]),
+    )
+
+    score, label, status, details, _, _ = _evaluate_analytical(
+        SimpleNamespace(answer="Anything."),
+        question,
+        None,
+        None,
+        Engine(),
+        experiment,
+    )
+
+    assert score is None
+    assert label is None
+    assert status == "invalid-evaluation-config"
+    assert details["reason"] == "Missing analytical rubric."
+    assert details["evaluationMethod"] == "invalid-evaluation-config"
+
+
+def test_evaluate_unanswerable_persists_classification_reason():
+    score, label, details, _, _ = _evaluate_unanswerable(
+        SimpleNamespace(answer="Not enough information in the document.")
+    )
+
+    assert score == 1.0
+    assert label == "correct-abstention"
+    assert details["classificationReason"] == "Matched abstention language."
+    assert details["matchedPattern"] == "not enough information"
+    assert details["evaluationMethod"] == "rule-unanswerable"
 
 
 def test_engine_mcp_binding_isolated_per_run():

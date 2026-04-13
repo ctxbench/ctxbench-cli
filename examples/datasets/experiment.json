@@ -1,8 +1,8 @@
 {
-  "id": "exp_basic_001",
-  "name": "basic benchmark example",
+  "id": "lattes_full_001",
+  "name": "lattes benchmark example with rate limiting",
   "output": "/home/michel/repos/doutorado/copa-benchmark/outputs",
-  "dataset": ".",
+  "dataset": "lattes/",
   "factors": {
     "model": [
       { "provider": "openai", "name": "gpt-5.4-nano" },
@@ -15,8 +15,28 @@
     "common": {
       "temperature": 0
     },
+    "gpt-5.4-nano": {
+      "max_output_tokens": 1000,
+      "rate_limit": {
+        "tpm": 200000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 1000
+      }
+    },
     "gemini-3.1-flash-lite-preview": {
-      "temperature": 0.3
+      "temperature": 0.3,
+      "max_output_tokens": 1000,
+      "rate_limit": {
+        "tpm": 200000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 1000
+      }
     }
   },
   "evaluation": {

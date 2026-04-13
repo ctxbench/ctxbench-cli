@@ -28,7 +28,7 @@ class InlineStrategy(StrategyAdapter):
                 system_instruction=DEFAULT_SYSTEM_INSTRUCTION,
                 prompt=prompt,
             )
-            model_response = model.generate(model_input, request)
+            model_response = model.generate(model_input, request, trace=trace)
             trace.record_model_call(
                 duration_ms=model_response.duration_ms,
                 input_tokens=model_response.input_tokens,

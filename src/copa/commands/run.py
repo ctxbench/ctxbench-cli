@@ -90,13 +90,14 @@ def run_command(
     progress: bool = False,
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
+    event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
     logger.phase("LOAD", "Loading run specification", path=path)
     runspecs, experiment_path = load_runspecs(path)
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
     logger.progress = progress_tracker
     logger.phase("LOAD", "Run specification loading completed", runs=len(runspecs))
     logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(runspecs))
-    engine = Engine()
+    engine = Engine(event_logger=event_logger)
     progress_tracker.start()
     results = []
     try:
@@ -158,7 +159,11 @@ def run_command(
     if experiment_path and runspecs[0].evaluationEnabled:
         logger.phase("EVALUATE", "Starting evaluation batch", experiment=experiment_path)
         experiment, base_dir = load_experiment_for_evaluation(experiment_path)
-        evaluations = evaluate_run_results(results, experiment=experiment)
+        evaluations = evaluate_run_results(
+            results,
+            experiment=experiment,
+            event_logger=event_logger,
+        )
         eval_dir, eval_jsonl = evaluation_output_paths(experiment, base_dir)
         write_evaluation_files(evaluations, eval_dir)
         summary_path = eval_dir / "evaluation-summary.json"

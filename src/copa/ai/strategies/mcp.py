@@ -45,7 +45,7 @@ class MCPStrategy(StrategyAdapter):
                     tool_results=tool_results,
                     continuation_state=continuation_state,
                 )
-                model_response = model.generate(model_input, request)
+                model_response = model.generate(model_input, request, trace=trace)
                 raw_responses.append(model_response.raw_response)
                 continuation_state = dict(model_response.continuation_state)
                 trace.record_model_call(

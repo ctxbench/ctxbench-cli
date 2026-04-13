@@ -7,3 +7,5 @@ build/
 result
 .direnv/
 .env
+outputs/
+results/

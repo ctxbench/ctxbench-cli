@@ -6,6 +6,16 @@ from typing import Any
 from copa._compat import BaseModel, Field, ValidationError
 
 
+def _model_dump_value(value: Any, mode: str) -> Any:
+    if hasattr(value, "model_dump"):
+        return value.model_dump(mode=mode)
+    if isinstance(value, list):
+        return [_model_dump_value(item, mode) for item in value]
+    if isinstance(value, dict):
+        return {key: _model_dump_value(item, mode) for key, item in value.items()}
+    return value
+
+
 class ExperimentDataset(BaseModel):
     root: str
 
@@ -60,9 +70,9 @@ class ExperimentParams(BaseModel):
         return cls(common=common, models=models)
 
     def model_dump(self, mode: str = "python") -> dict[str, Any]:
-        payload = {"common": self._dump(self.common, mode)}
+        payload = {"common": _model_dump_value(self.common, mode)}
         for model_name, params in self.models.items():
-            payload[model_name] = self._dump(params, mode)
+            payload[model_name] = _model_dump_value(params, mode)
         return payload
 
 
@@ -164,9 +174,20 @@ class Experiment(BaseModel):
         payload = dict(data)
         if "dataset" in payload:
             payload["dataset"] = ExperimentDataset.model_validate(payload["dataset"])
+        if "params" in payload:
+            payload["params"] = ExperimentParams.model_validate(payload["params"])
+        if "expansion" in payload and isinstance(payload["expansion"], dict):
+            payload["expansion"] = ExperimentExpansion.model_validate(payload["expansion"])
+        if "evaluation" in payload and isinstance(payload["evaluation"], dict):
+            payload["evaluation"] = ExperimentEvaluation.model_validate(payload["evaluation"])
+        if "trace" in payload and isinstance(payload["trace"], dict):
+            payload["trace"] = ExperimentTrace.model_validate(payload["trace"])
+        if "execution" in payload and isinstance(payload["execution"], dict):
+            payload["execution"] = ExperimentExecution.model_validate(payload["execution"])
         execution = payload.get("execution")
-        if not payload.get("output") and isinstance(execution, dict) and execution.get("output"):
-            payload["output"] = execution.get("output")
+        execution_output = execution.output if isinstance(execution, ExperimentExecution) else execution.get("output") if isinstance(execution, dict) else None
+        if not payload.get("output") and execution_output:
+            payload["output"] = execution_output
         return super().model_validate(payload)
 
     def _validate_model(self) -> None:
@@ -300,6 +321,7 @@ class RunResult(BaseModel):
     outputRoot: str | None = None
     answer: str
     status: str
+    errorMessage: str | None = None
     timing: RunTiming
     usage: dict[str, Any] = Field(default_factory=dict)
     trace: RunTrace = Field(default_factory=RunTrace)
@@ -337,6 +359,7 @@ class RunResult(BaseModel):
             "runId": self.runId,
             "status": self.status,
             "answer": self.answer,
+            "errorMessage": self.errorMessage,
             "timing": self.timing.model_dump(mode="json"),
             "usage": self.usage,
             "traceRef": trace_ref,
@@ -366,8 +389,10 @@ class EvaluationItemResult(BaseModel):
     questionId: str
     question: str
     evaluationMode: str
-    score: float
-    label: str
+    status: str = "evaluated"
+    evaluationMethod: str | None = None
+    score: float | None = None
+    label: str | None = None
     details: dict[str, Any] = Field(default_factory=dict)
     executionModel: str | None = None
     executionStrategy: str | None = None
@@ -387,8 +412,11 @@ class EvaluationItemResult(BaseModel):
 
     def to_persisted_artifact(self) -> dict[str, Any]:
         return {
+            "experimentId": self.experimentId,
             "runId": self.runId,
             "questionId": self.questionId,
+            "status": self.status,
+            "evaluationMethod": self.evaluationMethod,
             "score": self.score,
             "label": self.label,
             "details": self.details,
@@ -397,7 +425,7 @@ class EvaluationItemResult(BaseModel):
 
 class EvaluationRunSummary(BaseModel):
     itemCount: int = 0
-    meanScore: float = 0.0
+    meanScore: float | None = 0.0
     labels: dict[str, int] = Field(default_factory=dict)
 
 
@@ -434,5 +462,5 @@ class EvaluationBatchSummary(BaseModel):
     experimentId: str
     runCount: int = 0
     itemCount: int = 0
-    meanScore: float = 0.0
+    meanScore: float | None = 0.0
     labels: dict[str, int] = Field(default_factory=dict)

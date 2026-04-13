@@ -111,5 +111,7 @@ class DatasetProvider:
         if raw.get("lattesId") is None and raw.get("instanceId") is not None:
             normalized["lattesId"] = raw["instanceId"]
         normalized["metadata"] = metadata
+        if raw.get("evaluationContext") is None and metadata.get("evaluationContext") is not None:
+            normalized["evaluationContext"] = metadata["evaluationContext"]
         normalized.pop("instanceId", None)
         return normalized

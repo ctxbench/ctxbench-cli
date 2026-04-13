@@ -86,6 +86,7 @@ def load_results_from_input(
                 outputRoot=runspec.outputRoot,
                 answer=str(payload.get("answer", "")),
                 status=str(payload.get("status", "")),
+                errorMessage=payload.get("errorMessage"),
                 timing=payload.get("timing", {}),
                 usage=payload.get("usage", {}),
                 trace=trace_payload,
@@ -111,6 +112,7 @@ def eval_command(
     progress: bool = False,
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
+    event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
     logger.phase("LOAD", "Loading experiment", path=experiment_path)
     experiment, base_dir = load_experiment_for_evaluation(experiment_path)
     input_path = run_results_dir or run_results_json or ""
@@ -132,6 +134,7 @@ def eval_command(
         mode=mode,
         continue_on_error=continue_on_error,
         fail_on_missing_gold=fail_on_missing_gold,
+        event_logger=event_logger,
     )
     for _ in evaluations:
         progress_tracker.advance()

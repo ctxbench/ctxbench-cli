@@ -155,7 +155,7 @@ def write_mock_experiment(path: Path) -> Path:
 
 
 def test_experiment_validate_example(capsys):
-    exit_code = main(["experiment", "validate", "examples/datasets/lattes/experiment.json"])
+    exit_code = main(["experiment", "validate", "examples/datasets/experiment.json"])
     out = capsys.readouterr().out
     assert exit_code == 0
     assert "valid experiment" in out
@@ -202,13 +202,23 @@ def test_example_lattes_dataset_shape_is_supported():
         ExperimentDataset(root=str((Path("examples/datasets/lattes")).resolve()))
     )
 
-    instance = provider.get_question_instance("q_oos_002", "5660469902738038")
+    instance = provider.get_question_instance("q_exact_001", "5660469902738038")
 
     assert instance is not None
     assert instance.cvId == "5660469902738038"
     assert instance.lattesId == "5660469902738038"
     assert instance.researcherName == "Nabor das Chagas Mendonça"
     assert instance.metadata["researcherName"] == "Nabor das Chagas Mendonça"
+
+
+def test_experiment_preserves_model_specific_params():
+    from copa.benchmark.experiment_loader import load_experiment
+
+    experiment = load_experiment("examples/datasets/experiment.json")
+
+    assert "gpt-5.4-nano" in experiment.params.models
+    assert experiment.params.models["gpt-5.4-nano"]["rate_limit"]["tpm"] == 200000
+    assert experiment.params.models["gemini-3.1-flash-lite-preview"]["rate_limit"]["max_concurrency"] == 1
 
 
 def test_run_and_eval_jsonl_flow(tmp_path):
@@ -293,6 +303,7 @@ def test_run_and_eval_jsonl_flow(tmp_path):
     )
     assert exact_eval["score"] == 1.0
     assert exact_eval["label"] == "correct"
+    assert exact_eval["experimentId"] == "exp_test_mock_001"
     assert exact_eval["details"]["extractedAnswer"] == 2018
     assert exact_eval["runId"]
     assert eval_jsonl.exists()

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from copa._compat import BaseModel, Field
+from copa.ai.trace import TraceCollector
 
 
 class ToolSpec(BaseModel):
@@ -71,5 +72,10 @@ class ModelAdapter:
     def __init__(self, params: dict[str, Any] | None = None) -> None:
         self.params = params or {}
 
-    def generate(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+    def generate(
+        self,
+        model_input: ModelInput,
+        request: AIRequest,
+        trace: TraceCollector | None = None,
+    ) -> ModelResponse:
         raise NotImplementedError

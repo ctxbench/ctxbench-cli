@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+import warnings
 
 from copa._compat import BaseModel, Field, ValidationError
 
@@ -15,6 +16,7 @@ class EvaluationRubricCriterion(BaseModel):
 class QuestionEvaluation(BaseModel):
     mode: str
     answerType: str | None = None
+    kind: str | None = None
     expected: Any | None = None
     rubric: list[EvaluationRubricCriterion] = Field(default_factory=list)
 
@@ -27,6 +29,7 @@ class QuestionEvaluation(BaseModel):
         return cls(
             mode=str(data.get("mode", "")),
             answerType=data.get("answerType"),
+            kind=data.get("kind"),
             expected=data.get("expected"),
             rubric=[
                 EvaluationRubricCriterion.model_validate(item)
@@ -53,6 +56,13 @@ class Question(BaseModel):
             raise ValidationError("Question requires an object input.")
         evaluation_payload = data.get("evaluation")
         if not isinstance(evaluation_payload, dict):
+            warnings.warn(
+                (
+                    f"Question '{data.get('id', '')}' uses legacy evaluation metadata. "
+                    "Prefer an explicit question.evaluation block."
+                ),
+                stacklevel=2,
+            )
             evaluation_payload = {
                 "mode": cls._legacy_mode(data),
                 "answerType": data.get("expectedAnswerType"),
@@ -118,6 +128,7 @@ class QuestionInstance(BaseModel):
     notes: str | None = None
     evaluationType: str = "exact_match"
     judgeReference: dict[str, Any] | None = None
+    evaluationContext: dict[str, Any] | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
