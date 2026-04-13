@@ -41,6 +41,9 @@ class OpenAIModel(ModelAdapter):
             "instructions": model_input.system_instruction,
             "input": self._build_input(model_input),
         }
+        metadata = self._request_metadata(request)
+        if metadata:
+            payload["metadata"] = metadata
         if model_input.tools:
             payload["tools"] = [self._serialize_tool(tool) for tool in model_input.tools]
         if "temperature" in params:
@@ -169,3 +172,15 @@ class OpenAIModel(ModelAdapter):
         params = dict(self.params)
         params.update(request.params)
         return params
+
+    def _request_metadata(self, request: AIRequest) -> dict[str, str]:
+        metadata: dict[str, str] = {}
+        for source_key, target_key in (
+            ("runId", "runId"),
+            ("expId", "expId"),
+            ("phase", "phase"),
+        ):
+            value = request.metadata.get(source_key)
+            if value is not None and str(value):
+                metadata[target_key] = str(value)
+        return metadata

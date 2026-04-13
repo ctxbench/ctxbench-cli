@@ -41,6 +41,9 @@ class GeminiModel(ModelAdapter):
         params = self._merged_params(request)
         sdk_types = self._sdk_types()
         config: dict[str, Any] = {"system_instruction": model_input.system_instruction}
+        labels = self._request_labels(request)
+        if labels:
+            config["labels"] = labels
         if model_input.tools:
             if sdk_types is None:
                 config["tools"] = [
@@ -300,3 +303,15 @@ class GeminiModel(ModelAdapter):
         params = dict(self.params)
         params.update(request.params)
         return params
+
+    def _request_labels(self, request: AIRequest) -> dict[str, str]:
+        labels: dict[str, str] = {}
+        for source_key, target_key in (
+            ("runId", "runId"),
+            ("expId", "expId"),
+            ("phase", "phase"),
+        ):
+            value = request.metadata.get(source_key)
+            if value is not None and str(value):
+                labels[target_key] = str(value)
+        return labels

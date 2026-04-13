@@ -26,9 +26,13 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         context_format=runspec.format,
         params=runspec.params,
         metadata={
+            "run_id": runspec.runId,
+            "runId": runspec.runId,
+            "expId": runspec.experimentId,
             "question_id": runspec.questionId,
             "context_id": runspec.contextId,
             "experiment_id": runspec.experimentId,
+            "phase": "execution",
             "format": runspec.format,
             "provider": runspec.provider,
             "context_path": str(context_path(runspec.dataset.contexts, runspec.contextId, runspec.format).resolve()),

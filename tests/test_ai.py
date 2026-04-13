@@ -859,11 +859,16 @@ def test_openai_model_normalizes_response():
 
     result = model.generate(
         ModelInput(system_instruction="System", prompt="Prompt"),
-        make_request(provider_name="openai", model_name="gpt-5"),
+        make_request(
+            provider_name="openai",
+            model_name="gpt-5",
+            metadata={"question_id": "q1", "runId": "run-123", "expId": "exp-456", "phase": "execution"},
+        ),
     )
 
     assert captured["instructions"] == "System"
     assert captured["input"] == "Prompt"
+    assert captured["metadata"] == {"runId": "run-123", "expId": "exp-456", "phase": "execution"}
     assert result.text == "OpenAI answer"
     assert result.input_tokens == 9
     assert result.output_tokens == 4
@@ -965,7 +970,11 @@ def test_gemini_model_normalizes_response():
 
     result = model.generate(
         ModelInput(system_instruction="System", prompt="Prompt"),
-        make_request(provider_name="gemini", model_name="gemini-2.5"),
+        make_request(
+            provider_name="gemini",
+            model_name="gemini-2.5",
+            metadata={"question_id": "q1", "runId": "run-123", "expId": "exp-456", "phase": "execution"},
+        ),
     )
 
     assert captured["contents"] == "Prompt"
@@ -974,6 +983,10 @@ def test_gemini_model_normalizes_response():
     if system_instruction is None and isinstance(config, dict):
         system_instruction = config["system_instruction"]
     assert system_instruction == "System"
+    labels = getattr(config, "labels", None)
+    if labels is None and isinstance(config, dict):
+        labels = config["labels"]
+    assert labels == {"runId": "run-123", "expId": "exp-456", "phase": "execution"}
     assert result.text == "Gemini answer"
     assert result.input_tokens == 8
     assert result.output_tokens == 3
@@ -1104,11 +1117,16 @@ def test_claude_model_normalizes_response():
 
     result = model.generate(
         ModelInput(system_instruction="System", prompt="Prompt"),
-        make_request(provider_name="claude", model_name="claude-3-7-sonnet"),
+        make_request(
+            provider_name="claude",
+            model_name="claude-3-7-sonnet",
+            metadata={"question_id": "q1", "runId": "run-123", "expId": "exp-456", "phase": "execution"},
+        ),
     )
 
     assert captured["system"] == "System"
     assert captured["messages"] == [{"role": "user", "content": "Prompt"}]
+    assert captured["metadata"] == {"user_id": "runId=run-123;expId=exp-456;phase=execution"}
     assert result.text == "Claude answer"
     assert result.input_tokens == 7
     assert result.output_tokens == 2
@@ -1178,3 +1196,63 @@ def test_claude_model_maps_tools_and_tool_results():
             {"type": "tool_use", "id": "call-1", "name": "linesOfResearch", "input": {"topic": "ai"}},
         ]
     }
+
+
+def test_evaluation_judge_requests_propagate_run_metadata_to_provider():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        output_text='{"extractedAnswer":"2018","isExtractable":true,"justification":"ok"}',
+        usage=SimpleNamespace(input_tokens=9, output_tokens=4, total_tokens=13),
+        model_dump=lambda mode="json": {"id": "resp-openai-eval"},
+    )
+    client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+
+    original_create_client = OpenAIModel._create_client
+    OpenAIModel._create_client = lambda self: client
+    try:
+        experiment = make_experiment(judge={"provider": "openai", "model": "gpt-5", "temperature": 0})
+        provider = ExperimentDataset(root=str((Path.cwd() / "examples" / "datasets" / "lattes").resolve()))
+        result = evaluate_run_results(
+            [
+                execute_runspec(
+                    RunSpec(
+                        id="run-1",
+                        runId="run-1",
+                        experimentId="exp-1",
+                        dataset=provider,
+                        questionId="q_exact_003",
+                        contextId="5660469902738038",
+                        provider="mock",
+                        modelName="mock",
+                        strategy="inline",
+                        format="json",
+                        params={"model_name": "mock"},
+                        repeatIndex=1,
+                        outputRoot=None,
+                        evaluationEnabled=True,
+                        trace=ExperimentTrace(enabled=False),
+                        metadata=RunMetadata(
+                            canonicalId="exp-1|q_exact_003|5660469902738038|mock|mock|inline|json|1",
+                            questionId="q_exact_003",
+                            contextId="5660469902738038",
+                            provider="mock",
+                            modelName="mock",
+                            strategy="inline",
+                            format="json",
+                            repeatIndex=1,
+                        ),
+                    ),
+                    Engine(),
+                )
+            ],
+            experiment=experiment,
+        )
+    finally:
+        OpenAIModel._create_client = original_create_client
+
+    assert result
+    assert captured["metadata"] == {"runId": "run-1", "expId": "exp-1", "phase": "evaluation"}

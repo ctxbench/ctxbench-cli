@@ -42,6 +42,9 @@ class ClaudeModel(ModelAdapter):
             "messages": self._build_messages(model_input),
             "max_tokens": params.get("max_tokens", 1024),
         }
+        metadata = self._request_metadata(request)
+        if metadata:
+            payload["metadata"] = metadata
         if model_input.tools:
             payload["tools"] = [
                 {
@@ -163,3 +166,18 @@ class ClaudeModel(ModelAdapter):
         params = dict(self.params)
         params.update(request.params)
         return params
+
+    def _request_metadata(self, request: AIRequest) -> dict[str, str]:
+        run_id = request.metadata.get("runId")
+        exp_id = request.metadata.get("expId")
+        phase = request.metadata.get("phase")
+        parts = []
+        if run_id is not None and str(run_id):
+            parts.append(f"runId={run_id}")
+        if exp_id is not None and str(exp_id):
+            parts.append(f"expId={exp_id}")
+        if phase is not None and str(phase):
+            parts.append(f"phase={phase}")
+        if not parts:
+            return {}
+        return {"user_id": ";".join(parts)}

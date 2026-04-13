@@ -84,6 +84,8 @@ def _judge_request(
     config: EvaluationModelConfig,
     prompt: str,
     context: dict[str, Any],
+    run_id: str,
+    exp_id: str,
     engine: Engine,
 ) -> tuple[dict[str, Any] | None, EvaluationJudgeInfo, EvaluationTrace]:
     request = AIRequest(
@@ -94,7 +96,14 @@ def _judge_request(
         strategy_name="inline",
         context_format="json",
         params={"temperature": config.temperature, **config.params},
-        metadata={"phase": "evaluation", "judge_role": role},
+        metadata={
+            "run_id": run_id,
+            "runId": run_id,
+            "expId": exp_id,
+            "experiment_id": exp_id,
+            "phase": "evaluation",
+            "judge_role": role,
+        },
     )
     result = engine.execute(request)
     trace = EvaluationTrace(
@@ -118,6 +127,12 @@ def _judge_request(
         return json.loads(result.answer), info, trace
     except json.JSONDecodeError:
         return None, info, trace
+
+
+def _request_run_metadata(result: Any) -> tuple[str, str]:
+    run_id = getattr(result, "runId", None)
+    exp_id = getattr(result, "experimentId", None)
+    return (str(run_id) if run_id is not None else "", str(exp_id) if exp_id is not None else "")
 
 
 def _evaluate_exact(
@@ -170,6 +185,7 @@ def _evaluate_exact(
     )
 
     if experiment.evaluation.judge is not None:
+        run_id, exp_id = _request_run_metadata(result)
         judge_payload, judge_info, trace = _judge_request(
             role="exact-extractor",
             config=experiment.evaluation.judge,
@@ -179,6 +195,8 @@ def _evaluate_exact(
                 "answerType": answer_type,
                 "modelAnswer": result.answer,
             },
+            run_id=run_id,
+            exp_id=exp_id,
             engine=engine,
         )
         if judge_payload is not None:
@@ -195,6 +213,8 @@ def _evaluate_exact(
                     "answerType": answer_type,
                     "modelAnswer": result.answer,
                 },
+                run_id=run_id,
+                exp_id=exp_id,
                 engine=engine,
             )
             judge_info.fallbackUsed = True
@@ -338,6 +358,7 @@ def _evaluate_analytical(
     if sum(max(item.weight, 0.0) for item in rubric) <= 0:
         return _invalid_analytical_result("Analytical rubric has no positive weight.", rubric)
     if experiment.evaluation.judge is not None and rubric:
+        run_id, exp_id = _request_run_metadata(result)
         prompt = (
             "You are evaluating an answer to a benchmark question using a rubric.\n\n"
             "Task:\n"
@@ -373,6 +394,8 @@ def _evaluate_analytical(
                 "judgeReference": judge_reference,
                 "evaluationContext": evaluation_context,
             },
+            run_id=run_id,
+            exp_id=exp_id,
             engine=engine,
         )
         details = _normalize_judge_criteria_payload(judge_payload, rubric, evaluation_method="judge-rubric")
@@ -397,6 +420,8 @@ def _evaluate_analytical(
                     "judgeReference": judge_reference,
                     "evaluationContext": evaluation_context,
                 },
+                run_id=run_id,
+                exp_id=exp_id,
                 engine=engine,
             )
             fallback_info.fallbackUsed = True
