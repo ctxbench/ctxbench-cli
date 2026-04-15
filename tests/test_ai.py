@@ -26,8 +26,9 @@ from copa.ai.strategies.inline import DEFAULT_SYSTEM_INSTRUCTION
 from copa.ai.trace import TraceCollector
 from copa.benchmark.executor import execute_runspec
 from copa.benchmark.models import Experiment, ExperimentDataset, ExperimentTrace, RunMetadata, RunSpec
-from copa.benchmark.evaluation import _evaluate_analytical, _evaluate_exact, _evaluate_unanswerable, evaluate_run_results
-from copa.dataset.questions import EvaluationRubricCriterion, Question, QuestionEvaluation
+from copa.benchmark.evaluation import EVALUATION_SYSTEM_INSTRUCTION, _evaluate_analytical, _evaluate_exact, _evaluate_unanswerable, evaluate_run_results
+from copa.dataset.provider import DatasetProvider
+from copa.dataset.questions import EvaluationDimension, EvaluationRubricCriterion, Question, QuestionEvaluation
 
 
 def make_request(**overrides: object) -> AIRequest:
@@ -141,6 +142,24 @@ class JSONModel(ModelAdapter):
         )
 
 
+class RecordingJSONModel(ModelAdapter):
+    def __init__(self, text: str) -> None:
+        super().__init__()
+        self.text = text
+        self.last_input: ModelInput | None = None
+
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
+        self.last_input = model_input
+        return ModelResponse(
+            text=self.text,
+            input_tokens=10,
+            output_tokens=5,
+            total_tokens=15,
+            duration_ms=2,
+            metadata={"provider": request.provider_name},
+        )
+
+
 class FakeMCPServer:
     def __init__(self, result_prefix: str = "ctx") -> None:
         self.result_prefix = result_prefix
@@ -221,6 +240,47 @@ def test_engine_normalizes_errors_and_preserves_trace():
         "error",
     ]
     assert result.trace["events"][-1]["metadata"]["error"] == "provider exploded"
+
+
+def test_engine_inline_uses_request_system_instruction_override():
+    engine = Engine()
+    model = RecordingModel()
+    engine._models["recording"] = model
+
+    result = engine.execute(
+        make_request(
+            provider_name="recording",
+            system_instruction="Evaluation-only system instruction.",
+        )
+    )
+
+    assert result.error is None
+    assert model.last_input is not None
+    assert model.last_input.system_instruction == "Evaluation-only system instruction."
+
+
+def test_engine_execute_model_input_records_trace_and_usage():
+    engine = Engine()
+    model = RecordingModel()
+    engine._models["recording"] = model
+    request = make_request(provider_name="recording")
+    model_input = ModelInput(system_instruction="Judge system.", prompt="Prompt body")
+
+    result = engine.execute_model_input(request, model_input)
+
+    assert result.answer == "3"
+    assert result.error is None
+    assert result.usage == {"inputTokens": 11, "outputTokens": 1, "totalTokens": 12}
+    assert model.last_input is not None
+    assert model.last_input.system_instruction == "Judge system."
+    assert model.last_input.prompt == "Prompt body"
+    metrics = result.trace["metrics"]
+    assert metrics["prompt_size_chars"] == len("Prompt body")
+    assert metrics["model_calls"] == 1
+    assert [event["name"] for event in result.trace["events"]] == [
+        "model.generate",
+        "engine.execute_model_input",
+    ]
 
 
 def test_engine_mcp_executes_tool_loop_and_records_trace():
@@ -647,6 +707,110 @@ def test_evaluate_analytical_missing_rubric_is_invalid_config():
     assert details["evaluationMethod"] == "invalid-evaluation-config"
 
 
+def test_evaluate_analytical_dimensions_uses_judge_and_scores_weighted():
+    question = Question(
+        id="q_summary_001",
+        question="Summarize the main fields.",
+        evaluation=QuestionEvaluation(
+            mode="analytical",
+            dimensions=[
+                EvaluationDimension(
+                    id="main-fields",
+                    weight=2.0,
+                    defaultScale=["absent", "partial", "present"],
+                ),
+                EvaluationDimension(
+                    id="grounded",
+                    weight=1.0,
+                    defaultScale=["ungrounded", "partially-grounded", "grounded"],
+                ),
+            ],
+        ),
+    )
+    experiment = make_experiment(
+        judge={"provider": "judge", "model": "judge-model", "temperature": 0},
+    )
+    engine = Engine()
+    engine._models["judge"] = JSONModel(
+        json.dumps(
+            {
+                "dimensionAssessments": [
+                    {
+                        "id": "main-fields",
+                        "label": "present",
+                        "justification": "The answer identifies the main fields.",
+                    },
+                    {
+                        "id": "grounded",
+                        "label": "partially-grounded",
+                        "justification": "Mostly grounded but slightly generic.",
+                    },
+                ],
+                "overallJustification": "The answer is strong overall.",
+            }
+        )
+    )
+
+    score, label, status, details, judge_info, _ = _evaluate_analytical(
+        SimpleNamespace(answer="Software engineering and distributed systems with cloud and microservices emphasis."),
+        question,
+        None,
+        None,
+        engine,
+        experiment,
+        evaluation_context_by_dimension={
+            "main-fields": {"availableThemes": ["software engineering", "distributed systems"]},
+            "grounded": {"allowedClaims": {"themes": ["software engineering", "distributed systems"]}},
+        },
+    )
+
+    assert score == 0.8333
+    assert label == "strong"
+    assert status == "evaluated"
+    assert details["evaluationMethod"] == "judge-dimensions"
+    assert details["dimensionResults"]["main-fields"]["label"] == "present"
+    assert details["dimensionResults"]["grounded"]["label"] == "partially-grounded"
+    assert details["matchedWeight"] == 2.5
+    assert details["totalWeight"] == 3.0
+    assert judge_info.used is True
+
+
+
+
+def test_evaluate_judge_uses_evaluation_specific_system_instruction():
+    experiment = make_experiment(
+        judge={"provider": "judge", "model": "judge-model", "temperature": 0},
+    )
+    engine = Engine()
+    model = RecordingJSONModel(
+        json.dumps(
+            {
+                "extractedAnswer": 2018,
+                "isExtractable": True,
+                "justification": "Explicitly stated.",
+            }
+        )
+    )
+    engine._models["judge"] = model
+    question = Question(
+        id="q_exact_001",
+        question="In which year did the researcher obtain their Ph.D.?",
+        evaluation=QuestionEvaluation(mode="exact", answerType="year"),
+    )
+
+    _evaluate_exact(
+        SimpleNamespace(runId="run-1", experimentId="exp-1", answer="The Ph.D. was in 2018."),
+        question,
+        2018,
+        [],
+        engine,
+        experiment,
+    )
+
+    assert model.last_input is not None
+    assert model.last_input.system_instruction == EVALUATION_SYSTEM_INSTRUCTION
+
+
 def test_evaluate_unanswerable_persists_classification_reason():
     score, label, details, _, _ = _evaluate_unanswerable(
         SimpleNamespace(answer="Not enough information in the document.")
@@ -657,6 +821,27 @@ def test_evaluate_unanswerable_persists_classification_reason():
     assert details["classificationReason"] == "Matched abstention language."
     assert details["matchedPattern"] == "not enough information"
     assert details["evaluationMethod"] == "rule-unanswerable"
+
+
+def test_lattes_dataset_loads_dimension_catalog_and_dimensions():
+    provider = DatasetProvider.from_dataset(
+        ExperimentDataset(root=str((Path("datasets/lattes")).resolve()))
+    )
+
+    question = provider.get_question("q_summary_001")
+    instance = provider.get_question_instance("q_summary_001", "5660469902738038")
+
+    assert question.evaluation is not None
+    assert [item.id for item in question.evaluation.dimensions][:3] == [
+        "main-fields",
+        "topic-coverage",
+        "grounded",
+    ]
+    assert question.evaluation.dimensions[0].defaultScale == ["absent", "partial", "present"]
+    assert question.evaluation.dimensions[0].description == "Identifies the main research fields of the researcher."
+    assert instance is not None
+    assert "main-fields" in instance.evaluationContextByDimension
+    assert "context-dependence" in instance.evaluationContextByDimension
 
 
 def test_engine_mcp_binding_isolated_per_run():

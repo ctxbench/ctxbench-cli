@@ -9,14 +9,8 @@
         "name": "gpt-5.4-nano"
       }
     ],
-    "strategy": [
-      "inline",
-      "mcp"
-    ],
-    "format": [
-      "json",
-      "html"
-    ]
+    "strategy": ["inline", "mcp"],
+    "format": ["json", "html"]
   },
   "params": {
     "common": {
@@ -37,8 +31,8 @@
   "evaluation": {
     "enabled": true,
     "judge": {
-      "provider": "openai",
-      "model": "gpt-5.4-mini",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
       "temperature": 0
     },
     "fallback": {

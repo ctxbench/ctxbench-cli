@@ -1,46 +1,181 @@
 {
-  "datasetId": "quelattes-questions-v3",
+  "datasetId": "quelattes-questions-v5",
   "domain": "lattes-cv",
   "language": "en",
+  "version": "4.0",
+  "description": "Question set for evaluating context-based question answering over Lattes CV data.",
+  "dimensionsCatalog": {
+    "exact-match": {
+      "description": "Answer matches an accepted canonical answer after normalization.",
+      "defaultScale": ["incorrect", "correct"]
+    },
+    "answerability": {
+      "description": "Model correctly identifies that the answer is not available in the provided context.",
+      "defaultScale": ["incorrect", "correct"]
+    },
+    "main-topics": {
+      "description": "Identifies important topics from the researcher profile.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "research-expertise": {
+      "description": "Infers expertise grounded in research activities, projects, or publications.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "teaching-expertise": {
+      "description": "Infers expertise grounded in teaching, advising, or academic supervision.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "main-fields": {
+      "description": "Identifies the main research fields of the researcher.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "topic-coverage": {
+      "description": "Covers relevant themes expected for the task.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "temporal-evolution": {
+      "description": "Describes change, progression, or expansion over time instead of listing isolated topics.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "synthesis": {
+      "description": "Provides a synthesized answer rather than a raw list of items.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "conciseness": {
+      "description": "Keeps the answer concise and proportional to the request.",
+      "defaultScale": ["poor", "adequate", "good"]
+    },
+    "clear-conclusion": {
+      "description": "States a clear conclusion or decision when the task requires one.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "domain-fit": {
+      "description": "Connects the researcher profile to the target domain of the judgment task.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "count": {
+      "description": "Provides the requested number of items.",
+      "defaultScale": ["incorrect", "correct"]
+    },
+    "item-structure": {
+      "description": "Each item follows the requested structure.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "topic-relevance": {
+      "description": "Selected items are relevant to the requested topic.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "justified-selection": {
+      "description": "The answer explains why the selected items are relevant.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "uses-evidence": {
+      "description": "Uses evidence from the provided context to support the answer.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "factual-correctness": {
+      "description": "Claims are factually correct with respect to the provided context.",
+      "defaultScale": ["incorrect", "mixed", "correct"]
+    },
+    "grounded": {
+      "description": "Claims stay within the information supported by the provided context.",
+      "defaultScale": ["ungrounded", "partially-grounded", "grounded"]
+    },
+    "traceability": {
+      "description": "Claims can be mapped to specific evidence in the context.",
+      "defaultScale": ["absent", "partial", "present"]
+    },
+    "context-dependence": {
+      "description": "The answer depends on the provided context rather than generic prior knowledge.",
+      "defaultScale": ["none", "weak", "strong"]
+    },
+    "task-success": {
+      "description": "Overall fulfillment of the task intent.",
+      "defaultScale": ["poor", "partial", "successful"]
+    }
+  },
   "questions": [
     {
       "id": "q_exact_001",
       "question": "How many publications does the researcher have in 2026?",
+      "questionType": "factoid",
+      "cognitiveType": "retrieval",
+      "difficulty": "easy",
       "evaluation": {
         "mode": "exact",
-        "answerType": "number"
+        "answerType": "number",
+        "dimensions": [
+          {
+            "id": "exact-match",
+            "weight": 1.0,
+            "normalization": ["trim", "lowercase", "extract-number"]
+          }
+        ]
       }
     },
     {
       "id": "q_analytical_001",
       "question": "What skills or areas of expertise can be inferred from the researcher’s teaching and research activities?",
+      "questionType": "analytical",
+      "cognitiveType": "inference",
+      "difficulty": "medium",
       "evaluation": {
         "mode": "analytical",
-        "kind": "inference",
-        "rubric": [
+        "dimensions": [
           {
             "id": "research-expertise",
-            "description": "Identifies research-related expertise grounded in the researcher’s activities or publications.",
-            "weight": 1.5
+            "weight": 1.5,
+            "judgingNotes": [
+              "Look for expertise inferred from research topics, publications, or projects.",
+              "Do not reward generic software-related claims with no support in context."
+            ]
           },
           {
             "id": "teaching-expertise",
-            "description": "Identifies expertise supported by teaching or advising activities.",
-            "weight": 1.0
+            "weight": 1.0,
+            "judgingNotes": [
+              "Look for expertise supported by teaching, advising, or supervision activities."
+            ]
           },
           {
             "id": "topic-coverage",
-            "description": "Covers important themes that characterize the researcher’s expertise.",
-            "weight": 1.5
+            "weight": 1.5,
+            "basedOn": "availableThemes",
+            "minRelevantThemesForPresent": 3
           },
           {
             "id": "grounded",
-            "description": "Keeps the inference grounded in the provided information.",
+            "weight": 1.0,
+            "criteria": [
+              "no unsupported expertise areas",
+              "no contradiction with context"
+            ]
+          },
+          {
+            "id": "factual-correctness",
             "weight": 1.0
           },
           {
+            "id": "traceability",
+            "weight": 1.0,
+            "criteria": [
+              "major claims can be linked to activities, themes, publications, projects, or supervision"
+            ]
+          },
+          {
+            "id": "context-dependence",
+            "weight": 1.5,
+            "criteria": [
+              "answer uses profile-specific evidence",
+              "answer would not fit equally well for an arbitrary software engineering researcher"
+            ]
+          },
+          {
             "id": "synthesis",
-            "description": "Provides synthesized expertise areas instead of only listing raw activities.",
+            "weight": 1.0
+          },
+          {
+            "id": "task-success",
             "weight": 1.0
           }
         ]
@@ -49,36 +184,77 @@
     {
       "id": "q_oos_001",
       "question": "How many children does the researcher have?",
+      "questionType": "unanswerable",
+      "cognitiveType": "answerability-detection",
+      "difficulty": "easy",
       "evaluation": {
-        "mode": "unanswerable"
+        "mode": "unanswerable",
+        "dimensions": [
+          {
+            "id": "answerability",
+            "weight": 1.0
+          },
+          {
+            "id": "grounded",
+            "weight": 1.0,
+            "criteria": [
+              "does not invent personal facts that are absent from context"
+            ]
+          },
+          {
+            "id": "task-success",
+            "weight": 1.0
+          }
+        ]
       }
     },
     {
       "id": "q_summary_001",
       "question": "Summarize the researcher’s main fields of research in one concise paragraph based only on the provided information.",
+      "questionType": "summary",
+      "cognitiveType": "synthesis",
+      "difficulty": "medium",
       "evaluation": {
         "mode": "analytical",
-        "kind": "summary",
-        "rubric": [
+        "dimensions": [
           {
             "id": "main-fields",
-            "description": "Identifies the researcher’s main fields of research.",
-            "weight": 1.5
-          },
-          {
-            "id": "grounded",
-            "description": "Stays grounded in the provided information.",
-            "weight": 1.0
-          },
-          {
-            "id": "concise",
-            "description": "Provides a concise summary rather than an overly long answer.",
-            "weight": 0.5
+            "weight": 1.5,
+            "basedOn": "availableThemes"
           },
           {
             "id": "topic-coverage",
-            "description": "Covers the major themes that characterize the researcher’s profile.",
+            "weight": 1.5,
+            "basedOn": "availableThemes",
+            "minRelevantThemesForPresent": 3
+          },
+          {
+            "id": "grounded",
+            "weight": 1.0
+          },
+          {
+            "id": "factual-correctness",
+            "weight": 1.0
+          },
+          {
+            "id": "traceability",
+            "weight": 1.0
+          },
+          {
+            "id": "context-dependence",
             "weight": 1.5
+          },
+          {
+            "id": "conciseness",
+            "weight": 0.5,
+            "judgingNotes": [
+              "Prefer a single concise paragraph.",
+              "Penalize overly long or repetitive answers."
+            ]
+          },
+          {
+            "id": "task-success",
+            "weight": 1.0
           }
         ]
       }
@@ -86,33 +262,59 @@
     {
       "id": "q_recommendation_001",
       "question": "You are conducting research on microservices architecture. List 3 publications from this researcher that are most relevant to this topic. For each publication, include title, year, and a brief justification.",
+      "questionType": "recommendation",
+      "cognitiveType": "selection-and-justification",
+      "difficulty": "medium",
       "evaluation": {
         "mode": "analytical",
-        "kind": "recommendation",
-        "rubric": [
+        "dimensions": [
           {
             "id": "count",
-            "description": "Provides exactly 3 recommendations.",
             "weight": 1.0
           },
           {
             "id": "item-structure",
-            "description": "Each recommendation includes title, year, and justification.",
-            "weight": 1.0
+            "weight": 1.0,
+            "requiredFields": ["title", "year", "justification"]
           },
           {
             "id": "topic-relevance",
-            "description": "Recommendations are relevant to the requested topic.",
-            "weight": 1.5
+            "weight": 1.5,
+            "basedOn": "preferredThemes"
           },
           {
             "id": "grounded",
-            "description": "Recommendations are grounded in the researcher’s publications or documented work.",
-            "weight": 1.5
+            "weight": 1.5,
+            "criteria": [
+              "recommended publications exist in availablePublications",
+              "no invented titles",
+              "no invented years"
+            ]
+          },
+          {
+            "id": "factual-correctness",
+            "weight": 1.0
+          },
+          {
+            "id": "traceability",
+            "weight": 1.0,
+            "criteria": [
+              "each recommended item can be matched to an available publication"
+            ]
+          },
+          {
+            "id": "context-dependence",
+            "weight": 1.5,
+            "criteria": [
+              "selection reflects the researcher-specific candidate space"
+            ]
           },
           {
             "id": "justified-selection",
-            "description": "The justifications meaningfully explain why the selected publications are relevant.",
+            "weight": 1.0
+          },
+          {
+            "id": "task-success",
             "weight": 1.0
           }
         ]
@@ -121,28 +323,46 @@
     {
       "id": "q_judgment_001",
       "question": "Assess whether this researcher would be a suitable senior advisor for a research project on adaptive software architecture. Provide a clear conclusion and a brief justification based on the researcher’s experience and publications.",
+      "questionType": "judgment",
+      "cognitiveType": "judgment",
+      "difficulty": "hard",
       "evaluation": {
         "mode": "analytical",
-        "kind": "judgment",
-        "rubric": [
+        "dimensions": [
           {
             "id": "clear-conclusion",
-            "description": "Provides a clear conclusion about suitability.",
             "weight": 1.0
           },
           {
             "id": "domain-fit",
-            "description": "Connects the researcher’s background to adaptive software architecture.",
-            "weight": 1.5
+            "weight": 1.5,
+            "basedOn": "preferredEvidence"
           },
           {
             "id": "uses-evidence",
-            "description": "Supports the conclusion with evidence from the researcher’s experience, publications, teaching, projects, or supervision.",
-            "weight": 1.5
+            "weight": 1.5,
+            "criteria": [
+              "uses evidence from publications, projects, roles, teaching, or supervision"
+            ]
           },
           {
             "id": "grounded",
-            "description": "Keeps the judgment grounded in the provided information.",
+            "weight": 1.0
+          },
+          {
+            "id": "factual-correctness",
+            "weight": 1.0
+          },
+          {
+            "id": "traceability",
+            "weight": 1.0
+          },
+          {
+            "id": "context-dependence",
+            "weight": 1.5
+          },
+          {
+            "id": "task-success",
             "weight": 1.0
           }
         ]
@@ -150,3 +370,4 @@
     }
   ]
 }
+
