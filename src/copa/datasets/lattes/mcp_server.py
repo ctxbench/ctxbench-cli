@@ -86,6 +86,11 @@ def build_lattes_mcp_server(*, contexts_dir: str, provider: LattesProvider | Non
     return LattesMCPServer(contexts_dir=contexts_dir, provider=provider)
 
 
+def create_mcp(*, contexts_dir: str | None = None) -> FastMCP:
+    resolved_contexts_dir = contexts_dir or _default_contexts_dir()
+    return build_lattes_mcp_server(contexts_dir=resolved_contexts_dir).app
+
+
 def _default_contexts_dir() -> str:
     return str((Path(__file__).resolve().parents[4] / "datasets" / "lattes" / "context").resolve())
 
@@ -146,3 +151,8 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+mcp = create_mcp()
+app = mcp
+server = mcp
