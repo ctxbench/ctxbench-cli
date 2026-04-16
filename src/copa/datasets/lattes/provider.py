@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from copa.ai.mcp.runtime import MCPRuntime
+from pathlib import Path
+
 from copa.datasets.lattes.models import EducationEntry, LattesCurriculum, ProjectEntry, PublicationEntry
 from copa.datasets.lattes.readers import HtmlLattesReader, JsonLattesReader, LattesReader
+from copa.dataset.contexts import context_path
 
 
 class LattesProvider:
@@ -11,23 +13,39 @@ class LattesProvider:
             "json": JsonLattesReader(),
             "html": HtmlLattesReader(),
         }
-        self._curriculum: LattesCurriculum | None = None
-        self._bound_path: str | None = None
-        self._bound_format: str | None = None
+        self._cache: dict[tuple[str, str], LattesCurriculum] = {}
+        self._preferred_formats = tuple(self._readers.keys())
 
-    def bind(self, *, path: str, fmt: str) -> None:
+    def get_curriculum(self, *, path: str, fmt: str) -> LattesCurriculum:
         normalized_format = fmt.lower()
-        if self._bound_path == path and self._bound_format == normalized_format and self._curriculum is not None:
-            return
+        cache_key = (path, normalized_format)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
         reader = self._readers.get(normalized_format)
         if reader is None:
             raise ValueError(f"Unsupported Lattes context format: {fmt}")
-        self._curriculum = reader.read(path)
-        self._bound_path = path
-        self._bound_format = normalized_format
+        curriculum = reader.read(path)
+        self._cache[cache_key] = curriculum
+        return curriculum
 
-    def get_basic_information(self) -> dict[str, object]:
-        curriculum = self._require_curriculum()
+    def resolve_context_path(self, *, contexts_dir: str, lattes_id: str, fmt: str) -> str:
+        path = context_path(contexts_dir, lattes_id, fmt)
+        if not path.exists():
+            raise FileNotFoundError(f"Missing context artifact: {path}")
+        return str(path.resolve())
+
+    def resolve_context_artifact(self, *, contexts_dir: str, lattes_id: str) -> tuple[str, str]:
+        for fmt in self._preferred_formats:
+            path = context_path(contexts_dir, lattes_id, fmt)
+            if path.exists():
+                return str(path.resolve()), fmt
+        available = ", ".join(self._preferred_formats)
+        raise FileNotFoundError(
+            f"Missing context artifact for lattesId={lattes_id}. Tried formats: {available}."
+        )
+
+    def get_basic_information(self, *, path: str, fmt: str) -> dict[str, object]:
+        curriculum = self.get_curriculum(path=path, fmt=fmt)
         return {
             "name": curriculum.profile.name,
             "summary": curriculum.profile.summary,
@@ -40,31 +58,42 @@ class LattesProvider:
             "lastUpdated": curriculum.meta.last_updated,
         }
 
-    def get_education(self) -> list[EducationEntry]:
-        return list(self._require_curriculum().education)
+    def get_education(self, *, path: str, fmt: str) -> list[EducationEntry]:
+        return list(self.get_curriculum(path=path, fmt=fmt).education)
 
-    def get_lines_of_research(self) -> list[str]:
-        return list(self._require_curriculum().research.lines_of_research)
+    def get_lines_of_research(self, *, path: str, fmt: str) -> list[str]:
+        return list(self.get_curriculum(path=path, fmt=fmt).research.lines_of_research)
 
-    def get_projects(self, start_year: int | None = None, end_year: int | None = None) -> list[ProjectEntry]:
-        return self._filter_by_year(self._require_curriculum().projects, start_year=start_year, end_year=end_year)
+    def get_projects(
+        self,
+        *,
+        path: str,
+        fmt: str,
+        start_year: int | None = None,
+        end_year: int | None = None,
+    ) -> list[ProjectEntry]:
+        return self._filter_by_year(
+            self.get_curriculum(path=path, fmt=fmt).projects,
+            start_year=start_year,
+            end_year=end_year,
+        )
 
     def get_publications(
         self,
+        *,
+        path: str,
+        fmt: str,
         start_year: int | None = None,
         end_year: int | None = None,
     ) -> list[PublicationEntry]:
-        return self._filter_by_year(self._require_curriculum().publications, start_year=start_year, end_year=end_year)
+        return self._filter_by_year(
+            self.get_curriculum(path=path, fmt=fmt).publications,
+            start_year=start_year,
+            end_year=end_year,
+        )
 
     def close(self) -> None:
-        self._curriculum = None
-        self._bound_path = None
-        self._bound_format = None
-
-    def _require_curriculum(self) -> LattesCurriculum:
-        if self._curriculum is None:
-            raise RuntimeError("Lattes provider is not bound to a curriculum.")
-        return self._curriculum
+        self._cache.clear()
 
     def _filter_by_year(self, items: list[ProjectEntry | PublicationEntry], *, start_year: int | None, end_year: int | None):
         if start_year is None and end_year is None:
@@ -80,9 +109,3 @@ class LattesProvider:
                 continue
             filtered.append(item)
         return filtered
-
-
-def create_lattes_mcp_runtime() -> MCPRuntime:
-    from copa.datasets.lattes.mcp_server import LattesMCPServer
-
-    return MCPRuntime(server=LattesMCPServer(provider=LattesProvider()))

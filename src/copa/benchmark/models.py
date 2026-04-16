@@ -294,6 +294,8 @@ class RunTiming(BaseModel):
 class RunTrace(BaseModel):
     aiTrace: dict[str, Any] = Field(default_factory=dict)
     toolCalls: list[dict[str, Any]] = Field(default_factory=list)
+    nativeMcp: dict[str, Any] = Field(default_factory=dict)
+    serverMcp: list[dict[str, Any]] = Field(default_factory=list)
     rawResponse: Any | None = None
     error: str | None = None
 

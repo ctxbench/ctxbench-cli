@@ -4,9 +4,11 @@ from datetime import datetime
 
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest
+from copa.ai.runtime import LocalFunctionRuntime, MCPRuntime
 from copa.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
+from copa.datasets.lattes.mcp_server import LattesMCPServer
+from copa.datasets.lattes.tools import LattesToolService
 from copa.dataset.contexts import context_path
-from copa.datasets.lattes.provider import create_lattes_mcp_runtime
 from copa.util.clock import utc_now_iso
 
 
@@ -15,7 +17,13 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
 
     provider = DatasetProvider.from_dataset(runspec.dataset)
     question = provider.get_question(runspec.questionId)
+    question_instance = provider.get_question_instance(runspec.questionId, runspec.contextId)
     context = provider.get_context(runspec.contextId, runspec.format)
+    lattes_id = (
+        question_instance.lattesId
+        if question_instance is not None and isinstance(question_instance.lattesId, str) and question_instance.lattesId
+        else runspec.contextId
+    )
 
     request = AIRequest(
         question=question.question,
@@ -35,6 +43,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             "phase": "execution",
             "format": runspec.format,
             "provider": runspec.provider,
+            "lattes_id": lattes_id,
             "context_path": str(context_path(runspec.dataset.contexts, runspec.contextId, runspec.format).resolve()),
         },
     )
@@ -43,8 +52,19 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     start = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
     active_engine = engine
     owned_engine: Engine | None = None
-    if runspec.strategy == "mcp" and not engine.has_mcp_runtime():
-        owned_engine = engine.copy_with_mcp_runtime(create_lattes_mcp_runtime())
+    if runspec.strategy in {"local_function", "local_mcp"}:
+        tool_runtime_factories = {}
+        if runspec.strategy == "local_function":
+            tool_runtime_factories["local_function"] = lambda: LocalFunctionRuntime(
+                LattesToolService(contexts_dir=runspec.dataset.contexts)
+            )
+        if runspec.strategy == "local_mcp":
+            tool_runtime_factories["local_mcp"] = lambda: MCPRuntime.for_local_server(
+                LattesMCPServer(
+                    contexts_dir=runspec.dataset.contexts,
+                )
+            )
+        owned_engine = engine.copy_with_tool_runtime_factories(tool_runtime_factories)
         active_engine = owned_engine
     try:
         ai_result = active_engine.execute(request)
@@ -59,6 +79,12 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         trace.aiTrace = ai_result.trace
         if runspec.trace.save_tool_calls:
             trace.toolCalls = ai_result.tool_calls
+        native_mcp = ai_result.metadata.get("native_mcp")
+        if isinstance(native_mcp, dict):
+            trace.nativeMcp = native_mcp
+        server_mcp = ai_result.metadata.get("server_mcp")
+        if isinstance(server_mcp, list):
+            trace.serverMcp = [item for item in server_mcp if isinstance(item, dict)]
         if runspec.trace.save_raw_response:
             trace.rawResponse = ai_result.raw_response
         if runspec.trace.save_errors:

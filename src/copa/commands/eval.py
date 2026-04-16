@@ -135,9 +135,8 @@ def eval_command(
         continue_on_error=continue_on_error,
         fail_on_missing_gold=fail_on_missing_gold,
         event_logger=event_logger,
+        on_result=lambda _result, _evaluated: progress_tracker.advance(),
     )
-    for _ in evaluations:
-        progress_tracker.advance()
 
     target_dir, target_jsonl = evaluation_output_paths(
         experiment,

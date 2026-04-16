@@ -6,12 +6,11 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.ai.models.base import AIRequest
 from copa.datasets.lattes.mcp_server import LattesMCPServer
 from copa.datasets.lattes.provider import LattesProvider
 from copa.datasets.lattes.readers.html_reader import HtmlLattesReader
 from copa.datasets.lattes.readers.json_reader import JsonLattesReader
-from copa.datasets.lattes.tools import call_lattes_tool
+from copa.datasets.lattes.tools import LattesToolService
 
 
 def _fixture(name: str) -> Path:
@@ -80,7 +79,7 @@ def test_html_reader_supports_latin1_documents(tmp_path: Path):
     assert any(publication.kind == "journal" for publication in curriculum.publications)
 
 
-def test_provider_binds_once_and_filters_publications_and_projects():
+def test_provider_caches_curricula_and_filters_publications_and_projects():
     class CountingReader:
         def __init__(self) -> None:
             self.calls = 0
@@ -93,14 +92,14 @@ def test_provider_binds_once_and_filters_publications_and_projects():
     provider = LattesProvider(readers={"json": reader})
     path = str(_fixture("5660469902738038.json"))
 
-    provider.bind(path=path, fmt="json")
-    provider.bind(path=path, fmt="json")
+    provider.get_curriculum(path=path, fmt="json")
+    provider.get_curriculum(path=path, fmt="json")
 
     assert reader.calls == 1
-    publications_2026 = provider.get_publications(start_year=2026, end_year=2026)
+    publications_2026 = provider.get_publications(path=path, fmt="json", start_year=2026, end_year=2026)
     assert len(publications_2026) == 3
     assert all(publication.year == 2026 for publication in publications_2026)
-    projects_after_2020 = provider.get_projects(start_year=2020)
+    projects_after_2020 = provider.get_projects(path=path, fmt="json", start_year=2020)
     assert projects_after_2020
     assert all(project.start_year is not None and project.start_year >= 2020 for project in projects_after_2020)
 
@@ -115,23 +114,27 @@ def test_provider_skips_entries_without_year_when_filtering():
             return curriculum
 
     provider = LattesProvider(readers={"json": NoYearReader()})
-    provider.bind(path=str(_fixture("5660469902738038.json")), fmt="json")
+    path = str(_fixture("5660469902738038.json"))
 
-    filtered = provider.get_publications(start_year=2024)
+    filtered = provider.get_publications(path=path, fmt="json", start_year=2024)
 
     assert all(publication.year is not None for publication in filtered)
     assert all(publication.title != "No year" for publication in filtered)
 
 
 def test_list_publications_tool_supports_all_filter_modes():
-    provider = LattesProvider()
-    provider.bind(path=str(_fixture("5660469902738038.json")), fmt="json")
+    service = LattesToolService(
+        contexts_dir=str((Path.cwd() / "datasets" / "lattes" / "context").resolve()),
+    )
 
-    all_items = call_lattes_tool(provider, "listPublications", {}).content
-    start_only = call_lattes_tool(provider, "listPublications", {"startYear": 2026}).content
-    end_only = call_lattes_tool(provider, "listPublications", {"endYear": 1995}).content
-    bounded = call_lattes_tool(provider, "listPublications", {"startYear": 2026, "endYear": 2026}).content
-    empty = call_lattes_tool(provider, "listPublications", {"startYear": 2100}).content
+    all_items = service.call_tool("listPublications", {"lattesId": "5660469902738038"}).content
+    start_only = service.call_tool("listPublications", {"lattesId": "5660469902738038", "startYear": 2026}).content
+    end_only = service.call_tool("listPublications", {"lattesId": "5660469902738038", "endYear": 1995}).content
+    bounded = service.call_tool(
+        "listPublications",
+        {"lattesId": "5660469902738038", "startYear": 2026, "endYear": 2026},
+    ).content
+    empty = service.call_tool("listPublications", {"lattesId": "5660469902738038", "startYear": 2100}).content
 
     assert len(all_items) >= len(start_only) >= len(bounded)
     assert all(item["year"] >= 2026 for item in start_only)
@@ -140,21 +143,29 @@ def test_list_publications_tool_supports_all_filter_modes():
     assert empty == []
 
 
-def test_mcp_server_binds_provider_using_context_path():
+def test_mcp_server_exposes_stateless_lattes_tools():
     provider = LattesProvider()
-    server = LattesMCPServer(provider=provider)
-    request = AIRequest(
-        question="How many publications?",
-        context="ignored in MCP",
-        provider_name="mock",
-        model_name="mock",
-        strategy_name="mcp",
-        context_format="json",
-        params={},
-        metadata={"context_path": str(_fixture("5660469902738038.json"))},
+    server = LattesMCPServer(
+        contexts_dir=str((Path.cwd() / "datasets" / "lattes" / "context").resolve()),
+        provider=provider,
     )
 
-    server.bind(request)
-    result = server.call_tool("listPublications", {"startYear": 2026, "endYear": 2026})
+    tools = server.list_tools()
+    result = server.call_tool(
+        "listPublications",
+        {"lattesId": "5660469902738038", "startYear": 2026, "endYear": 2026},
+    )
 
+    assert any(tool.name == "listPublications" for tool in tools)
     assert len(result.content) == 3
+
+
+def test_tool_service_resolves_available_format_internally():
+    service = LattesToolService(
+        contexts_dir=str((Path.cwd() / "datasets" / "lattes" / "context").resolve()),
+    )
+
+    result = service.call_tool("basicInformation", {"lattesId": "5660469902738038"})
+
+    assert result.content["name"] == "Nabor das Chagas Mendonça"
+    assert result.metadata["server_event"]["contextFormat"] in {"json", "html"}

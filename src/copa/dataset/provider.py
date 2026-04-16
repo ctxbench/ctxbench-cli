@@ -122,4 +122,11 @@ class DatasetProvider:
         normalized["metadata"] = metadata
         if raw.get("evaluationContext") is None and metadata.get("evaluationContext") is not None:
             normalized["evaluationContext"] = metadata["evaluationContext"]
+        if (
+            raw.get("evaluationContextByDimension") is None
+            and metadata.get("evaluationContextByDimension") is not None
+        ):
+            normalized["evaluationContextByDimension"] = metadata["evaluationContextByDimension"]
+        if raw.get("normalizationHints") is None and metadata.get("normalizationHints") is not None:
+            normalized["normalizationHints"] = metadata["normalizationHints"]
         return normalized

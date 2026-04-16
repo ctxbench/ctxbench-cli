@@ -25,7 +25,7 @@ class InlineStrategy(StrategyAdapter):
             )
             trace.metrics.prompt_size_chars = len(prompt)
             model_input = ModelInput(
-                system_instruction=DEFAULT_SYSTEM_INSTRUCTION,
+                system_instruction=request.system_instruction or DEFAULT_SYSTEM_INSTRUCTION,
                 prompt=prompt,
             )
             model_response = model.generate(model_input, request, trace=trace)

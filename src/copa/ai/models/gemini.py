@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import asyncio
 from time import perf_counter
 from typing import Any
 
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
+from copa.ai.runtime import MCPRuntime
 
 
 class GeminiModel(ModelAdapter):
     def generate(self, model_input: ModelInput, request: AIRequest, trace: Any | None = None) -> ModelResponse:
+        if request.strategy_name == "mcp":
+            return asyncio.run(self._generate_with_native_mcp(model_input, request))
         client = self._create_client()
         generation_config = self._build_generation_config(request, model_input)
         started_at = perf_counter()
@@ -30,6 +34,46 @@ class GeminiModel(ModelAdapter):
             continuation_state=self._build_continuation_state(response),
         )
 
+    async def _generate_with_native_mcp(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
+        client = self._create_client()
+        runtime = self._create_mcp_runtime(request)
+        try:
+            async with runtime.session() as (session, session_metadata):
+                generation_config = self._build_generation_config(
+                    request,
+                    model_input,
+                    additional_tools=[session],
+                )
+                started_at = perf_counter()
+                response = await client.aio.models.generate_content(
+                    model=request.model_name,
+                    contents=self._build_contents(model_input),
+                    config=generation_config or None,
+                )
+                duration_ms = max(0, int((perf_counter() - started_at) * 1000))
+        finally:
+            runtime.close()
+        input_tokens, output_tokens, total_tokens = self._extract_usage(response)
+        metadata = {
+            "provider": "gemini",
+            "model": request.model_name,
+            "native_mcp": {
+                **session_metadata,
+                **self._extract_native_mcp_metadata(response),
+            },
+        }
+        return ModelResponse(
+            text=self._extract_text(response),
+            requested_tool_calls=self._extract_tool_calls(response),
+            raw_response=self._normalize_raw_response(response),
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            total_tokens=total_tokens,
+            duration_ms=duration_ms,
+            metadata=metadata,
+            continuation_state=self._build_continuation_state(response),
+        )
+
     def _create_client(self) -> Any:
         try:
             from google import genai
@@ -37,16 +81,19 @@ class GeminiModel(ModelAdapter):
             raise RuntimeError("Gemini SDK is not installed.") from exc
         return genai.Client(api_key=self.params.get("api_key"))
 
-    def _build_generation_config(self, request: AIRequest, model_input: ModelInput) -> Any:
+    def _build_generation_config(
+        self,
+        request: AIRequest,
+        model_input: ModelInput,
+        additional_tools: list[Any] | None = None,
+    ) -> Any:
         params = self._merged_params(request)
         sdk_types = self._sdk_types()
         config: dict[str, Any] = {"system_instruction": model_input.system_instruction}
-        labels = self._request_labels(request)
-        if labels:
-            config["labels"] = labels
+        extra_tools = list(additional_tools or [])
         if model_input.tools:
             if sdk_types is None:
-                config["tools"] = [
+                declared_tools: list[Any] = [
                     {
                         "function_declarations": [
                             {
@@ -58,6 +105,7 @@ class GeminiModel(ModelAdapter):
                         ]
                     }
                 ]
+                config["tools"] = declared_tools + extra_tools
                 config["automatic_function_calling"] = {"disable": True}
             else:
                 declarations = [
@@ -68,15 +116,17 @@ class GeminiModel(ModelAdapter):
                     )
                     for tool in model_input.tools
                 ]
-                config["tools"] = [sdk_types.Tool(function_declarations=declarations)]
+                config["tools"] = [sdk_types.Tool(function_declarations=declarations)] + extra_tools
                 config["automatic_function_calling"] = sdk_types.AutomaticFunctionCallingConfig(disable=True)
+        elif extra_tools:
+            config["tools"] = extra_tools
         if "temperature" in params:
             config["temperature"] = params["temperature"]
         if "max_tokens" in params:
             config["max_output_tokens"] = params["max_tokens"]
         if "max_output_tokens" in params:
             config["max_output_tokens"] = params["max_output_tokens"]
-        if sdk_types is None:
+        if sdk_types is None or extra_tools:
             return config
         return sdk_types.GenerateContentConfig(**config)
 
@@ -304,14 +354,17 @@ class GeminiModel(ModelAdapter):
         params.update(request.params)
         return params
 
-    def _request_labels(self, request: AIRequest) -> dict[str, str]:
-        labels: dict[str, str] = {}
-        for source_key, target_key in (
-            ("runId", "runId"),
-            ("expId", "expId"),
-            ("phase", "phase"),
-        ):
-            value = request.metadata.get(source_key)
-            if value is not None and str(value):
-                labels[target_key] = str(value)
-        return labels
+    def _create_mcp_runtime(self, request: AIRequest) -> MCPRuntime:
+        config = request.params.get("mcp_server")
+        if not isinstance(config, dict):
+            raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Gemini models.")
+        return MCPRuntime.from_config(config)
+
+    def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:
+        tool_calls = self._extract_tool_calls(response)
+        if not tool_calls:
+            return {}
+        return {
+            "visibleToolCallCount": len(tool_calls),
+            "visibleToolCalls": [tool_call.model_dump(mode="json") for tool_call in tool_calls],
+        }

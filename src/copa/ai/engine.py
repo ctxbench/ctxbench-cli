@@ -2,23 +2,25 @@ from __future__ import annotations
 
 from typing import Callable
 
-from copa.ai.mcp.runtime import MCPRuntime
-from copa.ai.models.base import AIRequest, AIResult, ModelAdapter
+from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput
 from copa.ai.models.claude import ClaudeModel
 from copa.ai.models.gemini import GeminiModel
 from copa.ai.models.mock import MockModel
 from copa.ai.models.openai import OpenAIModel
 from copa.ai.rate_control import RateControlRegistry, RateLimitedModelAdapter
+from copa.ai.runtime import ToolRuntime
+from copa.ai.strategies.local_function import LocalFunctionStrategy
+from copa.ai.strategies.local_mcp import LocalMCPStrategy
+from copa.ai.strategies.mcp import MCPStrategy
 from copa.ai.strategies.base import StrategyAdapter
 from copa.ai.strategies.inline import InlineStrategy
-from copa.ai.strategies.mcp import MCPStrategy
 from copa.ai.trace import TraceCollector
 
 
 class Engine:
     def __init__(
         self,
-        mcp_runtime: MCPRuntime | None = None,
+        tool_runtime_factories: dict[str, Callable[[], ToolRuntime]] | None = None,
         event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
     ) -> None:
         self._models: dict[str, ModelAdapter] = {
@@ -27,8 +29,9 @@ class Engine:
         }
         self._strategies: dict[str, StrategyAdapter] = {
             "inline": InlineStrategy(),
+            "mcp": MCPStrategy(),
         }
-        self._mcp_runtime = mcp_runtime
+        self._tool_runtime_factories = dict(tool_runtime_factories or {})
         self._rate_control_registry = RateControlRegistry()
         self._event_logger = event_logger
 
@@ -37,7 +40,7 @@ class Engine:
         trace.metrics.context_size_chars = len(request.context)
         trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
         trace.metrics.question_size_chars = len(request.question)
-        owned_runtime: MCPRuntime | None = None
+        owned_runtime: ToolRuntime | None = None
         try:
             with trace.span("engine.execute", "engine.execute"):
                 model = self._resolve_model(request.provider_name, request.model_name, request.params)
@@ -56,6 +59,48 @@ class Engine:
         finally:
             if owned_runtime is not None:
                 owned_runtime.close()
+        result.trace = trace.to_trace().model_dump(mode="json")
+        return result
+
+    def execute_model_input(self, request: AIRequest, model_input: ModelInput) -> AIResult:
+        trace = TraceCollector()
+        trace.metrics.context_size_chars = len(request.context)
+        trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
+        trace.metrics.question_size_chars = len(request.question)
+        trace.metrics.prompt_size_chars = len(model_input.prompt)
+        try:
+            with trace.span("engine.execute_model_input", "engine.execute_model_input"):
+                model = self._resolve_model(request.provider_name, request.model_name, request.params)
+                model_response = model.generate(model_input, request, trace=trace)
+                trace.record_model_call(
+                    duration_ms=model_response.duration_ms,
+                    input_tokens=model_response.input_tokens,
+                    output_tokens=model_response.output_tokens,
+                    total_tokens=model_response.total_tokens,
+                    metadata=model_response.metadata,
+                )
+                usage = {
+                    "inputTokens": model_response.input_tokens,
+                    "outputTokens": model_response.output_tokens,
+                    "totalTokens": model_response.total_tokens,
+                }
+                usage = {key: value for key, value in usage.items() if value is not None}
+                result = AIResult(
+                    answer=model_response.text,
+                    raw_response=model_response.raw_response,
+                    metadata=dict(model_response.metadata),
+                    usage=usage,
+                )
+        except Exception as exc:
+            trace.record_error(
+                str(exc),
+                metadata={
+                    "provider_name": request.provider_name,
+                    "model_name": request.model_name,
+                    "execution_mode": "direct-model-input",
+                },
+            )
+            result = AIResult(answer="", error=str(exc))
         result.trace = trace.to_trace().model_dump(mode="json")
         return result
 
@@ -106,25 +151,26 @@ class Engine:
             event_logger=self._event_logger,
         )
 
-    def _resolve_strategy(self, name: str) -> tuple[StrategyAdapter, MCPRuntime | None]:
+    def _resolve_strategy(self, name: str) -> tuple[StrategyAdapter, ToolRuntime | None]:
         strategy = self._strategies.get(name)
         if strategy is not None:
             return strategy, None
-        if name == "mcp":
-            if self._mcp_runtime is None:
-                raise ValueError("MCP strategy requires an injected MCP runtime.")
-            return MCPStrategy(self._mcp_runtime), None
+        runtime_factory = self._tool_runtime_factories.get(name)
+        if runtime_factory is None:
+            raise ValueError(f"Unknown strategy: {name}")
+        runtime = runtime_factory()
+        if name == "local_function":
+            return LocalFunctionStrategy(runtime), runtime
+        if name == "local_mcp":
+            return LocalMCPStrategy(runtime), runtime
+        runtime.close()
         raise ValueError(f"Unknown strategy: {name}")
 
     def close(self) -> None:
-        if self._mcp_runtime is not None:
-            self._mcp_runtime.close()
+        return None
 
-    def has_mcp_runtime(self) -> bool:
-        return self._mcp_runtime is not None
-
-    def copy_with_mcp_runtime(self, runtime: MCPRuntime) -> "Engine":
-        engine = Engine(mcp_runtime=runtime)
+    def copy_with_tool_runtime_factories(self, tool_runtime_factories: dict[str, Callable[[], ToolRuntime]]) -> "Engine":
+        engine = Engine(tool_runtime_factories=tool_runtime_factories)
         engine._models = self._models
         engine._strategies = self._strategies
         engine._rate_control_registry = self._rate_control_registry

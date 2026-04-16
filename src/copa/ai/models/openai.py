@@ -23,7 +23,11 @@ class OpenAIModel(ModelAdapter):
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             duration_ms=duration_ms,
-            metadata={"provider": "openai", "model": request.model_name},
+            metadata={
+                "provider": "openai",
+                "model": request.model_name,
+                **self._extract_native_mcp_metadata(response),
+            },
             continuation_state=self._build_continuation_state(response),
         )
 
@@ -44,7 +48,10 @@ class OpenAIModel(ModelAdapter):
         metadata = self._request_metadata(request)
         if metadata:
             payload["metadata"] = metadata
-        if model_input.tools:
+        native_mcp_tools = self._build_native_mcp_tools(request)
+        if native_mcp_tools:
+            payload["tools"] = native_mcp_tools
+        elif model_input.tools:
             payload["tools"] = [self._serialize_tool(tool) for tool in model_input.tools]
         if "temperature" in params:
             payload["temperature"] = params["temperature"]
@@ -184,3 +191,53 @@ class OpenAIModel(ModelAdapter):
             if value is not None and str(value):
                 metadata[target_key] = str(value)
         return metadata
+
+    def _build_native_mcp_tools(self, request: AIRequest) -> list[dict[str, Any]]:
+        if request.strategy_name != "mcp":
+            return []
+        config = request.params.get("mcp_server")
+        if not isinstance(config, dict):
+            raise RuntimeError("Native MCP strategy requires params['mcp_server'] for OpenAI models.")
+        server_url = config.get("server_url") or config.get("url")
+        server_label = config.get("server_label") or config.get("label") or "lattes"
+        if not isinstance(server_url, str) or not server_url:
+            raise RuntimeError("OpenAI MCP config requires a non-empty 'server_url' or 'url'.")
+        tool: dict[str, Any] = {
+            "type": "mcp",
+            "server_label": str(server_label),
+            "server_url": server_url,
+        }
+        if isinstance(config.get("headers"), dict):
+            tool["headers"] = dict(config["headers"])
+        if isinstance(config.get("authorization"), str) and config["authorization"]:
+            tool["authorization"] = config["authorization"]
+        if isinstance(config.get("allowed_tools"), list) and config["allowed_tools"]:
+            tool["allowed_tools"] = list(config["allowed_tools"])
+        if config.get("require_approval") is not None:
+            tool["require_approval"] = config["require_approval"]
+        return [tool]
+
+    def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:
+        output = getattr(response, "output", None)
+        if not isinstance(output, list):
+            return {}
+        calls: list[dict[str, Any]] = []
+        approvals: list[dict[str, Any]] = []
+        for item in output:
+            item_type = getattr(item, "type", None)
+            normalized = self._normalize_raw_response(item)
+            if item_type == "mcp_call" and isinstance(normalized, dict):
+                calls.append(normalized)
+            elif item_type == "mcp_approval_request" and isinstance(normalized, dict):
+                approvals.append(normalized)
+        if not calls and not approvals:
+            return {}
+        return {
+            "native_mcp": {
+                "provider": "openai",
+                "callCount": len(calls),
+                "approvalRequestCount": len(approvals),
+                "calls": calls,
+                "approvalRequests": approvals,
+            }
+        }

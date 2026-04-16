@@ -10,7 +10,14 @@ from copa.util.jsonl import write_jsonl
 
 
 def _has_trace_payload(trace: RunTrace) -> bool:
-    return bool(trace.aiTrace or trace.toolCalls or trace.rawResponse is not None or trace.error is not None)
+    return bool(
+        trace.aiTrace
+        or trace.toolCalls
+        or trace.nativeMcp
+        or trace.serverMcp
+        or trace.rawResponse is not None
+        or trace.error is not None
+    )
 
 
 def write_trace_file(result: RunResult, artifact_root: str | Path) -> str | None:

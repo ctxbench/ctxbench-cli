@@ -275,7 +275,12 @@ class TraceCollector:
     def _apply_span_metrics(self, event: TraceEvent) -> None:
         if event.name == "engine.execute":
             self.metrics.total_duration_ms = event.duration_ms
-        elif event.name in {"strategy.inline.execute", "strategy.mcp.execute"}:
+        elif event.name in {
+            "strategy.inline.execute",
+            "strategy.local_function.execute",
+            "strategy.local_mcp.execute",
+            "strategy.mcp.execute",
+        }:
             self.metrics.strategy_duration_ms = event.duration_ms
 
     def _sum_optional(self, current: int | None, value: int | None) -> int | None:

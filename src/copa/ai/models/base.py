@@ -33,6 +33,7 @@ class AIRequest(BaseModel):
     model_name: str
     strategy_name: str
     context_format: str
+    system_instruction: str | None = None
     params: dict[str, Any] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 

@@ -9,7 +9,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
-from copa.ai.mcp.runtime import MCPRuntime
 from copa.ai.models.claude import ClaudeModel
 from copa.ai.models.gemini import GeminiModel
 from copa.ai.models.openai import OpenAIModel
@@ -40,7 +39,7 @@ def make_request(**overrides: object) -> AIRequest:
         "strategy_name": "inline",
         "context_format": "json",
         "params": {},
-        "metadata": {"question_id": "q1"},
+        "metadata": {"question_id": "q1", "lattes_id": "cv-demo", "context_id": "cv-demo"},
     }
     payload.update(overrides)
     return AIRequest(**payload)
@@ -160,29 +159,32 @@ class RecordingJSONModel(ModelAdapter):
         )
 
 
-class FakeMCPServer:
+class FakeToolRuntime:
     def __init__(self, result_prefix: str = "ctx") -> None:
         self.result_prefix = result_prefix
-        self.bound_context_ids: list[str] = []
+        self.called_lattes_ids: list[str] = []
         self.closed = False
-
-    def bind(self, request: AIRequest) -> None:
-        self.bound_context_ids.append(str(request.metadata.get("context_id", "missing")))
 
     def list_tools(self) -> list[ToolSpec]:
         return [
             ToolSpec(
                 name="basicInformation",
                 description="Return basic information.",
-                input_schema={"type": "object", "properties": {}, "additionalProperties": False},
+                input_schema={
+                    "type": "object",
+                    "properties": {"lattesId": {"type": "string"}},
+                    "required": ["lattesId"],
+                    "additionalProperties": False,
+                },
             )
         ]
 
     def call_tool(self, name: str, arguments: dict[str, object]) -> ToolResult:
         if name == "explode":
             raise RuntimeError("tool exploded")
-        context_id = self.bound_context_ids[-1]
-        return ToolResult(name=name, content={"contextId": context_id, "value": f"{self.result_prefix}:{context_id}"})
+        lattes_id = str(arguments.get("lattesId", "missing"))
+        self.called_lattes_ids.append(lattes_id)
+        return ToolResult(name=name, content={"lattesId": lattes_id, "value": f"{self.result_prefix}:{lattes_id}"})
 
     def close(self) -> None:
         self.closed = True
@@ -283,13 +285,13 @@ def test_engine_execute_model_input_records_trace_and_usage():
     ]
 
 
-def test_engine_mcp_executes_tool_loop_and_records_trace():
-    runtime = MCPRuntime(FakeMCPServer())
-    engine = Engine(mcp_runtime=runtime)
+def test_engine_local_function_executes_tool_loop_and_records_trace():
+    runtime = FakeToolRuntime()
+    engine = Engine(tool_runtime_factories={"local_function": lambda: runtime})
     model = ScriptedMCPModel(
         responses=[
             ModelResponse(
-                requested_tool_calls=[ToolCall(name="basicInformation", arguments={})],
+                requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-demo"})],
                 duration_ms=5,
                 input_tokens=10,
                 output_tokens=0,
@@ -310,16 +312,17 @@ def test_engine_mcp_executes_tool_loop_and_records_trace():
     )
     engine._models["scripted"] = model
 
-    result = engine.execute(make_request(provider_name="scripted", strategy_name="mcp"))
+    result = engine.execute(make_request(provider_name="scripted", strategy_name="local_function"))
 
     assert result.answer == "Researcher found"
     assert result.error is None
     assert len(model.inputs) == 2
     assert len(model.inputs[0].tools) == 1
     assert model.inputs[0].tool_results == []
-    assert model.inputs[1].tool_results[0].content["contextId"] == "missing"
+    assert "Researcher Lattes ID:\ncv-demo" in model.inputs[0].prompt
+    assert model.inputs[1].tool_results[0].content["lattesId"] == "cv-demo"
     assert result.tool_calls[0]["name"] == "basicInformation"
-    assert result.tool_calls[0]["result"]["value"] == "ctx:missing"
+    assert result.tool_calls[0]["result"]["value"] == "ctx:cv-demo"
     metrics = result.trace["metrics"]
     assert metrics["model_calls"] == 2
     assert metrics["mcp_tool_calls"] == 1
@@ -330,7 +333,54 @@ def test_engine_mcp_executes_tool_loop_and_records_trace():
         "mcp.tool_call",
         "mcp.tool_result",
         "model.generate",
-        "strategy.mcp.execute",
+        "strategy.local_function.execute",
+        "engine.execute",
+    ]
+
+
+def test_engine_local_mcp_executes_tool_loop_and_records_trace():
+    runtime = FakeToolRuntime(result_prefix="mcp")
+    engine = Engine(tool_runtime_factories={"local_mcp": lambda: runtime})
+    model = ScriptedMCPModel(
+        responses=[
+            ModelResponse(
+                requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-demo"})],
+                duration_ms=5,
+                input_tokens=10,
+                output_tokens=0,
+                total_tokens=10,
+                metadata={"provider": "scripted"},
+                raw_response={"step": 1},
+            ),
+            ModelResponse(
+                text="Researcher found",
+                duration_ms=6,
+                input_tokens=4,
+                output_tokens=2,
+                total_tokens=6,
+                metadata={"provider": "scripted"},
+                raw_response={"step": 2},
+            ),
+        ]
+    )
+    engine._models["scripted"] = model
+
+    result = engine.execute(make_request(provider_name="scripted", strategy_name="local_mcp"))
+
+    assert result.answer == "Researcher found"
+    assert result.error is None
+    assert len(model.inputs) == 2
+    assert len(model.inputs[0].tools) == 1
+    assert "Researcher Lattes ID:\ncv-demo" in model.inputs[0].prompt
+    assert model.inputs[1].tool_results[0].content["lattesId"] == "cv-demo"
+    assert result.tool_calls[0]["result"]["value"] == "mcp:cv-demo"
+    assert result.trace["metrics"]["mcp_tool_calls"] == 1
+    assert [event["name"] for event in result.trace["events"]] == [
+        "model.generate",
+        "mcp.tool_call",
+        "mcp.tool_result",
+        "model.generate",
+        "strategy.local_mcp.execute",
         "engine.execute",
     ]
 
@@ -844,83 +894,88 @@ def test_lattes_dataset_loads_dimension_catalog_and_dimensions():
     assert "context-dependence" in instance.evaluationContextByDimension
 
 
-def test_engine_mcp_binding_isolated_per_run():
-    server = FakeMCPServer()
-    engine = Engine(mcp_runtime=MCPRuntime(server))
+def test_engine_local_function_binding_isolated_per_run():
+    runtime = FakeToolRuntime()
+    engine = Engine(tool_runtime_factories={"local_function": lambda: runtime})
     model = ScriptedMCPModel(
         responses=[
-            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={})]),
+            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-a"})]),
             ModelResponse(text="first"),
-            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={})]),
+            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-b"})]),
             ModelResponse(text="second"),
         ]
     )
     engine._models["scripted"] = model
 
     first = engine.execute(
-        make_request(provider_name="scripted", strategy_name="mcp", metadata={"context_id": "cv-a"})
+        make_request(provider_name="scripted", strategy_name="local_function", metadata={"context_id": "cv-a"})
     )
     second = engine.execute(
-        make_request(provider_name="scripted", strategy_name="mcp", metadata={"context_id": "cv-b"})
+        make_request(provider_name="scripted", strategy_name="local_function", metadata={"context_id": "cv-b"})
     )
 
-    assert first.tool_calls[0]["result"]["contextId"] == "cv-a"
-    assert second.tool_calls[0]["result"]["contextId"] == "cv-b"
-    assert server.bound_context_ids == ["cv-a", "cv-b"]
+    assert first.tool_calls[0]["result"]["lattesId"] == "cv-a"
+    assert second.tool_calls[0]["result"]["lattesId"] == "cv-b"
+    assert runtime.called_lattes_ids == ["cv-a", "cv-b"]
 
 
-def test_engine_mcp_returns_error_when_max_steps_exceeded():
+def test_engine_local_function_returns_error_when_max_steps_exceeded():
     model = ScriptedMCPModel(
         responses=[
-            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={})]),
-            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={})]),
+            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-demo"})]),
+            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-demo"})]),
         ]
     )
-    engine = Engine(mcp_runtime=MCPRuntime(FakeMCPServer()))
+    engine = Engine(tool_runtime_factories={"local_function": lambda: FakeToolRuntime()})
     engine._models["scripted"] = model
 
-    result = engine.execute(make_request(provider_name="scripted", strategy_name="mcp", params={"max_steps": 2}))
+    result = engine.execute(make_request(provider_name="scripted", strategy_name="local_function", params={"max_steps": 2}))
 
     assert result.answer == ""
-    assert result.error == "MCP strategy exceeded max_steps=2."
+    assert result.error == "Local function strategy exceeded max_steps=2."
     assert result.trace["metrics"]["mcp_tool_calls"] == 2
     assert "error" in [event["name"] for event in result.trace["events"]]
 
 
-def test_engine_mcp_closes_injected_runtime_via_engine_close():
-    server = FakeMCPServer()
-    engine = Engine(mcp_runtime=MCPRuntime(server))
+def test_engine_local_function_closes_runtime_after_execution():
+    runtime = FakeToolRuntime()
+    engine = Engine(tool_runtime_factories={"local_function": lambda: runtime})
+    model = ScriptedMCPModel(
+        responses=[
+            ModelResponse(requested_tool_calls=[ToolCall(name="basicInformation", arguments={"lattesId": "cv-demo"})]),
+            ModelResponse(text="done"),
+        ]
+    )
+    engine._models["scripted"] = model
 
-    engine.close()
+    result = engine.execute(make_request(provider_name="scripted", strategy_name="local_function"))
 
-    assert server.closed is True
+    assert result.error is None
+    assert runtime.closed is True
 
 
-def test_engine_mcp_requires_explicit_runtime_injection():
+def test_engine_local_function_requires_explicit_runtime_injection():
     engine = Engine()
 
-    result = engine.execute(make_request(strategy_name="mcp"))
+    result = engine.execute(make_request(strategy_name="local_function"))
 
     assert result.answer == ""
-    assert result.error == "MCP strategy requires an injected MCP runtime."
-    assert result.trace["events"][-1]["metadata"]["error"] == "MCP strategy requires an injected MCP runtime."
+    assert result.error == "Unknown strategy: local_function"
+    assert result.trace["events"][-1]["metadata"]["error"] == "Unknown strategy: local_function"
 
 
-def test_engine_mcp_preserves_trace_on_tool_error():
-    class ExplodingRuntime(MCPRuntime):
-        def __init__(self) -> None:
-            super().__init__(FakeMCPServer())
-
+def test_engine_local_function_preserves_trace_on_tool_error():
+    class ExplodingRuntime(FakeToolRuntime):
         def call_tool(self, name: str, arguments: dict[str, object]) -> ToolResult:
             raise RuntimeError("tool exploded")
 
     model = ScriptedMCPModel(
-        responses=[ModelResponse(requested_tool_calls=[ToolCall(name="explode", arguments={})])]
+        responses=[ModelResponse(requested_tool_calls=[ToolCall(name="explode", arguments={"lattesId": "cv-demo"})])]
     )
-    engine = Engine(mcp_runtime=ExplodingRuntime())
+    engine = Engine(tool_runtime_factories={"local_function": lambda: ExplodingRuntime()})
     engine._models["scripted"] = model
 
-    result = engine.execute(make_request(provider_name="scripted", strategy_name="mcp"))
+    result = engine.execute(make_request(provider_name="scripted", strategy_name="local_function"))
 
     assert result.answer == ""
     assert result.error == "tool exploded"
@@ -975,7 +1030,124 @@ def test_execute_runspec_persists_ai_trace_usage_and_raw_response():
     assert result.trace.aiTrace["events"][-1]["name"] == "engine.execute"
 
 
-def test_execute_runspec_injects_runtime_for_mcp_strategy():
+def test_execute_runspec_injects_runtime_for_local_function_strategy():
+    runspec = RunSpec(
+        id="run-local-function-1",
+        runId="run-local-function-1",
+        experimentId="exp-local-function-1",
+        dataset=ExperimentDataset(root=str((Path.cwd() / "datasets" / "lattes").resolve())),
+        questionId="q_exact_001",
+        contextId="5660469902738038",
+        provider="scripted",
+        strategy="local_function",
+        format="json",
+        repeatIndex=1,
+        outputRoot=None,
+        evaluationEnabled=False,
+        params={"model_name": "mock"},
+        metadata=RunMetadata(
+            canonicalId="exp-local-function-1|q_exact_001|5660469902738038|scripted|mock|local_function|json|1",
+            questionId="q_exact_001",
+            contextId="5660469902738038",
+            provider="scripted",
+            modelName="mock",
+            strategy="local_function",
+            format="json",
+            repeatIndex=1,
+        ),
+        trace=ExperimentTrace(
+            enabled=True,
+            save_raw_response=True,
+            save_tool_calls=True,
+            save_usage=True,
+            save_errors=True,
+        ),
+    )
+    engine = Engine()
+    engine._models["scripted"] = ScriptedMCPModel(
+        responses=[
+            ModelResponse(
+                requested_tool_calls=[
+                    ToolCall(
+                        name="listPublications",
+                        arguments={"lattesId": "5660469902738038", "startYear": 2026, "endYear": 2026},
+                    )
+                ]
+            ),
+            ModelResponse(text="3"),
+        ]
+    )
+
+    result = execute_runspec(runspec, engine)
+
+    assert result.status == "success"
+    assert result.answer == "3"
+    assert len(result.trace.toolCalls) == 1
+    assert result.trace.toolCalls[0]["arguments"]["lattesId"] == "5660469902738038"
+    assert len(result.trace.toolCalls[0]["result"]) == 3
+    assert result.trace.aiTrace["metrics"]["mcp_tool_calls"] == 1
+
+
+def test_execute_runspec_injects_runtime_for_local_mcp_strategy():
+    runspec = RunSpec(
+        id="run-local-mcp-1",
+        runId="run-local-mcp-1",
+        experimentId="exp-local-mcp-1",
+        dataset=ExperimentDataset(root=str((Path.cwd() / "datasets" / "lattes").resolve())),
+        questionId="q_exact_001",
+        contextId="5660469902738038",
+        provider="scripted",
+        strategy="local_mcp",
+        format="json",
+        repeatIndex=1,
+        outputRoot=None,
+        evaluationEnabled=False,
+        params={"model_name": "mock"},
+        metadata=RunMetadata(
+            canonicalId="exp-local-mcp-1|q_exact_001|5660469902738038|scripted|mock|local_mcp|json|1",
+            questionId="q_exact_001",
+            contextId="5660469902738038",
+            provider="scripted",
+            modelName="mock",
+            strategy="local_mcp",
+            format="json",
+            repeatIndex=1,
+        ),
+        trace=ExperimentTrace(
+            enabled=True,
+            save_raw_response=True,
+            save_tool_calls=True,
+            save_usage=True,
+            save_errors=True,
+        ),
+    )
+    engine = Engine()
+    engine._models["scripted"] = ScriptedMCPModel(
+        responses=[
+            ModelResponse(
+                requested_tool_calls=[
+                    ToolCall(
+                        name="listPublications",
+                        arguments={"lattesId": "5660469902738038", "startYear": 2026, "endYear": 2026},
+                    )
+                ]
+            ),
+            ModelResponse(text="3"),
+        ]
+    )
+
+    result = execute_runspec(runspec, engine)
+
+    assert result.status == "success"
+    assert result.answer == "3"
+    assert len(result.trace.toolCalls) == 1
+    assert result.trace.toolCalls[0]["arguments"]["lattesId"] == "5660469902738038"
+    assert len(result.trace.toolCalls[0]["result"]) == 3
+    assert result.trace.aiTrace["metrics"]["mcp_tool_calls"] == 1
+    assert result.trace.serverMcp
+
+
+def test_execute_runspec_native_mcp_passes_request_to_provider_model():
     runspec = RunSpec(
         id="run-mcp-1",
         runId="run-mcp-1",
@@ -989,7 +1161,10 @@ def test_execute_runspec_injects_runtime_for_mcp_strategy():
         repeatIndex=1,
         outputRoot=None,
         evaluationEnabled=False,
-        params={"model_name": "mock"},
+        params={
+            "model_name": "mock",
+            "mcp_server": {"server_url": "https://mcp.example.test", "server_label": "lattes"},
+        },
         metadata=RunMetadata(
             canonicalId="exp-mcp-1|q_exact_001|5660469902738038|scripted|mock|mcp|json|1",
             questionId="q_exact_001",
@@ -1008,23 +1183,19 @@ def test_execute_runspec_injects_runtime_for_mcp_strategy():
             save_errors=True,
         ),
     )
+    model = RecordingModel()
     engine = Engine()
-    engine._models["scripted"] = ScriptedMCPModel(
-        responses=[
-            ModelResponse(
-                requested_tool_calls=[ToolCall(name="listPublications", arguments={"startYear": 2026, "endYear": 2026})]
-            ),
-            ModelResponse(text="3"),
-        ]
-    )
+    engine._models["scripted"] = model
 
     result = execute_runspec(runspec, engine)
 
     assert result.status == "success"
     assert result.answer == "3"
-    assert len(result.trace.toolCalls) == 1
-    assert len(result.trace.toolCalls[0]["result"]) == 3
-    assert result.trace.aiTrace["metrics"]["mcp_tool_calls"] == 1
+    assert result.trace.toolCalls == []
+    assert model.last_input is not None
+    assert "Researcher Lattes ID:\n5660469902738038" in model.last_input.prompt
+    assert result.trace.aiTrace["metrics"]["model_calls"] == 1
+    assert result.trace.aiTrace["metrics"]["mcp_tool_calls"] == 0
 
 
 def test_openai_model_normalizes_response():
@@ -1060,6 +1231,51 @@ def test_openai_model_normalizes_response():
     assert result.total_tokens == 13
     assert result.raw_response == {"id": "resp-openai"}
     assert result.metadata["provider"] == "openai"
+
+
+def test_openai_model_builds_native_mcp_tool_payload():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        output_text="OpenAI MCP answer",
+        output=[],
+        usage=SimpleNamespace(input_tokens=9, output_tokens=4, total_tokens=13),
+        model_dump=lambda mode="json": {"id": "resp-openai-mcp"},
+    )
+    client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+    model = OpenAIModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    result = model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="openai",
+            model_name="gpt-5",
+            strategy_name="mcp",
+            params={
+                "mcp_server": {
+                    "server_url": "https://mcp.example.test",
+                    "server_label": "lattes",
+                    "allowed_tools": ["listPublications"],
+                    "require_approval": "never",
+                }
+            },
+        ),
+    )
+
+    assert captured["tools"] == [
+        {
+            "type": "mcp",
+            "server_label": "lattes",
+            "server_url": "https://mcp.example.test",
+            "allowed_tools": ["listPublications"],
+            "require_approval": "never",
+        }
+    ]
+    assert result.text == "OpenAI MCP answer"
 
 
 def test_openai_model_maps_tools_and_tool_results():
@@ -1168,16 +1384,78 @@ def test_gemini_model_normalizes_response():
     if system_instruction is None and isinstance(config, dict):
         system_instruction = config["system_instruction"]
     assert system_instruction == "System"
-    labels = getattr(config, "labels", None)
-    if labels is None and isinstance(config, dict):
-        labels = config["labels"]
-    assert labels == {"runId": "run-123", "expId": "exp-456", "phase": "execution"}
     assert result.text == "Gemini answer"
     assert result.input_tokens == 8
     assert result.output_tokens == 3
     assert result.total_tokens == 11
     assert result.raw_response == {"id": "resp-gemini"}
     assert result.metadata["provider"] == "gemini"
+
+
+def test_gemini_model_uses_mcp_runtime_session_for_native_mcp():
+    class DummySession:
+        pass
+
+    class AsyncGenerateContent:
+        def __init__(self, callback):
+            self._callback = callback
+
+        async def __call__(self, **kwargs):
+            return self._callback(**kwargs)
+
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        text="Gemini MCP answer",
+        function_calls=[],
+        usage_metadata=SimpleNamespace(
+            prompt_token_count=8,
+            candidates_token_count=3,
+            total_token_count=11,
+        ),
+        model_dump=lambda mode="json": {"id": "resp-gemini-mcp"},
+    )
+    model = GeminiModel(params={"api_key": "test-key"})
+    model._create_client = lambda: SimpleNamespace(
+        aio=SimpleNamespace(
+            models=SimpleNamespace(
+                generate_content=AsyncGenerateContent(lambda **kwargs: captured.update(kwargs) or response)
+            )
+        )
+    )
+
+    from contextlib import asynccontextmanager
+
+    class FakeMCPRuntime:
+        @asynccontextmanager
+        async def session(self):
+            yield DummySession(), {
+                "transport": "streamable_http",
+                "serverUrl": "https://mcp.example.test",
+                "serverLabel": "lattes",
+                "clientFramework": "fastmcp",
+            }
+
+        def close(self) -> None:
+            return None
+
+    model._create_mcp_runtime = lambda _request: FakeMCPRuntime()
+
+    result = model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="gemini",
+            model_name="gemini-2.5",
+            strategy_name="mcp",
+            params={"mcp_server": {"server_url": "https://mcp.example.test", "server_label": "lattes"}},
+        ),
+    )
+
+    config = captured["config"]
+    assert config["tools"][0].__class__.__name__ == "DummySession"
+    assert result.text == "Gemini MCP answer"
+    assert result.metadata["provider"] == "gemini"
+    assert result.metadata["native_mcp"]["transport"] == "streamable_http"
+    assert result.metadata["native_mcp"]["serverUrl"] == "https://mcp.example.test"
 
 
 def test_gemini_model_maps_tools_and_tool_results():
@@ -1318,6 +1596,51 @@ def test_claude_model_normalizes_response():
     assert result.total_tokens == 9
     assert result.raw_response == {"id": "resp-claude"}
     assert result.metadata["provider"] == "claude"
+
+
+def test_claude_model_builds_native_mcp_server_payload():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        content=[SimpleNamespace(text="Claude MCP answer")],
+        usage=SimpleNamespace(input_tokens=7, output_tokens=2, total_tokens=9),
+        model_dump=lambda mode="json": {"id": "resp-claude-mcp"},
+    )
+    client = SimpleNamespace(
+        messages=SimpleNamespace(
+            create=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+    model = ClaudeModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    result = model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="claude",
+            model_name="claude-3-7-sonnet",
+            strategy_name="mcp",
+            params={
+                "mcp_server": {
+                    "server_url": "https://mcp.example.test",
+                    "server_label": "lattes",
+                    "allowed_tools": ["listPublications"],
+                    "authorization": "Bearer secret",
+                }
+            },
+        ),
+    )
+
+    assert captured["mcp_servers"] == [
+        {
+            "type": "url",
+            "url": "https://mcp.example.test",
+            "name": "lattes",
+            "tool_configuration": {"enabled": True, "allowed_tools": ["listPublications"]},
+            "authorization_token": "Bearer secret",
+        }
+    ]
+    assert captured["betas"] == ["mcp-client-2025-04-04"]
+    assert result.text == "Claude MCP answer"
 
 
 def test_claude_model_maps_tools_and_tool_results():

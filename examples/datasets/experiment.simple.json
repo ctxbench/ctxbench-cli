@@ -7,14 +7,20 @@
       {
         "provider": "openai",
         "name": "gpt-5.4-nano"
-      }
+      },
+      { "provider": "google", "name": "gemini-3.1-flash-lite-preview" },
+      { "provider": "anthropic", "name": "claude-sonnet-4-6" }
     ],
-    "strategy": ["inline", "mcp"],
-    "format": ["json", "html"]
+    "strategy": ["local_function", "local_mcp"],
+    "format": ["json"]
   },
   "params": {
     "common": {
-      "temperature": 0
+      "temperature": 0,
+      "mcp_server": {
+        "server_url": "https://example.invalid/mcp",
+        "server_label": "lattes"
+      }
     },
     "gpt-5.4-nano": {
       "max_output_tokens": 1000,
@@ -29,7 +35,7 @@
     }
   },
   "evaluation": {
-    "enabled": true,
+    "enabled": false,
     "judge": {
       "provider": "anthropic",
       "model": "claude-sonnet-4-6",

@@ -8,12 +8,16 @@
       { "provider": "openai", "name": "gpt-5.4-nano" },
       { "provider": "google", "name": "gemini-3.1-flash-lite-preview" }
     ],
-    "strategy": ["inline", "mcp"],
+    "strategy": ["inline", "local_function", "local_mcp", "mcp"],
     "format": ["json", "html"]
   },
   "params": {
     "common": {
-      "temperature": 0
+      "temperature": 0,
+      "mcp_server": {
+        "server_url": "https://example.invalid/mcp",
+        "server_label": "lattes"
+      }
     },
     "gpt-5.4-nano": {
       "max_output_tokens": 1000,

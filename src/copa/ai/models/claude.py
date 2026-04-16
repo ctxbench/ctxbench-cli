@@ -23,7 +23,11 @@ class ClaudeModel(ModelAdapter):
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             duration_ms=duration_ms,
-            metadata={"provider": "claude", "model": request.model_name},
+            metadata={
+                "provider": "claude",
+                "model": request.model_name,
+                **self._extract_native_mcp_metadata(response),
+            },
             continuation_state=self._build_continuation_state(response),
         )
 
@@ -45,7 +49,11 @@ class ClaudeModel(ModelAdapter):
         metadata = self._request_metadata(request)
         if metadata:
             payload["metadata"] = metadata
-        if model_input.tools:
+        native_mcp_servers = self._build_native_mcp_servers(request)
+        if native_mcp_servers:
+            payload["mcp_servers"] = native_mcp_servers
+            payload["betas"] = ["mcp-client-2025-04-04"]
+        elif model_input.tools:
             payload["tools"] = [
                 {
                     "name": tool.name,
@@ -181,3 +189,48 @@ class ClaudeModel(ModelAdapter):
         if not parts:
             return {}
         return {"user_id": ";".join(parts)}
+
+    def _build_native_mcp_servers(self, request: AIRequest) -> list[dict[str, Any]]:
+        if request.strategy_name != "mcp":
+            return []
+        config = request.params.get("mcp_server")
+        if not isinstance(config, dict):
+            raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Claude models.")
+        server_url = config.get("server_url") or config.get("url")
+        server_label = config.get("server_label") or config.get("label") or "lattes"
+        if not isinstance(server_url, str) or not server_url:
+            raise RuntimeError("Claude MCP config requires a non-empty 'server_url' or 'url'.")
+        server: dict[str, Any] = {
+            "type": "url",
+            "url": server_url,
+            "name": str(server_label),
+        }
+        tool_configuration: dict[str, Any] = {"enabled": True}
+        if isinstance(config.get("allowed_tools"), list) and config["allowed_tools"]:
+            tool_configuration["allowed_tools"] = list(config["allowed_tools"])
+        if tool_configuration:
+            server["tool_configuration"] = tool_configuration
+        if isinstance(config.get("authorization"), str) and config["authorization"]:
+            server["authorization_token"] = config["authorization"]
+        return [server]
+
+    def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:
+        content = getattr(response, "content", None)
+        if not isinstance(content, list):
+            return {}
+        blocks: list[dict[str, Any]] = []
+        for block in content:
+            block_type = getattr(block, "type", None)
+            if isinstance(block_type, str) and block_type.startswith("mcp"):
+                normalized = self._normalize_raw_response(block)
+                if isinstance(normalized, dict):
+                    blocks.append(normalized)
+        if not blocks:
+            return {}
+        return {
+            "native_mcp": {
+                "provider": "claude",
+                "blockCount": len(blocks),
+                "blocks": blocks,
+            }
+        }
