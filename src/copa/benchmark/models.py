@@ -359,6 +359,7 @@ class RunResult(BaseModel):
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
         return {
             "runId": self.runId,
+            "repeatIndex": self.repeatIndex,
             "status": self.status,
             "answer": self.answer,
             "errorMessage": self.errorMessage,

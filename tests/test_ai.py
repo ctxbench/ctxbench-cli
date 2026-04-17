@@ -213,6 +213,10 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
     assert metrics["prompt_size_chars"] == len(model.last_input.prompt)
     assert metrics["model_calls"] == 1
     assert metrics["model_duration_ms"] == 7
+    assert metrics["benchmark_duration_ms"] is not None
+    assert metrics["function_execution_duration_ms"] is None
+    assert metrics["loop_control_duration_ms"] is not None
+    assert metrics["steps"] == 1
     assert metrics["input_tokens"] == 11
     assert metrics["output_tokens"] == 1
     assert metrics["total_tokens"] == 12
@@ -325,8 +329,16 @@ def test_engine_local_function_executes_tool_loop_and_records_trace():
     assert result.tool_calls[0]["result"]["value"] == "ctx:cv-demo"
     metrics = result.trace["metrics"]
     assert metrics["model_calls"] == 2
+    assert metrics["tool_call_count"] == 1
     assert metrics["mcp_tool_calls"] == 1
+    assert metrics["steps"] == 2
     assert metrics["model_duration_ms"] == 11
+    assert metrics["function_execution_duration_ms"] is not None
+    assert metrics["benchmark_duration_ms"] is not None
+    assert metrics["loop_control_duration_ms"] is not None
+    assert metrics["benchmark_duration_ms"] == (
+        metrics["function_execution_duration_ms"] + metrics["loop_control_duration_ms"]
+    )
     assert metrics["total_tokens"] == 16
     assert [event["name"] for event in result.trace["events"]] == [
         "model.generate",
@@ -374,7 +386,14 @@ def test_engine_local_mcp_executes_tool_loop_and_records_trace():
     assert "Researcher Lattes ID:\ncv-demo" in model.inputs[0].prompt
     assert model.inputs[1].tool_results[0].content["lattesId"] == "cv-demo"
     assert result.tool_calls[0]["result"]["value"] == "mcp:cv-demo"
-    assert result.trace["metrics"]["mcp_tool_calls"] == 1
+    metrics = result.trace["metrics"]
+    assert metrics["tool_call_count"] == 1
+    assert metrics["mcp_tool_calls"] == 1
+    assert metrics["steps"] == 2
+    assert metrics["function_execution_duration_ms"] is not None
+    assert metrics["benchmark_duration_ms"] == (
+        metrics["function_execution_duration_ms"] + metrics["loop_control_duration_ms"]
+    )
     assert [event["name"] for event in result.trace["events"]] == [
         "model.generate",
         "mcp.tool_call",
@@ -1233,6 +1252,56 @@ def test_openai_model_normalizes_response():
     assert result.metadata["provider"] == "openai"
 
 
+def test_openai_model_uses_structured_output_format():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        output_text='{"value":"ok"}',
+        usage=SimpleNamespace(input_tokens=9, output_tokens=4, total_tokens=13),
+        model_dump=lambda mode="json": {"id": "resp-openai-structured"},
+    )
+    client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+    model = OpenAIModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="openai",
+            model_name="gpt-5",
+            params={
+                "structured_output": {
+                    "name": "evaluation_result",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {"value": {"type": "string"}},
+                        "required": ["value"],
+                        "additionalProperties": False,
+                    },
+                }
+            },
+        ),
+    )
+
+    assert captured["text"] == {
+        "format": {
+            "type": "json_schema",
+            "name": "evaluation_result",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "properties": {"value": {"type": "string"}},
+                "required": ["value"],
+                "additionalProperties": False,
+            },
+        }
+    }
+
+
 def test_openai_model_builds_native_mcp_tool_payload():
     captured: dict[str, object] = {}
     response = SimpleNamespace(
@@ -1440,6 +1509,61 @@ def test_gemini_model_normalizes_response():
     assert result.metadata["provider"] == "gemini"
 
 
+def test_gemini_model_uses_structured_output_format():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        text='{"value":"ok"}',
+        usage_metadata=SimpleNamespace(
+            prompt_token_count=8,
+            candidates_token_count=3,
+            total_token_count=11,
+        ),
+        model_dump=lambda mode="json": {"id": "resp-gemini-structured"},
+    )
+    client = SimpleNamespace(
+        models=SimpleNamespace(
+            generate_content=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+    model = GeminiModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="gemini",
+            model_name="gemini-2.5",
+            params={
+                "structured_output": {
+                    "name": "evaluation_result",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {"value": {"type": "string"}},
+                        "required": ["value"],
+                        "additionalProperties": False,
+                    },
+                }
+            },
+        ),
+    )
+
+    config = captured["config"]
+    response_mime_type = getattr(config, "response_mime_type", None)
+    if response_mime_type is None and isinstance(config, dict):
+        response_mime_type = config["response_mime_type"]
+    response_json_schema = getattr(config, "response_json_schema", None)
+    if response_json_schema is None and isinstance(config, dict):
+        response_json_schema = config["response_json_schema"]
+    assert response_mime_type == "application/json"
+    assert response_json_schema == {
+        "type": "object",
+        "properties": {"value": {"type": "string"}},
+        "required": ["value"],
+        "additionalProperties": False,
+    }
+
+
 def test_gemini_model_uses_mcp_runtime_session_for_native_mcp():
     class DummySession:
         pass
@@ -1619,8 +1743,10 @@ def test_claude_model_normalizes_response():
         model_dump=lambda mode="json": {"id": "resp-claude"},
     )
     client = SimpleNamespace(
-        messages=SimpleNamespace(
-            create=lambda **kwargs: captured.update(kwargs) or response
+        beta=SimpleNamespace(
+            messages=SimpleNamespace(
+                create=lambda **kwargs: captured.update(kwargs) or response
+            )
         )
     )
     model = ClaudeModel(params={"api_key": "test-key"})
@@ -1654,8 +1780,10 @@ def test_claude_model_builds_native_mcp_server_payload():
         model_dump=lambda mode="json": {"id": "resp-claude-mcp"},
     )
     client = SimpleNamespace(
-        messages=SimpleNamespace(
-            create=lambda **kwargs: captured.update(kwargs) or response
+        beta=SimpleNamespace(
+            messages=SimpleNamespace(
+                create=lambda **kwargs: captured.update(kwargs) or response
+            )
         )
     )
     model = ClaudeModel(params={"api_key": "test-key"})
@@ -1702,8 +1830,10 @@ def test_claude_model_maps_tools_and_tool_results():
         model_dump=lambda mode="json": {"id": "resp-claude-tool"},
     )
     client = SimpleNamespace(
-        messages=SimpleNamespace(
-            create=lambda **kwargs: captured.update(kwargs) or response
+        beta=SimpleNamespace(
+            messages=SimpleNamespace(
+                create=lambda **kwargs: captured.update(kwargs) or response
+            )
         )
     )
     model = ClaudeModel(params={"api_key": "test-key"})
@@ -1751,6 +1881,56 @@ def test_claude_model_maps_tools_and_tool_results():
             {"type": "text", "text": "Checking tools"},
             {"type": "tool_use", "id": "call-1", "name": "linesOfResearch", "input": {"topic": "ai"}},
         ]
+    }
+
+
+def test_claude_model_uses_structured_output_format():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        content=[SimpleNamespace(text='{"value":"ok"}')],
+        usage=SimpleNamespace(input_tokens=7, output_tokens=2, total_tokens=9),
+        model_dump=lambda mode="json": {"id": "resp-claude-structured"},
+    )
+    client = SimpleNamespace(
+        beta=SimpleNamespace(
+            messages=SimpleNamespace(
+                create=lambda **kwargs: captured.update(kwargs) or response
+            )
+        )
+    )
+    model = ClaudeModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="claude",
+            model_name="claude-3-7-sonnet",
+            params={
+                "structured_output": {
+                    "name": "evaluation_result",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {"value": {"type": "string"}},
+                        "required": ["value"],
+                        "additionalProperties": False,
+                    },
+                }
+            },
+        ),
+    )
+
+    assert captured["output_config"] == {
+        "format": {
+            "type": "json_schema",
+            "schema": {
+                "type": "object",
+                "properties": {"value": {"type": "string"}},
+                "required": ["value"],
+                "additionalProperties": False,
+            },
+        }
     }
 
 
@@ -1812,3 +1992,54 @@ def test_evaluation_judge_requests_propagate_run_metadata_to_provider():
 
     assert result
     assert captured["metadata"] == {"runId": "run-1", "expId": "exp-1", "phase": "evaluation"}
+    assert captured["text"]["format"]["type"] == "json_schema"
+    assert captured["text"]["format"]["name"] == "exact_extractor"
+
+
+def test_write_evaluation_file_persists_trace_under_task_folder(tmp_path):
+    from copa.benchmark.results import write_evaluation_file
+    from copa.benchmark.models import EvaluationItemResult, EvaluationRunResult, EvaluationRunSummary, EvaluationTrace
+
+    evaluation = EvaluationRunResult(
+        experimentId="exp-1",
+        runId="run-1",
+        questionId="q_exact_003",
+        items=[
+            EvaluationItemResult(
+                experimentId="exp-1",
+                runId="run-1",
+                questionId="q_exact_003",
+                question="When did the researcher obtain their Ph.D.?",
+                evaluationMode="exact",
+                status="evaluated",
+                evaluationMethod="judge-extraction",
+                score=1.0,
+                label="correct",
+                details={"extractedAnswer": 2018},
+                evaluationTrace=EvaluationTrace(
+                    aiTrace={"events": [], "metrics": {"total_duration_ms": 12}},
+                    rawResponse={"id": "eval-raw"},
+                ),
+            )
+        ],
+        summary=EvaluationRunSummary(itemCount=1, meanScore=1.0, labels={"correct": 1}),
+        metadata=RunMetadata(
+            canonicalId="exp-1|q_exact_003|5660469902738038|mock|mock|inline|json|1",
+            questionId="q_exact_003",
+            contextId="5660469902738038",
+            provider="mock",
+            modelName="mock",
+            strategy="inline",
+            format="json",
+            repeatIndex=1,
+        ),
+    )
+    eval_dir = tmp_path / "evaluation"
+    artifact_root = tmp_path
+    path = write_evaluation_file(evaluation, eval_dir, artifact_root=artifact_root)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    assert payload["traceRef"] == "traces/evals/run-1.json"
+    trace_payload = json.loads((artifact_root / payload["traceRef"]).read_text(encoding="utf-8"))
+    assert trace_payload["task"] == "evals"
+    assert trace_payload["runId"] == "run-1"

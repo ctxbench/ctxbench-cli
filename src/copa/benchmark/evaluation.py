@@ -191,6 +191,71 @@ def _strip_markdown_fences(value: str) -> str:
     return stripped
 
 
+def _structured_output_config(name: str, schema: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "name": name,
+        "schema": schema,
+        "strict": True,
+    }
+
+
+def _exact_extractor_schema(answer_type: str | None) -> dict[str, Any]:
+    extracted_answer_type: Any
+    if answer_type == "number":
+        extracted_answer_type = ["number", "null"]
+    elif answer_type == "year":
+        extracted_answer_type = ["integer", "null"]
+    else:
+        extracted_answer_type = ["string", "null"]
+    return {
+        "type": "object",
+        "properties": {
+            "extractedAnswer": {"type": extracted_answer_type},
+            "isExtractable": {"type": "boolean"},
+            "justification": {"type": "string"},
+        },
+        "required": ["extractedAnswer", "isExtractable", "justification"],
+        "additionalProperties": False,
+    }
+
+
+def _analytical_rubric_schema() -> dict[str, Any]:
+    return {
+        "type": "object",
+        "properties": {
+            "matchedCriteria": {"type": "array", "items": {"type": "string"}},
+            "missingCriteria": {"type": "array", "items": {"type": "string"}},
+            "justification": {"type": "string"},
+        },
+        "required": ["matchedCriteria", "missingCriteria", "justification"],
+        "additionalProperties": False,
+    }
+
+
+def _analytical_dimensions_schema() -> dict[str, Any]:
+    return {
+        "type": "object",
+        "properties": {
+            "dimensionAssessments": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "label": {"type": "string"},
+                        "justification": {"type": "string"},
+                    },
+                    "required": ["id", "label", "justification"],
+                    "additionalProperties": False,
+                },
+            },
+            "overallJustification": {"type": "string"},
+        },
+        "required": ["dimensionAssessments", "overallJustification"],
+        "additionalProperties": False,
+    }
+
+
 def _judge_request(
     *,
     role: str,
@@ -200,6 +265,7 @@ def _judge_request(
     run_id: str,
     exp_id: str,
     engine: Engine,
+    structured_output: dict[str, Any] | None = None,
     event_logger: Any | None = None,
 ) -> tuple[dict[str, Any] | None, EvaluationJudgeInfo, EvaluationTrace]:
     if event_logger is not None:
@@ -222,7 +288,11 @@ def _judge_request(
         strategy_name="inline",
         context_format="json",
         system_instruction=EVALUATION_SYSTEM_INSTRUCTION,
-        params={"temperature": config.temperature, **config.params},
+        params={
+            "temperature": config.temperature,
+            **config.params,
+            **({"structured_output": structured_output} if structured_output is not None else {}),
+        },
         metadata={
             "run_id": run_id,
             "runId": run_id,
@@ -354,15 +424,10 @@ def _evaluate_exact(
         "- Do not decide whether the answer is correct.\n"
         "- Do not assign a score or label.\n\n"
         "Output requirements:\n"
-        "- Return valid JSON only.\n"
+        "- Return only the requested structured fields.\n"
         "- Do not include markdown.\n"
         "- Do not include extra text.\n"
-        "- Use exactly these fields:\n"
-        "  - extractedAnswer\n"
-        "  - isExtractable\n"
-        "  - justification\n\n"
-        "Return:\n"
-        '{\n  "extractedAnswer": null,\n  "isExtractable": false,\n  "justification": ""\n}'
+        "- Provide: extractedAnswer, isExtractable, justification.\n"
     )
 
     if experiment.evaluation.judge is not None:
@@ -379,6 +444,10 @@ def _evaluate_exact(
             run_id=run_id,
             exp_id=exp_id,
             engine=engine,
+            structured_output=_structured_output_config(
+                "exact_extractor",
+                _exact_extractor_schema(answer_type),
+            ),
             event_logger=event_logger,
         )
         if judge_payload is not None:
@@ -410,6 +479,10 @@ def _evaluate_exact(
                 run_id=run_id,
                 exp_id=exp_id,
                 engine=engine,
+                structured_output=_structured_output_config(
+                    "exact_extractor",
+                    _exact_extractor_schema(answer_type),
+                ),
                 event_logger=event_logger,
             )
             judge_info.fallbackUsed = True
@@ -753,18 +826,9 @@ def _evaluate_analytical_dimensions(
             "- Be conservative when evidence is weak.\n"
             "- Do not compute the final weighted score.\n\n"
             "Output requirements:\n"
-            "- Return valid JSON only.\n"
+            "- Return only the requested structured fields.\n"
             "- Do not include markdown or extra text.\n"
-            "- Use exactly these fields:\n"
-            "  - dimensionAssessments\n"
-            "  - overallJustification\n\n"
-            "Return this JSON structure:\n"
-            '{\n'
-            '  "dimensionAssessments": [\n'
-            '    {"id": "", "label": "", "justification": ""}\n'
-            "  ],\n"
-            '  "overallJustification": ""\n'
-            "}"
+            "- Provide: dimensionAssessments, overallJustification.\n"
         )
         judge_payload, judge_info, trace = _judge_request(
             role="analytical-dimensions-judge",
@@ -781,6 +845,10 @@ def _evaluate_analytical_dimensions(
             run_id=run_id,
             exp_id=exp_id,
             engine=engine,
+            structured_output=_structured_output_config(
+                "analytical_dimensions_assessment",
+                _analytical_dimensions_schema(),
+            ),
             event_logger=event_logger,
         )
         details = _dimension_assessment_payload(
@@ -826,6 +894,10 @@ def _evaluate_analytical_dimensions(
                 run_id=run_id,
                 exp_id=exp_id,
                 engine=engine,
+                structured_output=_structured_output_config(
+                    "analytical_dimensions_assessment",
+                    _analytical_dimensions_schema(),
+                ),
                 event_logger=event_logger,
             )
             fallback_info.fallbackUsed = True
@@ -905,15 +977,10 @@ def _evaluate_analytical(
             "- Do not compute the final score.\n"
             "- Do not assign the final label.\n\n"
             "Output requirements:\n"
-            "- Return valid JSON only.\n"
+            "- Return only the requested structured fields.\n"
             "- Do not include markdown.\n"
             "- Do not include extra text.\n"
-            "- Use exactly these fields:\n"
-            "  - matchedCriteria\n"
-            "  - missingCriteria\n"
-            "  - justification\n\n"
-            "Return this JSON structure:\n"
-            '{\n  "matchedCriteria": [],\n  "missingCriteria": [],\n  "justification": ""\n}'
+            "- Provide: matchedCriteria, missingCriteria, justification.\n"
         )
         judge_payload, judge_info, trace = _judge_request(
             role="analytical-judge",
@@ -929,6 +996,10 @@ def _evaluate_analytical(
             run_id=run_id,
             exp_id=exp_id,
             engine=engine,
+            structured_output=_structured_output_config(
+                "analytical_rubric_assessment",
+                _analytical_rubric_schema(),
+            ),
             event_logger=event_logger,
         )
         details = _normalize_judge_criteria_payload(judge_payload, rubric, evaluation_method="judge-rubric")
@@ -968,6 +1039,10 @@ def _evaluate_analytical(
                 run_id=run_id,
                 exp_id=exp_id,
                 engine=engine,
+                structured_output=_structured_output_config(
+                    "analytical_rubric_assessment",
+                    _analytical_rubric_schema(),
+                ),
                 event_logger=event_logger,
             )
             fallback_info.fallbackUsed = True

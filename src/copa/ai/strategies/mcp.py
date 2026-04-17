@@ -21,6 +21,7 @@ class MCPStrategy(StrategyAdapter):
         lattes_id = _resolve_lattes_id(request)
 
         with trace.span("strategy.mcp.execute", "strategy.mcp.execute"):
+            trace.record_steps(1)
             prompt = (
                 f"Question:\n{request.question}\n\n"
                 f"Researcher Lattes ID:\n{lattes_id}\n\n"

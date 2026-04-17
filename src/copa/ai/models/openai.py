@@ -59,6 +59,18 @@ class OpenAIModel(ModelAdapter):
             payload["max_output_tokens"] = params["max_tokens"]
         if "max_output_tokens" in params:
             payload["max_output_tokens"] = params["max_output_tokens"]
+        structured_output = params.get("structured_output")
+        if isinstance(structured_output, dict):
+            schema = structured_output.get("schema")
+            if isinstance(schema, dict):
+                payload["text"] = {
+                    "format": {
+                        "type": "json_schema",
+                        "name": str(structured_output.get("name") or "structured_output"),
+                        "strict": bool(structured_output.get("strict", True)),
+                        "schema": schema,
+                    }
+                }
         return payload
 
     def _build_input(self, model_input: ModelInput) -> str | list[dict[str, Any]]:

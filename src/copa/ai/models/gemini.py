@@ -126,6 +126,12 @@ class GeminiModel(ModelAdapter):
             config["max_output_tokens"] = params["max_tokens"]
         if "max_output_tokens" in params:
             config["max_output_tokens"] = params["max_output_tokens"]
+        structured_output = params.get("structured_output")
+        if isinstance(structured_output, dict):
+            schema = structured_output.get("schema")
+            if isinstance(schema, dict):
+                config["response_mime_type"] = "application/json"
+                config["response_json_schema"] = schema
         if sdk_types is None or extra_tools:
             return config
         return sdk_types.GenerateContentConfig(**config)

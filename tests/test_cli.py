@@ -344,8 +344,9 @@ def test_run_and_eval_jsonl_flow(tmp_path):
     assert all(path.name.startswith("rr_exp_test_mock_001_") for path in result_files)
     result = json.loads(result_files[0].read_text(encoding="utf-8"))
     assert result["status"] == "success"
+    assert result["repeatIndex"] == 1
     assert "|" not in result["runId"]
-    assert result["traceRef"].startswith("traces/exp_test_mock_001/")
+    assert result["traceRef"].startswith("traces/runs/")
     trace_path = results_jsonl.parent / result["traceRef"]
     trace = json.loads(trace_path.read_text(encoding="utf-8"))
     assert trace["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
@@ -387,11 +388,13 @@ def test_run_and_eval_jsonl_flow(tmp_path):
     assert exact_eval["score"] == 1.0
     assert exact_eval["label"] == "correct"
     assert exact_eval["experimentId"] == "exp_test_mock_001"
+    assert exact_eval["repeatIndex"] == 1
     assert exact_eval["details"]["extractedAnswer"] == 2018
     assert exact_eval["runId"]
     assert eval_jsonl.exists()
     rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
     assert len(rows) == 6
+    assert all(row["repeatIndex"] == 1 for row in rows)
     assert {row["label"] for row in rows} >= {"correct", "correct-abstention", "strong"}
 
 
@@ -492,3 +495,67 @@ def test_eval_resume_rebuilds_missing_jsonl_without_duplicate_rows(tmp_path):
     assert len({row["runId"] for row in rows}) == 6
     summary = json.loads((eval_dir / "evaluation-summary.json").read_text(encoding="utf-8"))
     assert summary["runCount"] == 6
+
+
+def test_eval_keeps_trace_refs_valid_when_output_dir_and_jsonl_have_different_parents(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judge"] = {"provider": "mock", "model": "mock", "temperature": 0}
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    runspecs_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    eval_dir = tmp_path / "eval-artifacts" / "evaluation"
+    eval_jsonl = tmp_path / "reports" / "eval.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir)]) == 0
+    assert (
+        main(
+            [
+                "eval",
+                "--run-results-dir",
+                str(results_dir),
+                "--experiment",
+                str(experiment_path),
+                "--output-dir",
+                str(eval_dir),
+                "--output-jsonl",
+                str(eval_jsonl),
+            ]
+        )
+        == 0
+    )
+
+    eval_files = sorted(path for path in eval_dir.glob("re_*.json"))
+    assert eval_files
+    eval_payload = next(
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in eval_files
+        if json.loads(path.read_text(encoding="utf-8")).get("traceRef")
+    )
+    trace_ref = eval_payload["traceRef"]
+    assert trace_ref.startswith("traces/evals/")
+    assert (eval_dir.parent / trace_ref).exists()
+
+    jsonl_row = next(
+        json.loads(line)
+        for line in eval_jsonl.read_text(encoding="utf-8").splitlines()
+        if json.loads(line).get("traceRef")
+    )
+    assert jsonl_row["traceRef"].startswith("traces/evals/")
+    assert (eval_jsonl.parent / jsonl_row["traceRef"]).exists()
+
+
+def test_run_resume_backfill_copies_trace_for_jsonl_parent(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    runspecs_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    results_jsonl = tmp_path / "reports" / "results.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir)]) == 0
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
+
+    row = json.loads(results_jsonl.read_text(encoding="utf-8").splitlines()[0])
+    assert row["traceRef"].startswith("traces/runs/")
+    assert (results_jsonl.parent / row["traceRef"]).exists()

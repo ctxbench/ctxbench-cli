@@ -129,9 +129,25 @@ def _backfill_evaluation_jsonl(results: list[RunResult], *, target_dir: Path, ta
         evaluation_path = _evaluation_path(target_dir, result)
         if not evaluation_path.exists():
             continue
-        append_jsonl(target_jsonl, [load_json(evaluation_path)])
+        payload = load_json(evaluation_path)
+        _copy_trace_payload(
+            payload,
+            source_root=target_dir.parent,
+            target_root=target_jsonl.parent,
+        )
+        append_jsonl(target_jsonl, [payload])
         existing_run_ids.add(result.runId)
     return existing_run_ids
+
+
+def _copy_trace_payload(payload: dict[str, Any], *, source_root: Path, target_root: Path) -> None:
+    trace_ref = payload.get("traceRef")
+    if not isinstance(trace_ref, str) or not trace_ref:
+        return
+    source_trace = source_root / trace_ref
+    if not source_trace.exists():
+        return
+    write_json(target_root / trace_ref, load_json(source_trace))
 
 
 def eval_command(
@@ -168,6 +184,8 @@ def eval_command(
         output_dir=output_dir,
         output_jsonl=output_jsonl,
     )
+    file_artifact_root = target_dir.parent
+    jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     progress_tracker.start()
     existing_jsonl_run_ids = _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
     pending_results = [result for result in results if not _evaluation_path(target_dir, result).exists()]
@@ -181,10 +199,10 @@ def eval_command(
             progress_tracker.advance()
             return
         evaluation_path = _evaluation_path(target_dir, evaluated)
-        write_evaluation_file(evaluated, target_dir)
+        write_evaluation_file(evaluated, target_dir, artifact_root=file_artifact_root)
         logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=evaluation_path)
         if target_jsonl is not None:
-            append_evaluation_jsonl(evaluated, target_jsonl)
+            append_evaluation_jsonl(evaluated, target_jsonl, artifact_root=jsonl_artifact_root)
             existing_jsonl_run_ids.add(evaluated.runId)
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=target_jsonl)
         summary_path = target_dir / "evaluation-summary.json"

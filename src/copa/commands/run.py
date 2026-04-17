@@ -78,12 +78,6 @@ def load_runspecs(path: str) -> tuple[list[RunSpec], str | None]:
     return runspecs, experiment_path
 
 
-def _artifact_root(target_dir: Path, target_jsonl: Path | None) -> Path:
-    if target_jsonl is not None:
-        return target_jsonl.parent
-    return target_dir.parent
-
-
 def _existing_run_ids_in_jsonl(path: Path | None) -> set[str]:
     if path is None or not path.exists():
         return set()
@@ -125,7 +119,13 @@ def _backfill_result_jsonl(
         result_path = _result_path(target_dir, runspec)
         if not result_path.exists():
             continue
-        append_jsonl(target_jsonl, [load_json(result_path)])
+        payload = load_json(result_path)
+        _copy_trace_payload(
+            payload,
+            source_root=target_dir.parent,
+            target_root=target_jsonl.parent,
+        )
+        append_jsonl(target_jsonl, [payload])
         existing_run_ids.add(runspec.runId)
 
 
@@ -144,8 +144,24 @@ def _backfill_evaluation_jsonl(
         evaluation_path = _evaluation_path(target_dir, runspec)
         if not evaluation_path.exists():
             continue
-        append_jsonl(target_jsonl, [load_json(evaluation_path)])
+        payload = load_json(evaluation_path)
+        _copy_trace_payload(
+            payload,
+            source_root=target_dir.parent,
+            target_root=target_jsonl.parent,
+        )
+        append_jsonl(target_jsonl, [payload])
         existing_run_ids.add(runspec.runId)
+
+
+def _copy_trace_payload(payload: dict[str, Any], *, source_root: Path, target_root: Path) -> None:
+    trace_ref = payload.get("traceRef")
+    if not isinstance(trace_ref, str) or not trace_ref:
+        return
+    source_trace = source_root / trace_ref
+    if not source_trace.exists():
+        return
+    write_json(target_root / trace_ref, load_json(source_trace))
 
 
 def run_command(
@@ -175,7 +191,8 @@ def run_command(
         if jsonl_path
         else (resolve_run_jsonl_path(experiment, base_dir) if experiment is not None else None)
     )
-    artifact_root = _artifact_root(target_dir, target_jsonl)
+    file_artifact_root = target_dir.parent
+    jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     logger.phase("LOAD", "Run specification loading completed", runs=len(runspecs))
     logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(runspecs))
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
@@ -211,10 +228,10 @@ def run_command(
                 question=runspec.questionId,
             )
             logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
-            written_path = write_result_file(result, target_dir, artifact_root=artifact_root)
+            written_path = write_result_file(result, target_dir, artifact_root=file_artifact_root)
             logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
             if target_jsonl is not None:
-                append_result_jsonl(result, target_jsonl, artifact_root=artifact_root)
+                append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root)
                 existing_jsonl_run_ids.add(result.runId)
                 logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
             logger.phase("DONE", "Completed successfully", run=result.runId)
@@ -268,15 +285,15 @@ def run_command(
             eval_path = _evaluation_path(eval_dir, evaluated)
             if eval_path.exists():
                 if eval_jsonl is not None and evaluated.runId not in existing_eval_jsonl_ids:
-                    append_evaluation_jsonl(evaluated, eval_jsonl)
+                    append_evaluation_jsonl(evaluated, eval_jsonl, artifact_root=eval_jsonl.parent)
                     existing_eval_jsonl_ids.add(evaluated.runId)
                     logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_jsonl)
                 progress_tracker.advance()
                 return
-            write_evaluation_file(evaluated, eval_dir)
+            write_evaluation_file(evaluated, eval_dir, artifact_root=eval_dir.parent)
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_path)
             if eval_jsonl is not None:
-                append_evaluation_jsonl(evaluated, eval_jsonl)
+                append_evaluation_jsonl(evaluated, eval_jsonl, artifact_root=eval_jsonl.parent)
                 existing_eval_jsonl_ids.add(evaluated.runId)
                 logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_jsonl)
             summary_path = eval_dir / "evaluation-summary.json"

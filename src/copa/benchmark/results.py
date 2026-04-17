@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from copa.benchmark.models import EvaluationRunResult, RunResult, RunTrace
+from copa.benchmark.models import EvaluationRunResult, EvaluationTrace, RunResult, RunTrace
 from copa.util.artifacts import evalresult_filename, runresult_filename
 from copa.util.fs import write_json
 from copa.util.jsonl import append_jsonl, write_jsonl
@@ -20,18 +20,60 @@ def _has_trace_payload(trace: RunTrace) -> bool:
     )
 
 
+def _has_evaluation_trace_payload(trace: EvaluationTrace) -> bool:
+    return bool(
+        trace.aiTrace
+        or trace.rawResponse is not None
+        or trace.error is not None
+    )
+
+
+def _write_trace_payload(
+    *,
+    artifact_root: str | Path,
+    task: str,
+    run_id: str,
+    payload: dict[str, Any],
+) -> str:
+    root = Path(artifact_root)
+    relative_path = Path("traces") / task / f"{run_id}.json"
+    write_json(root / relative_path, payload)
+    return relative_path.as_posix()
+
+
 def write_trace_file(result: RunResult, artifact_root: str | Path) -> str | None:
     if not _has_trace_payload(result.trace):
         return None
-    root = Path(artifact_root)
-    relative_path = Path("traces") / result.experimentId / f"{result.runId}.json"
     payload = {
         "experimentId": result.experimentId,
         "runId": result.runId,
+        "task": "runs",
         "trace": result.trace.model_dump(mode="json"),
     }
-    write_json(root / relative_path, payload)
-    return relative_path.as_posix()
+    return _write_trace_payload(
+        artifact_root=artifact_root,
+        task="runs",
+        run_id=result.runId,
+        payload=payload,
+    )
+
+
+def write_evaluation_trace_file(result: EvaluationRunResult, artifact_root: str | Path) -> str | None:
+    item = result.items[0] if result.items else None
+    if item is None or not _has_evaluation_trace_payload(item.evaluationTrace):
+        return None
+    payload = {
+        "experimentId": result.experimentId,
+        "runId": result.runId,
+        "task": "evals",
+        "trace": item.evaluationTrace.model_dump(mode="json"),
+    }
+    return _write_trace_payload(
+        artifact_root=artifact_root,
+        task="evals",
+        run_id=result.runId,
+        payload=payload,
+    )
 
 
 def serialize_run_result(result: RunResult, *, artifact_root: str | Path) -> dict[str, Any]:
@@ -40,20 +82,30 @@ def serialize_run_result(result: RunResult, *, artifact_root: str | Path) -> dic
     return result.to_persisted_artifact(trace_ref=trace_ref)
 
 
-def serialize_evaluation_result(result: EvaluationRunResult) -> dict[str, Any]:
+def serialize_evaluation_result(
+    result: EvaluationRunResult,
+    *,
+    artifact_root: str | Path | None = None,
+) -> dict[str, Any]:
     item = result.items[0] if result.items else None
+    trace_ref = write_evaluation_trace_file(result, artifact_root) if artifact_root is not None else None
     if item is None:
         return {
             "experimentId": result.experimentId,
             "runId": result.runId,
+            "repeatIndex": result.metadata.repeatIndex,
             "questionId": result.questionId,
             "status": "not_evaluated",
             "evaluationMethod": None,
             "score": 0.0,
             "label": "not_evaluated",
             "details": {},
+            "traceRef": trace_ref,
         }
-    return item.to_persisted_artifact()
+    payload = item.to_persisted_artifact()
+    payload["repeatIndex"] = result.metadata.repeatIndex
+    payload["traceRef"] = trace_ref
+    return payload
 
 
 def write_result_file(
@@ -115,13 +167,16 @@ def write_results_jsonl(
 def write_evaluation_files(
     evaluations: Iterable[EvaluationRunResult],
     out_dir: str | Path,
+    *,
+    artifact_root: str | Path | None = None,
 ) -> list[Path]:
     evaluation_list = list(evaluations)
     target = Path(out_dir)
     target.mkdir(parents=True, exist_ok=True)
+    root = Path(artifact_root) if artifact_root is not None else target.parent
     paths: list[Path] = []
     for item in evaluation_list:
-        path = write_evaluation_file(item, target)
+        path = write_evaluation_file(item, target, artifact_root=root)
         paths.append(path)
     return paths
 
@@ -129,21 +184,37 @@ def write_evaluation_files(
 def write_evaluation_file(
     evaluation: EvaluationRunResult,
     out_dir: str | Path,
+    *,
+    artifact_root: str | Path | None = None,
 ) -> Path:
     target = Path(out_dir)
     target.mkdir(parents=True, exist_ok=True)
+    root = Path(artifact_root) if artifact_root is not None else target.parent
     path = target / evalresult_filename(evaluation.experimentId, evaluation.runId)
-    write_json(path, serialize_evaluation_result(evaluation))
+    write_json(path, serialize_evaluation_result(evaluation, artifact_root=root))
     return path
 
 
-def append_evaluation_jsonl(evaluation: EvaluationRunResult, path: str | Path) -> Path:
+def append_evaluation_jsonl(
+    evaluation: EvaluationRunResult,
+    path: str | Path,
+    *,
+    artifact_root: str | Path | None = None,
+) -> Path:
     target_path = Path(path)
-    append_jsonl(target_path, [serialize_evaluation_result(evaluation)])
+    root = Path(artifact_root) if artifact_root is not None else target_path.parent
+    append_jsonl(target_path, [serialize_evaluation_result(evaluation, artifact_root=root)])
     return target_path
 
 
-def write_evaluation_jsonl(evaluations: Iterable[EvaluationRunResult], path: str | Path) -> Path:
+def write_evaluation_jsonl(
+    evaluations: Iterable[EvaluationRunResult],
+    path: str | Path,
+    *,
+    artifact_root: str | Path | None = None,
+) -> Path:
     evaluation_list = list(evaluations)
-    write_jsonl(path, [serialize_evaluation_result(item) for item in evaluation_list])
+    target_path = Path(path)
+    root = Path(artifact_root) if artifact_root is not None else target_path.parent
+    write_jsonl(target_path, [serialize_evaluation_result(item, artifact_root=root) for item in evaluation_list])
     return Path(path)

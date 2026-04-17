@@ -18,8 +18,13 @@ class AIMetrics(BaseModel):
     total_duration_ms: int | None = None
     strategy_duration_ms: int | None = None
     model_duration_ms: int | None = None
+    benchmark_duration_ms: int | None = None
+    function_execution_duration_ms: int | None = None
+    loop_control_duration_ms: int | None = None
     model_calls: int = 0
+    tool_call_count: int = 0
     mcp_tool_calls: int = 0
+    steps: int = 0
     input_tokens: int | None = None
     output_tokens: int | None = None
     total_tokens: int | None = None
@@ -100,6 +105,7 @@ class TraceCollector:
                 metadata={"tool_name": name, "arguments": arguments or {}},
             )
         )
+        self.metrics.tool_call_count += 1
         self.metrics.mcp_tool_calls += 1
 
     def record_tool_result(
@@ -108,6 +114,7 @@ class TraceCollector:
         name: str,
         result: Any,
         is_error: bool = False,
+        duration_ms: int | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
         event_metadata: dict[str, Any] = {
@@ -121,9 +128,17 @@ class TraceCollector:
             TraceEvent(
                 type="mcp.tool_result",
                 name="mcp.tool_result",
+                duration_ms=duration_ms,
                 metadata=event_metadata,
             )
         )
+        self.metrics.function_execution_duration_ms = self._sum_optional(
+            self.metrics.function_execution_duration_ms,
+            duration_ms,
+        )
+
+    def record_steps(self, steps: int) -> None:
+        self.metrics.steps = max(self.metrics.steps, steps)
 
     def record_error(self, error: str, metadata: dict[str, Any] | None = None) -> None:
         event_metadata = {"error": error}
@@ -270,6 +285,7 @@ class TraceCollector:
         )
 
     def to_trace(self) -> AITrace:
+        self._finalize_derived_metrics()
         return AITrace(events=list(self.events), metrics=self.metrics)
 
     def _apply_span_metrics(self, event: TraceEvent) -> None:
@@ -289,3 +305,14 @@ class TraceCollector:
         if current is None:
             return value
         return current + value
+
+    def _finalize_derived_metrics(self) -> None:
+        strategy = self.metrics.strategy_duration_ms
+        model = self.metrics.model_duration_ms or 0
+        function = self.metrics.function_execution_duration_ms or 0
+        if strategy is None:
+            self.metrics.benchmark_duration_ms = None
+            self.metrics.loop_control_duration_ms = None
+            return
+        self.metrics.benchmark_duration_ms = max(0, strategy - model)
+        self.metrics.loop_control_duration_ms = max(0, strategy - model - function)

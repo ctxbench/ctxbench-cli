@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from time import perf_counter
+
 from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput, ToolResult
 from copa.ai.runtime import ToolRuntime
 from copa.ai.strategies.base import StrategyAdapter
@@ -59,6 +61,7 @@ class LocalMCPStrategy(StrategyAdapter):
                     metadata=model_response.metadata,
                 )
                 if not model_response.requested_tool_calls:
+                    trace.record_steps(step + 1)
                     usage = {
                         "inputTokens": trace.metrics.input_tokens,
                         "outputTokens": trace.metrics.output_tokens,
@@ -81,7 +84,9 @@ class LocalMCPStrategy(StrategyAdapter):
                 for call_index, tool_call in enumerate(model_response.requested_tool_calls, start=1):
                     tool_call_id = tool_call.id or f"step-{step + 1}-tool-{call_index}"
                     trace.record_tool_call(name=tool_call.name, arguments=tool_call.arguments)
+                    tool_started_at = perf_counter()
                     tool_result = self.runtime.call_tool(tool_call.name, tool_call.arguments)
+                    tool_duration_ms = max(0, int((perf_counter() - tool_started_at) * 1000))
                     server_event = tool_result.metadata.get("server_event")
                     if isinstance(server_event, dict):
                         server_metrics.append(dict(server_event))
@@ -100,12 +105,14 @@ class LocalMCPStrategy(StrategyAdapter):
                         name=normalized_result.name,
                         result=normalized_result.content,
                         is_error=normalized_result.is_error,
+                        duration_ms=tool_duration_ms,
                         metadata=normalized_result.metadata,
                     )
                 previous_tool_calls = list(model_response.requested_tool_calls)
                 tool_results = current_results
 
         error = f"Local MCP strategy exceeded max_steps={max_steps}."
+        trace.record_steps(max_steps)
         trace.record_error(error, metadata={"strategy_name": request.strategy_name, "max_steps": max_steps})
         return AIResult(
             answer="",

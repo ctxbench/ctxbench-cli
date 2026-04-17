@@ -64,6 +64,16 @@ class ClaudeModel(ModelAdapter):
             ]
         if "temperature" in params:
             payload["temperature"] = params["temperature"]
+        structured_output = params.get("structured_output")
+        if isinstance(structured_output, dict):
+            schema = structured_output.get("schema")
+            if isinstance(schema, dict):
+                payload["output_config"] = {
+                    "format": {
+                        "type": "json_schema",
+                        "schema": schema,
+                    }
+                }
         return payload
 
     def _build_messages(self, model_input: ModelInput) -> list[dict[str, Any]]:
