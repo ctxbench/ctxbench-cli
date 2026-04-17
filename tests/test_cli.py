@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from copa.benchmark.models import ExperimentDataset
+from copa.benchmark.runspec_generator import generate_runspecs
 from copa.cli import main
 
 
@@ -220,6 +221,87 @@ def test_experiment_preserves_model_specific_params():
     assert "gpt-5.4-nano" in experiment.params.models
     assert experiment.params.models["gpt-5.4-nano"]["rate_limit"]["tpm"] == 200000
     assert experiment.params.models["gemini-3.1-flash-lite-preview"]["rate_limit"]["max_concurrency"] == 1
+
+
+def test_runspec_generation_resolves_mcp_env_placeholders(tmp_path, monkeypatch):
+    from copa.benchmark.experiment_loader import load_experiment
+
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["factors"]["strategy"] = ["mcp"]
+    payload["params"]["common"]["mcp_server"] = {
+        "server_url": "${LATTES_MCP_URL}",
+        "auth_token": "${LATTES_MCP_TOKEN}",
+        "headers": {
+            "X-Server": "lattes",
+        },
+    }
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setenv("LATTES_MCP_URL", "https://lattes.example.test/mcp")
+    monkeypatch.setenv("LATTES_MCP_TOKEN", "Bearer lattes-secret")
+
+    experiment = load_experiment(experiment_path)
+    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
+
+    assert runspecs
+    params = runspecs[0].params
+    assert params["mcp_server"]["server_url"] == "https://lattes.example.test/mcp"
+    assert params["mcp_server"]["auth_token"] == "Bearer lattes-secret"
+    assert params["mcp_server"]["headers"]["X-Server"] == "lattes"
+    assert "Authorization" not in params["mcp_server"]["headers"]
+
+
+def test_runspec_generation_preserves_mcp_values_from_experiment_file(tmp_path):
+    from copa.benchmark.experiment_loader import load_experiment
+
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["factors"]["strategy"] = ["mcp"]
+    payload["params"]["common"]["mcp_server"] = {
+        "server_url": "https://file.example.test/mcp",
+        "auth_token": "Bearer file-secret",
+        "headers": {
+            "X-Server": "lattes",
+        },
+    }
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    experiment = load_experiment(experiment_path)
+    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
+
+    assert runspecs
+    params = runspecs[0].params
+    assert params["mcp_server"]["server_url"] == "https://file.example.test/mcp"
+    assert params["mcp_server"]["auth_token"] == "Bearer file-secret"
+    assert "Authorization" not in params["mcp_server"]["headers"]
+
+
+def test_runspec_generation_env_overrides_mcp_values_from_experiment_file(tmp_path, monkeypatch):
+    from copa.benchmark.experiment_loader import load_experiment
+
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["factors"]["strategy"] = ["mcp"]
+    payload["params"]["common"]["mcp_server"] = {
+        "server_url": "https://file.example.test/mcp",
+        "auth_token": "Bearer file-secret",
+        "headers": {
+            "X-Server": "lattes",
+        },
+    }
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setenv("LATTES_MCP_URL", "https://env.example.test/mcp")
+    monkeypatch.setenv("LATTES_MCP_TOKEN", "Bearer env-secret")
+
+    experiment = load_experiment(experiment_path)
+    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
+
+    assert runspecs
+    params = runspecs[0].params
+    assert params["mcp_server"]["server_url"] == "https://env.example.test/mcp"
+    assert params["mcp_server"]["auth_token"] == "Bearer env-secret"
+    assert params["mcp_server"]["headers"]["X-Server"] == "lattes"
+    assert "Authorization" not in params["mcp_server"]["headers"]
 
 
 def test_run_and_eval_jsonl_flow(tmp_path):

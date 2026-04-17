@@ -15,7 +15,8 @@
     "common": {
       "temperature": 0.7,
       "mcp_server": {
-        "server_url": "https://example.invalid/mcp",
+        "server_url": "${LATTES_MCP_URL}",
+        "auth_token": "${LATTES_MCP_TOKEN}",
         "server_label": "lattes"
       }
     },

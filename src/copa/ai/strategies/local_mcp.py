@@ -36,10 +36,6 @@ class LocalMCPStrategy(StrategyAdapter):
             prompt = (
                 f"Question:\n{request.question}\n\n"
                 f"Researcher Lattes ID:\n{lattes_id}\n\n"
-                "Instructions:\n"
-                f"- Every tool call must include this exact lattesId: {lattes_id}.\n"
-                "- Use only the information returned by the MCP tools.\n"
-                "- If the tools do not contain enough information, answer: Not enough information.\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
 

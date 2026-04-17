@@ -1260,9 +1260,9 @@ def test_openai_model_builds_native_mcp_tool_payload():
                     "server_url": "https://mcp.example.test",
                     "server_label": "lattes",
                     "allowed_tools": ["listPublications"],
-                    "require_approval": "never",
                 }
             },
+            metadata={"question_id": "q1", "lattes_id": "cv-demo", "context_id": "cv-demo", "mcp_options": {"require_approval": "never"}},
         ),
     )
 
@@ -1276,6 +1276,54 @@ def test_openai_model_builds_native_mcp_tool_payload():
         }
     ]
     assert result.text == "OpenAI MCP answer"
+
+
+def test_openai_model_drops_authorization_header_when_authorization_param_is_set():
+    captured: dict[str, object] = {}
+    response = SimpleNamespace(
+        output_text="OpenAI MCP answer",
+        output=[],
+        usage=SimpleNamespace(input_tokens=9, output_tokens=4, total_tokens=13),
+        model_dump=lambda mode="json": {"id": "resp-openai-mcp-auth"},
+    )
+    client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **kwargs: captured.update(kwargs) or response
+        )
+    )
+    model = OpenAIModel(params={"api_key": "test-key"})
+    model._create_client = lambda: client
+
+    model.generate(
+        ModelInput(system_instruction="System", prompt="Prompt"),
+        make_request(
+            provider_name="openai",
+            model_name="gpt-5",
+            strategy_name="mcp",
+            params={
+                "mcp_server": {
+                    "server_url": "https://mcp.example.test",
+                    "server_label": "lattes",
+                    "auth_token": "Bearer secret",
+                    "headers": {
+                        "Authorization": "Bearer stale",
+                        "X-Server": "lattes",
+                    },
+                }
+            },
+        ),
+    )
+
+    assert captured["tools"] == [
+        {
+            "type": "mcp",
+            "server_label": "lattes",
+            "server_url": "https://mcp.example.test",
+            "authorization": "Bearer secret",
+            "headers": {"X-Server": "lattes"},
+            "require_approval": "never",
+        }
+    ]
 
 
 def test_openai_model_maps_tools_and_tool_results():
@@ -1624,7 +1672,7 @@ def test_claude_model_builds_native_mcp_server_payload():
                     "server_url": "https://mcp.example.test",
                     "server_label": "lattes",
                     "allowed_tools": ["listPublications"],
-                    "authorization": "Bearer secret",
+                    "auth_token": "Bearer secret",
                 }
             },
         ),

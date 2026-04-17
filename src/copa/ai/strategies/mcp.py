@@ -24,10 +24,6 @@ class MCPStrategy(StrategyAdapter):
             prompt = (
                 f"Question:\n{request.question}\n\n"
                 f"Researcher Lattes ID:\n{lattes_id}\n\n"
-                "Instructions:\n"
-                f"- If you use MCP tools, use this exact lattesId: {lattes_id}.\n"
-                "- Use available MCP tools when they help answer the question.\n"
-                "- If the available information is insufficient, answer: Not enough information.\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
             model_input = ModelInput(

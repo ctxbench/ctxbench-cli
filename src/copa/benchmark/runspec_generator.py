@@ -6,12 +6,14 @@ from typing import Any
 from copa.benchmark.models import Experiment, RunMetadata, RunSpec
 from copa.dataset.provider import DatasetProvider
 from copa.util.artifacts import build_short_ids, canonical_run_identity
+from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
 
 
 def resolve_params(experiment: Experiment, model_name: str) -> dict[str, Any]:
     common = dict(experiment.params.common)
     model_specific = experiment.params.models.get(model_name, {})
-    return {**common, **model_specific, "model_name": model_name}
+    params = resolve_env_placeholders({**common, **model_specific, "model_name": model_name})
+    return apply_lattes_mcp_env_overrides(params)
 
 
 def resolve_models(experiment: Experiment) -> list[dict[str, str]]:

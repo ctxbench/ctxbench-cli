@@ -206,15 +206,18 @@ class OpenAIModel(ModelAdapter):
             "type": "mcp",
             "server_label": str(server_label),
             "server_url": server_url,
+            "require_approval": "never"
         }
-        if isinstance(config.get("headers"), dict):
-            tool["headers"] = dict(config["headers"])
-        if isinstance(config.get("authorization"), str) and config["authorization"]:
-            tool["authorization"] = config["authorization"]
+        if isinstance(config.get("auth_token"), str) and config["auth_token"]:
+            tool["authorization"] = config["auth_token"]
+        headers = dict(config.get("headers") or {}) if isinstance(config.get("headers"), dict) else {}
+        if "authorization" in tool:
+            headers.pop("Authorization", None)
+            headers.pop("authorization", None)
+        if headers:
+            tool["headers"] = headers
         if isinstance(config.get("allowed_tools"), list) and config["allowed_tools"]:
             tool["allowed_tools"] = list(config["allowed_tools"])
-        if config.get("require_approval") is not None:
-            tool["require_approval"] = config["require_approval"]
         return [tool]
 
     def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:

@@ -73,7 +73,7 @@ class MCPRuntime:
             if not isinstance(server_url, str) or not server_url:
                 raise RuntimeError("MCP runtime config requires a non-empty 'server_url' or 'url'.")
         headers = config.get("headers") if isinstance(config.get("headers"), dict) else None
-        authorization = config.get("authorization") if isinstance(config.get("authorization"), str) else None
+        authorization = config.get("auth_token") if isinstance(config.get("auth_token"), str) else None
         return cls(
             transport=transport,
             server_url=server_url if isinstance(server_url, str) else None,

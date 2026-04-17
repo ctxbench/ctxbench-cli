@@ -12,7 +12,7 @@ class ClaudeModel(ModelAdapter):
         client = self._create_client()
         payload = self._build_payload(model_input, request)
         started_at = perf_counter()
-        response = client.messages.create(**payload)
+        response = client.beta.messages.create(**payload)
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         return ModelResponse(
@@ -210,8 +210,8 @@ class ClaudeModel(ModelAdapter):
             tool_configuration["allowed_tools"] = list(config["allowed_tools"])
         if tool_configuration:
             server["tool_configuration"] = tool_configuration
-        if isinstance(config.get("authorization"), str) and config["authorization"]:
-            server["authorization_token"] = config["authorization"]
+        if isinstance(config.get("auth_token"), str) and config["auth_token"]:
+            server["authorization_token"] = config["auth_token"]
         return [server]
 
     def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:
