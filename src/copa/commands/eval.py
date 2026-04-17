@@ -4,17 +4,17 @@ from pathlib import Path
 from typing import Any
 
 from copa.benchmark.evaluation import (
-    build_evaluation_summary,
+    build_evaluation_summary_rows,
     evaluate_run_results,
     evaluation_output_paths,
     load_experiment_for_evaluation,
     runspec_index_for_experiment,
-    write_evaluation_files,
-    write_evaluation_jsonl,
 )
 from copa.benchmark.models import RunResult
+from copa.benchmark.results import append_evaluation_jsonl, write_evaluation_file
+from copa.util.artifacts import evalresult_filename
 from copa.util.fs import load_json, write_json
-from copa.util.jsonl import read_jsonl
+from copa.util.jsonl import append_jsonl, read_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
 
@@ -97,6 +97,43 @@ def load_results_from_input(
     return results
 
 
+def _evaluation_path(target_dir: Path, result: RunResult) -> Path:
+    return target_dir / evalresult_filename(result.experimentId, result.runId)
+
+
+def _existing_run_ids_in_jsonl(path: Path | None) -> set[str]:
+    if path is None or not path.exists():
+        return set()
+    return {
+        str(item.get("runId") or "")
+        for item in read_jsonl(path)
+        if isinstance(item.get("runId"), str) and str(item.get("runId"))
+    }
+
+
+def _load_persisted_evaluation_rows(target_dir: Path) -> list[dict[str, Any]]:
+    return [
+        load_json(path_item)
+        for path_item in sorted(target_dir.glob("re_*.json"))
+        if path_item.name != "evaluation-summary.json"
+    ]
+
+
+def _backfill_evaluation_jsonl(results: list[RunResult], *, target_dir: Path, target_jsonl: Path | None) -> set[str]:
+    existing_run_ids = _existing_run_ids_in_jsonl(target_jsonl)
+    if target_jsonl is None:
+        return existing_run_ids
+    for result in results:
+        if result.runId in existing_run_ids:
+            continue
+        evaluation_path = _evaluation_path(target_dir, result)
+        if not evaluation_path.exists():
+            continue
+        append_jsonl(target_jsonl, [load_json(evaluation_path)])
+        existing_run_ids.add(result.runId)
+    return existing_run_ids
+
+
 def eval_command(
     *,
     run_results_dir: str | None,
@@ -125,38 +162,65 @@ def eval_command(
     progress_tracker = ProgressTracker(total=len(results), enabled=progress)
     logger.progress = progress_tracker
     logger.phase("PLAN", "Starting evaluation batch", input=input_path, discoveredRuns=len(results))
-    progress_tracker.start()
-
-    evaluations = evaluate_run_results(
-        results,
-        experiment=experiment,
-        only=only,
-        mode=mode,
-        continue_on_error=continue_on_error,
-        fail_on_missing_gold=fail_on_missing_gold,
-        event_logger=event_logger,
-        on_result=lambda _result, _evaluated: progress_tracker.advance(),
-    )
-
     target_dir, target_jsonl = evaluation_output_paths(
         experiment,
         base_dir,
         output_dir=output_dir,
         output_jsonl=output_jsonl,
     )
-    written_files = write_evaluation_files(evaluations, target_dir)
-    for path_item in written_files:
-        logger.phase("WRITE", "Artifact written", path=path_item)
+    progress_tracker.start()
+    existing_jsonl_run_ids = _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
+    pending_results = [result for result in results if not _evaluation_path(target_dir, result).exists()]
 
-    summary = build_evaluation_summary(evaluations)
+    progress_tracker.total = len(pending_results)
+    progress_tracker.current = 0
+    progress_tracker.start()
+
+    def _persist_evaluation(_result: RunResult, evaluated: Any) -> None:
+        if evaluated is None:
+            progress_tracker.advance()
+            return
+        evaluation_path = _evaluation_path(target_dir, evaluated)
+        write_evaluation_file(evaluated, target_dir)
+        logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=evaluation_path)
+        if target_jsonl is not None:
+            append_evaluation_jsonl(evaluated, target_jsonl)
+            existing_jsonl_run_ids.add(evaluated.runId)
+            logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=target_jsonl)
+        summary_path = target_dir / "evaluation-summary.json"
+        write_json(
+            summary_path,
+            build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir)).model_dump(mode="json"),
+        )
+        logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=summary_path)
+        progress_tracker.advance()
+
+    evaluations = evaluate_run_results(
+        pending_results,
+        experiment=experiment,
+        only=only,
+        mode=mode,
+        continue_on_error=continue_on_error,
+        fail_on_missing_gold=fail_on_missing_gold,
+        event_logger=event_logger,
+        on_result=_persist_evaluation,
+    )
+
     summary_path = target_dir / "evaluation-summary.json"
-    write_json(summary_path, summary.model_dump(mode="json"))
+    write_json(
+        summary_path,
+        build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir)).model_dump(mode="json"),
+    )
     logger.phase("WRITE", "Artifact written", path=summary_path)
 
     if target_jsonl is not None:
-        write_evaluation_jsonl(evaluations, target_jsonl)
-        logger.phase("WRITE", "Artifact written", path=target_jsonl)
-        print(f"Wrote {len(evaluations)} evaluation result(s) to {target_dir} and {target_jsonl}")
+        print(
+            f"Processed {len(results)} evaluation result(s) to {target_dir} and {target_jsonl}"
+            + (f" ({len(results) - len(pending_results)} resumed)" if len(results) != len(pending_results) else "")
+        )
     else:
-        print(f"Wrote {len(evaluations)} evaluation result(s) to {target_dir}")
+        print(
+            f"Processed {len(results)} evaluation result(s) to {target_dir}"
+            + (f" ({len(results) - len(pending_results)} resumed)" if len(results) != len(pending_results) else "")
+        )
     return 0

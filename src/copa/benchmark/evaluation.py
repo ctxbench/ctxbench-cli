@@ -1348,3 +1348,32 @@ def build_evaluation_summary(evaluations: Iterable[EvaluationRunResult]) -> Eval
         meanScore=round(score_total / scored_item_count, 4) if scored_item_count else None,
         labels=labels,
     )
+
+
+def build_evaluation_summary_rows(rows: Iterable[dict[str, Any]]) -> EvaluationBatchSummary:
+    row_list = list(rows)
+    labels: dict[str, int] = {}
+    score_total = 0.0
+    item_count = 0
+    scored_item_count = 0
+    run_ids: set[str] = set()
+    experiment_id = str(row_list[0].get("experimentId", "")) if row_list else ""
+    for row in row_list:
+        run_id = row.get("runId")
+        if isinstance(run_id, str) and run_id:
+            run_ids.add(run_id)
+        label = row.get("label")
+        if isinstance(label, str) and label:
+            labels[label] = labels.get(label, 0) + 1
+        score = row.get("score")
+        if isinstance(score, (int, float)):
+            score_total += float(score)
+            scored_item_count += 1
+        item_count += 1
+    return EvaluationBatchSummary(
+        experimentId=experiment_id,
+        runCount=len(run_ids),
+        itemCount=item_count,
+        meanScore=round(score_total / scored_item_count, 4) if scored_item_count else None,
+        labels=labels,
+    )

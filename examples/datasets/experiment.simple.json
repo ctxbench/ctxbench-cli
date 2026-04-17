@@ -57,7 +57,7 @@
     }
   },
   "evaluation": {
-    "enabled": true,
+    "enabled": false,
     "judge": {
       "provider": "anthropic",
       "model": "claude-sonnet-4-6",

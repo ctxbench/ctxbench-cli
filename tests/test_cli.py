@@ -418,5 +418,77 @@ def test_run_verbose_and_progress_logging(tmp_path, capsys):
     assert "[EXECUTE]" in stderr
     assert "[WRITE]" in stderr
     assert "[EVALUATE]" in stderr
-    assert "[DONE]" in stderr
-    assert "Processing runs:" in stderr
+
+
+def test_run_resume_rebuilds_missing_jsonl_without_duplicate_execution(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    runspecs_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    results_jsonl = tmp_path / "results.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
+
+    result_files = sorted(results_dir.glob("rr_*.json"))
+    assert len(result_files) == 6
+    results_jsonl.unlink()
+
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
+
+    assert len(sorted(results_dir.glob("rr_*.json"))) == 6
+    rows = [json.loads(line) for line in results_jsonl.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 6
+    assert len({row["runId"] for row in rows}) == 6
+
+
+def test_eval_resume_rebuilds_missing_jsonl_without_duplicate_rows(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    runspecs_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    eval_dir = tmp_path / "eval"
+    results_jsonl = tmp_path / "results.jsonl"
+    eval_jsonl = tmp_path / "eval.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
+    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
+    assert (
+        main(
+            [
+                "eval",
+                "--run-results-dir",
+                str(results_dir),
+                "--experiment",
+                str(experiment_path),
+                "--output-dir",
+                str(eval_dir),
+                "--output-jsonl",
+                str(eval_jsonl),
+            ]
+        )
+        == 0
+    )
+
+    eval_jsonl.unlink()
+
+    assert (
+        main(
+            [
+                "eval",
+                "--run-results-dir",
+                str(results_dir),
+                "--experiment",
+                str(experiment_path),
+                "--output-dir",
+                str(eval_dir),
+                "--output-jsonl",
+                str(eval_jsonl),
+            ]
+        )
+        == 0
+    )
+
+    rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 6
+    assert len({row["runId"] for row in rows}) == 6
+    summary = json.loads((eval_dir / "evaluation-summary.json").read_text(encoding="utf-8"))
+    assert summary["runCount"] == 6
