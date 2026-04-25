@@ -24,22 +24,75 @@ class LattesMCPServer:
             name="copa-lattes",
             instructions=(
                 "MCP server for querying Lattes researcher data."
-                " All tools require an explicit lattesId argument."
+                " All tools are read-only and require lattes_id."
             ),
         )
         self._register_tools()
         self._tool_specs = self._service.list_tools()
 
     def _register_tools(self) -> None:
-        @self.app.tool(name="listSections", description="List available sections for a researcher.")
-        async def list_sections(lattesId: str) -> list[str]:
-            return self.call_tool("listSections", {"lattesId": lattesId}).content
+        @self.app.tool(name="get_profile", description="Return the researcher's identification data.")
+        async def get_profile(lattes_id: str) -> object:
+            return self.call_tool("get_profile", {"lattes_id": lattes_id}).content
 
-        @self.app.tool(name="getSection", description="Return one parsed section for a researcher.")
-        async def get_section(lattesId: str, sectionName: str) -> object:
+        @self.app.tool(name="get_expertise", description="Return the researcher's expertise, research lines and awards.")
+        async def get_expertise(lattes_id: str) -> object:
+            return self.call_tool("get_expertise", {"lattes_id": lattes_id}).content
+
+        @self.app.tool(name="get_education", description="Return the researcher's academic background.")
+        async def get_education(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
             return self.call_tool(
-                "getSection",
-                {"lattesId": lattesId, "sectionName": sectionName},
+                "get_education",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_projects", description="Return the researcher's projects.")
+        async def get_projects(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_projects",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_supervisions", description="Return the researcher's supervision activities.")
+        async def get_supervisions(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_supervisions",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_experience", description="Return the researcher's professional experience.")
+        async def get_experience(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_experience",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_academic_activities", description="Return boards, events and academic service activities.")
+        async def get_academic_activities(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_academic_activities",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_publications", description="Return the researcher's bibliographic production.")
+        async def get_publications(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_publications",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_technical_output", description="Return the researcher's technical output.")
+        async def get_technical_output(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_technical_output",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+            ).content
+
+        @self.app.tool(name="get_artistic_output", description="Return the researcher's artistic and cultural output.")
+        async def get_artistic_output(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+            return self.call_tool(
+                "get_artistic_output",
+                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
             ).content
 
     def list_tools(self) -> list[ToolSpec]:

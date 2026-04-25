@@ -18,6 +18,7 @@ from copa.benchmark.models import (
     RunMetadata,
     RunSpec,
 )
+import json
 
 
 def make_request(**overrides: object) -> AIRequest:
@@ -55,6 +56,47 @@ def make_experiment() -> Experiment:
     )
 
 
+def write_mock_dataset(root: Path) -> ExperimentDataset:
+    instance_dir = root / "context" / "cv-demo"
+    instance_dir.mkdir(parents=True, exist_ok=True)
+    (root / "questions.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "mock-v2",
+                "questions": [
+                    {
+                        "id": "q_year",
+                        "question": "In which year did the researcher obtain their PhD?",
+                        "tags": ["objective", "simple"],
+                        "validation": {"type": "heuristic", "schema": {"type": "number"}},
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "questions.instance.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "mock-v2",
+                "instances": [
+                    {
+                        "instanceId": "cv-demo",
+                        "contextBlocks": "context/cv-demo/blocks.json",
+                        "questions": [{"id": "q_year", "acceptedAnswers": [2020]}],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (instance_dir / "parsed.json").write_text(json.dumps({"answers": {"q_year": 2020}}), encoding="utf-8")
+    (instance_dir / "raw.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
+    (instance_dir / "cleaned.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
+    (instance_dir / "blocks.json").write_text(json.dumps({"summary": "PhD in 2020"}), encoding="utf-8")
+    return ExperimentDataset(root=str(root.resolve()))
+
+
 class RecordingModel(ModelAdapter):
     def __init__(self) -> None:
         super().__init__()
@@ -84,21 +126,21 @@ class ScriptedToolModel(ModelAdapter):
         return self.responses.pop(0)
 
 
-class FakeSectionRuntime:
+class FakeLattesRuntime:
     def __init__(self) -> None:
         self.calls: list[tuple[str, dict[str, object]]] = []
 
     def list_tools(self) -> list[ToolSpec]:
         return [
-            ToolSpec(name="listSections", input_schema={"type": "object"}),
-            ToolSpec(name="getSection", input_schema={"type": "object"}),
+            ToolSpec(name="get_profile", input_schema={"type": "object"}),
+            ToolSpec(name="get_publications", input_schema={"type": "object"}),
         ]
 
     def call_tool(self, name: str, arguments: dict[str, object]) -> ToolResult:
         self.calls.append((name, arguments))
-        if name == "listSections":
-            return ToolResult(name=name, content=["summary", "research"])
-        return ToolResult(name=name, content={"text": "software engineering"})
+        if name == "get_profile":
+            return ToolResult(name=name, content={"name": "Ada Lovelace"})
+        return ToolResult(name=name, content={"items": [{"year": 2024, "title": "Software Engineering Paper"}]})
 
     def close(self) -> None:
         return None
@@ -114,20 +156,21 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
     assert result.answer == "3"
     assert result.usage == {"inputTokens": 11, "outputTokens": 1, "totalTokens": 12}
     assert model.last_input is not None
-    assert model.last_input.prompt.startswith("Context format: json")
+    assert "# Question:" in model.last_input.prompt
+    assert "# Context:" in model.last_input.prompt
     metrics = result.trace["metrics"]
     assert metrics["question_tokens"] == len("How many publications are listed?".split())
     assert metrics["llm_call_count"] == 1
     assert metrics["total_llm_tokens"] == 12
 
 
-def test_engine_local_function_uses_section_tools_and_records_calls():
-    runtime = FakeSectionRuntime()
+def test_engine_local_function_uses_resource_tools_and_records_calls():
+    runtime = FakeLattesRuntime()
     engine = Engine(tool_runtime_factories={"local_function": lambda: runtime})
     model = ScriptedToolModel(
         [
             ModelResponse(
-                requested_tool_calls=[ToolCall(name="listSections", arguments={"lattesId": "cv-demo"})],
+                requested_tool_calls=[ToolCall(name="get_publications", arguments={"lattes_id": "cv-demo", "start_year": 2020})],
                 duration_ms=5,
                 input_tokens=10,
                 output_tokens=0,
@@ -147,8 +190,8 @@ def test_engine_local_function_uses_section_tools_and_records_calls():
     result = engine.execute(make_request(provider_name="scripted", strategy_name="local_function"))
 
     assert result.answer == "Software engineering"
-    assert runtime.calls == [("listSections", {"lattesId": "cv-demo"})]
-    assert "Tool usage:" in model.inputs[0].prompt
+    assert runtime.calls == [("get_publications", {"lattes_id": "cv-demo", "start_year": 2020})]
+    assert "Researcher Lattes ID:" in model.inputs[0].prompt
     assert result.trace["metrics"]["tool_call_count_semantic"] == 1
 
 
@@ -196,14 +239,15 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     assert judge_info.used is True
 
 
-def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp():
+def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
+    dataset = write_mock_dataset(tmp_path / "dataset")
     runspec = RunSpec(
         id="run-1",
         runId="run-1",
         experimentId="exp-1",
-        dataset=ExperimentDataset(root=str((Path.cwd() / "examples" / "datasets" / "lattes-simple").resolve())),
-        questionId="q_phd_year",
-        instanceId="5660469902738038",
+        dataset=dataset,
+        questionId="q_year",
+        instanceId="cv-demo",
         provider="mock",
         modelName="mock",
         strategy="mcp",
@@ -211,9 +255,9 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp():
         repeatIndex=1,
         params={"mcp_server": {"server_url": "https://example.test/mcp"}},
         metadata=RunMetadata(
-            canonicalId="exp-1|q_phd_year|5660469902738038|mock|mock|mcp|json|1",
-            questionId="q_phd_year",
-            instanceId="5660469902738038",
+            canonicalId="exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+            questionId="q_year",
+            instanceId="cv-demo",
             provider="mock",
             modelName="mock",
             strategy="mcp",

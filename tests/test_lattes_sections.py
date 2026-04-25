@@ -14,44 +14,55 @@ def _contexts_dir() -> str:
     return str((Path.cwd() / "datasets" / "lattes" / "context").resolve())
 
 
-def test_provider_lists_and_returns_sections():
+def test_provider_returns_resource_payloads_and_filters_years():
     provider = LattesProvider()
 
-    sections = provider.list_sections(contexts_dir=_contexts_dir(), lattes_id="2342739419247924")
-    profile = provider.get_section(
+    profile = provider.get_profile(
         contexts_dir=_contexts_dir(),
         lattes_id="2342739419247924",
-        section_name="profile",
+    )
+    publications = provider.get_publications(
+        contexts_dir=_contexts_dir(),
+        lattes_id="2342739419247924",
+        start_year=2025,
+        end_year=2026,
     )
 
-    assert "profile" in sections
     assert isinstance(profile, dict)
     assert "summary" in profile
+    assert isinstance(publications, dict)
+    assert publications["items"]
+    assert all(2025 <= int(item["year"]) <= 2026 for item in publications["items"] if isinstance(item, dict) and "year" in item)
 
 
-def test_tool_service_exposes_section_tools():
+def test_tool_service_exposes_resource_tools():
     service = LattesToolService(contexts_dir=_contexts_dir())
 
     tools = service.list_tools()
-    sections = service.call_tool("listSections", {"lattesId": "2342739419247924"}).content
     profile = service.call_tool(
-        "getSection",
-        {"lattesId": "2342739419247924", "sectionName": "profile"},
+        "get_profile",
+        {"lattes_id": "2342739419247924"},
+    ).content
+    education = service.call_tool(
+        "get_education",
+        {"lattes_id": "2342739419247924", "start_year": 1995, "end_year": 2000},
     ).content
 
-    assert {tool.name for tool in tools} == {"listSections", "getSection"}
-    assert "profile" in sections
+    assert "get_profile" in {tool.name for tool in tools}
+    assert "get_publications" in {tool.name for tool in tools}
     assert isinstance(profile, dict)
+    assert isinstance(education, dict)
+    assert "items" in education
 
 
-def test_mcp_server_routes_section_tools():
+def test_mcp_server_routes_resource_tools():
     server = LattesMCPServer(contexts_dir=_contexts_dir())
 
     tools = server.list_tools()
     result = server.call_tool(
-        "getSection",
-        {"lattesId": "2342739419247924", "sectionName": "profile"},
+        "get_profile",
+        {"lattes_id": "2342739419247924"},
     )
 
-    assert any(tool.name == "getSection" for tool in tools)
+    assert any(tool.name == "get_profile" for tool in tools)
     assert isinstance(result.content, dict)

@@ -8,7 +8,7 @@ The current codebase is centered on a simple idea:
 - vary how the model accesses the source information
 - evaluate the answer qualitatively with either deterministic heuristics or a judge model
 
-The repository currently ships a Lattes-based dataset and section-oriented tool layer.
+The repository currently ships a Lattes-based dataset and resource-oriented tool layer.
 
 ## What Changed
 
@@ -20,7 +20,7 @@ The benchmark now uses:
 - question-level `validation.type`
 - instance-level `acceptedAnswers`, `contextRefs`, and `themes`
 - qualitative evaluation only
-- section-based Lattes tools: `listSections` and `getSection`
+- Lattes tools named as `get_<resource>`
 
 ## Core Concepts
 
@@ -179,8 +179,16 @@ The benchmark controls the tool loop and exposes local Python tools directly.
 
 For Lattes, the model interacts with:
 
-- `listSections`
-- `getSection`
+- `get_profile`
+- `get_expertise`
+- `get_education`
+- `get_projects`
+- `get_supervisions`
+- `get_experience`
+- `get_academic_activities`
+- `get_publications`
+- `get_technical_output`
+- `get_artistic_output`
 
 ### `local_mcp`
 
@@ -194,12 +202,22 @@ This path is less observable by design. Some metrics may be `null` because the b
 
 ## Lattes Tool Layer
 
-The Lattes integration is section-oriented.
+The Lattes integration is resource-oriented.
 
-The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The current tool surface is intentionally small:
+The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The tool surface is fixed and shared across `local_function`, `local_mcp`, and `mcp`:
 
-- `listSections`
-- `getSection`
+- `get_profile`
+- `get_expertise`
+- `get_education`
+- `get_projects`
+- `get_supervisions`
+- `get_experience`
+- `get_academic_activities`
+- `get_publications`
+- `get_technical_output`
+- `get_artistic_output`
+
+All tools are read-only. Temporal filters are exposed only where they make sense through `start_year` and `end_year`.
 
 This keeps the benchmark simpler and makes tool usage easier to compare across strategies.
 
@@ -210,13 +228,13 @@ The CLI entrypoint is `copa`.
 ### Validate an Experiment
 
 ```bash
-copa experiment validate examples/datasets/experiment.json
+copa experiment validate datasets/lattes/experiment.json
 ```
 
 ### Expand an Experiment into RunSpecs
 
 ```bash
-copa experiment expand examples/datasets/experiment.json --out runspecs --jsonl runs.jsonl
+copa experiment expand datasets/lattes/experiment.json --out runspecs --jsonl runs.jsonl
 ```
 
 ### Execute Runs
@@ -238,7 +256,7 @@ From a directory:
 ```bash
 copa eval \
   --run-results-dir results \
-  --experiment examples/datasets/experiment.json \
+  --experiment datasets/lattes/experiment.json \
   --output-dir eval \
   --output-jsonl evaluation.jsonl \
   --output-csv evaluation.csv
@@ -249,7 +267,7 @@ From one JSON or JSONL input:
 ```bash
 copa eval \
   --run-results-json results.jsonl \
-  --experiment examples/datasets/experiment.json \
+  --experiment datasets/lattes/experiment.json \
   --output-dir eval
 ```
 

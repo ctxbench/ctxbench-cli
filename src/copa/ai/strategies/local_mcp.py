@@ -8,13 +8,12 @@ from copa.ai.strategies.base import StrategyAdapter
 from copa.ai.trace import TraceCollector
 
 DEFAULT_LOCAL_MCP_SYSTEM_INSTRUCTION = (
-    "You are answering questions about a researcher.\n"
-    "You have access to MCP tools over the parsed curriculum sections.\n"
+    "You are an assistant that answers questions about a researcher.\n"
+    "You have access to tools to gather information about the researcher's lattes curriculum.\n"
+    "Your goal is to produce accurate, concise and information-grounded answers.\n"
     "Guidelines:\n"
-    "- Use only the available information from the MCP tools to answer the question.\n"
-    "- First inspect available sections when needed, then request only the sections needed.\n"
-    "- Every tool call must include the exact provided lattesId.\n"
-    "- If the information is insufficient, respond with: 'Not enough information.'\n"
+    "- Use only the available information from the tools to answer the question.\n"
+    "- Inform if the provided information isn't enough to answer the question.\n"
     "- Be concise and precise.\n"
     "- Do not make assumptions or use external knowledge.\n"
 )
@@ -37,9 +36,8 @@ class LocalMCPStrategy(StrategyAdapter):
         with trace.span("strategy.local_mcp.execute", "strategy.local_mcp.execute"):
             tools = self.runtime.list_tools()
             prompt = (
-                f"Question:\n{request.question}\n\n"
-                f"Researcher Lattes ID:\n{lattes_id}\n\n"
-                "Tool usage:\n- listSections lists the parsed curriculum sections.\n- getSection returns one section by exact name.\n\n"
+                f"# Question:\n{request.question}\n\n"
+                f"# Researcher Lattes ID:\n{lattes_id}\n\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
 

@@ -19,7 +19,7 @@ def write_jsonl(path: str | Path, rows: Iterable[dict[str, Any]]) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     with target.open("w", encoding="utf-8") as handle:
         for row in rows:
-            handle.write(json.dumps(row, sort_keys=True))
+            handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False))
             handle.write("\n")
 
 
@@ -28,5 +28,5 @@ def append_jsonl(path: str | Path, rows: Iterable[dict[str, Any]]) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     with target.open("a", encoding="utf-8") as handle:
         for row in rows:
-            handle.write(json.dumps(row, sort_keys=True))
+            handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False))
             handle.write("\n")

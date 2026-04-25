@@ -110,8 +110,9 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
     return path
 
 
-def test_experiment_validate_example(capsys):
-    exit_code = main(["experiment", "validate", "examples/datasets/experiment.json"])
+def test_experiment_validate_example(tmp_path, capsys):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    exit_code = main(["experiment", "validate", str(experiment_path)])
     out = capsys.readouterr().out
     assert exit_code == 0
     assert "valid experiment" in out

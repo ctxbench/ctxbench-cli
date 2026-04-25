@@ -5,11 +5,11 @@ from copa.ai.strategies.base import StrategyAdapter
 from copa.ai.trace import TraceCollector
 
 DEFAULT_SYSTEM_INSTRUCTION = (
-    "You are given a researcher's Lattes CV as context.\n"
-    "Answer the question using only the information available in the provided context.\n"
+    "You are an assistant that answers questions about a researcher using his / her Lattes curriculum as context.\n"
+    "Your goal is to produce  accurate, concise and context-grounded answers.\n"
     "Guidelines:\n"
     "- Base your answer strictly on the provided data.\n"
-    "- If the answer is not explicitly or implicitly supported by the context, respond with: 'Not enough information.'\n"
+    "- Inform if the provided context isn't enough to answer the question\n"
     "- Be concise and precise.\n"
     "- Do not make assumptions or use external knowledge.\n"
 )
@@ -20,9 +20,8 @@ class InlineStrategy(StrategyAdapter):
         with trace.span("strategy.inline.execute", "strategy.inline.execute"):
             trace.record_steps(1)
             prompt = (
-                f"Context format: {request.context_format}\n\n"
-                f"Question:\n{request.question}\n\n"
-                f"Context:\n{request.context}\n"
+                f"# Question:\n{request.question}\n\n"
+                f"# Context:\n{request.context}\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
             model_input = ModelInput(
