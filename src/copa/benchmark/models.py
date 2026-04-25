@@ -82,6 +82,24 @@ class ExperimentExecution(BaseModel):
     jsonl: str | None = None
 
 
+class ExperimentScope(BaseModel):
+    instances: list[str] = Field(default_factory=list)
+    questions: list[str] = Field(default_factory=list)
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "ExperimentScope":
+        if isinstance(data, cls):
+            return data
+        if data is None:
+            return cls()
+        if not isinstance(data, dict):
+            raise ValidationError("ExperimentScope requires an object input.")
+        return cls(
+            instances=[str(item) for item in data.get("instances", []) if isinstance(item, str)],
+            questions=[str(item) for item in data.get("questions", []) if isinstance(item, str)],
+        )
+
+
 class ExperimentExpansion(BaseModel):
     output: str | None = None
     jsonl: str | None = None
@@ -158,6 +176,7 @@ class Experiment(BaseModel):
     name: str | None = None
     output: str = "outputs"
     dataset: ExperimentDataset
+    scope: ExperimentScope = Field(default_factory=ExperimentScope)
     factors: dict[str, list[Any]]
     params: ExperimentParams = Field(default_factory=ExperimentParams)
     expansion: ExperimentExpansion = Field(default_factory=ExperimentExpansion)
@@ -174,6 +193,8 @@ class Experiment(BaseModel):
         payload = dict(data)
         if "dataset" in payload:
             payload["dataset"] = ExperimentDataset.model_validate(payload["dataset"])
+        if "scope" in payload:
+            payload["scope"] = ExperimentScope.model_validate(payload["scope"])
         if "params" in payload:
             payload["params"] = ExperimentParams.model_validate(payload["params"])
         if "expansion" in payload and isinstance(payload["expansion"], dict):
@@ -218,12 +239,14 @@ class Experiment(BaseModel):
 class RunMetadata(BaseModel):
     canonicalId: str
     questionId: str
-    contextId: str
+    instanceId: str
     provider: str
     modelName: str | None = None
     strategy: str
     format: str
     repeatIndex: int
+    questionTags: list[str] = Field(default_factory=list)
+    validationType: str | None = None
 
 
 class RunSpec(BaseModel):
@@ -233,7 +256,7 @@ class RunSpec(BaseModel):
     dataset: ExperimentDataset
     experimentPath: str | None = None
     questionId: str
-    contextId: str
+    instanceId: str
     provider: str
     modelName: str | None = None
     strategy: str
@@ -254,6 +277,8 @@ class RunSpec(BaseModel):
         payload = dict(data)
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
+        if "instanceId" not in payload and "contextId" in payload:
+            payload["instanceId"] = payload.get("contextId")
         original_id = str(payload.get("id") or "")
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
@@ -262,7 +287,7 @@ class RunSpec(BaseModel):
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
                 "questionId": payload.get("questionId", ""),
-                "contextId": payload.get("contextId", ""),
+                "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
                 "modelName": payload.get("modelName"),
                 "strategy": payload.get("strategy", ""),
@@ -276,12 +301,14 @@ class RunSpec(BaseModel):
             "runId": self.runId,
             "experimentId": self.experimentId,
             "questionId": self.questionId,
-            "contextId": self.contextId,
+            "instanceId": self.instanceId,
             "model": self.modelName,
             "provider": self.provider,
             "strategy": self.strategy,
             "format": self.format,
             "repeatIndex": self.repeatIndex,
+            "questionTags": list(self.metadata.questionTags),
+            "validationType": self.metadata.validationType,
         }
 
 
@@ -314,7 +341,7 @@ class RunResult(BaseModel):
     experimentId: str
     dataset: ExperimentDataset
     questionId: str
-    contextId: str
+    instanceId: str
     provider: str
     modelName: str | None = None
     strategy: str
@@ -326,6 +353,7 @@ class RunResult(BaseModel):
     errorMessage: str | None = None
     timing: RunTiming
     usage: dict[str, Any] = Field(default_factory=dict)
+    metricsSummary: dict[str, Any] = Field(default_factory=dict)
     trace: RunTrace = Field(default_factory=RunTrace)
     traceRef: str | None = None
     evaluation: EvaluationResult = Field(default_factory=EvaluationResult)
@@ -340,6 +368,8 @@ class RunResult(BaseModel):
         payload = dict(data)
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
+        if "instanceId" not in payload and "contextId" in payload:
+            payload["instanceId"] = payload.get("contextId")
         original_id = str(payload.get("id") or "")
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
@@ -347,7 +377,7 @@ class RunResult(BaseModel):
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
                 "questionId": payload.get("questionId", ""),
-                "contextId": payload.get("contextId", ""),
+                "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
                 "modelName": payload.get("modelName"),
                 "strategy": payload.get("strategy", ""),
@@ -359,12 +389,20 @@ class RunResult(BaseModel):
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
         return {
             "runId": self.runId,
+            "experimentId": self.experimentId,
+            "questionId": self.questionId,
+            "instanceId": self.instanceId,
+            "provider": self.provider,
+            "model": self.modelName,
+            "strategy": self.strategy,
+            "format": self.format,
             "repeatIndex": self.repeatIndex,
             "status": self.status,
             "answer": self.answer,
             "errorMessage": self.errorMessage,
             "timing": self.timing.model_dump(mode="json"),
             "usage": self.usage,
+            "metricsSummary": self.metricsSummary,
             "traceRef": trace_ref,
         }
 
@@ -390,12 +428,11 @@ class EvaluationItemResult(BaseModel):
     experimentId: str
     runId: str
     questionId: str
+    instanceId: str | None = None
     question: str
     evaluationMode: str
     status: str = "evaluated"
     evaluationMethod: str | None = None
-    score: float | None = None
-    label: str | None = None
     details: dict[str, Any] = Field(default_factory=dict)
     executionModel: str | None = None
     executionStrategy: str | None = None
@@ -404,6 +441,9 @@ class EvaluationItemResult(BaseModel):
     executionOutputTokens: int | None = None
     executionDurationMs: int | None = None
     executionToolCalls: int | None = None
+    executionFunctionCalls: int | None = None
+    executionLlmCalls: int | None = None
+    questionTags: list[str] = Field(default_factory=list)
     evaluationJudgeUsed: bool = False
     evaluationJudgeRole: str | None = None
     evaluationJudgeProvider: str | None = None
@@ -418,18 +458,15 @@ class EvaluationItemResult(BaseModel):
             "experimentId": self.experimentId,
             "runId": self.runId,
             "questionId": self.questionId,
+            "instanceId": self.instanceId,
             "status": self.status,
             "evaluationMethod": self.evaluationMethod,
-            "score": self.score,
-            "label": self.label,
             "details": self.details,
         }
 
 
 class EvaluationRunSummary(BaseModel):
     itemCount: int = 0
-    meanScore: float | None = 0.0
-    labels: dict[str, int] = Field(default_factory=dict)
 
 
 class EvaluationRunResult(BaseModel):
@@ -451,7 +488,7 @@ class EvaluationRunResult(BaseModel):
             payload["metadata"] = {
                 "canonicalId": str(payload.get("runId", "")),
                 "questionId": payload.get("questionId", ""),
-                "contextId": "",
+                "instanceId": "",
                 "provider": "",
                 "modelName": None,
                 "strategy": "",
@@ -465,5 +502,3 @@ class EvaluationBatchSummary(BaseModel):
     experimentId: str
     runCount: int = 0
     itemCount: int = 0
-    meanScore: float | None = 0.0
-    labels: dict[str, int] = Field(default_factory=dict)

@@ -44,6 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("path", help="RunSpec JSON file, directory, or JSONL file")
     run_parser.add_argument("--out", help="Directory to write result JSON files")
     run_parser.add_argument("--jsonl", help="Optional JSONL file for run results")
+    run_parser.add_argument("--force", action="store_true", help="Re-execute runs even when result artifacts already exist")
     run_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     run_parser.add_argument("--progress", action="store_true", help="Show batch progress")
     run_parser.set_defaults(
@@ -51,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
             args.path,
             out_dir=args.out,
             jsonl_path=args.jsonl,
+            force=args.force,
             verbose=args.verbose,
             progress=args.progress,
         )
@@ -63,10 +65,11 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("--experiment", required=True, help="Experiment JSON file")
     eval_parser.add_argument("--output-dir", help="Directory to write evaluation JSON files")
     eval_parser.add_argument("--output-jsonl", help="Optional JSONL file for flattened evaluation rows")
+    eval_parser.add_argument("--output-csv", help="Optional CSV file for flattened evaluation rows")
     eval_parser.add_argument("--only", help="Evaluate only one question id")
     eval_parser.add_argument(
         "--mode",
-        choices=["exact", "analytical", "unanswerable"],
+        choices=["heuristic", "judge"],
         help="Evaluate only one evaluation mode",
     )
     eval_parser.add_argument("--continue-on-error", action="store_true", help="Keep evaluating after an item error")
@@ -80,6 +83,7 @@ def build_parser() -> argparse.ArgumentParser:
             experiment_path=args.experiment,
             output_dir=args.output_dir,
             output_jsonl=args.output_jsonl,
+            output_csv=args.output_csv,
             only=args.only,
             mode=args.mode,
             continue_on_error=args.continue_on_error,

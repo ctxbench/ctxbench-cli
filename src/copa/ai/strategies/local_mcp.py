@@ -9,9 +9,10 @@ from copa.ai.trace import TraceCollector
 
 DEFAULT_LOCAL_MCP_SYSTEM_INSTRUCTION = (
     "You are answering questions about a researcher.\n"
-    "You have access to MCP tools that return researcher information.\n"
+    "You have access to MCP tools over the parsed curriculum sections.\n"
     "Guidelines:\n"
     "- Use only the available information from the MCP tools to answer the question.\n"
+    "- First inspect available sections when needed, then request only the sections needed.\n"
     "- Every tool call must include the exact provided lattesId.\n"
     "- If the information is insufficient, respond with: 'Not enough information.'\n"
     "- Be concise and precise.\n"
@@ -38,6 +39,7 @@ class LocalMCPStrategy(StrategyAdapter):
             prompt = (
                 f"Question:\n{request.question}\n\n"
                 f"Researcher Lattes ID:\n{lattes_id}\n\n"
+                "Tool usage:\n- listSections lists the parsed curriculum sections.\n- getSection returns one section by exact name.\n\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
 
@@ -123,7 +125,7 @@ class LocalMCPStrategy(StrategyAdapter):
 
 
 def _resolve_lattes_id(request: AIRequest) -> str:
-    value = request.metadata.get("lattes_id") or request.metadata.get("context_id")
+    value = request.metadata.get("lattes_id") or request.metadata.get("instance_id")
     if not isinstance(value, str) or not value:
         raise ValueError("Local MCP strategy requires request.metadata['lattes_id'].")
     return value

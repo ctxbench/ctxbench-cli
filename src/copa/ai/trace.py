@@ -38,6 +38,19 @@ class AIMetrics(BaseModel):
     rate_limit_wait_ms: int | None = None
     retry_count: int = 0
     retry_sleep_ms: int | None = None
+    experiment_duration: int | None = None
+    strategy_duration: int | None = None
+    function_exec_duration: int | None = None
+    tool_exec_duration: int | None = None
+    llm_exec_duration: int | None = None
+    function_call_count: int | None = None
+    tool_call_count_semantic: int | None = None
+    llm_call_count: int | None = None
+    prompt_tokens: int | None = None
+    question_tokens: int | None = None
+    function_tokens: int | None = None
+    tool_tokens: int | None = None
+    total_llm_tokens: int | None = None
 
 
 class AITrace(BaseModel):
@@ -313,6 +326,16 @@ class TraceCollector:
         if strategy is None:
             self.metrics.benchmark_duration_ms = None
             self.metrics.loop_control_duration_ms = None
-            return
-        self.metrics.benchmark_duration_ms = max(0, strategy - model)
-        self.metrics.loop_control_duration_ms = max(0, strategy - model - function)
+        else:
+            self.metrics.benchmark_duration_ms = max(0, strategy - model)
+            self.metrics.loop_control_duration_ms = max(0, strategy - model - function)
+        self.metrics.experiment_duration = self.metrics.total_duration_ms
+        self.metrics.strategy_duration = self.metrics.strategy_duration_ms
+        self.metrics.function_exec_duration = self.metrics.function_execution_duration_ms
+        self.metrics.tool_exec_duration = self.metrics.function_execution_duration_ms
+        self.metrics.llm_exec_duration = self.metrics.model_duration_ms
+        self.metrics.function_call_count = self.metrics.tool_call_count
+        self.metrics.tool_call_count_semantic = self.metrics.mcp_tool_calls
+        self.metrics.llm_call_count = self.metrics.model_calls
+        self.metrics.prompt_tokens = self.metrics.input_tokens
+        self.metrics.total_llm_tokens = self.metrics.total_tokens

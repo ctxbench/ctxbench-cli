@@ -3,19 +3,19 @@ from __future__ import annotations
 from pathlib import Path
 
 
-FORMAT_EXTENSIONS = {
-    "json": ".json",
-    "html": ".html",
-    "xml": ".xml",
-    "text": ".txt",
-    "plain": ".txt",
-    "txt": ".txt",
+FORMAT_ARTIFACTS = {
+    "html": "raw.html",
+    "raw_html": "raw.html",
+    "cleaned_html": "cleaned.html",
+    "json": "parsed.json",
+    "parsed_json": "parsed.json",
+    "blocks": "blocks.json",
 }
 
 
-def extension_for_format(format_name: str) -> str:
-    return FORMAT_EXTENSIONS.get(format_name, f".{format_name}")
+def artifact_name_for_format(format_name: str) -> str:
+    return FORMAT_ARTIFACTS.get(format_name, format_name)
 
 
 def context_path(context_dir: str | Path, context_id: str, format_name: str) -> Path:
-    return Path(context_dir) / f"{context_id}{extension_for_format(format_name)}"
+    return Path(context_dir) / context_id / artifact_name_for_format(format_name)

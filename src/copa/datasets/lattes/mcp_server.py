@@ -6,7 +6,6 @@ from pathlib import Path
 from fastmcp import FastMCP
 
 from copa.ai.models.base import ToolResult, ToolSpec
-from copa.datasets.lattes.provider import LattesProvider
 from copa.datasets.lattes.tools import LattesToolService
 
 
@@ -15,7 +14,7 @@ class LattesMCPServer:
         self,
         *,
         contexts_dir: str,
-        provider: LattesProvider | None = None,
+        provider: object | None = None,
     ) -> None:
         self._service = LattesToolService(
             contexts_dir=contexts_dir,
@@ -32,41 +31,15 @@ class LattesMCPServer:
         self._tool_specs = self._service.list_tools()
 
     def _register_tools(self) -> None:
-        @self.app.tool(name="basicInformation", description="Return basic profile information for a researcher.")
-        async def basic_information(lattesId: str) -> dict[str, object]:
-            return self.call_tool("basicInformation", {"lattesId": lattesId}).content
+        @self.app.tool(name="listSections", description="List available sections for a researcher.")
+        async def list_sections(lattesId: str) -> list[str]:
+            return self.call_tool("listSections", {"lattesId": lattesId}).content
 
-        @self.app.tool(name="education", description="Return education history for a researcher.")
-        async def education(lattesId: str) -> list[dict[str, object]]:
-            return self.call_tool("education", {"lattesId": lattesId}).content
-
-        @self.app.tool(name="linesOfResearch", description="Return lines of research for a researcher.")
-        async def lines_of_research(lattesId: str) -> list[str]:
-            return self.call_tool("linesOfResearch", {"lattesId": lattesId}).content
-
-        @self.app.tool(name="listProjects", description="List projects for a researcher, optionally filtered by year.")
-        async def list_projects(
-            lattesId: str,
-            startYear: int | None = None,
-            endYear: int | None = None,
-        ) -> list[dict[str, object]]:
+        @self.app.tool(name="getSection", description="Return one parsed section for a researcher.")
+        async def get_section(lattesId: str, sectionName: str) -> object:
             return self.call_tool(
-                "listProjects",
-                {"lattesId": lattesId, "startYear": startYear, "endYear": endYear},
-            ).content
-
-        @self.app.tool(
-            name="listPublications",
-            description="List publications for a researcher, optionally filtered by year.",
-        )
-        async def list_publications(
-            lattesId: str,
-            startYear: int | None = None,
-            endYear: int | None = None,
-        ) -> list[dict[str, object]]:
-            return self.call_tool(
-                "listPublications",
-                {"lattesId": lattesId, "startYear": startYear, "endYear": endYear},
+                "getSection",
+                {"lattesId": lattesId, "sectionName": sectionName},
             ).content
 
     def list_tools(self) -> list[ToolSpec]:
@@ -82,7 +55,7 @@ class LattesMCPServer:
         self._service.close()
 
 
-def build_lattes_mcp_server(*, contexts_dir: str, provider: LattesProvider | None = None) -> LattesMCPServer:
+def build_lattes_mcp_server(*, contexts_dir: str, provider: object | None = None) -> LattesMCPServer:
     return LattesMCPServer(contexts_dir=contexts_dir, provider=provider)
 
 

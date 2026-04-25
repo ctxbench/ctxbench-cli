@@ -43,7 +43,7 @@ def expand_experiment(
         "LOAD",
         "Dataset loading completed",
         questions=len(provider.list_question_ids()),
-        instances=len(provider._question_instances.instances),
+        instances=len(provider.list_instance_ids()),
     )
     runspecs = generate_runspecs(experiment, base_dir, experiment_path=path)
     logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(runspecs))

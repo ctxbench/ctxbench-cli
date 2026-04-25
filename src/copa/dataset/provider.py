@@ -3,14 +3,24 @@ from __future__ import annotations
 from pathlib import Path
 
 from copa.benchmark.models import Experiment, ExperimentDataset
-from copa.dataset.contexts import context_path, extension_for_format
 from copa.dataset.questions import (
     Question,
     QuestionDataset,
     QuestionInstance,
     QuestionInstanceDataset,
+    QuestionInstanceEntry,
 )
 from copa.util.fs import load_json
+
+
+FORMAT_ARTIFACTS = {
+    "html": "raw.html",
+    "raw_html": "raw.html",
+    "cleaned_html": "cleaned.html",
+    "json": "parsed.json",
+    "parsed_json": "parsed.json",
+    "blocks": "blocks.json",
+}
 
 
 class DatasetProvider:
@@ -32,101 +42,63 @@ class DatasetProvider:
     def list_question_ids(self) -> list[str]:
         return [question.id for question in self._questions.questions]
 
+    def list_instance_ids(self) -> list[str]:
+        return [instance.instanceId for instance in self._question_instances.instances]
+
+    def list_context_ids(self, format_name: str | None = None) -> list[str]:
+        return self.list_instance_ids()
+
     def get_question(self, question_id: str) -> Question:
         for question in self._questions.questions:
             if question.id == question_id:
                 return question
         raise KeyError(f"Unknown question id: {question_id}")
 
-    def list_context_ids(self, format_name: str) -> list[str]:
-        contexts_dir = Path(self.dataset_paths.contexts)
-        suffix = extension_for_format(format_name)
-        return sorted(path.stem for path in contexts_dir.glob(f"*{suffix}") if path.is_file())
+    def get_instance(self, instance_id: str) -> QuestionInstance:
+        for instance in self._question_instances.instances:
+            if instance.instanceId == instance_id:
+                return instance
+        raise KeyError(f"Unknown instance id: {instance_id}")
 
-    def get_context(self, context_id: str, format_name: str) -> str:
-        path = context_path(self.dataset_paths.contexts, context_id, format_name)
+    def get_question_instance(self, question_id: str, context_id: str) -> QuestionInstanceEntry | None:
+        instance = self.get_instance(context_id)
+        return instance.get_question(question_id)
+
+    def list_question_ids_for_instance(self, instance_id: str) -> list[str]:
+        instance = self.get_instance(instance_id)
+        return [item.id for item in instance.questions]
+
+    def get_instance_dir(self, instance_id: str) -> Path:
+        path = Path(self.dataset_paths.contexts) / instance_id
+        if not path.exists() or not path.is_dir():
+            raise FileNotFoundError(f"Missing context directory for instance '{instance_id}': {path}")
+        return path
+
+    def get_context_artifact_path(self, instance_id: str, format_name: str) -> Path:
+        filename = FORMAT_ARTIFACTS.get(format_name, format_name)
+        path = self.get_instance_dir(instance_id) / filename
         if not path.exists():
             raise FileNotFoundError(f"Missing context artifact: {path}")
+        return path
+
+    def get_context(self, context_id: str, format_name: str) -> str:
+        path = self.get_context_artifact_path(context_id, format_name)
         return path.read_text(encoding="utf-8")
 
-    def get_question_instance(self, question_id: str, context_id: str) -> QuestionInstance | None:
-        for instance in self._question_instances.instances:
-            instance_key = instance.instanceId or instance.cvId
-            if instance.questionId == question_id and instance_key == context_id:
-                return instance
-        question = self.get_question(question_id)
-        return None if question is None else None
+    def get_context_blocks(self, instance_id: str) -> dict[str, object]:
+        instance = self.get_instance(instance_id)
+        path = Path(self.dataset_paths.root) / instance.contextBlocks
+        if not path.exists():
+            path = self.get_instance_dir(instance_id) / "blocks.json"
+        payload = load_json(path)
+        if not isinstance(payload, dict):
+            raise ValueError(f"Context blocks must be a JSON object: {path}")
+        return payload
 
     def _load_question_instances(self, path: str | None) -> QuestionInstanceDataset:
         if not path or not Path(path).exists():
             return QuestionInstanceDataset(datasetId="missing", instances=[])
-        raw = self._normalize_question_instance_dataset(load_json(path), path)
-        for instance in raw.get("instances", []):
-            if "evaluationType" not in instance:
-                question = next(
-                    (item for item in self._questions.questions if item.id == instance["questionId"]),
-                    None,
-                )
-                if question is not None:
-                    instance["evaluationType"] = question.evaluationType
-        return QuestionInstanceDataset.model_validate(raw)
-
-    def _normalize_question_instance_dataset(
-        self, raw: object, path: str
-    ) -> dict[str, object]:
-        if isinstance(raw, list):
-            payload: dict[str, object] = {
-                "datasetId": Path(path).stem,
-                "instances": raw,
-            }
-        elif isinstance(raw, dict):
-            payload = dict(raw)
-        else:
-            raise ValueError("Question instances dataset must be an object or an array.")
-
-        raw_instances = payload.get("instances", [])
-        if not isinstance(raw_instances, list):
-            raise ValueError("Question instances dataset field 'instances' must be a list.")
-
-        payload["instances"] = [self._normalize_question_instance(item) for item in raw_instances]
-        return payload
-
-    def _normalize_question_instance(self, raw: object) -> dict[str, object]:
+        raw = load_json(path)
         if not isinstance(raw, dict):
-            raise ValueError("Question instance entries must be objects.")
-
-        metadata = raw.get("metadata", {})
-        if not isinstance(metadata, dict):
-            metadata = {}
-
-        normalized = dict(raw)
-        instance_id = str(
-            raw.get("instanceId")
-            or raw.get("cvId")
-            or raw.get("contextId")
-            or raw.get("lattesId")
-            or ""
-        )
-        normalized["instanceId"] = instance_id or None
-        normalized["cvId"] = str(
-            raw.get("cvId")
-            or raw.get("instanceId")
-            or raw.get("contextId")
-            or raw.get("lattesId")
-            or ""
-        )
-        if raw.get("researcherName") is None and metadata.get("researcherName") is not None:
-            normalized["researcherName"] = metadata["researcherName"]
-        if raw.get("lattesId") is None and instance_id:
-            normalized["lattesId"] = instance_id
-        normalized["metadata"] = metadata
-        if raw.get("evaluationContext") is None and metadata.get("evaluationContext") is not None:
-            normalized["evaluationContext"] = metadata["evaluationContext"]
-        if (
-            raw.get("evaluationContextByDimension") is None
-            and metadata.get("evaluationContextByDimension") is not None
-        ):
-            normalized["evaluationContextByDimension"] = metadata["evaluationContextByDimension"]
-        if raw.get("normalizationHints") is None and metadata.get("normalizationHints") is not None:
-            normalized["normalizationHints"] = metadata["normalizationHints"]
-        return normalized
+            raise ValueError("Question instances dataset must be a JSON object.")
+        return QuestionInstanceDataset.model_validate(raw)

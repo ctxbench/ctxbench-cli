@@ -7,6 +7,7 @@ from copa.benchmark.evaluation import (
     build_evaluation_summary_rows,
     evaluate_run_results,
     evaluation_output_paths,
+    export_evaluation_rows_csv,
     load_experiment_for_evaluation,
     runspec_index_for_experiment,
 )
@@ -58,7 +59,7 @@ def load_results_from_input(
     )
     if not payloads:
         return []
-    if "questionId" in payloads[0]:
+    if "dataset" in payloads[0]:
         return [RunResult.model_validate(item) for item in payloads]
 
     experiment, base_dir = load_experiment_for_evaluation(experiment_path)
@@ -77,7 +78,7 @@ def load_results_from_input(
                 experimentId=runspec.experimentId,
                 dataset=runspec.dataset,
                 questionId=runspec.questionId,
-                contextId=runspec.contextId,
+                instanceId=runspec.instanceId,
                 provider=runspec.provider,
                 modelName=runspec.modelName,
                 strategy=runspec.strategy,
@@ -89,6 +90,7 @@ def load_results_from_input(
                 errorMessage=payload.get("errorMessage"),
                 timing=payload.get("timing", {}),
                 usage=payload.get("usage", {}),
+                metricsSummary=payload.get("metricsSummary", {}),
                 trace=trace_payload,
                 traceRef=payload.get("traceRef"),
                 metadata=runspec.metadata,
@@ -157,6 +159,7 @@ def eval_command(
     experiment_path: str,
     output_dir: str | None = None,
     output_jsonl: str | None = None,
+    output_csv: str | None = None,
     only: str | None = None,
     mode: str | None = None,
     continue_on_error: bool = False,
@@ -230,6 +233,9 @@ def eval_command(
         build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir)).model_dump(mode="json"),
     )
     logger.phase("WRITE", "Artifact written", path=summary_path)
+    if output_csv:
+        csv_path = export_evaluation_rows_csv(_load_persisted_evaluation_rows(target_dir), output_csv)
+        logger.phase("WRITE", "Artifact written", path=csv_path)
 
     if target_jsonl is not None:
         print(

@@ -97,8 +97,6 @@ def serialize_evaluation_result(
             "questionId": result.questionId,
             "status": "not_evaluated",
             "evaluationMethod": None,
-            "score": 0.0,
-            "label": "not_evaluated",
             "details": {},
             "traceRef": trace_ref,
         }

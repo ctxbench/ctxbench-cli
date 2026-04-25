@@ -9,7 +9,7 @@ class RunIdentity(Protocol):
     runId: str
     experimentId: str
     questionId: str
-    contextId: str
+    instanceId: str
     provider: str
     modelName: str | None
     strategy: str
@@ -50,7 +50,7 @@ def canonical_identity_from_run(run: RunIdentity) -> str:
     return canonical_run_identity(
         experiment_id=run.experimentId,
         question_id=run.questionId,
-        instance_id=run.contextId,
+        instance_id=run.instanceId,
         provider=run.provider,
         model_name=run.modelName or "",
         strategy=run.strategy,

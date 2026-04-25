@@ -35,15 +35,28 @@ def generate_runspecs(
     experiment_path: str | Path | None = None,
 ) -> list[RunSpec]:
     provider = DatasetProvider.from_experiment(experiment, base_dir)
-    questions = provider.list_question_ids()
+    scoped_questions = set(experiment.scope.questions)
+    scoped_instances = set(experiment.scope.instances)
+    questions = [
+        question_id for question_id in provider.list_question_ids()
+        if not scoped_questions or question_id in scoped_questions
+    ]
+    instance_ids = [
+        instance_id for instance_id in provider.list_instance_ids()
+        if not scoped_instances or instance_id in scoped_instances
+    ]
     models = resolve_models(experiment)
     strategies = experiment.factors.get("strategy", [])
     formats = experiment.factors.get("format", [])
     output_root = str((Path(base_dir) / experiment.output).resolve())
     draft_specs: list[dict[str, Any]] = []
-    for question_id in questions:
-        for format_name in formats:
-            for context_id in provider.list_context_ids(format_name):
+    for instance_id in instance_ids:
+        available_questions = set(provider.list_question_ids_for_instance(instance_id))
+        for question_id in questions:
+            if question_id not in available_questions:
+                continue
+            question = provider.get_question(question_id)
+            for format_name in formats:
                 for model in models:
                     provider_name = model["provider"]
                     model_name = model["name"]
@@ -53,7 +66,7 @@ def generate_runspecs(
                             canonical_id = canonical_run_identity(
                                 experiment.id,
                                 question_id,
-                                context_id,
+                                instance_id,
                                 provider_name,
                                 model_name,
                                 strategy_name,
@@ -69,7 +82,7 @@ def generate_runspecs(
                                     if experiment_path
                                     else None,
                                     "questionId": question_id,
-                                    "contextId": context_id,
+                                    "instanceId": instance_id,
                                     "provider": provider_name,
                                     "modelName": model_name,
                                     "strategy": strategy_name,
@@ -79,6 +92,8 @@ def generate_runspecs(
                                     "outputRoot": output_root,
                                     "evaluationEnabled": experiment.evaluation.enabled,
                                     "trace": experiment.trace,
+                                    "questionTags": list(question.tags),
+                                    "validationType": question.validation.type,
                                 }
                             )
 
@@ -93,7 +108,7 @@ def generate_runspecs(
                 dataset=item["dataset"],
                 experimentPath=item["experimentPath"],
                 questionId=item["questionId"],
-                contextId=item["contextId"],
+                instanceId=item["instanceId"],
                 provider=item["provider"],
                 modelName=item["modelName"],
                 strategy=item["strategy"],
@@ -106,12 +121,14 @@ def generate_runspecs(
                 metadata=RunMetadata(
                     canonicalId=item["canonical_id"],
                     questionId=item["questionId"],
-                    contextId=item["contextId"],
+                    instanceId=item["instanceId"],
                     provider=item["provider"],
                     modelName=item["modelName"],
                     strategy=item["strategy"],
                     format=item["format"],
                     repeatIndex=item["repeatIndex"],
+                    questionTags=item["questionTags"],
+                    validationType=item["validationType"],
                 ),
             )
         )

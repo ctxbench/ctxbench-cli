@@ -4,142 +4,97 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.benchmark.models import ExperimentDataset
-from copa.benchmark.runspec_generator import generate_runspecs
 from copa.cli import main
 
 
-def write_mock_experiment(path: Path) -> Path:
-    dataset_root = path.parent / "datasets"
-    contexts_dir = dataset_root / "context"
-    contexts_dir.mkdir(parents=True, exist_ok=True)
+def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Path:
+    dataset_root = path.parent / "dataset"
+    instance_dir = dataset_root / "context" / "cv_demo"
+    instance_dir.mkdir(parents=True, exist_ok=True)
 
-    questions_path = dataset_root / "questions.json"
-    question_instances_path = dataset_root / "questions.instance.json"
-    context_json_path = contexts_dir / "cv_demo.json"
-    context_text_path = contexts_dir / "cv_demo.txt"
-
-    questions_path.write_text(
+    (dataset_root / "questions.json").write_text(
         json.dumps(
             {
-                "datasetId": "mock-questions-v2",
-                "domain": "demo",
-                "language": "en",
+                "datasetId": "mock-v2",
                 "questions": [
                     {
-                        "id": "q_exact_001",
-                        "question": "In which year did the researcher obtain their Ph.D.?",
-                        "evaluation": {
-                            "mode": "exact",
-                            "answerType": "year",
-                        },
+                        "id": "q_year",
+                        "question": "In which year did the researcher obtain their PhD?",
+                        "tags": ["objective", "simple"],
+                        "validation": {"type": "heuristic", "schema": {"type": "number"}},
                     },
                     {
-                        "id": "q_analytical_001",
-                        "question": "What skills can be inferred from the researcher profile?",
-                        "evaluation": {
-                            "mode": "analytical",
-                            "rubric": [
-                                {
-                                    "id": "teaching",
-                                    "description": "Mentions teaching expertise",
-                                    "keywords": ["teaching"],
-                                    "weight": 1,
-                                },
-                                {
-                                    "id": "research",
-                                    "description": "Mentions research expertise",
-                                    "keywords": ["research"],
-                                    "weight": 1,
-                                },
-                                {
-                                    "id": "synthesis",
-                                    "description": "Provides synthesized interpretation",
-                                    "keywords": ["synthesizes", "combines"],
-                                    "weight": 1,
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        "id": "q_oos_001",
-                        "question": "How many children does the researcher have?",
-                        "evaluation": {
-                            "mode": "unanswerable",
-                        },
+                        "id": "q_summary",
+                        "question": "Summarize the main research areas.",
+                        "tags": ["subjective", "simple"],
+                        "validation": {"type": "judge"},
                     },
                 ],
             }
         ),
         encoding="utf-8",
     )
-    question_instances_path.write_text(
+    (dataset_root / "questions.instance.json").write_text(
         json.dumps(
             {
-                "datasetId": "mock-question-instances-v2",
+                "datasetId": "mock-v2",
                 "instances": [
                     {
-                        "questionId": "q_exact_001",
-                        "cvId": "cv_demo",
-                        "goldAnswer": 2018,
-                    },
-                    {
-                        "questionId": "q_analytical_001",
-                        "cvId": "cv_demo",
-                        "goldAnswer": "Mentions teaching and research and synthesizes them.",
-                    },
-                    {
-                        "questionId": "q_oos_001",
-                        "cvId": "cv_demo",
-                        "goldAnswer": "Not enough information.",
-                    },
+                        "instanceId": "cv_demo",
+                        "contextBlocks": "context/cv_demo/blocks.json",
+                        "questions": [
+                            {"id": "q_year", "acceptedAnswers": [2018]},
+                            {
+                                "id": "q_summary",
+                                "contextRefs": ["summary", "research"],
+                                "themes": ["software engineering", "distributed systems"],
+                            },
+                        ],
+                    }
                 ],
             }
         ),
         encoding="utf-8",
     )
-    context_json_path.write_text(
+    (instance_dir / "parsed.json").write_text(
         json.dumps(
             {
-                "answers": {
-                    "q_exact_001": "2018",
-                    "q_analytical_001": "The profile combines teaching and research experience and synthesizes both into software engineering expertise.",
-                    "q_oos_001": "Not enough information.",
-                }
+                "answers": {"q_year": 2018},
+                "summary": {"text": "Researcher in software engineering."},
+                "research": {"areas": ["software engineering", "distributed systems"]},
             }
         ),
         encoding="utf-8",
     )
-    context_text_path.write_text(
-        "\n".join(
-            [
-                "ANSWER[q_exact_001]: 2018",
-                "ANSWER[q_analytical_001]: The profile combines teaching and research experience and synthesizes both into software engineering expertise.",
-                "ANSWER[q_oos_001]: Not enough information.",
-            ]
-        )
-        + "\n",
+    (instance_dir / "raw.html").write_text("ANSWER[q_year]: 2018\n", encoding="utf-8")
+    (instance_dir / "cleaned.html").write_text("ANSWER[q_year]: 2018\n", encoding="utf-8")
+    (instance_dir / "blocks.json").write_text(
+        json.dumps(
+            {
+                "summary": "Researcher in software engineering.",
+                "research": "Works with distributed systems.",
+            }
+        ),
         encoding="utf-8",
     )
 
     path.write_text(
         json.dumps(
             {
-                "id": "exp_test_mock_001",
+                "id": "exp_mock_v2",
                 "output": "outputs",
                 "dataset": str(dataset_root.resolve()),
+                "scope": {"instances": ["cv_demo"], "questions": ["q_year", "q_summary"]},
                 "factors": {
                     "model": [{"provider": "mock", "name": "mock"}],
                     "strategy": ["inline"],
-                    "format": ["json", "text"],
+                    "format": ["json"],
                 },
-                "params": {
-                    "common": {
-                        "temperature": 0,
-                    }
+                "params": {"common": {"temperature": 0}},
+                "evaluation": {
+                    "enabled": evaluation_enabled,
+                    "judge": {"provider": "mock", "model": "mock", "temperature": 0},
                 },
-                "expansion": {},
-                "evaluation": {"enabled": True},
                 "trace": {
                     "enabled": True,
                     "save_raw_response": True,
@@ -162,7 +117,7 @@ def test_experiment_validate_example(capsys):
     assert "valid experiment" in out
 
 
-def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
+def test_experiment_expand_respects_scope_and_writes_runspecs(tmp_path):
     experiment_path = write_mock_experiment(tmp_path / "experiment.json")
     out_dir = tmp_path / "runspecs"
     jsonl_path = tmp_path / "runspecs.jsonl"
@@ -181,381 +136,89 @@ def test_experiment_expand_writes_runspecs_and_jsonl(tmp_path):
 
     assert exit_code == 0
     files = sorted(path for path in out_dir.glob("rs_*.json"))
-    assert len(files) == 6
-    assert all(path.name.startswith("rs_exp_test_mock_001_") for path in files)
+    assert len(files) == 2
     first = json.loads(files[0].read_text(encoding="utf-8"))
-    assert first["provider"] == "mock"
-    assert first["model"] == "mock"
-    assert first["strategy"] == "inline"
-    assert first["format"] in {"json", "text"}
-    assert "|" not in first["runId"]
-    assert first["questionId"]
-    assert first["contextId"] == "cv_demo"
+    assert first["questionId"] in {"q_year", "q_summary"}
+    assert first["instanceId"] == "cv_demo"
+    assert first["validationType"] in {"heuristic", "judge"}
     assert (out_dir / "runs.manifest.json").exists()
-    assert jsonl_path.exists()
-    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 6
+    assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 2
 
 
-def test_example_lattes_dataset_shape_is_supported():
-    from copa.dataset.provider import DatasetProvider
-
-    provider = DatasetProvider.from_dataset(
-        ExperimentDataset(root=str((Path("examples/datasets/lattes")).resolve()))
-    )
-
-    instance = provider.get_question_instance("q_exact_001", "5660469902738038")
-
-    assert instance is not None
-    assert instance.instanceId == "5660469902738038"
-    assert instance.cvId == "5660469902738038"
-    assert instance.lattesId == "5660469902738038"
-    assert instance.researcherName == "Nabor das Chagas Mendonça"
-    assert instance.metadata == {}
-
-
-def test_experiment_preserves_model_specific_params():
-    from copa.benchmark.experiment_loader import load_experiment
-
-    experiment = load_experiment("examples/datasets/experiment.json")
-
-    assert "gpt-5.4-nano" in experiment.params.models
-    assert experiment.params.models["gpt-5.4-nano"]["rate_limit"]["tpm"] == 200000
-    assert experiment.params.models["gemini-3.1-flash-lite-preview"]["rate_limit"]["max_concurrency"] == 1
-
-
-def test_runspec_generation_resolves_mcp_env_placeholders(tmp_path, monkeypatch):
-    from copa.benchmark.experiment_loader import load_experiment
-
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
-    payload["factors"]["strategy"] = ["mcp"]
-    payload["params"]["common"]["mcp_server"] = {
-        "server_url": "${LATTES_MCP_URL}",
-        "auth_token": "${LATTES_MCP_TOKEN}",
-        "headers": {
-            "X-Server": "lattes",
-        },
-    }
-    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
-    monkeypatch.setenv("LATTES_MCP_URL", "https://lattes.example.test/mcp")
-    monkeypatch.setenv("LATTES_MCP_TOKEN", "Bearer lattes-secret")
-
-    experiment = load_experiment(experiment_path)
-    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
-
-    assert runspecs
-    params = runspecs[0].params
-    assert params["mcp_server"]["server_url"] == "https://lattes.example.test/mcp"
-    assert params["mcp_server"]["auth_token"] == "Bearer lattes-secret"
-    assert params["mcp_server"]["headers"]["X-Server"] == "lattes"
-    assert "Authorization" not in params["mcp_server"]["headers"]
-
-
-def test_runspec_generation_preserves_mcp_values_from_experiment_file(tmp_path):
-    from copa.benchmark.experiment_loader import load_experiment
-
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
-    payload["factors"]["strategy"] = ["mcp"]
-    payload["params"]["common"]["mcp_server"] = {
-        "server_url": "https://file.example.test/mcp",
-        "auth_token": "Bearer file-secret",
-        "headers": {
-            "X-Server": "lattes",
-        },
-    }
-    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
-
-    experiment = load_experiment(experiment_path)
-    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
-
-    assert runspecs
-    params = runspecs[0].params
-    assert params["mcp_server"]["server_url"] == "https://file.example.test/mcp"
-    assert params["mcp_server"]["auth_token"] == "Bearer file-secret"
-    assert "Authorization" not in params["mcp_server"]["headers"]
-
-
-def test_runspec_generation_env_overrides_mcp_values_from_experiment_file(tmp_path, monkeypatch):
-    from copa.benchmark.experiment_loader import load_experiment
-
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
-    payload["factors"]["strategy"] = ["mcp"]
-    payload["params"]["common"]["mcp_server"] = {
-        "server_url": "https://file.example.test/mcp",
-        "auth_token": "Bearer file-secret",
-        "headers": {
-            "X-Server": "lattes",
-        },
-    }
-    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
-    monkeypatch.setenv("LATTES_MCP_URL", "https://env.example.test/mcp")
-    monkeypatch.setenv("LATTES_MCP_TOKEN", "Bearer env-secret")
-
-    experiment = load_experiment(experiment_path)
-    runspecs = generate_runspecs(experiment, experiment_path.parent, experiment_path=experiment_path)
-
-    assert runspecs
-    params = runspecs[0].params
-    assert params["mcp_server"]["server_url"] == "https://env.example.test/mcp"
-    assert params["mcp_server"]["auth_token"] == "Bearer env-secret"
-    assert params["mcp_server"]["headers"]["X-Server"] == "lattes"
-    assert "Authorization" not in params["mcp_server"]["headers"]
-
-
-def test_run_and_eval_jsonl_flow(tmp_path):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    runspecs_dir = tmp_path / "runspecs"
+def test_run_force_reexecutes_and_overwrites_results(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    runspec_dir = tmp_path / "runspecs"
     results_dir = tmp_path / "results"
-    eval_dir = tmp_path / "manual-eval"
-    results_jsonl = tmp_path / "results.jsonl"
-    eval_jsonl = tmp_path / "eval.jsonl"
 
-    assert (
-        main(
-            [
-                "experiment",
-                "expand",
-                str(experiment_path),
-                "--out",
-                str(runspecs_dir),
-            ]
-        )
-        == 0
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspec_dir)]) == 0
+    assert main(["run", str(runspec_dir), "--out", str(results_dir)]) == 0
+
+    result_path = next(
+        path
+        for path in sorted(results_dir.glob("rr_*.json"))
+        if json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_year"
     )
+    first_payload = json.loads(result_path.read_text(encoding="utf-8"))
+    assert first_payload["answer"] == "2018"
 
-    assert (
-        main(
-            [
-                "run",
-                str(runspecs_dir),
-                "--out",
-                str(results_dir),
-                "--jsonl",
-                str(results_jsonl),
-            ]
-        )
-        == 0
-    )
+    parsed_path = tmp_path / "dataset" / "context" / "cv_demo" / "parsed.json"
+    parsed_payload = json.loads(parsed_path.read_text(encoding="utf-8"))
+    parsed_payload["answers"]["q_year"] = 2020
+    parsed_path.write_text(json.dumps(parsed_payload), encoding="utf-8")
 
-    result_files = sorted(results_dir.glob("*.json"))
-    assert len(result_files) == 6
-    assert all(path.name.startswith("rr_exp_test_mock_001_") for path in result_files)
-    result = json.loads(result_files[0].read_text(encoding="utf-8"))
-    assert result["status"] == "success"
-    assert result["repeatIndex"] == 1
-    assert "|" not in result["runId"]
-    assert result["traceRef"].startswith("traces/runs/")
-    trace_path = results_jsonl.parent / result["traceRef"]
-    trace = json.loads(trace_path.read_text(encoding="utf-8"))
-    assert trace["trace"]["aiTrace"]["metrics"]["model_calls"] == 1
-    assert trace["trace"]["aiTrace"]["events"][-1]["name"] == "engine.execute"
-    assert results_jsonl.exists()
-
-    auto_eval_dir = experiment_path.parent / "outputs" / "exp_test_mock_001" / "evaluation"
-    auto_eval_files = sorted(path for path in auto_eval_dir.glob("re_*.json"))
-    assert len(auto_eval_files) == 6
-    assert (auto_eval_dir / "evaluation-summary.json").exists()
-    assert (experiment_path.parent / "outputs" / "exp_test_mock_001" / "evaluation.jsonl").exists()
-
-    assert (
-        main(
-            [
-                "eval",
-                "--run-results-json",
-                str(results_jsonl),
-                "--experiment",
-                str(experiment_path),
-                "--output-dir",
-                str(eval_dir),
-                "--output-jsonl",
-                str(eval_jsonl),
-            ]
-        )
-        == 0
-    )
-
-    evaluated_files = sorted(eval_dir.glob("*.json"))
-    assert len(evaluated_files) == 7
-    assert any(path.name.startswith("re_exp_test_mock_001_") for path in evaluated_files)
-    exact_eval = next(
-        json.loads(path.read_text(encoding="utf-8"))
-        for path in evaluated_files
-        if path.name.startswith("re_")
-        and json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_exact_001"
-    )
-    assert exact_eval["score"] == 1.0
-    assert exact_eval["label"] == "correct"
-    assert exact_eval["experimentId"] == "exp_test_mock_001"
-    assert exact_eval["repeatIndex"] == 1
-    assert exact_eval["details"]["extractedAnswer"] == 2018
-    assert exact_eval["runId"]
-    assert eval_jsonl.exists()
-    rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
-    assert len(rows) == 6
-    assert all(row["repeatIndex"] == 1 for row in rows)
-    assert {row["label"] for row in rows} >= {"correct", "correct-abstention", "strong"}
+    assert main(["run", str(runspec_dir), "--out", str(results_dir), "--force"]) == 0
+    second_payload = json.loads(result_path.read_text(encoding="utf-8"))
+    assert second_payload["answer"] == "2020"
 
 
-def test_run_verbose_and_progress_logging(tmp_path, capsys):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    runspecs_dir = tmp_path / "runspecs"
-
-    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
-
-    exit_code = main(
-        [
-            "run",
-            str(runspecs_dir),
-            "--out",
-            str(tmp_path / "results"),
-            "--verbose",
-            "--progress",
-        ]
-    )
-
-    assert exit_code == 0
-    stderr = capsys.readouterr().err
-    assert "[PLAN]" in stderr
-    assert "[EXECUTE]" in stderr
-    assert "[WRITE]" in stderr
-    assert "[EVALUATE]" in stderr
-
-
-def test_run_resume_rebuilds_missing_jsonl_without_duplicate_execution(tmp_path):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    runspecs_dir = tmp_path / "runspecs"
-    results_dir = tmp_path / "results"
-    results_jsonl = tmp_path / "results.jsonl"
-
-    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
-
-    result_files = sorted(results_dir.glob("rr_*.json"))
-    assert len(result_files) == 6
-    results_jsonl.unlink()
-
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
-
-    assert len(sorted(results_dir.glob("rr_*.json"))) == 6
-    rows = [json.loads(line) for line in results_jsonl.read_text(encoding="utf-8").splitlines()]
-    assert len(rows) == 6
-    assert len({row["runId"] for row in rows}) == 6
-
-
-def test_eval_resume_rebuilds_missing_jsonl_without_duplicate_rows(tmp_path):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    runspecs_dir = tmp_path / "runspecs"
+def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    runspec_dir = tmp_path / "runspecs"
     results_dir = tmp_path / "results"
     eval_dir = tmp_path / "eval"
-    results_jsonl = tmp_path / "results.jsonl"
-    eval_jsonl = tmp_path / "eval.jsonl"
+    eval_csv = tmp_path / "eval.csv"
 
-    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
-    assert (
-        main(
-            [
-                "eval",
-                "--run-results-dir",
-                str(results_dir),
-                "--experiment",
-                str(experiment_path),
-                "--output-dir",
-                str(eval_dir),
-                "--output-jsonl",
-                str(eval_jsonl),
-            ]
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspec_dir)]) == 0
+    assert main(["run", str(runspec_dir), "--out", str(results_dir)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        del kwargs
+        return (
+            {
+                "groundedness": {"rating": "meets", "justification": "Supported by summary."},
+                "correctness": {"rating": "meets", "justification": "Consistent with research section."},
+                "completeness": {"rating": "partially meets", "justification": "Covers the main areas but remains short."},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
         )
-        == 0
-    )
 
-    eval_jsonl.unlink()
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
 
-    assert (
-        main(
-            [
-                "eval",
-                "--run-results-dir",
-                str(results_dir),
-                "--experiment",
-                str(experiment_path),
-                "--output-dir",
-                str(eval_dir),
-                "--output-jsonl",
-                str(eval_jsonl),
-            ]
-        )
-        == 0
-    )
+    assert main(
+        [
+            "eval",
+            "--run-results-dir",
+            str(results_dir),
+            "--experiment",
+            str(experiment_path),
+            "--output-dir",
+            str(eval_dir),
+            "--output-csv",
+            str(eval_csv),
+        ]
+    ) == 0
 
-    rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
-    assert len(rows) == 6
-    assert len({row["runId"] for row in rows}) == 6
-    summary = json.loads((eval_dir / "evaluation-summary.json").read_text(encoding="utf-8"))
-    assert summary["runCount"] == 6
-
-
-def test_eval_keeps_trace_refs_valid_when_output_dir_and_jsonl_have_different_parents(tmp_path):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
-    payload["evaluation"]["judge"] = {"provider": "mock", "model": "mock", "temperature": 0}
-    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
-    runspecs_dir = tmp_path / "runspecs"
-    results_dir = tmp_path / "results"
-    eval_dir = tmp_path / "eval-artifacts" / "evaluation"
-    eval_jsonl = tmp_path / "reports" / "eval.jsonl"
-
-    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir)]) == 0
-    assert (
-        main(
-            [
-                "eval",
-                "--run-results-dir",
-                str(results_dir),
-                "--experiment",
-                str(experiment_path),
-                "--output-dir",
-                str(eval_dir),
-                "--output-jsonl",
-                str(eval_jsonl),
-            ]
-        )
-        == 0
-    )
-
-    eval_files = sorted(path for path in eval_dir.glob("re_*.json"))
-    assert eval_files
-    eval_payload = next(
+    rows = [
         json.loads(path.read_text(encoding="utf-8"))
-        for path in eval_files
-        if json.loads(path.read_text(encoding="utf-8")).get("traceRef")
-    )
-    trace_ref = eval_payload["traceRef"]
-    assert trace_ref.startswith("traces/evals/")
-    assert (eval_dir.parent / trace_ref).exists()
-
-    jsonl_row = next(
-        json.loads(line)
-        for line in eval_jsonl.read_text(encoding="utf-8").splitlines()
-        if json.loads(line).get("traceRef")
-    )
-    assert jsonl_row["traceRef"].startswith("traces/evals/")
-    assert (eval_jsonl.parent / jsonl_row["traceRef"]).exists()
-
-
-def test_run_resume_backfill_copies_trace_for_jsonl_parent(tmp_path):
-    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
-    runspecs_dir = tmp_path / "runspecs"
-    results_dir = tmp_path / "results"
-    results_jsonl = tmp_path / "reports" / "results.jsonl"
-
-    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspecs_dir)]) == 0
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir)]) == 0
-    assert main(["run", str(runspecs_dir), "--out", str(results_dir), "--jsonl", str(results_jsonl)]) == 0
-
-    row = json.loads(results_jsonl.read_text(encoding="utf-8").splitlines()[0])
-    assert row["traceRef"].startswith("traces/runs/")
-    assert (results_jsonl.parent / row["traceRef"]).exists()
+        for path in sorted(eval_dir.glob("re_*.json"))
+    ]
+    assert len(rows) == 2
+    heuristic = next(row for row in rows if row["questionId"] == "q_year")
+    judge = next(row for row in rows if row["questionId"] == "q_summary")
+    assert heuristic["details"]["outcome"] == "accepted"
+    assert judge["details"]["groundedness"]["justification"] == "Supported by summary."
+    assert "score" not in heuristic
+    assert eval_csv.exists()

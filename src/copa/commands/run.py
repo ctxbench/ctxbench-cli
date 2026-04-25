@@ -17,12 +17,14 @@ from copa.benchmark.paths import resolve_run_jsonl_path, resolve_run_output_dir
 from copa.benchmark.results import (
     append_evaluation_jsonl,
     append_result_jsonl,
+    serialize_evaluation_result,
+    serialize_run_result,
     write_evaluation_file,
     write_result_file,
 )
 from copa.util.artifacts import evalresult_filename, runresult_filename
 from copa.util.fs import load_json, write_json
-from copa.util.jsonl import append_jsonl, read_jsonl
+from copa.util.jsonl import append_jsonl, read_jsonl, write_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
 
@@ -164,11 +166,25 @@ def _copy_trace_payload(payload: dict[str, Any], *, source_root: Path, target_ro
     write_json(target_root / trace_ref, load_json(source_trace))
 
 
+def _rewrite_jsonl_with_run_payload(
+    *,
+    path: Path,
+    run_id: str,
+    payload: dict[str, Any],
+) -> None:
+    existing = []
+    if path.exists():
+        existing = [row for row in read_jsonl(path) if str(row.get("runId") or "") != run_id]
+    existing.append(payload)
+    write_jsonl(path, existing)
+
+
 def run_command(
     path: str,
     out_dir: str | None = None,
     jsonl_path: str | None = None,
     *,
+    force: bool = False,
     verbose: bool = False,
     progress: bool = False,
 ) -> int:
@@ -205,7 +221,7 @@ def run_command(
     try:
         for runspec in runspecs:
             result_path = _result_path(target_dir, runspec)
-            if result_path.exists():
+            if result_path.exists() and not force:
                 skipped_runs += 1
                 logger.phase("SKIP", "Run already persisted; skipping execution", run=runspec.runId, path=result_path)
                 progress_tracker.advance()
@@ -227,11 +243,20 @@ def run_command(
                 model=model_name,
                 question=runspec.questionId,
             )
+            if force and result_path.exists():
+                logger.phase("WRITE", "Overwriting existing run artifact", run=result.runId, path=result_path)
             logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
             written_path = write_result_file(result, target_dir, artifact_root=file_artifact_root)
             logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
             if target_jsonl is not None:
-                append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root)
+                if force:
+                    _rewrite_jsonl_with_run_payload(
+                        path=target_jsonl,
+                        run_id=result.runId,
+                        payload=serialize_run_result(result, artifact_root=jsonl_artifact_root),
+                    )
+                else:
+                    append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root)
                 existing_jsonl_run_ids.add(result.runId)
                 logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
             logger.phase("DONE", "Completed successfully", run=result.runId)
@@ -283,17 +308,26 @@ def run_command(
                 progress_tracker.advance()
                 return
             eval_path = _evaluation_path(eval_dir, evaluated)
-            if eval_path.exists():
+            if eval_path.exists() and not force:
                 if eval_jsonl is not None and evaluated.runId not in existing_eval_jsonl_ids:
                     append_evaluation_jsonl(evaluated, eval_jsonl, artifact_root=eval_jsonl.parent)
                     existing_eval_jsonl_ids.add(evaluated.runId)
                     logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_jsonl)
                 progress_tracker.advance()
                 return
+            if force and eval_path.exists():
+                logger.phase("WRITE", "Overwriting existing evaluation artifact", run=evaluated.runId, path=eval_path)
             write_evaluation_file(evaluated, eval_dir, artifact_root=eval_dir.parent)
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_path)
             if eval_jsonl is not None:
-                append_evaluation_jsonl(evaluated, eval_jsonl, artifact_root=eval_jsonl.parent)
+                if force:
+                    _rewrite_jsonl_with_run_payload(
+                        path=eval_jsonl,
+                        run_id=evaluated.runId,
+                        payload=serialize_evaluation_result(evaluated, artifact_root=eval_jsonl.parent),
+                    )
+                else:
+                    append_evaluation_jsonl(evaluated, eval_jsonl, artifact_root=eval_jsonl.parent)
                 existing_eval_jsonl_ids.add(evaluated.runId)
                 logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=eval_jsonl)
             summary_path = eval_dir / "evaluation-summary.json"
@@ -307,7 +341,7 @@ def run_command(
         pending_results = [
             result
             for result in results
-            if not _evaluation_path(eval_dir, result).exists()
+            if force or not _evaluation_path(eval_dir, result).exists()
         ]
         if pending_results:
             progress_tracker.total = len(pending_results)

@@ -1,383 +1,320 @@
 # COPA Benchmark
 
-COPA is a benchmark runner for comparing how different LLM providers answer dataset-backed questions under multiple execution strategies.
+COPA is a benchmark runner for comparing how LLMs answer dataset-backed questions under different execution strategies.
 
-The project is built around one core idea: keep the question set and evaluation constant while changing how the model gets access to information. In the current Lattes dataset, the same question can be answered through:
+The current codebase is centered on a simple idea:
 
-- direct inline context injection
-- direct local function calls
-- local MCP with a benchmark-controlled MCP client
-- native remote MCP integration through the model provider SDK/API
+- keep the question set fixed
+- vary how the model accesses the source information
+- evaluate the answer qualitatively with either deterministic heuristics or a judge model
 
-## Purpose
+The repository currently ships a Lattes-based dataset and section-oriented tool layer.
 
-COPA exists to make these strategy comparisons repeatable.
+## What Changed
 
-It provides:
+This version no longer uses the legacy evaluation model based on `exact`, `analytical`, `unanswerable`, numeric scores, or rubric dimensions.
 
-- an experiment definition format
-- runspec generation
-- batch execution across providers, models, strategies, and formats
-- trace capture for prompts, tool calls, MCP activity, usage, and errors
-- automatic evaluation for exact, analytical, and unanswerable questions
+The benchmark now uses:
 
-In practice, `copa` is the CLI used to:
+- dataset instances organized by folder
+- question-level `validation.type`
+- instance-level `acceptedAnswers`, `contextRefs`, and `themes`
+- qualitative evaluation only
+- section-based Lattes tools: `listSections` and `getSection`
 
-1. validate an experiment definition
-2. expand it into concrete runspecs
-3. execute the runs
-4. evaluate the results
+## Core Concepts
 
-## CLI
+### Dataset
 
-Main commands:
+A dataset is composed of:
 
-```bash
-copa experiment validate <experiment.json>
-copa experiment expand <experiment.json> --out <runspec-dir> --jsonl <runspecs.jsonl>
-copa run <runspec-dir-or-jsonl> --out <results-dir> --jsonl <run-results.jsonl>
-copa eval --run-results-dir <results-dir> --experiment <experiment.json> --output-dir <eval-dir> --output-jsonl <eval.jsonl>
-```
+- `questions.json`
+- `questions.instance.json`
+- `context/<instanceId>/...`
 
-## Project Organization
-
-The repository is split into a few main areas:
-
-- `src/copa/cli.py`
-  CLI entrypoint.
-- `src/copa/commands/`
-  CLI command handlers for experiment expansion, run execution, and evaluation.
-- `src/copa/benchmark/`
-  Experiment schema, runspec generation, execution wiring, result persistence, and evaluation.
-- `src/copa/ai/`
-  Model adapters, strategies, tracing, rate control, and runtimes.
-- `src/copa/dataset/`
-  Generic dataset loading and question/context handling.
-- `src/copa/datasets/lattes/`
-  Lattes-specific provider, tools, models, and MCP server.
-- `examples/datasets/`
-  Example experiment definitions and example datasets.
-- `datasets/lattes/`
-  Main Lattes dataset and a sample experiment file.
-
-## Architecture
-
-At a high level, the benchmark has three layers:
-
-1. Dataset and experiment layer
-   Loads questions, contexts, question instances, and experiment factors.
-
-2. Execution layer
-   Expands experiments into runspecs and executes each runspec through one strategy.
-
-3. Evaluation layer
-   Scores outputs against gold answers or rubric-based criteria.
-
-### Core Components
-
-**Dataset core**
-
-- `DatasetProvider` loads questions, contexts, and instances from a dataset root.
-- `Experiment` and `RunSpec` define the benchmark input objects.
-
-**Execution core**
-
-- `Engine` resolves the model adapter and strategy for each request.
-- `execute_runspec()` in the benchmark layer prepares the request and persists traces/results.
-- `TraceCollector` captures prompt, model, tool, MCP, retry, and error events.
-
-**Model adapters**
-
-- `OpenAIModel`
-- `ClaudeModel`
-- `GeminiModel`
-- `MockModel`
-
-Each adapter translates a provider-neutral request into provider-specific SDK/API payloads.
-
-**Strategies**
-
-- `InlineStrategy`
-- `LocalFunctionStrategy`
-- `LocalMCPStrategy`
-- `MCPStrategy`
-
-Each strategy decides how the model gets access to external information.
-
-**Lattes domain layer**
-
-- `LattesProvider`
-  Resolves and parses curriculum artifacts.
-- `LattesToolService`
-  Exposes the stateless logical tool set keyed by `lattesId`.
-- `LattesMCPServer`
-  FastMCP server exposing the same logical tools over MCP.
-
-## Benchmark Flow
-
-```mermaid
-flowchart LR
-    A[Experiment JSON] --> B[Load and validate experiment]
-    B --> C[Generate RunSpecs]
-    C --> D[Execute each RunSpec]
-    D --> E[Resolve dataset question and context]
-    E --> F[Build AIRequest]
-    F --> G[Engine]
-    G --> H[Strategy]
-    H --> I[Model adapter]
-    I --> J[LLM provider]
-    H --> K[Tool runtime or native MCP path]
-    D --> L[Persist RunResult and trace]
-    L --> M[Evaluation]
-    M --> N[Evaluation results]
-```
-
-## Execution Flow Inside the Engine
-
-```mermaid
-flowchart TD
-    A[AIRequest] --> B[Engine]
-    B --> C[Resolve provider adapter]
-    B --> D[Resolve strategy]
-    D --> E[Execute strategy]
-    E --> F[Model call]
-    E --> G[Optional tool or MCP activity]
-    F --> H[AIResult]
-    G --> H
-    H --> I[Trace serialization]
-```
-
-## Strategies
-
-### `inline`
-
-The model receives the full context directly in the prompt.
-
-Use this when you want a no-tools baseline.
-
-Properties:
-
-- no tool calls
-- no MCP
-- context format matters because the prompt includes the raw artifact
-
-Flow:
-
-```mermaid
-flowchart LR
-    Q[Question + context] --> P[Inline prompt]
-    P --> M[Model adapter]
-    M --> L[LLM]
-    L --> A[Answer]
-```
-
-### `local_function`
-
-The benchmark controls the call loop and exposes local Python tools directly.
-
-This is the lowest-overhead tool-using condition. The model sees tool schemas, requests tool calls, and the benchmark executes them in-process without MCP.
-
-Properties:
-
-- benchmark-controlled tool loop
-- direct Python tool invocation
-- no protocol transport
-- tools are stateless and require explicit `lattesId`
-
-Flow:
-
-```mermaid
-flowchart LR
-    Q[Question + lattesId] --> S[LocalFunctionStrategy]
-    S --> M[Model adapter]
-    M --> L[LLM]
-    L --> T[Requested tool call]
-    T --> R[LocalFunctionRuntime]
-    R --> X[LattesToolService]
-    X --> P[LattesProvider]
-    P --> R
-    R --> M
-    M --> L
-    L --> A[Answer]
-```
-
-### `local_mcp`
-
-The benchmark still controls the call loop, but the tools are reached through a real MCP client/runtime using FastMCP in-memory transport.
-
-This isolates the effect of MCP semantics and protocol mediation while keeping the execution local and controlled by the benchmark.
-
-Properties:
-
-- benchmark-controlled tool loop
-- real MCP client path
-- FastMCP in-memory transport
-- same logical Lattes tool API as the other tool-based strategies
-
-Flow:
-
-```mermaid
-flowchart LR
-    Q[Question + lattesId] --> S[LocalMCPStrategy]
-    S --> M[Model adapter]
-    M --> L[LLM]
-    L --> T[Requested tool call]
-    T --> R[MCPRuntime]
-    R --> C[FastMCP client session]
-    C --> I[In-memory transport]
-    I --> Srv[LattesMCPServer]
-    Srv --> X[LattesToolService]
-    X --> P[LattesProvider]
-    P --> X
-    X --> Srv
-    Srv --> R
-    R --> M
-    M --> L
-    L --> A[Answer]
-```
-
-### `mcp`
-
-This is the native remote MCP strategy.
-
-The benchmark does not control the tool loop here. Instead, it provides remote MCP server configuration to the model provider, and the provider SDK/API decides how to interact with the MCP server.
-
-Properties:
-
-- provider-controlled MCP loop
-- remote MCP endpoint
-- benchmark still records answer, usage, raw response, and whatever native MCP metadata the provider exposes
-
-Current provider behavior:
-
-- OpenAI
-  Native remote MCP tool config via the Responses API.
-- Anthropic
-  Native remote MCP connector via the beta Messages API.
-- Gemini
-  Uses a FastMCP-backed client session created by `MCPRuntime`, then hands that session to the Gemini SDK.
-
-Flow:
-
-```mermaid
-flowchart LR
-    Q[Question + lattesId] --> S[MCPStrategy]
-    S --> M[Model adapter]
-    M --> L[Provider SDK or API]
-    L --> N[Provider-native MCP loop]
-    N --> R[Remote Lattes MCP server]
-    R --> X[LattesToolService]
-    X --> P[LattesProvider]
-    P --> X
-    X --> R
-    N --> L
-    L --> A[Answer]
-```
-
-## Lattes MCP Server
-
-The Lattes MCP server is implemented with FastMCP and exposes one logical tool catalog. It is format-agnostic from the model’s point of view.
-
-The model never selects JSON vs HTML explicitly. The server resolves the best available backing artifact for the given `lattesId` internally.
-
-Exposed tools:
-
-- `basicInformation(lattesId)`
-- `education(lattesId)`
-- `linesOfResearch(lattesId)`
-- `listProjects(lattesId, startYear?, endYear?)`
-- `listPublications(lattesId, startYear?, endYear?)`
-
-### Running the server
-
-With the module entrypoint:
-
-```bash
-uv run python -m copa.datasets.lattes.mcp_server --transport streamable-http
-```
-
-FastMCP CLI-compatible:
-
-```bash
-fastmcp inspect src/copa/datasets/lattes/mcp_server.py:mcp
-fastmcp run src/copa/datasets/lattes/mcp_server.py:mcp --transport http
-```
-
-## Remote MCP Configuration
-
-For native `mcp`, the benchmark expects remote MCP server configuration under `params.common.mcp_server` or model-specific params.
-
-Recommended benchmark-facing shape:
+`questions.json` defines the stable question catalog.
 
 ```json
 {
-  "mcp_server": {
-    "server_url": "${LATTES_MCP_URL}",
-    "auth_token": "${LATTES_MCP_TOKEN}",
-    "server_label": "lattes"
+  "datasetId": "example-lattes-v2",
+  "questions": [
+    {
+      "id": "q_phd_year",
+      "question": "In which year did the researcher obtain their PhD?",
+      "tags": ["objective", "factual", "simple"],
+      "validation": {
+        "type": "heuristic",
+        "schema": { "type": "number" }
+      }
+    },
+    {
+      "id": "q_research_summary",
+      "question": "Summarize the researcher's main research areas based only on the available context.",
+      "tags": ["subjective", "factual", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    }
+  ]
+}
+```
+
+`questions.instance.json` binds each question to one instance.
+
+```json
+{
+  "datasetId": "example-lattes-v2",
+  "instances": [
+    {
+      "instanceId": "5660469902738038",
+      "contextBlocks": "context/5660469902738038/blocks.json",
+      "questions": [
+        {
+          "id": "q_phd_year",
+          "acceptedAnswers": [1999]
+        },
+        {
+          "id": "q_research_summary",
+          "contextRefs": ["summary", "research"],
+          "themes": ["software engineering", "distributed systems"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Each instance lives in its own directory:
+
+```text
+dataset-root/
+  questions.json
+  questions.instance.json
+  context/
+    5660469902738038/
+      raw.html
+      cleaned.html
+      parsed.json
+      blocks.json
+```
+
+### Validation Modes
+
+Only two validation modes exist:
+
+- `heuristic`
+  Used when the answer can be checked deterministically against `acceptedAnswers`.
+- `judge`
+  Used when the answer must be evaluated qualitatively against `contextRefs` and `themes`.
+
+Judge outputs are qualitative. They include one rating and one justification for each criterion:
+
+- `groundedness`
+- `correctness`
+- `completeness`
+
+There is no `score` and no `meanScore`.
+
+### Experiment
+
+An experiment selects:
+
+- which dataset to use
+- which instances and questions to include via `scope`
+- which provider/model pairs to run
+- which strategies and formats to test
+- whether evaluation is enabled
+
+Example:
+
+```json
+{
+  "id": "lattes_full_001",
+  "output": "/abs/path/to/outputs",
+  "dataset": "lattes/",
+  "scope": {
+    "instances": [],
+    "questions": []
+  },
+  "factors": {
+    "model": [
+      { "provider": "openai", "name": "gpt-5.4-nano" }
+    ],
+    "strategy": ["inline", "local_function", "local_mcp", "mcp"],
+    "format": ["json", "html"]
+  },
+  "evaluation": {
+    "enabled": true,
+    "judge": {
+      "provider": "openai",
+      "model": "gpt-5.4-mini",
+      "temperature": 0
+    }
+  },
+  "execution": {
+    "repeats": 1
   }
 }
 ```
 
-Environment precedence:
+`scope.instances` and `scope.questions` act as filters. Empty lists mean "all available".
 
-- values may come from the experiment file
-- `LATTES_MCP_URL` overrides `mcp_server.server_url`
-- `LATTES_MCP_TOKEN` overrides `mcp_server.auth_token`
+## Strategies
 
-The benchmark-facing field is `auth_token`. Adapters map it internally into provider-specific payloads.
+COPA currently supports four execution strategies.
 
-## Evaluation
+### `inline`
 
-COPA supports three evaluation modes:
+The model receives the context artifact directly in the prompt.
 
-- `exact`
-  Exact comparison or judge-assisted extraction followed by deterministic comparison.
-- `analytical`
-  Rubric- or dimension-based scoring.
-- `unanswerable`
-  Detects valid abstention behavior.
+Typical formats:
 
-Evaluation runs after execution and produces structured evaluation artifacts separate from raw run results.
+- `json` -> `parsed.json`
+- `html` -> `raw.html`
+- `cleaned_html` -> `cleaned.html`
 
-## Development
+### `local_function`
 
-Without Nix:
+The benchmark controls the tool loop and exposes local Python tools directly.
 
-```bash
-uv sync --all-extras
-uv run pytest
-```
+For Lattes, the model interacts with:
 
-With Nix:
+- `listSections`
+- `getSection`
 
-```bash
-nix develop
-pytest
-```
+### `local_mcp`
 
-## Typical Workflow
+The benchmark still controls the loop, but the tools are accessed through a local MCP runtime.
 
-Validate an experiment:
+### `mcp`
+
+The model provider controls the remote MCP interaction.
+
+This path is less observable by design. Some metrics may be `null` because the benchmark cannot reliably observe provider-side tool execution.
+
+## Lattes Tool Layer
+
+The Lattes integration is section-oriented.
+
+The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The current tool surface is intentionally small:
+
+- `listSections`
+- `getSection`
+
+This keeps the benchmark simpler and makes tool usage easier to compare across strategies.
+
+## CLI
+
+The CLI entrypoint is `copa`.
+
+### Validate an Experiment
 
 ```bash
 copa experiment validate examples/datasets/experiment.json
 ```
 
-Expand it:
+### Expand an Experiment into RunSpecs
 
 ```bash
-copa experiment expand examples/datasets/experiment.json --out outputs/runspecs --jsonl outputs/runspecs.jsonl
+copa experiment expand examples/datasets/experiment.json --out runspecs --jsonl runs.jsonl
 ```
 
-Run the benchmark:
+### Execute Runs
 
 ```bash
-copa run outputs/runspecs --out outputs/run-results --jsonl outputs/run-results.jsonl
+copa run runspecs --out results --jsonl results.jsonl
 ```
 
-Evaluate:
+To force re-execution even when artifacts already exist:
 
 ```bash
-copa eval --run-results-dir outputs/run-results --experiment examples/datasets/experiment.json --output-dir outputs/eval --output-jsonl outputs/eval.jsonl
+copa run runspecs --out results --jsonl results.jsonl --force
 ```
+
+### Evaluate Run Results
+
+From a directory:
+
+```bash
+copa eval \
+  --run-results-dir results \
+  --experiment examples/datasets/experiment.json \
+  --output-dir eval \
+  --output-jsonl evaluation.jsonl \
+  --output-csv evaluation.csv
+```
+
+From one JSON or JSONL input:
+
+```bash
+copa eval \
+  --run-results-json results.jsonl \
+  --experiment examples/datasets/experiment.json \
+  --output-dir eval
+```
+
+Optional filters:
+
+- `--only <questionId>`
+- `--mode heuristic`
+- `--mode judge`
+
+## Output Artifacts
+
+The benchmark persists:
+
+- runspec JSON files
+- run result JSON files
+- evaluation result JSON files
+- optional JSONL aggregations
+- optional CSV export for evaluation rows
+- trace artifacts
+
+Run results include a compact `metricsSummary` separate from the raw trace. When a strategy does not expose a metric reliably, the field is stored as `null`.
+
+Evaluation rows persist qualitative details instead of numeric scores.
+
+## Repository Layout
+
+- `src/copa/cli.py`
+  CLI entrypoint
+- `src/copa/commands/`
+  `experiment`, `run`, and `eval` commands
+- `src/copa/benchmark/`
+  experiment schema, runspec generation, execution, evaluation, persistence
+- `src/copa/ai/`
+  model adapters, strategies, trace collection, runtimes
+- `src/copa/dataset/`
+  generic dataset loading and validation
+- `src/copa/datasets/lattes/`
+  section-based Lattes provider, tools, and MCP server
+- `examples/datasets/`
+  example dataset and experiment fixtures
+- `datasets/lattes/`
+  main Lattes dataset
+
+## Development
+
+Install the project in editable mode:
+
+```bash
+pip install -e .[dev]
+```
+
+Run the test suite:
+
+```bash
+pytest -q
+```
+
+## Current Status
+
+The refactor is aligned around simplicity:
+
+- no compatibility with the legacy dataset/evaluation contract
+- no score aggregation
+- no rubric dimensions
+- no broad domain-specific tool surface
+- section-first retrieval for Lattes
+
+If you are extending the benchmark, prefer preserving these constraints instead of reintroducing legacy abstractions.

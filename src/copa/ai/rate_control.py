@@ -267,8 +267,8 @@ class RateLimitedModelAdapter(ModelAdapter):
                 )
                 if request_fields.get("questionId"):
                     message += f" question_id={request_fields['questionId']}"
-                if request_fields.get("contextId"):
-                    message += f" context_id={request_fields['contextId']}"
+                if request_fields.get("instanceId"):
+                    message += f" instance_id={request_fields['instanceId']}"
                 if request_fields.get("judgeRole"):
                     message += f" judge_role={request_fields['judgeRole']}"
                 self._log_event(
@@ -399,8 +399,8 @@ class RateLimitedModelAdapter(ModelAdapter):
         }
         if request.metadata.get("question_id") is not None:
             fields["questionId"] = request.metadata.get("question_id")
-        if request.metadata.get("context_id") is not None:
-            fields["contextId"] = request.metadata.get("context_id")
+        if request.metadata.get("instance_id") is not None:
+            fields["instanceId"] = request.metadata.get("instance_id")
         if request.metadata.get("judge_role") is not None:
             fields["judgeRole"] = request.metadata.get("judge_role")
         if request.metadata.get("experiment_id") is not None:

@@ -8,7 +8,6 @@ from copa.ai.runtime import LocalFunctionRuntime, MCPRuntime
 from copa.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
 from copa.datasets.lattes.mcp_server import LattesMCPServer
 from copa.datasets.lattes.tools import LattesToolService
-from copa.dataset.contexts import context_path
 from copa.util.clock import utc_now_iso
 
 
@@ -17,13 +16,11 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
 
     provider = DatasetProvider.from_dataset(runspec.dataset)
     question = provider.get_question(runspec.questionId)
-    question_instance = provider.get_question_instance(runspec.questionId, runspec.contextId)
-    context = provider.get_context(runspec.contextId, runspec.format)
-    lattes_id = (
-        question_instance.lattesId
-        if question_instance is not None and isinstance(question_instance.lattesId, str) and question_instance.lattesId
-        else runspec.contextId
-    )
+    question_instance = provider.get_question_instance(runspec.questionId, runspec.instanceId)
+    context = provider.get_context(runspec.instanceId, runspec.format)
+    context_path = provider.get_context_artifact_path(runspec.instanceId, runspec.format)
+    instance_dir = provider.get_instance_dir(runspec.instanceId)
+    lattes_id = runspec.instanceId
 
     request = AIRequest(
         question=question.question,
@@ -38,13 +35,16 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             "runId": runspec.runId,
             "expId": runspec.experimentId,
             "question_id": runspec.questionId,
-            "context_id": runspec.contextId,
+            "instance_id": runspec.instanceId,
             "experiment_id": runspec.experimentId,
             "phase": "execution",
             "format": runspec.format,
             "provider": runspec.provider,
             "lattes_id": lattes_id,
-            "context_path": str(context_path(runspec.dataset.contexts, runspec.contextId, runspec.format).resolve()),
+            "instance_dir": str(instance_dir.resolve()),
+            "question_tags": list(question.tags),
+            "validation_type": question.validation.type,
+            "context_path": str(context_path.resolve()),
         },
     )
 
@@ -91,12 +91,16 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             trace.error = ai_result.error
 
     usage = ai_result.usage if runspec.trace.save_usage or ai_result.error else {}
+    metrics_summary = _build_metrics_summary(
+        ai_trace=trace.aiTrace,
+        strategy=runspec.strategy,
+    )
     result = RunResult(
         runId=runspec.runId,
         experimentId=runspec.experimentId,
         dataset=runspec.dataset,
         questionId=runspec.questionId,
-        contextId=runspec.contextId,
+        instanceId=runspec.instanceId,
         provider=runspec.provider,
         modelName=runspec.modelName,
         strategy=runspec.strategy,
@@ -112,8 +116,58 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             durationMs=max(0, int((finish - start).total_seconds() * 1000)),
         ),
         usage=usage,
+        metricsSummary=metrics_summary,
         trace=trace,
         evaluation=EvaluationResult(),
         metadata=runspec.metadata,
     )
     return result
+
+
+def _build_metrics_summary(*, ai_trace: dict[str, object], strategy: str) -> dict[str, int | None]:
+    metrics = ai_trace.get("metrics", {}) if isinstance(ai_trace, dict) else {}
+    if not isinstance(metrics, dict):
+        metrics = {}
+    summary: dict[str, int | None] = {
+        "experiment_duration": _as_int(metrics.get("experiment_duration") or metrics.get("total_duration_ms")),
+        "strategy_duration": _as_int(metrics.get("strategy_duration") or metrics.get("strategy_duration_ms")),
+        "function_exec_duration": None,
+        "tool_exec_duration": None,
+        "llm_exec_duration": _as_int(metrics.get("llm_exec_duration") or metrics.get("model_duration_ms")),
+        "function_call_count": None,
+        "tool_call_count": None,
+        "llm_call_count": _as_int(metrics.get("llm_call_count") or metrics.get("model_calls")),
+        "prompt_tokens": _as_int(metrics.get("prompt_tokens") or metrics.get("input_tokens")),
+        "question_tokens": _as_int(metrics.get("question_tokens")),
+        "function_tokens": None,
+        "tool_tokens": None,
+        "total_llm_tokens": _as_int(metrics.get("total_llm_tokens") or metrics.get("total_tokens")),
+    }
+    if strategy in {"local_function", "local_mcp"}:
+        summary["function_exec_duration"] = _as_int(metrics.get("function_exec_duration") or metrics.get("function_execution_duration_ms"))
+        summary["tool_exec_duration"] = summary["function_exec_duration"]
+        summary["function_call_count"] = _as_int(metrics.get("function_call_count") or metrics.get("tool_call_count"))
+        summary["tool_call_count"] = _as_int(metrics.get("tool_call_count_semantic") or metrics.get("mcp_tool_calls") or metrics.get("tool_call_count"))
+    elif strategy == "inline":
+        summary["function_exec_duration"] = 0
+        summary["tool_exec_duration"] = 0
+        summary["function_call_count"] = 0
+        summary["tool_call_count"] = 0
+    elif strategy == "mcp":
+        summary["function_exec_duration"] = None
+        summary["tool_exec_duration"] = None
+        summary["function_call_count"] = None
+        summary["tool_call_count"] = None
+        summary["prompt_tokens"] = None
+        summary["total_llm_tokens"] = None
+    return summary
+
+
+def _as_int(value: object) -> int | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    return None

@@ -40,6 +40,7 @@ class Engine:
         trace.metrics.context_size_chars = len(request.context)
         trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
         trace.metrics.question_size_chars = len(request.question)
+        trace.metrics.question_tokens = len(request.question.split()) or None
         owned_runtime: ToolRuntime | None = None
         try:
             with trace.span("engine.execute", "engine.execute"):
@@ -67,6 +68,7 @@ class Engine:
         trace.metrics.context_size_chars = len(request.context)
         trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
         trace.metrics.question_size_chars = len(request.question)
+        trace.metrics.question_tokens = len(request.question.split()) or None
         trace.metrics.prompt_size_chars = len(model_input.prompt)
         try:
             with trace.span("engine.execute_model_input", "engine.execute_model_input"):
