@@ -82,16 +82,16 @@
       }
     },
     {
-      "id": "q_align_nephro",
-      "question": "How does the candidate’s academic and professional background align with the project \"New and old players in therapeutic strategies for nephropathies: cellular, acellular, and pharmacological therapies\"?",
+      "id": "q_not_aligned",
+      "question": "How does the candidate’s academic and professional background align with the project '{project_not_aligned}'?",
       "tags": ["subjective", "factual", "complex"],
       "validation": {
         "type": "judge"
       }
     },
     {
-      "id": "q_align_ai",
-      "question": "How does the candidate’s academic and professional background align with the project \"Talking to Machines: UX and pragmatics for advancing Artificial Intelligence in Brazil\"?",
+      "id": "q_aligned",
+      "question": "How does the candidate’s academic and professional background align with the project '{project_aligned}' ?",
       "tags": ["subjective", "factual", "complex"],
       "validation": {
         "type": "judge"

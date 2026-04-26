@@ -45,7 +45,12 @@ def expand_experiment(
         questions=len(provider.list_question_ids()),
         instances=len(provider.list_instance_ids()),
     )
-    runspecs = generate_runspecs(experiment, base_dir, experiment_path=path)
+    runspecs = generate_runspecs(
+        experiment,
+        base_dir,
+        experiment_path=path,
+        on_warning=lambda message, **fields: logger.warn(message, **fields),
+    )
     logger.phase("PLAN", "Starting batch processing", input=path, discoveredRuns=len(runspecs))
     payloads = [runspec.to_persisted_artifact() for runspec in runspecs]
     default_dir = resolve_expand_output_dir(experiment, base_dir)

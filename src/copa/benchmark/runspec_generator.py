@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+import re
+from typing import Any, Callable
 
 from copa.benchmark.models import Experiment, RunMetadata, RunSpec
 from copa.dataset.provider import DatasetProvider
 from copa.util.artifacts import build_short_ids, canonical_run_identity
 from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
+
+QUESTION_TEMPLATE_PATTERN = re.compile(r"\{([a-zA-Z_][a-zA-Z0-9_]*)\}")
 
 
 def resolve_params(experiment: Experiment, model_name: str) -> dict[str, Any]:
@@ -28,11 +31,19 @@ def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
     return models
 
 
+def effective_formats_for_strategy(strategy_name: str, formats: list[Any]) -> list[str]:
+    resolved_formats = [str(item) for item in formats if isinstance(item, str) and item.strip()]
+    if strategy_name in {"local_function", "local_mcp", "mcp"}:
+        return ["json"]
+    return resolved_formats
+
+
 def generate_runspecs(
     experiment: Experiment,
     base_dir: str | Path,
     *,
     experiment_path: str | Path | None = None,
+    on_warning: Callable[..., None] | None = None,
 ) -> list[RunSpec]:
     provider = DatasetProvider.from_experiment(experiment, base_dir)
     scoped_questions = set(experiment.scope.questions)
@@ -56,11 +67,20 @@ def generate_runspecs(
             if question_id not in available_questions:
                 continue
             question = provider.get_question(question_id)
-            for format_name in formats:
-                for model in models:
-                    provider_name = model["provider"]
-                    model_name = model["name"]
-                    for strategy_name in strategies:
+            question_instance = provider.get_question_instance(question_id, instance_id)
+            template_parameters = dict(question_instance.templateParameters) if question_instance is not None else {}
+            rendered_question = render_question_template(
+                question.question,
+                template_parameters,
+                on_warning=on_warning,
+                question_id=question_id,
+                instance_id=instance_id,
+            )
+            for model in models:
+                provider_name = model["provider"]
+                model_name = model["name"]
+                for strategy_name in strategies:
+                    for format_name in effective_formats_for_strategy(strategy_name, formats):
                         params = resolve_params(experiment, model_name)
                         for repeat_index in range(1, experiment.execution.repeats + 1):
                             canonical_id = canonical_run_identity(
@@ -82,6 +102,8 @@ def generate_runspecs(
                                     if experiment_path
                                     else None,
                                     "questionId": question_id,
+                                    "question": rendered_question,
+                                    "questionTemplate": question.question,
                                     "instanceId": instance_id,
                                     "provider": provider_name,
                                     "modelName": model_name,
@@ -94,6 +116,7 @@ def generate_runspecs(
                                     "trace": experiment.trace,
                                     "questionTags": list(question.tags),
                                     "validationType": question.validation.type,
+                                    "templateParameters": template_parameters,
                                 }
                             )
 
@@ -108,6 +131,8 @@ def generate_runspecs(
                 dataset=item["dataset"],
                 experimentPath=item["experimentPath"],
                 questionId=item["questionId"],
+                question=item["question"],
+                questionTemplate=item["questionTemplate"],
                 instanceId=item["instanceId"],
                 provider=item["provider"],
                 modelName=item["modelName"],
@@ -129,7 +154,51 @@ def generate_runspecs(
                     repeatIndex=item["repeatIndex"],
                     questionTags=item["questionTags"],
                     validationType=item["validationType"],
+                    templateParameters=item["templateParameters"],
                 ),
             )
         )
     return runspecs
+
+
+def render_question_template(
+    question_template: str,
+    template_parameters: dict[str, str],
+    *,
+    on_warning: Callable[..., None] | None = None,
+    question_id: str,
+    instance_id: str,
+) -> str:
+    placeholders = QUESTION_TEMPLATE_PATTERN.findall(question_template)
+    if not placeholders:
+        if template_parameters and on_warning is not None:
+            for key in sorted(template_parameters):
+                on_warning(
+                    "Unused template parameter; ignoring",
+                    questionId=question_id,
+                    instanceId=instance_id,
+                    parameter=key,
+                )
+        return question_template
+
+    rendered = question_template
+    for placeholder in placeholders:
+        if placeholder not in template_parameters and on_warning is not None:
+            on_warning(
+                "Missing template parameter; substituting empty string",
+                questionId=question_id,
+                instanceId=instance_id,
+                parameter=placeholder,
+            )
+        rendered = rendered.replace("{" + placeholder + "}", template_parameters.get(placeholder, ""))
+
+    if on_warning is not None:
+        for key in sorted(template_parameters):
+            if key not in placeholders:
+                on_warning(
+                    "Unused template parameter; ignoring",
+                    questionId=question_id,
+                    instanceId=instance_id,
+                    parameter=key,
+                )
+    return rendered

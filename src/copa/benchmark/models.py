@@ -247,6 +247,7 @@ class RunMetadata(BaseModel):
     repeatIndex: int
     questionTags: list[str] = Field(default_factory=list)
     validationType: str | None = None
+    templateParameters: dict[str, str] = Field(default_factory=dict)
 
 
 class RunSpec(BaseModel):
@@ -256,6 +257,8 @@ class RunSpec(BaseModel):
     dataset: ExperimentDataset
     experimentPath: str | None = None
     questionId: str
+    question: str = ""
+    questionTemplate: str | None = None
     instanceId: str
     provider: str
     modelName: str | None = None
@@ -293,6 +296,7 @@ class RunSpec(BaseModel):
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
                 "repeatIndex": payload.get("repeatIndex", 1),
+                "templateParameters": payload.get("templateParameters", {}),
             }
         return super().model_validate(payload)
 
@@ -301,6 +305,8 @@ class RunSpec(BaseModel):
             "runId": self.runId,
             "experimentId": self.experimentId,
             "questionId": self.questionId,
+            "question": self.question,
+            "questionTemplate": self.questionTemplate,
             "instanceId": self.instanceId,
             "model": self.modelName,
             "provider": self.provider,
@@ -309,6 +315,7 @@ class RunSpec(BaseModel):
             "repeatIndex": self.repeatIndex,
             "questionTags": list(self.metadata.questionTags),
             "validationType": self.metadata.validationType,
+            "templateParameters": dict(self.metadata.templateParameters),
         }
 
 
@@ -341,6 +348,8 @@ class RunResult(BaseModel):
     experimentId: str
     dataset: ExperimentDataset
     questionId: str
+    question: str = ""
+    questionTemplate: str | None = None
     instanceId: str
     provider: str
     modelName: str | None = None
@@ -383,6 +392,7 @@ class RunResult(BaseModel):
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
                 "repeatIndex": payload.get("repeatIndex", 1),
+                "templateParameters": payload.get("templateParameters", {}),
             }
         return super().model_validate(payload)
 
@@ -391,6 +401,8 @@ class RunResult(BaseModel):
             "runId": self.runId,
             "experimentId": self.experimentId,
             "questionId": self.questionId,
+            "question": self.question,
+            "questionTemplate": self.questionTemplate,
             "instanceId": self.instanceId,
             "provider": self.provider,
             "model": self.modelName,
@@ -404,6 +416,7 @@ class RunResult(BaseModel):
             "usage": self.usage,
             "metricsSummary": self.metricsSummary,
             "traceRef": trace_ref,
+            "templateParameters": dict(self.metadata.templateParameters),
         }
 
 

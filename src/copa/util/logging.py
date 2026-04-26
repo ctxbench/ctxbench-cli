@@ -80,6 +80,9 @@ class PhaseLogger:
     def error(self, message: str, **fields: object) -> None:
         self._emit("ERROR", message, fields)
 
+    def warn(self, message: str, **fields: object) -> None:
+        self._emit("WARN", message, fields)
+
     def _emit(self, label: str, message: str, fields: dict[str, object]) -> None:
         if self.progress is not None:
             self.progress.clear()

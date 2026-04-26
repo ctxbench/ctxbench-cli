@@ -77,8 +77,11 @@
           "acceptedAnswers": ["yes"]
         },
         {
-          "id": "q_align_nephro",
+          "id": "q_not_aligned",
           "contextRefs": ["academicProfessional", "projects", "publications"],
+          "template_parameters": {
+            "project_not_aligned": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
           "themes": [
             "no direct alignment with nephropathies",
             "no evidence of cellular, acellular, or pharmacological therapies",
@@ -87,8 +90,11 @@
           ]
         },
         {
-          "id": "q_align_ai",
+          "id": "q_aligned",
           "contextRefs": ["academicProfessional", "projects", "publications"],
+          "template_parameters": {
+            "project_aligned": "How does MLOps differs from DevSecOps"
+          },
           "themes": [
             "partial alignment with AI through data science and software systems",
             "strong background in software systems, distributed systems, smart cities, and data science",

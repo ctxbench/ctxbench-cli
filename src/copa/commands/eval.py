@@ -78,6 +78,8 @@ def load_results_from_input(
                 experimentId=runspec.experimentId,
                 dataset=runspec.dataset,
                 questionId=runspec.questionId,
+                question=str(payload.get("question") or runspec.question),
+                questionTemplate=str(payload.get("questionTemplate") or runspec.questionTemplate or ""),
                 instanceId=runspec.instanceId,
                 provider=runspec.provider,
                 modelName=runspec.modelName,

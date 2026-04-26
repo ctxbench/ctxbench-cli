@@ -81,6 +81,7 @@ class QuestionInstanceEntry(BaseModel):
     acceptedAnswers: list[Any] = Field(default_factory=list)
     contextRefs: list[str] = Field(default_factory=list)
     themes: list[str] = Field(default_factory=list)
+    templateParameters: dict[str, str] = Field(default_factory=dict)
 
     @classmethod
     def model_validate(cls, data: Any) -> "QuestionInstanceEntry":
@@ -95,6 +96,13 @@ class QuestionInstanceEntry(BaseModel):
             else [],
             contextRefs=[str(item) for item in data.get("contextRefs", []) if isinstance(item, str)],
             themes=[str(item) for item in data.get("themes", []) if isinstance(item, str)],
+            templateParameters={
+                str(key): str(value)
+                for key, value in data.get("template_parameters", {}).items()
+                if isinstance(key, str)
+            }
+            if isinstance(data.get("template_parameters"), dict)
+            else {},
         )
 
 

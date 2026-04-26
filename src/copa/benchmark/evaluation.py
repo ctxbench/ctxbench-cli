@@ -323,6 +323,7 @@ def evaluate_run_result(
         return None
 
     question = provider.get_question(result.questionId)
+    rendered_question = result.question or question.question
     validation_type = question.validation.type
     if mode and validation_type != mode:
         return None
@@ -352,7 +353,7 @@ def evaluate_run_result(
         blocks = provider.get_context_blocks(result.instanceId)
         details, judge_info, trace = _evaluate_judge(
             result,
-            question.question,
+            rendered_question,
             blocks,
             list(instance_question.contextRefs),
             list(instance_question.themes),
@@ -369,7 +370,7 @@ def evaluate_run_result(
         runId=result.runId,
         questionId=result.questionId,
         instanceId=result.instanceId,
-        question=question.question,
+        question=rendered_question,
         evaluationMode=validation_type,
         status="evaluated",
         evaluationMethod=details.get("evaluationMethod"),

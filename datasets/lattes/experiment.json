@@ -5,7 +5,7 @@
   "dataset": ".",
   "scope": {
     "instances": ["2342739419247924"],
-    "questions": ["q_qualis_count", "q_tcc5y"]
+    "questions": ["q_aligned", "q_not_aligned"]
   },
   "factors": {
     "model": [
@@ -14,7 +14,7 @@
         "name": "gpt-5.4-2026-03-05"
       }
     ],
-    "strategy": ["inline", "local_function"],
+    "strategy": ["local_function"],
     "format": ["html", "json"]
   },
   "params": {

@@ -23,7 +23,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     lattes_id = runspec.instanceId
 
     request = AIRequest(
-        question=question.question,
+        question=runspec.question or question.question,
         context=context,
         provider_name=runspec.provider,
         model_name=str(runspec.params.get("model_name", "")),
@@ -100,6 +100,8 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         experimentId=runspec.experimentId,
         dataset=runspec.dataset,
         questionId=runspec.questionId,
+        question=runspec.question or question.question,
+        questionTemplate=runspec.questionTemplate or question.question,
         instanceId=runspec.instanceId,
         provider=runspec.provider,
         modelName=runspec.modelName,
