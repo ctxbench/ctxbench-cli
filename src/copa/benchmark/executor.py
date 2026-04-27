@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from copa.ai.cache import build_inline_prompt_cache_key
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest
 from copa.ai.runtime import LocalFunctionRuntime, MCPRuntime
@@ -28,6 +29,16 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             "strict": True,
             "schema": question.validation.schema,
         }
+    if runspec.strategy == "inline" and runspec.provider.lower().startswith("openai"):
+        request_params.setdefault(
+            "prompt_cache_key",
+            build_inline_prompt_cache_key(
+                model_name=str(runspec.modelName or runspec.params.get("model_name") or ""),
+                instance_id=runspec.instanceId,
+                format_name=runspec.format,
+                context=context,
+            ),
+        )
 
     request = AIRequest(
         question=runspec.question or question.question,

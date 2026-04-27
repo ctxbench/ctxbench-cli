@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
+from copa.ai.models.openai import OpenAIModel
 from copa.ai.trace import TraceCollector
 from copa.benchmark.evaluation import _evaluate_judge, _heuristic_compare
 from copa.benchmark.executor import execute_runspec
@@ -190,8 +191,9 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
     assert result.answer == "3"
     assert result.usage == {"inputTokens": 11, "outputTokens": 1, "totalTokens": 12}
     assert model.last_input is not None
-    assert "# Question:" in model.last_input.prompt
     assert "# Context:" in model.last_input.prompt
+    assert "# Question:" in model.last_input.prompt
+    assert model.last_input.prompt.index("# Context:") < model.last_input.prompt.index("# Question:")
     metrics = result.trace["metrics"]
     assert metrics["question_tokens"] == len("How many publications are listed?".split())
     assert metrics["llm_call_count"] == 1
@@ -460,4 +462,101 @@ def test_execute_runspec_injects_structured_output_for_heuristic_questions(tmp_p
         "name": "q_year_response",
         "strict": True,
         "schema": {"type": "number"},
+    }
+
+
+def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):
+    dataset = write_mock_dataset(tmp_path / "dataset")
+    runspec = RunSpec(
+        id="run-1",
+        runId="run-1",
+        experimentId="exp-1",
+        dataset=dataset,
+        questionId="q_year",
+        question="In which year did the researcher obtain their PhD?",
+        questionTemplate="In which year did the researcher obtain their PhD?",
+        instanceId="cv-demo",
+        provider="openai",
+        modelName="gpt-5.4-mini",
+        strategy="inline",
+        format="html",
+        repeatIndex=1,
+        params={},
+        metadata=RunMetadata(
+            canonicalId="exp-1|q_year|cv-demo|openai|gpt-5.4-mini|inline|html|1",
+            questionId="q_year",
+            instanceId="cv-demo",
+            provider="openai",
+            modelName="gpt-5.4-mini",
+            strategy="inline",
+            format="html",
+            repeatIndex=1,
+        ),
+    )
+    engine = Engine()
+    model = RecordingModel()
+    engine._models["openai"] = model
+
+    execute_runspec(runspec, engine)
+
+    assert model.last_request is not None
+    cache_key = model.last_request.params["prompt_cache_key"]
+    assert cache_key.startswith("inl:html:")
+    assert len(cache_key) <= 64
+
+
+def test_openai_model_build_payload_includes_prompt_cache_fields():
+    model = OpenAIModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="openai",
+        model_name="gpt-5.4-mini",
+        strategy_name="inline",
+        context_format="text",
+        params={
+            "prompt_cache_key": "inl:html:abc123",
+            "prompt_cache_retention": "24h",
+        },
+        metadata={},
+    )
+    model_input = ModelInput(system_instruction="System", prompt="Prompt")
+
+    payload = model._build_payload(model_input, request)
+
+    assert payload["prompt_cache_key"] == "inl:html:abc123"
+    assert payload["prompt_cache_retention"] == "24h"
+
+
+def test_openai_model_extracts_cache_metadata():
+    class UsageDetails:
+        def __init__(self, cached_tokens: int) -> None:
+            self.cached_tokens = cached_tokens
+
+    class Usage:
+        def __init__(self) -> None:
+            self.input_tokens = 100
+            self.output_tokens = 10
+            self.total_tokens = 110
+            self.input_tokens_details = UsageDetails(cached_tokens=64)
+            self.prompt_tokens_details = [{"type": "cached_tokens", "token_count": 64}]
+            self.cache_tokens_details = {"cached_tokens": 64}
+            self.cached_content_token_count = 64
+
+    class Response:
+        def __init__(self) -> None:
+            self.usage = Usage()
+            self.output_text = "ok"
+            self.output = []
+
+    model = OpenAIModel()
+    metadata = model._extract_cache_metadata(Response())
+
+    assert metadata == {
+        "cache": {
+            "input_tokens_details": {"cached_tokens": 64},
+            "prompt_tokens_details": [{"type": "cached_tokens", "token_count": 64}],
+            "cache_tokens_details": {"cached_tokens": 64},
+            "cached_content_token_count": 64,
+        }
     }

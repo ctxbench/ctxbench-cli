@@ -1,29 +1,36 @@
 {
-  "id": "exp_baseline_001",
+  "id": "exp_cache_004",
   "name": "Baseline run including only inline executions",
   "output": "outputs",
   "dataset": "datasets/lattes",
   "scope": {
-    "instances": ["9674541381385819", "9039182932747194"],
-    "questions": []
+    "instances": ["5521922960404236"],
+    "questions": ["q_phd", "q_sup", "q_projfit_1"]
   },
   "factors": {
     "model": [
       {
         "provider": "openai",
-        "name": "gpt-5.4-2026-03-05"
-      },
-      {
-        "provider": "google",
-        "name": "gemini-3.1-flash-lite-preview"
+        "name": "gpt-5.4-mini-2026-03-17"
       }
     ],
     "strategy": ["inline"],
-    "format": ["html", "json"]
+    "format": ["html"]
   },
   "params": {
     "common": {
       "temperature": 0.3
+    },
+    "gpt-5.4-mini-2026-03-17": {
+      "max_output_tokens": 8000,
+      "rate_limit": {
+        "tpm": 400000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 6000
+      }
     },
     "gpt-5.4-2026-03-05": {
       "max_output_tokens": 8000,
@@ -60,7 +67,7 @@
     }
   },
   "evaluation": {
-    "enabled": true,
+    "enabled": false,
     "judges": [
       { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 }
     ]

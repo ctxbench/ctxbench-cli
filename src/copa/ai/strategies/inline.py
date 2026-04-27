@@ -20,8 +20,8 @@ class InlineStrategy(StrategyAdapter):
         with trace.span("strategy.inline.execute", "strategy.inline.execute"):
             trace.record_steps(1)
             prompt = (
-                f"# Question:\n{request.question}\n\n"
-                f"# Context:\n{request.context}\n"
+                f"# Context:\n{request.context}\n\n"
+                f"# Question:\n{request.question}\n"
             )
             trace.metrics.prompt_size_chars = len(prompt)
             model_input = ModelInput(

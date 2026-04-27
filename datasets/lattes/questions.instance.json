@@ -36,11 +36,7 @@
         },
         {
           "id": "q_en",
-          "acceptedAnswers": [
-            {
-              "answer": "yes"
-            }
-          ]
+          "ground_truth": "Yes. His curriculum states that he has full proficiency in English — he understands, speaks, reads, and writes the language well."
         },
         {
           "id": "q_projfit_1",
@@ -166,11 +162,7 @@
         },
         {
           "id": "q_en",
-          "acceptedAnswers": [
-            {
-              "answer": "yes"
-            }
-          ]
+          "ground_truth": "Yes. The curriculum states that she understands, speaks, reads, and writes English well."
         },
         {
           "id": "q_projfit_1",
@@ -296,11 +288,7 @@
         },
         {
           "id": "q_en",
-          "acceptedAnswers": [
-            {
-              "answer": "yes"
-            }
-          ]
+          "ground_truth": "Yes — his curriculum states he reads, writes, speaks, and understands English well."
         },
         {
           "id": "q_projfit_1",
@@ -426,11 +414,7 @@
         },
         {
           "id": "q_en",
-          "acceptedAnswers": [
-            {
-              "answer": "yes"
-            }
-          ]
+          "ground_truth": "Yes — her curriculum states she understands, speaks, reads, and writes English well."
         },
         {
           "id": "q_projfit_1",
@@ -556,11 +540,7 @@
         },
         {
           "id": "q_en",
-          "acceptedAnswers": [
-            {
-              "answer": "yes"
-            }
-          ]
+          "ground_truth": "Yes. The curriculum states that she understands, speaks, reads, and writes English well."
         },
         {
           "id": "q_projfit_1",
@@ -647,6 +627,132 @@
         {
           "id": "q_awards",
           "ground_truth": "She has received 9 awards, honorable mentions, and titles throughout her career: the IEEE TCPP Outstanding Service and Contributions Award (IEEE Computer Society, 2023); the IEEE TPDS Award for Editorial Excellence (IEEE Computer Society, 2019); the Wilkes Award for Best Paper Published in The Computer Journal in 2018 (Oxford University Press, 2019); an honorable mention as thesis advisor at WSCAD-CTD 2018 (SBC); advisor of the 3rd best PhD thesis at SBC CTD 2016 (SBC); advisor of the winning thesis of the 2016 CAPES Thesis Award in Computer Science (CAPES); advisor of the winning thesis at WSCAD-CTD 2016 (SBC); Best Paper Award at I2TS 2004; and the title of IEEE Senior Member (IEEE Society, 2004)."
+        }
+      ]
+    },
+    {
+      "instanceId": "5660469902738038",
+      "questions": [
+        {
+          "id": "q_phd",
+          "ground_truth": "He earned his PhD in Computing from Imperial College of Science, Technology and Medicine, University of London, UK, back in 1999 — that's 27 years ago as of 2026."
+        },
+        {
+          "id": "q_field",
+          "ground_truth": "His home ground is Computer Science, with a strong focus on Software Engineering and Distributed Systems. Throughout his career, he's built expertise in software architecture, cloud computing, microservices, DevOps, self-adaptive and resilient systems, and generative AI applications."
+        },
+        {
+          "id": "q_venue",
+          "ground_truth": "He gravitates toward venues covering Software Engineering, Distributed Systems, Cloud Computing, Software Architecture, and Microservices. He's a recurring presence at conferences like SBES and SBRC, and in journals such as IEEE Software and Software: Practice and Experience."
+        },
+        {
+          "id": "q_coauth",
+          "ground_truth": "His closest collaborators by publication count are Américo Sampaio (~21 papers), Paulo Henrique Mendes Maia (~15), Maria Andréia Formico Rodrigues (~12), Matheus Cunha (~11), and Carlos Mendes Aderaldo (~10). Other frequent names include Jeffrey Kramer, Lincoln Rocha, Ricardo de Oliveira Anido, Fernando Trinta, Leandro Sales Holanda Pinto, Henrique Teófilo, David Garlan, Pooyan Jamshidi, and Claus Pahl. These figures are approximate, as the curriculum uses varied citation forms for some names."
+        },
+        {
+          "id": "q_advpub",
+          "ground_truth": "Yes, quite consistently. Several of his supervised students — including Carlos Mendes Aderaldo, Matheus Cunha, Michel Araújo Vasconcelos, Tiago Rolim, Ronaldo Gonçalves Junior, Augusto Freire, Pedro Fiuza Linhares, Glauber Queiroz de Oliveira, Camila Medeiros Rêgo, Davi Vasconcelos, Thiago Costa, and others — also appear as co-authors on his publications."
+        },
+        {
+          "id": "q_advareas",
+          "ground_truth": "His advisees cover a broad range of topics: Software Engineering, Distributed Systems, Cloud Computing, Microservices, Software Architecture, Self-Adaptive Systems, Resilience Engineering, Performance Evaluation, Capacity Planning, DevOps/MLOps, Large Language Models, Software Architecture Quality Assessment, Remote Patient Monitoring, Web Services, Reverse Engineering, Aspect-Oriented Development, Mobile and Context-Aware Applications, and Distributed Databases."
+        },
+        {
+          "id": "q_pubyear",
+          "template_parameters": {
+            "pub_year": 2024
+          },
+          "ground_truth": "The curriculum doesn't single out a \"most relevant\" 2024 work. That said, two journal articles stand out: \"Evaluating ChatGPT-4 Vision on Brazil's National Undergraduate Computer Science Exam\" (ACM Transactions on Computing Education) and \"A declarative approach and benchmark tool for controlled evaluation of microservice resiliency patterns\" (Software: Practice and Experience). Without additional criteria, it's not possible to pick just one."
+        },
+        {
+          "id": "q_en",
+          "ground_truth": "Yes. His curriculum states he understands, speaks, reads, and writes English well."
+        },
+        {
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "There's no meaningful alignment here. His work is firmly rooted in Computer Science — Software Engineering, Distributed Systems, Cloud Computing, and AI. The one health-adjacent project in his curriculum, SENTINELA, focuses on intelligent patient monitoring using data science, computer vision, and microservices — but that's quite different from nephropathies, cellular/acellular therapies, or pharmacological approaches."
+        },
+        {
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Estudo e avaliação de arquiteturas distribuídas"
+          },
+          "ground_truth": "The fit is strong. His PhD was on software architecture recovery for distributed systems, and his entire research trajectory — publications, projects, and student supervision — maps directly onto distributed systems, software architecture, cloud computing, microservices, web service replication, self-adaptive systems, resilience patterns, and performance evaluation."
+        },
+        {
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists 25 full journal articles. However, it doesn't specify which are indexed in Scopus or Web of Science, nor does it provide Qualis A1/A2 classifications — so those counts can't be determined from the available information."
+        },
+        {
+          "id": "q_indexed",
+          "ground_truth": "This can't be determined from the curriculum. It does report aggregate citation counts from Web of Science and Scopus and lists publication venues, but it doesn't classify individual works by indexing status or Qualis tier."
+        },
+        {
+          "id": "q_cites",
+          "ground_truth": "In Web of Science: 39 works and 129 citations (~3.31 avg). In Scopus: 50 works and 537 citations (~10.74 avg). The curriculum also reports 110 works with 2,594 citations from \"Other\" sources (~23.58 avg), though it doesn't explicitly name this source — it's likely Google Scholar."
+        },
+        {
+          "id": "q_hidx",
+          "ground_truth": "The curriculum reports an h-index of 6 in Web of Science. No h-index is reported for Scopus or Google Scholar, and no field average is provided, so a comparison isn't possible with the available data."
+        },
+        {
+          "id": "q_funded",
+          "ground_truth": "The curriculum lists 23 funded projects — 18 as coordinator and 5 as participant. Funding came from CNPq, FUNCAP, Microsoft Research, Amazon Web Services, Rede Nacional de Ensino e Pesquisa, Universidade de Fortaleza, Bull Grenoble, Companhia Energética do Ceará, Synapsis Brasil, Celestica do Brasil, Research Brazil Ireland, and Argo Comércio e Serviços em Sistemas de Informação Ltda. No FAPESP-funded project appears in the curriculum."
+        },
+        {
+          "id": "q_fundamt",
+          "ground_truth": "The curriculum doesn't include monetary figures. It documents funded projects from the past five years — including CNPq and FUNCAP support — but provides no total funding amounts."
+        },
+        {
+          "id": "q_sup",
+          "ground_truth": "He has completed supervision of 24 master's dissertations, 3 doctoral theses, and 38 undergraduate thesis/final course projects. Currently, 4 master's and 2 doctoral supervisions are ongoing. Worth noting: the profile summary mentions 2 completed doctoral theses, while the detailed section lists 3 — a minor inconsistency in the curriculum itself."
+        },
+        {
+          "id": "q_stupubs",
+          "ground_truth": "Roughly 81 bibliographic outputs can be traced to co-authorship with at least one supervised student — approximately 11 journal articles, 65 full conference papers, and 5 extended abstracts. The curriculum doesn't indicate which of these appeared in indexed venues."
+        },
+        {
+          "id": "q_tcc5y",
+          "ground_truth": "Between 2021 and 2026, he supervised 6 undergraduate thesis/final course projects. Undergraduate research projects aren't listed separately, so that figure isn't available."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum doesn't track advisees' career paths directly. That said, a few names — Carlos Mendes Aderaldo, Michel Araújo Vasconcelos, and Matheus Cunha — appear at multiple supervision levels and continue to show up in research projects and publications, suggesting at least some degree of continued academic involvement. An exact count isn't possible."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "At least 5 formal collaborations or interinstitutional projects are documented: mServiceLab, the Carnegie Mellon University partnership on self-adaptive cloud-native applications, the OW2 Open Source Middleware project with Bull-Grenoble and the OW2 consortium, the Universidade de Fortaleza–Dublin City University collaboration, and the COELCE/Synapsis project. Other projects also involve external collaborators, but the curriculum doesn't always provide enough detail to classify them as formal networks."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "At least 5 interinstitutional or international projects are documented. The publication list also includes several well-known external collaborators — David Garlan, Pooyan Jamshidi, Claus Pahl, Jeffrey Kramer, among others — though a reliable total count of interinstitutional co-authored papers isn't extractable from the curriculum. CNPq PQ fellowship status or equivalent recognition for any collaborator is not indicated."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "The curriculum doesn't document formal administrative roles such as course coordinator, department chair, or graduate program coordinator. His documented roles include professor, visiting researcher, editorial board member, journal reviewer, funding proposal reviewer, program committee member, event organizer, and research project coordinator."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "No information on this appears in the curriculum. It references research lines, project coordination, and collaboration, but doesn't mention a CNPq-certified group led by him."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "There's solid evidence of technological development and institutional partnerships. He's been involved in building tools like QLattes, Scholar Spots, ResilienceBench, Kubow, RefaX, and X-ray, and has collaborated with organizations such as COELCE, Synapsis Brasil, Bull Grenoble, Dublin City University, Jabil, Benchmark Electronics, Celestica, and Argo. However, no explicit documentation of research results being adopted in public policies or social actions appears in the curriculum."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "None. The curriculum lists 6 computer program records without formal registration — covering 5 unique software products (QLattes, ResilienceBench, Kubow, RefaX, and X-ray; Kubow appears twice). The number of officially registered technological products is zero."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "The curriculum doesn't document invited or keynote talks. His event-related roles include program committee member, selection committee member, reviewer, track chair, and organizer — but no explicit invited speaker appearances are recorded."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "The curriculum lists 17 recognitions in total. These were granted by CNPq, ECSA (European Conference on Software Architecture), SBRC, Amazon Web Services, Microsoft Research, Microsoft, WMSM, the SBC Thesis and Dissertation Contest (CTD/CSBC), and WASP (Workshop Brasileiro de Desenvolvimento de Software Orientado a Aspectos)."
         }
       ]
     }

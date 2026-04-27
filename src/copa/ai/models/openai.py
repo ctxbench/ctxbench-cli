@@ -26,6 +26,7 @@ class OpenAIModel(ModelAdapter):
             metadata={
                 "provider": "openai",
                 "model": request.model_name,
+                **self._extract_cache_metadata(response),
                 **self._extract_native_mcp_metadata(response),
             },
             continuation_state=self._build_continuation_state(response),
@@ -59,6 +60,10 @@ class OpenAIModel(ModelAdapter):
             payload["max_output_tokens"] = params["max_tokens"]
         if "max_output_tokens" in params:
             payload["max_output_tokens"] = params["max_output_tokens"]
+        if "prompt_cache_key" in params:
+            payload["prompt_cache_key"] = params["prompt_cache_key"]
+        if "prompt_cache_retention" in params:
+            payload["prompt_cache_retention"] = params["prompt_cache_retention"]
         structured_output = params.get("structured_output")
         if isinstance(structured_output, dict):
             schema = structured_output.get("schema")
@@ -152,6 +157,22 @@ class OpenAIModel(ModelAdapter):
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
 
+    def _extract_cache_metadata(self, response: Any) -> dict[str, Any]:
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            return {}
+        cache_metadata: dict[str, Any] = {}
+        for name in ("input_tokens_details", "prompt_tokens_details", "cache_tokens_details"):
+            value = self._normalize_attr(getattr(usage, name, None))
+            if value is not None:
+                cache_metadata[name] = value
+        cached_content_token_count = getattr(usage, "cached_content_token_count", None)
+        if cached_content_token_count is not None:
+            cache_metadata["cached_content_token_count"] = cached_content_token_count
+        if not cache_metadata:
+            return {}
+        return {"cache": cache_metadata}
+
     def _normalize_raw_response(self, response: Any) -> Any:
         if hasattr(response, "model_dump"):
             return response.model_dump(mode="json")
@@ -168,6 +189,12 @@ class OpenAIModel(ModelAdapter):
                 if not key.startswith("_")
             }
         return response
+
+    def _normalize_attr(self, value: Any) -> Any:
+        if value is None:
+            return None
+        normalized = self._normalize_raw_response(value)
+        return normalized
 
     def _build_continuation_state(self, response: Any) -> dict[str, Any]:
         output = getattr(response, "output", None)

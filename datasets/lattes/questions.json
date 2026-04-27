@@ -62,20 +62,9 @@
     {
       "id": "q_en",
       "question": "Does this researcher speak English?",
-      "tags": ["objective", "factual", "simple"],
+      "tags": ["subjective", "factual", "simple"],
       "validation": {
-        "type": "heuristic",
-        "schema": {
-          "type": "object",
-          "properties": {
-            "answer": {
-              "type": "string",
-              "enum": ["yes", "no"]
-            }
-          },
-          "required": ["answer"],
-          "additionalProperties": false
-        }
+        "type": "judge"
       }
     },
     {
