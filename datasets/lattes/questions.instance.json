@@ -1,929 +1,654 @@
 {
   "instances": [
     {
-      "instanceId": "2342739419247924",
-      "contextBlocks": "contexts/2342739419247924/blocks.json",
+      "instanceId": "9674541381385819",
       "questions": [
         {
           "id": "q_phd",
-          "acceptedAnswers": [
-            {
-              "where": "University Of Illinois At Urbana Champaign",
-              "yearsAgo": 26
-            },
-            {
-              "where": "University Of Illinois At Urbana-Champaign",
-              "yearsAgo": 26
-            },
-            {
-              "where": "UIUC",
-              "yearsAgo": 26
-            }
-          ]
+          "ground_truth": "He earned his PhD in Electronic Engineering from the University of Kent, England, back in 1994 — 32 years ago."
         },
         {
           "id": "q_field",
-          "acceptedAnswers": ["Computer Science", "Ciência da Computação"]
+          "ground_truth": "His work is rooted in Computer Science, with a strong focus on Artificial Intelligence, Machine Learning, Data Science, Neural Networks, Data Mining, and Bioinformatics."
         },
         {
           "id": "q_venue",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "most frequent venue or venue type",
-            "evidence from bibliographic production"
-          ]
+          "ground_truth": "He tends to publish in high-impact journals and conferences in computing and bioinformatics, including Information Sciences, Neurocomputing, Briefings in Bioinformatics, Knowledge-Based Systems, Machine Learning, and Data Mining and Knowledge Discovery. He is also a regular presence at events organized by the Brazilian Computing Society (SBC) and IEEE."
         },
         {
           "id": "q_coauth",
-          "contextRefs": ["publications"],
-          "themes": [
-            "recurring co-authors in bibliographic production",
-            "evidence of repeated collaboration",
-            "co-authorship frequency across journal and conference publications"
-          ]
+          "ground_truth": "His closest collaborators are Ana Carolina Lorena, Alexandre C. B. Delbem, Carlos Soares, Rodrigo C. Barros, and João Gama. Other frequent co-authors include Katti Faceli, Ricardo Cerri, Alex A. Freitas, Márcio P. Basgalupp, Teresa Ludermir, David Bisset, André Rossi, Luís Paulo Faina Garcia, Noel Bretas, Bruno Feres de Souza, Solange Rezende, Maria Carolina Monard, Robson Parmezan Bonidia, Rafael G. Mantovani, and Eduardo Hruschka."
         },
         {
-          "id": "q_with_advisees",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "co-authorship with advisees",
-            "evidence from supervision records",
-            "evidence from bibliographic production",
-            "relationship between supervised students and publication authors"
-          ]
+          "id": "q_advpub",
+          "ground_truth": "Yes, quite often. Many of his publications are co-authored with current or former advisees, including Ricardo Cerri, Rodrigo Barros, Katti Faceli, Luís Paulo Garcia, Robson Bonidia, Rafael Mantovani, Bruno Feres, Edésio Alcobaça, and others."
         },
         {
-          "id": "q_adv_areas",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "research topics in supervision records",
-            "research topics in student-related publications",
-            "areas associated with advisees",
-            "avoid inferring areas without evidence"
-          ]
+          "id": "q_advareas",
+          "ground_truth": "His advisees work across a broad range of topics, mostly centered on Machine Learning, AI, Automated ML, Data Mining, Data Streams, Neural Networks, Deep Learning, Bioinformatics, Computational Biology, NLP, Explainable and Responsible AI, Smart Cities, legal/legislative text processing, medical imaging, health applications, and AI for the public sector."
         },
         {
-          "id": "q_pub_2024",
-          "contextRefs": ["publications"],
-          "themes": [
-            "bibliographic production in 2024",
-            "publication relevance within the researcher profile",
-            "title and justification supported by the production list"
-          ]
-        },
-        {
-          "id": "q_english",
-          "acceptedAnswers": ["yes"]
-        },
-        {
-          "id": "q_not_aligned",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
+          "id": "q_pubyear",
           "template_parameters": {
-            "project_not_aligned": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+            "pub_year": 2024
           },
-          "themes": [
-            "no direct alignment with nephropathies",
-            "no evidence of cellular, acellular, or pharmacological therapies",
-            "no evidence of biomedical or clinical nephrology research",
-            "possible only indirect contribution through data science or software systems"
-          ]
+          "ground_truth": "The curriculum doesn't single out one production as the most relevant. In 2024, his output included 15 journal articles, 1 book, 4 book chapters, 7 full conference papers, 3 expanded abstracts, and 1 abstract — making it hard to point to a single standout piece based solely on the available data."
         },
         {
-          "id": "q_aligned",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "template_parameters": {
-            "project_aligned": "How does MLOps differs from DevSecOps"
-          },
-          "themes": [
-            "partial alignment with AI through data science and software systems",
-            "strong background in software systems, distributed systems, smart cities, and data science",
-            "no explicit evidence of UX or pragmatics as central research areas",
-            "possible contribution through software platforms and computational infrastructure"
-          ]
-        },
-        {
-          "id": "q_qualis_count",
-          "contextRefs": ["publications"],
-          "themes": [
-            "journal publications",
-            "indexed journals",
-            "Qualis A1/A2 classification",
-            "avoid unsupported counts if Qualis classification is not present"
-          ]
-        },
-        {
-          "id": "q_indexed_concentration",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "indexed journals or conferences",
-            "Scopus, Web of Science, or Qualis evidence",
-            "avoid unsupported concentration claims"
-          ]
-        },
-        {
-          "id": "q_citations",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "citation metadata in the curriculum",
-            "total citations",
-            "average citations per article",
-            "avoid external citation values unless present in context"
-          ]
-        },
-        {
-          "id": "q_hindex",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "h-index metadata in the curriculum",
-            "field average comparison",
-            "avoid external h-index or field-average claims unless present in context"
-          ]
-        },
-        {
-          "id": "q_projects_funding",
-          "contextRefs": ["projects"],
-          "themes": [
-            "funded research projects",
-            "project coordination or participation",
-            "funding agencies",
-            "evidence from project descriptions"
-          ]
-        },
-        {
-          "id": "q_funding_amount",
-          "contextRefs": ["projects", "professional"],
-          "themes": [
-            "funding amounts",
-            "public or private funding agencies",
-            "last five years",
-            "avoid unsupported monetary totals"
-          ]
-        },
-        {
-          "id": "q_supervision",
-          "contextRefs": ["supervision"],
-          "themes": [
-            "master's supervision",
-            "PhD supervision",
-            "undergraduate scientific initiation",
-            "completed supervisions",
-            "ongoing supervisions"
-          ],
+          "id": "q_en",
           "acceptedAnswers": [
             {
-              "supervised": 93,
-              "completed": 85
+              "answer": "yes"
             }
           ]
         },
         {
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "There's no meaningful alignment here. His expertise lies in Computer Science, AI, Machine Learning, and Bioinformatics. While some of his work touches on health-related topics, there's no evidence of involvement with nephropathies, cellular or acellular therapies, or pharmacological treatments."
+        },
+        {
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Execução Paralela de Aplicações de Bioinformática em Plataformas de Alto Desempenho"
+          },
+          "ground_truth": "The alignment is strong. His career is built on AI, Machine Learning, Data Science, and applied computing — all directly relevant to high-performance bioinformatics applications."
+        },
+        {
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists a considerable number of journal articles, but it doesn't specify how many appear in indexed venues or how many hold A1/A2 Qualis classifications. That level of detail isn't available from the document alone."
+        },
+        {
+          "id": "q_indexed",
+          "ground_truth": "It's not possible to determine that from the curriculum. While it does report overall citation counts from Web of Science, Scopus, and Google Scholar, individual publications aren't tagged with indexing status or Qualis classification."
+        },
+        {
+          "id": "q_cites",
+          "ground_truth": "His citation record is substantial across all major databases: 7,799 citations from 345 works on Web of Science (~22.6 per work); 10,962 citations from 448 works on Scopus (~24.5 per work); and 24,998 citations from 700 works on Google Scholar (~35.7 per work)."
+        },
+        {
+          "id": "q_hidx",
+          "ground_truth": "His h-index on Web of Science is 46. The curriculum doesn't report h-index values for Scopus or Google Scholar, nor does it include a field average — so a direct comparison isn't possible from the available information."
+        },
+        {
+          "id": "q_funded",
+          "ground_truth": "He has been involved in 24 funded research projects — 15 as coordinator and 9 as participant. Funding came from CNPq, FAPESP, CAPES, FACEPE, USP, the University Global Partnership Network, CONICET de Rosario, and the Universidade de Coimbra/Instituto do Mar, among others. Adding 3 funded development projects, funders also include the Câmara dos Deputados, the Tribunal de Justiça do Estado de São Paulo, and CNPq."
+        },
+        {
+          "id": "q_fundamt",
+          "ground_truth": "The curriculum doesn't include any financial figures, so this information isn't available."
+        },
+        {
+          "id": "q_sup",
+          "ground_truth": "His supervision record is extensive: 39 master's students (37 completed, 2 ongoing); 60 doctoral students (49 completed, 11 ongoing); 197 undergraduate research students (188 completed, 9 ongoing); and 62 completed undergraduate thesis/final course projects."
+        },
+        {
+          "id": "q_stupubs",
+          "ground_truth": "At least 285 scientific publications involved at least one supervised student, comprising 118 full journal articles, 114 full conference papers, 41 book chapters, 7 expanded conference abstracts, and 5 conference abstracts. The curriculum doesn't specify which of these appeared in indexed venues."
+        },
+        {
           "id": "q_tcc5y",
-          "contextRefs": ["supervision", "projects"],
-          "themes": [
-            "undergraduate thesis projects",
-            "undergraduate research projects",
-            "last five years",
-            "evidence from supervision and project sections"
-          ]
+          "ground_truth": "Over the past five years, he supervised 23 completed undergraduate thesis/final course projects."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum doesn't explicitly track career outcomes, but it's reasonable to infer that at least 21 advisees continued in academia — they show up at multiple supervision levels, for example moving from undergraduate research to a master's or doctorate, or from a master's to a doctorate or postdoc. Notable examples include Ricardo Cerri, Katti Faceli, Edésio Alcobaça, Jonas Coelho Kasmanas, Bruno Rafael Florentino, and Rosane Maria Maffei Vallim."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "He is formally part of at least 11 collaboration networks and consortia, including CPA-IA/IARA, INCT IA para o Bem Social, the EMBRAPII unit in Data Science and Applied Mathematics at ICMC-USP, CIAAM/USP, NAP-AMDA, the IFIP Working Group on ML and Data Mining, the INGSA LATAM Steering Committee, the UK Expert Advisory Panel for the AI Safety Report, the HealthAI Community of Practice, and two IEEE technical committees."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "At the project level, at least 49 multi-investigator projects are listed: 44 research projects and 5 development projects. However, co-author affiliations aren't consistently recorded in the publication entries, and the curriculum doesn't indicate which collaborators hold CNPq PQ fellowships or equivalent distinctions."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "He currently serves as Director of ICMC/USP, Coordinator of the USP Digital Transformation and AI Office, Vice-Coordinator of CIAAM/USP, and Coordinator of both CPA-IA/IARA and INCT IA para o Bem Social, as well as the EMBRAPII Data Science unit at ICMC-USP. Past roles include Vice-Director of ICMC/USP, Head of the Department of Computer Science, Vice-President of the Brazilian Computing Society, and coordinator of the Business Intelligence & Analytics postgraduate program at Porto Business School, among other council and committee memberships."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "The curriculum doesn't include information about CNPq-certified research group leadership or membership numbers."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "There are no external reports or news articles directly proving policy adoption, but the curriculum does document partnerships and applied projects with clear social or public relevance — including collaborations with the Câmara dos Deputados and the Tribunal de Justiça de São Paulo, AI-based hydrological-risk mitigation, smart city initiatives through IARA, AI for social good through INCT IAPROBEM, HealthAI governance, and membership on the UK AI Safety Report advisory panel."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "The curriculum lists 2 formally registered items: 1 patent filed with INPI and 1 registered computer program. Other software and technological products are mentioned but weren't officially registered."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "The curriculum records 52 presentations explicitly labeled as invited talks or invited speaker/debater sessions, plus 106 additional conference or lecture presentations. The selection criteria or curation process behind these invitations aren't described in the document."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "He has received 84 awards, honorable mentions, distinctions, or titles from a wide range of institutions, including IRCAI/UNESCO, ICMC-USP, USP, Google, Microsoft, NeurIPS, IEEE, ACM SIGEVO, CAPES, Santander, Embrapa, Hewlett-Packard, the Câmara Brasileira do Livro, Prototypes for Humanity, the Global Undergraduate Awards, the Helmholtz Association, the Federation of European Microbiological Societies, and several Brazilian state and municipal bodies, among others."
         }
       ]
     },
     {
       "instanceId": "5521922960404236",
-      "contextBlocks": "contexts/5521922960404236/blocks.json",
       "questions": [
         {
           "id": "q_phd",
-          "acceptedAnswers": [
-            {
-              "where": "Pontifícia Universidade Católica do Rio de Janeiro",
-              "yearsAgo": 26
-            },
-            {
-              "where": "PUC-Rio",
-              "yearsAgo": 26
-            }
-          ]
+          "ground_truth": "She earned her PhD in Informatics from PUC-Rio (Pontifícia Universidade Católica do Rio de Janeiro) in 2000 — 26 years ago as of 2026."
         },
         {
           "id": "q_field",
-          "acceptedAnswers": ["Computer Science", "Ciência da Computação"]
+          "ground_truth": "Her work sits firmly within Computer Science, with a focus on Software Architecture, Distributed Systems, Middleware, Cloud Computing, and the Internet of Things."
         },
         {
           "id": "q_venue",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "most frequent venue or venue type",
-            "evidence from bibliographic production"
-          ]
+          "ground_truth": "She publishes primarily in conference proceedings — 220 full papers in total — alongside 40 journal articles. Her venues of choice revolve around software architecture, distributed systems, software engineering, IoT, cloud/edge computing, middleware, and smart cities."
         },
         {
           "id": "q_coauth",
-          "contextRefs": ["publications"],
-          "themes": [
-            "recurring co-authors in bibliographic production",
-            "evidence of repeated collaboration",
-            "co-authorship frequency across journal and conference publications"
-          ]
+          "ground_truth": "Her most regular collaborators are Everton Cavalcante, Flavia Delicato, Paulo Pires, Nélio Cacho, and Frederico Lopes. Other frequent names include Flavio Oquendo, Alessandro Garcia, Jair Leite, Eduardo Alexandre Ferreira da Silva, André Gustavo Duarte Almeida, Aluizio Rocha Neto, and Ana Luisa Medeiros."
         },
         {
-          "id": "q_with_advisees",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "co-authorship with advisees",
-            "evidence from supervision records",
-            "evidence from bibliographic production",
-            "relationship between supervised students and publication authors"
-          ]
+          "id": "q_advpub",
+          "ground_truth": "Yes, quite often. Several of her advisees — including Everton Cavalcante, Nélio Cacho, Frederico Lopes, Eduardo Alexandre Ferreira da Silva, André Gustavo Duarte Almeida, Thiago Pereira da Silva, Pedro Victor Borges Caldas da Silva, Jorge Pereira, and Aluizio Rocha Neto — also appear as co-authors in her publications."
         },
         {
-          "id": "q_adv_areas",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "research topics in supervision records",
-            "research topics in student-related publications",
-            "areas associated with advisees",
-            "avoid inferring areas without evidence"
-          ]
+          "id": "q_advareas",
+          "ground_truth": "Her advisees work across a broad range of interconnected topics: Software Architecture, Distributed Systems, Middleware, IoT, Cloud and Edge Computing, Smart Cities, Systems-of-Systems, Digital Twins, Software Product Lines, Model-Driven Engineering, Dynamic Adaptation, Microservices, Computer Networks, and Security."
         },
         {
-          "id": "q_pub_2024",
-          "contextRefs": ["publications"],
-          "themes": [
-            "bibliographic production in 2024",
-            "publication relevance within the researcher profile",
-            "title and justification supported by the production list"
-          ]
+          "id": "q_pubyear",
+          "template_parameters": {
+            "pub_year": 2024
+          },
+          "ground_truth": "The curriculum doesn't single out one piece as the most relevant. In 2024, she produced 4 journal articles and 3 full conference papers, but no ranking or highlight is provided among them."
         },
         {
-          "id": "q_english",
-          "acceptedAnswers": ["yes"]
-        },
-        {
-          "id": "q_align_nephro",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "no direct alignment with nephropathies",
-            "no evidence of cellular, acellular, or pharmacological therapies",
-            "no evidence of biomedical or clinical nephrology research",
-            "possible only indirect contribution through software architecture, IoT, cloud, or smart city systems"
-          ]
-        },
-        {
-          "id": "q_align_ai",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "partial alignment with AI through software architecture, IoT, smart cities, and systems",
-            "strong background in software architecture, distributed systems, middleware, cloud computing, and IoT",
-            "no explicit evidence of pragmatics or UX as central research areas",
-            "possible contribution through computational infrastructure for AI-enabled systems"
-          ]
-        },
-        {
-          "id": "q_qualis_count",
-          "contextRefs": ["publications"],
-          "themes": [
-            "journal publications",
-            "indexed journals",
-            "Qualis A1/A2 classification",
-            "avoid unsupported counts if Qualis classification is not present"
-          ]
-        },
-        {
-          "id": "q_indexed_concentration",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "indexed journals or conferences",
-            "Scopus, Web of Science, or Qualis evidence",
-            "avoid unsupported concentration claims"
-          ]
-        },
-        {
-          "id": "q_citations",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "citation metadata in the curriculum",
-            "total citations",
-            "average citations per article",
-            "avoid external citation values unless present in context"
-          ]
-        },
-        {
-          "id": "q_hindex",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "h-index metadata in the curriculum",
-            "field average comparison",
-            "avoid external h-index or field-average claims unless present in context"
-          ]
-        },
-        {
-          "id": "q_projects_funding",
-          "contextRefs": ["projects"],
-          "themes": [
-            "funded research projects",
-            "project coordination or participation",
-            "funding agencies",
-            "evidence from project descriptions"
-          ]
-        },
-        {
-          "id": "q_funding_amount",
-          "contextRefs": ["projects", "professional"],
-          "themes": [
-            "funding amounts",
-            "public or private funding agencies",
-            "last five years",
-            "avoid unsupported monetary totals"
-          ]
-        },
-        {
-          "id": "q_supervision",
-          "contextRefs": ["supervision"],
-          "themes": [
-            "master's supervision",
-            "PhD supervision",
-            "undergraduate scientific initiation",
-            "completed supervisions",
-            "ongoing supervisions"
-          ],
+          "id": "q_en",
           "acceptedAnswers": [
             {
-              "supervised": 55,
-              "completed": 55
+              "answer": "yes"
             }
           ]
         },
         {
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "There's no meaningful alignment here. Her entire academic and professional trajectory is rooted in Computer Science — there's no evidence of work in nephrology, cellular therapies, or pharmacology."
+        },
+        {
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Desenvolvimento de aplicações para IoT"
+          },
+          "ground_truth": "The fit is excellent. Her research lines, publications, supervised students, and active projects all directly engage with IoT application development — including middleware, cloud/edge computing, smart cities, FIWARE, KNoT-FIWARE integration, 5G-based IoT, and architecture-driven development."
+        },
+        {
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists 40 full journal articles, but doesn't provide enough detail to determine how many are indexed or classified as A1/A2 by Qualis."
+        },
+        {
+          "id": "q_indexed",
+          "ground_truth": "This can't be determined from the curriculum alone. While it reports citation counts from Scopus and Google Scholar, it doesn't classify individual publications by indexing status or Qualis level."
+        },
+        {
+          "id": "q_cites",
+          "ground_truth": "In Scopus, she has 824 citations across 125 works (~6.59 per work). In Google Scholar, the numbers rise substantially: 3,392 citations across 150 works (~22.61 per work). Web of Science figures are not available, and the data isn't broken down by article type."
+        },
+        {
+          "id": "q_hidx",
+          "ground_truth": "Her Google Scholar h-index is 29. The Scopus h-index isn't reported, and there's no reference point for the field average, so a direct comparison isn't possible."
+        },
+        {
+          "id": "q_funded",
+          "ground_truth": "She's been involved in 17 funded projects — leading 8 as coordinator and contributing to 9 as participant. Funding came from FINEP, FAPESP, RNP, CNPq, CAPES, UFRN, and Synchro Sistemas de Informação."
+        },
+        {
+          "id": "q_fundamt",
+          "ground_truth": "The curriculum doesn't include any monetary figures, so this can't be determined."
+        },
+        {
+          "id": "q_sup",
+          "ground_truth": "At the master's level: 39 total, 37 completed, 2 ongoing. At the doctoral level: 20 total, 18 completed, 2 ongoing. She also supervised 4 undergraduate research students and 24 undergraduate thesis/final course projects — all completed."
+        },
+        {
+          "id": "q_stupubs",
+          "ground_truth": "At least 177 records involve at least one supervised student, spanning journals, conference proceedings, book chapters, and abstracts. The curriculum doesn't flag which of these appeared in indexed venues."
+        },
+        {
           "id": "q_tcc5y",
-          "contextRefs": ["supervision", "projects"],
-          "themes": [
-            "undergraduate thesis projects",
-            "undergraduate research projects",
-            "last five years",
-            "evidence from supervision and project sections"
-          ]
+          "ground_truth": "Three undergraduate thesis/final course projects in the last five years. No undergraduate research supervision records appear for the same period."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum doesn't directly track post-graduation careers, but at least 11 advisees can be inferred to have stayed in academia — they appear across multiple supervision levels, for example undergraduate to master's to doctorate."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "She participates in at least 9 formal scientific collaboration networks, including KNoT-FI/INCT INES, GT-EcoDiF/RNP, the Brazilian Institute for Web Science Research/INCT, PROCAD, the CAPES TV Digital cooperation project, Sistemas Auto-Reportáveis/PROCAD NF, the Casadinho project, LATIN-AOSD, and SiDETRAil/CAPES-GRICES."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "She participated in at least 9 interinstitutional projects, and her publication list shows extensive collaboration with external researchers. However, the curriculum doesn't systematically list co-author affiliations or identify which collaborators hold CNPq PQ fellowships — though it does confirm she herself is a CNPq productivity fellow."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "She has a strong administrative track record: President and Vice-President of the Brazilian Computer Society (SBC), SBC Council member, SBC Regional Secretariat Director, Coordinator of the Graduate Program in Systems and Computing at UFRN, Vice-Coordinator of the Computer Science undergraduate program, Laboratory Coordinator, Vice-Executive Director of LARC, representative on CONSEPE/CONSUNI and CCET/CONSEPE, member of CNPq and CAPES advisory committees, and Coordinator of the CAPES Thesis Award."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "The curriculum doesn't provide this information."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "No formal reports or news articles are cited, but there are concrete indicators of applied impact: the UFRN IT Residency Program with the Federal Justice of Rio Grande do Norte, Smart Metropolis projects involving public agencies and the private sector, the SPICI public safety system for smart cities, and software registrations related to smart city infrastructure and Federal Justice systems."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "She has 5 technological products in total: 2 patents registered with the USPTO and 3 computer programs registered with INPI."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "One confirmed keynote is on record: at the Brazilian Symposium on Software Engineering (SBES) in 2013. Two additional conference/lecture presentations are listed, but their nature as invited talks isn't explicitly stated."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "She has received 11 awards, honorable mentions, distinctions, or titles from INSTICC, the Brazilian Computer Society (SBC), LARC, IEEE, SBES/CEES, Emerald Group Publishing / Business Process Management Journal, ACM, and again SBC."
         }
       ]
     },
     {
-      "instanceId": "6682919653508224",
-      "contextBlocks": "contexts/6682919653508224/blocks.json",
+      "instanceId": "9039182932747194",
       "questions": [
         {
           "id": "q_phd",
-          "acceptedAnswers": [
-            {
-              "where": "Universidade Federal do Rio de Janeiro",
-              "yearsAgo": 17
-            },
-            {
-              "where": "UFRJ",
-              "yearsAgo": 17
-            }
-          ]
+          "ground_truth": "João Paulo Papa earned his PhD in Computer Science from UNICAMP (Universidade Estadual de Campinas), Brazil, in 2008 — 18 years ago as of 2026."
         },
         {
           "id": "q_field",
-          "acceptedAnswers": [
-            "Computer Science",
-            "Ciência da Computação",
-            "Software Engineering",
-            "Engenharia de Software",
-            "Human-Computer Interaction",
-            "Interação Humano-Computador"
-          ]
+          "ground_truth": "He works in Computer Science, with a focus on Image and Signal Processing, Pattern Recognition, and Machine Learning."
         },
         {
           "id": "q_venue",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "most frequent venue or venue type",
-            "evidence from bibliographic production"
-          ]
+          "ground_truth": "He publishes mainly in international journals like Applied Soft Computing, Neural Computing & Applications, Computers in Biology and Medicine, Information Sciences, and Expert Systems with Applications, as well as conferences such as SIBGRAPI, ICPR, and IJCNN."
         },
         {
           "id": "q_coauth",
-          "contextRefs": ["publications"],
-          "themes": [
-            "recurring co-authors in bibliographic production",
-            "evidence of repeated collaboration",
-            "co-authorship frequency across journal and conference publications"
-          ]
+          "ground_truth": "His most frequent collaborators include Leandro Aparecido Passos Junior, Alexandre Xavier Falcão, Douglas Rodrigues, Gustavo Henrique Rosa, Luis A. Souza Junior, André Nunes de Souza, Clayton R. Pereira, Kelton Augusto Pontara da Costa, Victor Hugo C. de Albuquerque, Danillo R. Pereira, Danilo Jodas, and Rodrigo Yuji Mizobe Nakamura."
         },
         {
-          "id": "q_with_advisees",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "co-authorship with advisees",
-            "evidence from supervision records",
-            "evidence from bibliographic production",
-            "relationship between supervised students and publication authors"
-          ]
+          "id": "q_advpub",
+          "ground_truth": "Yes. Many of his publications are co-authored with current or former advisees, including Leandro Aparecido Passos Junior, Danilo Samuel Jodas, Rafael Gonçalves Pires, Gustavo Henrique Rosa, Marcos Cleison Silva Santana, Luis A. Souza Junior, Pedro Henrique Paiola, Gabriel Lino Garcia, and João Renato Ribeiro Manesco, among others."
         },
         {
-          "id": "q_adv_areas",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "research topics in supervision records",
-            "research topics in student-related publications",
-            "areas associated with advisees",
-            "avoid inferring areas without evidence"
-          ]
+          "id": "q_advareas",
+          "ground_truth": "His advisees work primarily in Machine Learning, Deep Learning, Optimum-Path Forest, Bio-inspired Optimization, and Computer Vision, with applications in medical diagnosis (e.g., Parkinson's disease, cancer) and the oil and gas sector."
         },
         {
-          "id": "q_pub_2024",
-          "contextRefs": ["publications"],
-          "themes": [
-            "bibliographic production in 2024",
-            "publication relevance within the researcher profile",
-            "title and justification supported by the production list"
-          ]
+          "id": "q_pubyear",
+          "template_parameters": {
+            "pub_year": 2024
+          },
+          "ground_truth": "The curriculum doesn't single out one publication as most relevant. His 2024 output spans quantum neural networks, deepfake detection, medical/biomedical AI, optimization, and computer vision — a diverse set that makes it difficult to highlight a single standout work."
         },
         {
-          "id": "q_english",
-          "acceptedAnswers": ["yes"]
-        },
-        {
-          "id": "q_align_nephro",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "no direct alignment with nephropathies",
-            "no evidence of cellular, acellular, or pharmacological therapies",
-            "no evidence of biomedical or clinical nephrology research",
-            "possible only indirect contribution through UX, software engineering, or empirical methods"
-          ]
-        },
-        {
-          "id": "q_align_ai",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "strong alignment with UX and human-computer interaction",
-            "evidence of software engineering, experimental software engineering, human factors, and UX",
-            "evidence of AI-related education and software engineering projects",
-            "limited direct evidence of pragmatics as a linguistic research area"
-          ]
-        },
-        {
-          "id": "q_qualis_count",
-          "contextRefs": ["publications"],
-          "themes": [
-            "journal publications",
-            "indexed journals",
-            "Qualis A1/A2 classification",
-            "avoid unsupported counts if Qualis classification is not present"
-          ]
-        },
-        {
-          "id": "q_indexed_concentration",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "indexed journals or conferences",
-            "Scopus, Web of Science, or Qualis evidence",
-            "avoid unsupported concentration claims"
-          ]
-        },
-        {
-          "id": "q_citations",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "citation metadata in the curriculum",
-            "total citations",
-            "average citations per article",
-            "avoid external citation values unless present in context"
-          ]
-        },
-        {
-          "id": "q_hindex",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "h-index metadata in the curriculum",
-            "field average comparison",
-            "avoid external h-index or field-average claims unless present in context"
-          ]
-        },
-        {
-          "id": "q_projects_funding",
-          "contextRefs": ["projects"],
-          "themes": [
-            "funded research projects",
-            "project coordination or participation",
-            "funding agencies",
-            "evidence from project descriptions"
-          ]
-        },
-        {
-          "id": "q_funding_amount",
-          "contextRefs": ["projects", "professional"],
-          "themes": [
-            "funding amounts",
-            "public or private funding agencies",
-            "last five years",
-            "avoid unsupported monetary totals"
-          ]
-        },
-        {
-          "id": "q_supervision",
-          "contextRefs": ["supervision"],
-          "themes": [
-            "master's supervision",
-            "PhD supervision",
-            "undergraduate scientific initiation",
-            "completed supervisions",
-            "ongoing supervisions"
-          ],
+          "id": "q_en",
           "acceptedAnswers": [
             {
-              "supervised": 50,
-              "completed": 50
+              "answer": "yes"
             }
           ]
         },
         {
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "The alignment is limited. His work is rooted in AI and Computer Science, with some health-related applications (cancer, Parkinson's, ALS, stroke, biomedical imaging), but there's no direct evidence of research on nephropathies, cellular/acellular therapies, or pharmacological treatments."
+        },
+        {
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Plataforma de Agentes Inteligentes"
+          },
+          "ground_truth": "The alignment is strong. His curriculum includes projects on Large Language Models, NLP, knowledge extraction, knowledge graphs, intelligent agents, and AI-based platforms — all directly relevant to this initiative."
+        },
+        {
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists several journal articles but doesn't provide enough detail to determine how many are in indexed journals or classified as A1/A2 by Qualis. That data isn't available in the provided context."
+        },
+        {
+          "id": "q_indexed",
+          "ground_truth": "This can't be determined from the curriculum alone. While citation data from Web of Science and Scopus is reported, individual publications aren't classified by indexing status or Qualis level."
+        },
+        {
+          "id": "q_cites",
+          "ground_truth": "In Web of Science: 821 citations across 97 works (~8.46/work). In Scopus: 262 citations across 182 works (~1.44/work). In a third source listed in the curriculum: 3,515 citations across 129 works (~27.25/work). Google Scholar data isn't explicitly reported."
+        },
+        {
+          "id": "q_hidx",
+          "ground_truth": "The curriculum reports an h-index of 15 in Web of Science. No Scopus or Google Scholar h-index is listed, and no field average is provided for comparison."
+        },
+        {
+          "id": "q_funded",
+          "ground_truth": "He has been involved in at least 29 funded projects — 20 as coordinator and 9 as participant. Funding sources include FAPESP, CNPq, Petrobras, the Office of Naval Research (IFO), UNESP, and other institutional and private partners."
+        },
+        {
+          "id": "q_fundamt",
+          "ground_truth": "The curriculum contains no information on monetary amounts."
+        },
+        {
+          "id": "q_sup",
+          "ground_truth": "Master's: 39 total (28 completed, 11 ongoing). Doctoral: 23 total (18 completed, 5 ongoing). Undergraduate research: 59 total (46 completed, 13 ongoing). Additionally: 18 completed undergraduate thesis projects."
+        },
+        {
+          "id": "q_stupubs",
+          "ground_truth": "At least 436 bibliographic records involve supervised students: ~149 full journal articles, ~250 full conference papers, ~21 expanded abstracts, and ~16 abstracts. The curriculum doesn't specify which of these were published in indexed venues."
+        },
+        {
           "id": "q_tcc5y",
-          "contextRefs": ["supervision", "projects"],
-          "themes": [
-            "undergraduate thesis projects",
-            "undergraduate research projects",
-            "last five years",
-            "evidence from supervision and project sections"
-          ]
+          "ground_truth": "In the last five years: 3 undergraduate thesis projects and 29 undergraduate research projects — 32 in total (16 completed, 13 ongoing, among the research projects)."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum doesn't directly address this, but several advisees appear at multiple supervision levels and as co-authors or project collaborators, suggesting continued academic engagement. Examples include Leandro Aparecido Passos Junior, Danilo Samuel Jodas, Rafael Gonçalves Pires, Douglas Rodrigues, Kelton Augusto Pontara da Costa, Pedro Henrique Paiola, Gabriel Lino Garcia, João Renato Ribeiro Manesco, Giovani Candido, Kaio Henrique Avelino Domeni de Paulo, and Ana Lara Alves Garcia."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "At least 8 formal networks or consortia: IAPR, AAIA, Alexander von Humboldt Foundation, IEEE (including its Task Force on Business Intelligence and Knowledge Management), CA-CC/CNPq, the FAPESP eScience and Data Science Program, UNESPETRO/LIAAP/Recogna, and large interinstitutional projects such as CePEX, CMDTA, HIDE, QOPF, WASPi, WISDOM, RADIAR, and ProtoRADIAR."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "The curriculum shows extensive interinstitutional collaboration across at least 29 funded projects, but individual publication entries don't systematically list co-author affiliations. CNPq PQ fellowship status for collaborators is not indicated."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "He served as Coordinator (2017–2021) and Vice-Coordinator (2010–2013) of the Graduate Program in Computer Science at UNESP; Head (2015–2017) and Vice-Head (2013–2015) of the Department of Computer Science/Computing; Vice-Coordinator of the Bachelor's in Computer Science (2012–2014) and Information Systems (2022–2023); Coordinator of the Laboratory of Teaching, Research and Extension in Computing (2013–2015); member of CA-CC/CNPq; and Coordinator of the FAPESP eScience and Data Science Program."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "The curriculum provides no information on CNPq-certified research group leadership or membership numbers."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "No direct records (reports, news articles) are provided, but the curriculum documents several applied projects with societal relevance: EXTRACT (health research recommendations), CePEX (monitoring extreme events for public decision-making), CMDTA (assistive technology), and Petrobras-related projects (RADIAR, ProtoRADIAR, WISDOM, WASPi, SiSuSMS)."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "5 officially registered outputs: 3 patents and 2 registered computer programs. Other software (e.g., LibOPT) exists but is not formally registered."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "The curriculum lists 27 presentation records (26 conference/lecture presentations and 1 other), plus 2 technical lectures. However, it doesn't specify which were invited or keynote appearances, so a precise count isn't possible."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "He has received 43 awards, honors, titles, fellowships, and recognitions. Granting institutions include Wiley/Expert Systems, King Fahd University of Petroleum and Minerals, the National Academy of Artificial Intelligence, AVSEC-4 Challenge, UNESP-FC, Karlsruhe Institute of Technology, Academia Iberoamericana de Patología y Medicina Bucal, Google Explore CSR, UNICAMP's Innovation Agency, IAPR, AAIA, CAPES, SEBRAE-SP, the Brazilian Computing Society, IEEE, IEEE Signal Processing Society Malaysia Chapter, CAPES/Alexander von Humboldt Foundation, the International Conference on Applied Computing, the Centre for Pattern Recognition and Machine Intelligence, USP, SBSR, SIBGRAPI, ICIAP, and INTERCOM."
         }
       ]
     },
     {
-      "instanceId": "4208603228366576",
-      "contextBlocks": "contexts/4208603228366576/blocks.json",
+      "instanceId": "4093653182381054",
       "questions": [
         {
           "id": "q_phd",
+          "ground_truth": "She earned her PhD in Computing from the Universidade Federal do Rio Grande do Sul (UFRGS), Brazil, in 1994 — 32 years ago."
+        },
+        {
+          "id": "q_field",
+          "ground_truth": "Her work sits at the intersection of Computer Science, Interactive Data Visualization, Information Visualization, and Human-Computer Interaction."
+        },
+        {
+          "id": "q_venue",
+          "ground_truth": "She publishes primarily in conference proceedings tied to computer graphics, visualization, virtual reality, HCI, and applied computing — venues like SIBGRAPI, SVR, IEEE VR, INTERACT, AVI, and other IEEE/ACM/SBC events. She also has journal publications in outlets such as Computers & Graphics, Computer Graphics Forum, IEEE Computer Graphics and Applications, The Visual Computer, JMIR Medical Informatics, and ACM Computing Surveys."
+        },
+        {
+          "id": "q_coauth",
+          "ground_truth": "Her most frequent collaborators are Luciana Porcher Nedel (~60 joint works), Flávio Rech Wagner (~26), André Suslik Spritzer (~20), and Marco A. Winckler (~20). Other recurring names include Marcelo Pimenta, Ricardo Andrade Cava, Isabel Harb Manssour, Anderson Maciel, L. G. Golendziner, João Luis Dihl Comba, and Isabel Siqueira da Silva."
+        },
+        {
+          "id": "q_advpub",
+          "ground_truth": "Yes, quite often. Several co-authors also appear as her supervised students, including André Suslik Spritzer, Isabel Siqueira da Silva, Ricardo Andrade Cava, Francisco de Moura Pinto, Marina Fortes Rey, Jorge Wagner Filho, and Artur Becker, among others."
+        },
+        {
+          "id": "q_advareas",
+          "ground_truth": "Her advisees work on Immersive Analytics, Visual Analytics, Information Visualization (applied to politics, music, and health), Volume Visualization, and Human-Computer Interaction."
+        },
+        {
+          "id": "q_pubyear",
+          "template_parameters": {
+            "pub_year": 2024
+          },
+          "ground_truth": "The curriculum doesn't single out one production as the most relevant. In 2024, she published 2 journal articles and 4 full conference papers, but no ranking or highlight is provided among them."
+        },
+        {
+          "id": "q_en",
           "acceptedAnswers": [
             {
-              "where": "Universidade Federal do Paraná",
-              "yearsAgo": 11
-            },
-            {
-              "where": "UFPR",
-              "yearsAgo": 11
+              "answer": "yes"
             }
           ]
         },
         {
-          "id": "q_field",
-          "acceptedAnswers": [
-            "Linguistics",
-            "Linguística",
-            "Letters",
-            "Letras",
-            "Semantics",
-            "Semântica",
-            "Pragmatics",
-            "Pragmática"
-          ]
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "There's no meaningful alignment. Her expertise is centered on Computer Science, Data Visualization, HCI, Computer Graphics, and Visual Analytics. While she has some health-related work involving AI and medical data visualization, there's no connection to nephropathies or therapeutic strategies of that nature."
         },
         {
-          "id": "q_venue",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "most frequent venue or venue type",
-            "evidence from bibliographic production"
-          ]
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Análise exploratória visual de dados em diferentes domínios"
+          },
+          "ground_truth": "The alignment is very strong. Her PhD thesis already addressed visual exploratory analysis, and her entire career — research lines, projects, publications, and student supervision — revolves around interactive data visualization, visual analytics, multidimensional and graph data, scientific visualization, and their application across different domains."
         },
         {
-          "id": "q_coauth",
-          "contextRefs": ["publications"],
-          "themes": [
-            "recurring co-authors in bibliographic production",
-            "evidence of repeated collaboration",
-            "co-authorship frequency across journal and conference publications"
-          ]
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists numerous journal articles, but doesn't provide enough detail to determine how many are in indexed journals or carry Qualis A1/A2 classification — that information simply isn't available there."
         },
         {
-          "id": "q_with_advisees",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "co-authorship with advisees",
-            "evidence from supervision records",
-            "evidence from bibliographic production",
-            "relationship between supervised students and publication authors"
-          ]
+          "id": "q_indexed",
+          "ground_truth": "This can't be determined from the curriculum alone. It does report citation totals from Web of Science, Scopus, and Google Scholar, and lists venues, but doesn't classify individual publications by indexing status or Qualis level."
         },
         {
-          "id": "q_adv_areas",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "research topics in supervision records",
-            "research topics in student-related publications",
-            "areas associated with advisees",
-            "avoid inferring areas without evidence"
-          ]
+          "id": "q_cites",
+          "ground_truth": "In Web of Science: 537 citations across 75 works (~7.16 per work). In Scopus: 1,269 citations across 106 works (~11.97 per work). In Google Scholar: 3,178 citations across 268 works (~11.86 per work)."
         },
         {
-          "id": "q_pub_2024",
-          "contextRefs": ["publications"],
-          "themes": [
-            "bibliographic production in 2024",
-            "publication relevance within the researcher profile",
-            "title and justification supported by the production list"
-          ]
+          "id": "q_hidx",
+          "ground_truth": "Her h-index is 12 in Web of Science and 20 in Scopus. The curriculum doesn't report a Google Scholar h-index, and no field average is provided for comparison."
         },
         {
-          "id": "q_english",
-          "acceptedAnswers": ["yes"]
+          "id": "q_funded",
+          "ground_truth": "The curriculum lists 17 projects with explicit funding information — 14 as coordinator and 3 as participant. Funding sources include CNPq, CAPES, FAPERGS, FAPESP, FINEP, Unimed Belo Horizonte, and CENPES/Petrobras. An additional project (MIDAS) mentions CNPq/FNRS involvement, though funding details aren't explicitly stated."
         },
         {
-          "id": "q_align_nephro",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "no direct alignment with nephropathies",
-            "no evidence of cellular, acellular, or pharmacological therapies",
-            "no evidence of biomedical or clinical nephrology research",
-            "research background is in linguistics, semantics, pragmatics, fake news, and impoliteness"
-          ]
+          "id": "q_fundamt",
+          "ground_truth": "No monetary amounts are reported anywhere in the curriculum."
         },
         {
-          "id": "q_align_ai",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "strong alignment with pragmatics and language use",
-            "evidence of semantics, pragmatics, philosophy of linguistics, fake news, and digital communication",
-            "some contextual relevance to human communication with machines",
-            "limited evidence of technical artificial intelligence or machine learning research"
-          ]
+          "id": "q_sup",
+          "ground_truth": "Master's: 63 total (58 completed, 5 ongoing). Doctoral: 14 total (12 completed, 2 ongoing). Undergraduate research: 43 completed. Undergraduate thesis/final projects: 47 completed."
         },
         {
-          "id": "q_qualis_count",
-          "contextRefs": ["publications"],
-          "themes": [
-            "journal publications",
-            "indexed journals",
-            "Qualis A1/A2 classification",
-            "avoid unsupported counts if Qualis classification is not present"
-          ]
-        },
-        {
-          "id": "q_indexed_concentration",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "indexed journals or conferences",
-            "Scopus, Web of Science, or Qualis evidence",
-            "avoid unsupported concentration claims"
-          ]
-        },
-        {
-          "id": "q_citations",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "citation metadata in the curriculum",
-            "total citations",
-            "average citations per article",
-            "avoid external citation values unless present in context"
-          ]
-        },
-        {
-          "id": "q_hindex",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "h-index metadata in the curriculum",
-            "field average comparison",
-            "avoid external h-index or field-average claims unless present in context"
-          ]
-        },
-        {
-          "id": "q_projects_funding",
-          "contextRefs": ["projects"],
-          "themes": [
-            "funded research projects",
-            "project coordination or participation",
-            "funding agencies",
-            "evidence from project descriptions"
-          ]
-        },
-        {
-          "id": "q_funding_amount",
-          "contextRefs": ["projects", "professional"],
-          "themes": [
-            "funding amounts",
-            "public or private funding agencies",
-            "last five years",
-            "avoid unsupported monetary totals"
-          ]
-        },
-        {
-          "id": "q_supervision",
-          "contextRefs": ["supervision"],
-          "themes": [
-            "master's supervision",
-            "PhD supervision",
-            "undergraduate scientific initiation",
-            "completed supervisions",
-            "ongoing supervisions",
-            "avoid unsupported totals if the section does not provide enough evidence"
-          ]
+          "id": "q_stupubs",
+          "ground_truth": "At least 205 records involve at least one supervised student — 193 bibliographic publications and 12 presentations. The curriculum doesn't indicate which of these appeared in indexed venues."
         },
         {
           "id": "q_tcc5y",
-          "contextRefs": ["supervision", "projects"],
-          "themes": [
-            "undergraduate thesis projects",
-            "undergraduate research projects",
-            "last five years",
-            "evidence from supervision and project sections"
-          ]
+          "ground_truth": "In the last five years, she supervised 10 undergraduate thesis/final course projects and 3 undergraduate research projects — 13 in total."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum doesn't directly report on advisees' career paths. However, at least 11 appear to have continued academically, based on progressing through multiple supervision levels (e.g., undergraduate → master's → doctoral or postdoctoral)."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "At least 8 formal networks or consortia: CIARS, Geociências Digitais (University of Oslo), Formação e Análise de Grupos em Big Data, VIDAS/CAPES-COFECUB, IVisHDMed/CNPq-FNRS, MIDAS/CNPq-FNRS, EDGE/CNPq-INRIA, and SPIDER-WEB/CAPES-COFECUB."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "Eight interinstitutional or international projects are documented, involving institutions such as the University of Oslo, Université Paul Sabatier, INRIA, Université catholique de Louvain, and a broad CIARS network with over 45 researchers. However, the curriculum doesn't provide enough information to identify how many collaborators hold CNPq PQ fellowships or equivalent recognition."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "She served as Director of the Institute of Informatics at UFRGS (2016–2024) and Vice-Director (2011–2016); Head of the Department of Applied Informatics (2005–2008) and Vice-Head (2003–2004); Coordinator of the Graduate Program in Computing (1998–2000) and Vice-Coordinator (1997–1998 and 2011–2012); Coordinator of a specialization course (2009–2013); and Vice-Coordinator of the Institute Research Committee (2009–2010)."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "The curriculum doesn't mention CNPq-certified research group leadership or member counts. She coordinates the CIARS network (45+ researchers), but this is described as a project network, not a certified research group."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "No. The curriculum doesn't include reports, news articles, or institutional records demonstrating that research outcomes were applied to public policies or social initiatives."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "None officially registered. The curriculum mentions 3 computer programs — EasyConfig, TaxonomyBrowser, and DiaBR — but none carry formal INPI or equivalent registration."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "The curriculum lists 19 event participation records with presentation titles, but doesn't explicitly classify any as invited or keynote talks — so that count isn't determinable from the available information."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "She has received 18 awards, honorable mentions, or titles. Granting bodies include the Sociedade Brasileira de Computação, UFRGS, ASSESPRO-RS, SEI/MODDATA/Fundação Roberto Marinho, SUCESU-SP, and competitions/events such as SIBGRAPI, SVR, and thesis contests."
         }
       ]
     },
     {
-      "instanceId": "7227955029154651",
-      "contextBlocks": "contexts/7227955029154651/blocks.json",
+      "instanceId": "5123602572479168",
       "questions": [
         {
           "id": "q_phd",
-          "acceptedAnswers": [
-            {
-              "where": "Imperial College London",
-              "yearsAgo": 15
-            }
-          ]
+          "ground_truth": "She completed her PhD in Computer Science at the Institut National Polytechnique de Grenoble (INPG), in France, in 1996 — which means it has been 30 years, using 2026 as reference."
         },
         {
           "id": "q_field",
-          "acceptedAnswers": [
-            "Computer Science",
-            "Ciência da Computação",
-            "Software Engineering",
-            "Engenharia de Software",
-            "Distributed Systems",
-            "Sistemas Distribuídos"
-          ]
+          "ground_truth": "She works primarily in Computer Science, with a strong focus on High Performance Computing, parallel and distributed systems, accelerators such as GPUs and FPGAs, bioinformatics, and cloud computing."
         },
         {
           "id": "q_venue",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "most frequent venue or venue type",
-            "evidence from bibliographic production"
-          ]
+          "ground_truth": "She tends to publish in high-impact journals and conferences in the field, such as IEEE Transactions on Parallel and Distributed Systems, Journal of Parallel and Distributed Computing, Future Generation Computer Systems, and Concurrency and Computation: Practice and Experience."
         },
         {
           "id": "q_coauth",
-          "contextRefs": ["publications"],
-          "themes": [
-            "recurring co-authors in bibliographic production",
-            "evidence of repeated collaboration",
-            "co-authorship frequency across journal and conference publications"
-          ]
+          "ground_truth": "Her most frequent collaborators are Azzedine Boukerche (29 works), Edans Sandes (27), and George Teodoro (23). Other recurring names include Li Weigang, Maria Emilia Walter, Rodolfo Batista, Jan Correa, Jun Kong, Tahsin Kurc, and Joel Saltz."
         },
         {
-          "id": "q_with_advisees",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "co-authorship with advisees",
-            "evidence from supervision records",
-            "evidence from bibliographic production",
-            "relationship between supervised students and publication authors"
-          ]
+          "id": "q_advpub",
+          "ground_truth": "Yes. Several of her works are co-authored with advisees, including Edans Sandes, Daniel Sundfeld, Marco Antônio Figueiredo, and others."
         },
         {
-          "id": "q_adv_areas",
-          "contextRefs": ["supervision", "publications"],
-          "themes": [
-            "research topics in supervision records",
-            "research topics in student-related publications",
-            "areas associated with advisees",
-            "avoid inferring areas without evidence"
-          ]
+          "id": "q_advareas",
+          "ground_truth": "Her advisees work mainly in parallel and high-performance computing, biological sequence comparison, GPU/FPGA and hybrid platforms, cloud and federated cloud computing, and distributed systems."
         },
         {
-          "id": "q_pub_2024",
-          "contextRefs": ["publications"],
-          "themes": [
-            "bibliographic production in 2024",
-            "publication relevance within the researcher profile",
-            "title and justification supported by the production list"
-          ]
+          "id": "q_pubyear",
+          "template_parameters": {
+            "pub_year": 2024
+          },
+          "ground_truth": "The curriculum does not single out one production from 2024 as the most relevant. The works registered for that year include three journal articles, one book chapter, and one full conference paper — making it impossible to identify a single standout based on the curriculum alone."
         },
         {
-          "id": "q_english",
-          "acceptedAnswers": ["yes"]
-        },
-        {
-          "id": "q_align_nephro",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "no direct alignment with nephropathies",
-            "no evidence of cellular, acellular, or pharmacological therapies",
-            "no direct biomedical nephrology evidence",
-            "possible only indirect contribution through software systems, adaptive systems, or computational projects"
-          ]
-        },
-        {
-          "id": "q_align_ai",
-          "contextRefs": ["academicProfessional", "projects", "publications"],
-          "themes": [
-            "partial alignment with AI through AI for Software Engineering and Software Engineering for AI",
-            "strong background in distributed software engineering, self-adaptive systems, model-driven engineering, and software systems",
-            "no explicit evidence of UX or pragmatics as central research areas",
-            "possible contribution through engineering AI-enabled software systems"
-          ]
-        },
-        {
-          "id": "q_qualis_count",
-          "contextRefs": ["publications"],
-          "themes": [
-            "journal publications",
-            "indexed journals",
-            "Qualis A1/A2 classification",
-            "avoid unsupported counts if Qualis classification is not present"
-          ]
-        },
-        {
-          "id": "q_indexed_concentration",
-          "contextRefs": ["publications"],
-          "themes": [
-            "publication venues",
-            "indexed journals or conferences",
-            "Scopus, Web of Science, or Qualis evidence",
-            "avoid unsupported concentration claims"
-          ]
-        },
-        {
-          "id": "q_citations",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "citation metadata in the curriculum",
-            "total citations",
-            "average citations per article",
-            "avoid external citation values unless present in context"
-          ]
-        },
-        {
-          "id": "q_hindex",
-          "contextRefs": ["publications", "citations"],
-          "themes": [
-            "h-index metadata in the curriculum",
-            "field average comparison",
-            "avoid external h-index or field-average claims unless present in context"
-          ]
-        },
-        {
-          "id": "q_projects_funding",
-          "contextRefs": ["projects"],
-          "themes": [
-            "funded research projects",
-            "project coordination or participation",
-            "funding agencies",
-            "evidence from project descriptions"
-          ]
-        },
-        {
-          "id": "q_funding_amount",
-          "contextRefs": ["projects", "professional"],
-          "themes": [
-            "funding amounts",
-            "public or private funding agencies",
-            "last five years",
-            "avoid unsupported monetary totals"
-          ]
-        },
-        {
-          "id": "q_supervision",
-          "contextRefs": ["supervision"],
-          "themes": [
-            "master's supervision",
-            "PhD supervision",
-            "undergraduate scientific initiation",
-            "completed supervisions",
-            "ongoing supervisions"
-          ],
+          "id": "q_en",
           "acceptedAnswers": [
             {
-              "supervised": 20,
-              "completed": 20
+              "answer": "yes"
             }
           ]
         },
         {
+          "id": "q_projfit_1",
+          "template_parameters": {
+            "project": "Novos e velhos atores para estratégias terapêuticas em nefropatias: terapias celulares, acelulares e farmacológicas"
+          },
+          "ground_truth": "There is no direct alignment between her profile and this project. Her career is centered on Computer Science, high-performance computing, and bioinformatics. While there are some health and biotechnology-related projects in her curriculum, there is no evidence of work involving nephropathies, cellular or acellular therapies, or pharmacological treatments."
+        },
+        {
+          "id": "q_projfit_2",
+          "template_parameters": {
+            "project": "Execução Paralela de Aplicações de Bioinformática em Plataformas de Alto Desempenho"
+          },
+          "ground_truth": "The alignment is very strong. Her curriculum is filled with research lines, projects, publications, and student supervision directly related to parallel execution, GPU computing, high-performance platforms, and bioinformatics — which are the core themes of this project."
+        },
+        {
+          "id": "q_qualis",
+          "ground_truth": "The curriculum lists 52 full journal articles. However, it does not provide enough information to determine how many are in indexed journals or how many fall under the A1 or A2 Qualis classification."
+        },
+        {
+          "id": "q_indexed",
+          "ground_truth": "The curriculum reports citation totals from Web of Science and Scopus and lists the publication venues, but does not individually classify each work by indexing status or Qualis level. It is therefore not possible to confirm whether her output is concentrated in A1/A2 or indexed venues."
+        },
+        {
+          "id": "q_cites",
+          "ground_truth": "In Web of Science, she has 71 publications and 317 citations, averaging approximately 4.46 citations per work. In Scopus, there are 99 publications and 621 citations, with an average of around 6.27. A third source labeled \"Others\" records 204 publications and 1,302 citations, averaging about 6.38 per work. The curriculum does not provide updated Google Scholar data beyond this last source."
+        },
+        {
+          "id": "q_hidx",
+          "ground_truth": "The curriculum reports an h-index of 10 in Web of Science, 13 in Scopus, and 19 in the \"Others\" source. No field average is provided, so a direct comparison is not possible from the available information."
+        },
+        {
+          "id": "q_funded",
+          "ground_truth": "The curriculum lists 18 funded research projects in which she appears as coordinator or participant — 8 as coordinator and 10 as participant. Funding agencies and institutions include CNPq, CAPES, the Barcelona Supercomputing Center, the European Commission, FAPDF, Deutsche Forschungsgemeinschaft, Universidade de Brasília, Universidade Federal de Santa Catarina, Embrapa, Universidade Católica de Brasília, and the University of Ottawa."
+        },
+        {
+          "id": "q_fundamt",
+          "ground_truth": "The curriculum does not include any information about the monetary amounts of the funding obtained."
+        },
+        {
+          "id": "q_sup",
+          "ground_truth": "At the master's level, she has supervised 28 students, of whom 26 have completed and 2 are ongoing. At the doctoral level, there are 12 total, with 10 completed and 2 still in progress. In undergraduate research, she has supervised 8 students, with 7 completed and 1 ongoing. The curriculum also separately records 39 completed undergraduate thesis projects."
+        },
+        {
+          "id": "q_stupubs",
+          "ground_truth": "The curriculum shows 119 bibliographic production or presentation records involving at least one supervised student. Of these, 114 are publications — including 33 full journal articles, 71 full conference papers, 2 book chapters, 2 expanded abstracts, and 6 abstracts — and 5 are presentations. The curriculum does not specify which of these venues are indexed."
+        },
+        {
           "id": "q_tcc5y",
-          "contextRefs": ["supervision", "projects"],
-          "themes": [
-            "undergraduate thesis projects",
-            "undergraduate research projects",
-            "last five years",
-            "evidence from supervision and project sections"
-          ]
+          "ground_truth": "In the last five years (since 2021), she has supervised 3 undergraduate thesis projects — by Eduardo Martins, Matheus Pinho, and Matheus Nascimento — and has 1 ongoing undergraduate research project with Atila Fernandes."
+        },
+        {
+          "id": "q_careers",
+          "ground_truth": "The curriculum does not provide direct information about the professional paths taken by her advisees after completing their programs. That said, it is possible to infer that at least 9 of them pursued academic careers. Edans Sandes, for instance, appears across undergraduate research, master's, doctoral, and postdoctoral supervision. Others such as Alessandro Ferreira Leite, Daniel Sundfeld, Jan Correa, Marco Antônio Figueiredo, Emerson Macedo, and Gustavo Portela show up at both the master's and doctoral levels. Marcelo Sousa and Glauber Scorsatto started under her supervision at the undergraduate level and later continued to the master's."
+        },
+        {
+          "id": "q_networks",
+          "ground_truth": "The curriculum records 11 collaborative projects in total: 9 international — involving partners in Spain, Canada, France, Germany, and the European Commission — and 2 national interinstitutional ones."
+        },
+        {
+          "id": "q_extcoauth",
+          "ground_truth": "Based on the project descriptions, she participated in or coordinated at least 11 projects involving researchers from other institutions. However, the curriculum does not detail the other participants in those projects or indicate whether any of them hold a CNPq PQ fellowship or equivalent recognition."
+        },
+        {
+          "id": "q_admin",
+          "ground_truth": "She currently serves as Head of the Computer Science Department at UnB, a position she has held since 2024. Previously, she was Vice-Head of the same department from 2018 to 2022, and served as Program Coordinator during four separate terms between 2000 and 2010."
+        },
+        {
+          "id": "q_group",
+          "ground_truth": "The curriculum does not include information about leadership of CNPq-certified research groups or the number of active members."
+        },
+        {
+          "id": "q_impact",
+          "ground_truth": "The curriculum does not present direct evidence of research outcomes being applied to public policies or social initiatives. However, there are records of projects focused on the COVID-19 pandemic — in partnership with CAPES and FIOCRUZ INOVA — which point to concrete applications of her work in the area of public health."
+        },
+        {
+          "id": "q_techprod",
+          "ground_truth": "The curriculum highlights software tools developed by the researcher, such as CUDAlign and MASA, but does not list any formal patents or registrations with INPI or other official institutions."
+        },
+        {
+          "id": "q_talks",
+          "ground_truth": "The curriculum lists 31 records explicitly labeled as \"Invited Talk\" or \"Keynote Speaker,\" along with one \"Invited Webinar.\" It does not, however, describe the selection process or institutional curation criteria behind these invitations."
+        },
+        {
+          "id": "q_awards",
+          "ground_truth": "She has received 9 awards, honorable mentions, and titles throughout her career: the IEEE TCPP Outstanding Service and Contributions Award (IEEE Computer Society, 2023); the IEEE TPDS Award for Editorial Excellence (IEEE Computer Society, 2019); the Wilkes Award for Best Paper Published in The Computer Journal in 2018 (Oxford University Press, 2019); an honorable mention as thesis advisor at WSCAD-CTD 2018 (SBC); advisor of the 3rd best PhD thesis at SBC CTD 2016 (SBC); advisor of the winning thesis of the 2016 CAPES Thesis Award in Computer Science (CAPES); advisor of the winning thesis at WSCAD-CTD 2016 (SBC); Best Paper Award at I2TS 2004; and the title of IEEE Senior Member (IEEE Society, 2004)."
         }
       ]
     }
   ]
 }
-

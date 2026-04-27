@@ -4,9 +4,10 @@ from pathlib import Path
 
 
 FORMAT_ARTIFACTS = {
-    "html": "raw.html",
+    "html": "clean.html",
     "raw_html": "raw.html",
-    "cleaned_html": "cleaned.html",
+    "cleaned_html": "clean.html",
+    "clean_html": "clean.html",
     "json": "parsed.json",
     "parsed_json": "parsed.json",
     "blocks": "blocks.json",

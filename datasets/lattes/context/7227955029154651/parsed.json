@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-25T16:57:41.447Z",
+    "generatedAt": "2026-04-27T05:52:16.914Z",
     "lattesId": "7227955029154651",
     "lastUpdated": "2026-03-15T03:00:00.000Z",
     "sourceUrl": "https://lattes.cnpq.br/7227955029154651",
@@ -22,18 +22,12 @@
       "HENRIQUE M. MAIA, PAULO",
       "MAIA, PAULO"
     ],
-    "extraFields": [
-      "Nome: Paulo Henrique Mendes Maia"
-    ],
     "addresses": [
       {
         "type": "Profissional",
         "phones": [
           "(85) 31019647"
         ],
-        "fax": [],
-        "emails": [],
-        "extra": [],
         "organization": "Universidade Estadual do Ceará",
         "unit": "Centro de Ciências e Tecnologia, Curso de Ciências da Computação.",
         "street": "Fundação Universidade Estadual do Ceará - UECE",
@@ -136,9 +130,6 @@
         "degreeName": "Graduação em Ciência da Computação",
         "institution": "Universidade Federal do Ceará, UFC, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "academic"
       },
       {
@@ -150,9 +141,6 @@
         "degreeName": "Extensão universitária em Curso de Inglês. (Carga horária: 360h)",
         "institution": "Universidade Federal do Ceará, UFC, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       }
     ]
@@ -1032,291 +1020,173 @@
     ]
   },
   "supervisions": {
-    "completed": [
-      "Matheus Lima Chagas. Relying on Support Network for Uncertainty-Aware Adaptation. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador).",
-      "Antônio Marcos Alves Morais. Um Framework para Facilitar o Desenvolvimento de Sistemas com IA Explicável. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador).",
-      "Lucas Vieira Alves. Adapting Self-adaptive Cyber-physical systems On-the-fly. Início: 2021. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador).",
-      "Francisco Felipe Rodrigues de Oliveira. LLMS AS DESIGN PARTNERS FOR AI-BASED SYSTEM PATTERNS: AN EMPIRICAL EVALUATION. 2025. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ingrid Teles Guedes Coutinho. SP2Mic: Uma Ferramenta para Geração de Código de Microsserviços a partir de Stored Procedures. 2023. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Eduardo Pereira e Silva Filho. IDENTIFICANDO UNIDADES DE DECOMPOSIÇÃO EM MICROSSERVIÇOS EM UM SISTEMA LEGADO COMPLEXO E DE GRANDE PORTE: UM ESTUDO DE CASO. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Anderson Martins Gomes. DoME: an Architecture for Domain Model Evolution at Runtime Using NLP. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. ENVAIOT - AN ENVIRONMENT FOR MODELLING AND SIMULATING ADAPTIVE IOT APPLICATIONS. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Thaís de Almeida Barros. BUPA: BUSINESS PROCESS MODEL AND USER STORIES FOR ADAPTATION SCENARIOS - UM GUIA PARA IDENTIFICAR E MODELAR CENÁRIOS DE ADAPTAÇÃO, EXCEPCIONAIS E DE INCERTEZAS EM SISTEMAS DE SISTEMAS. 2022. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Lima Chagas. FRADE: A CONCEPTUAL FRAMEWORK FOR SELF-ADAPTIVE DEFIANT COMPONENTS. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. DRES-ML: a Domain-specific Language for Modelling Exceptional Scenarios and Self-adaptive Behaviours for Drone-based Applications. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Luiz Alexandre Castelo Branco Gomes. EDITORY: UMA FERRAMENTA DE AUTORIA PARA CRIAÇÃO DE CONTEÚDO DIGITAL ACESSÍVEL PARA EDUCAÇÃO A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Cleyton Carvalho Cândido. REDE ESTADUAL DE GESTÃO COLABORATIVA DAS UNIDADES DE ENSINO: um ambiente colaborativo para profissionais de saúde como estratégia de integração do Observatório Cearense de Educação Permanente em Saúde. 2020. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marcia Maria Silva Souza Maciel. ADORE: An Adaptation-Oriented Requirement Modeling Approach for Systems of Systems. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marx Haron Gomes Barbosa. A PROCESS TO DISCOVER AND EXTRACT MICROSERVICES FROM DATABASE-ORIENTED LEGACY SYSTEMS. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Adson Roberto Pontes Damasceno. \"STUART: UM SISTEMA DE TUTORIA INTELIGENTE ARTIFICIAL PARA AUMENTAR A ESCALABILIDADE DOS CURSOS A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Wanessa de Caldas Teotônio. WAL: UMA FERRAMENTA PARA DIAGNOSTICAR E INSERIR RECURSOS DE ACESSIBILIDADE EM PÁGINAS WEB EM TEMPO DE EXECUÇÃO. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliziana Mendonça Machado. LUZ DO SABER FUNDAMENTAL: RECURSO DIGITAL AUXILIAR NOS PROCESSOS DE ALFABETIZAÇÃO E LETRAMENTOS. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ana Júlia Ferreira Alves. SOFTWARE CRIATIVO: SISTEMA DE APOIO À PRODUÇÃO DE GÊNEROS TEXTUAIS PARA ALUNOS DO ENSINO FUNDAMENTAL 1. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Carlos Alberto Fernandes Medeiros. UMA ANÁLISE DO USO DE TÉCNICAS E FERRAMENTAS DE ENGENHARIA DIRIGIDA POR MODELOS A PARTIR DE PLATAFORMAS DE PERGUNTAS E RESPOSTAS NO ÂMBITO DA ENGENHARIA DE SOFTWARE. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Monteiro Barbosa. BEETHOVEN: AN EVENT-DRIVEN LIGHTWEIGHT PLATFORM FOR MICROSERVICES ORCHESTRATION. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Rômulo Gadelha de Moura Lima. SCEN@RIST: An Approach for Verifying Self-Adaptive Systems Using Runtime Scenarios. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "MARCOS VINÍCIUS DE FREITAS BORGES. CLOUD RESTRICTION SOLVER: A REFACTORING-BASED APPROACH TO MIGRATE APPLICATIONS TO THE CLOUD. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Amanda Souza da Silva. Uma Abordagem Interativa e Semi-automática para a Detecção e Remoção de Cenários Implícitos em Modelos Comportamentais usando Rastros de Execução. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Fabiano José Gadelha de Freitas. JustModeling: uma Abordagem MDE para Desenvolvimento de Aplicações Negociais para Android. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Programa de Pós-graduação em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Evilásio Costa Júnior. Um framework para desenvolvimento de sistemas adaptativos baseados em serviços. 2013. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Paulo Henrique Mendes Maia.",
-      "Sandra Régia Chaves Carvalho. Economia de Energia em Redes de Sensores Utilizano Boas Práticas da Metodologia Seis Sigma. 2012. Dissertação (Mestrado em Programa de Pós-graduação em Engenharia de TeleInf) - Universidade Federal do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Paulo Henrique Mendes Maia.",
-      "Ricardo Normando Ferreira de Paula. UMA TAXONOMIA PARA REQUISITOS DE METAVERSOS EDUCACIONAIS. 2025. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ricardo Normando Ferreira de Paula. UMA TAXONOMIA PARA REQUISITOS DE METAVERSOS EDUCACIONAIS. 2025. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marcos Vinícius de Freitas Borges. A Syntactic-Semantic Analysis Method for Automatic API Connection Points Discovery in Systems-of-Information Systems. 2025. Tese (Doutorado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Matheus Henrique Esteves Paixão. 2021. Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Paulo Henrique Mendes Maia.",
-      "Carlos Henrique Gouveia Carneiro. DataQI.NET: um Framework para Especificação de Consultas Utilizando o Padrão Repository. 2020. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Wellington Costa pereira. CONVALIDA - UMA BIBLIOTECA BASEADA EM ANOTAÇÕES PARA VALIDAÇÃO DE CAMPOS EM APLICAÇÕES ANDROID. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "ÂNGELO LUSTOSA DE FIGUEIREDO FILHO. GUARDIÃOIMAGEM - UM SISTEMA DE INTEGRAÇÃO ENTRE UM SISTEMA DE INFORMAÇÃO HOSPITALAR E UM SISTEMA DE COMUNICAÇÃO E ARQUIVAMENTO DE IMAGENS. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Laryssa Lima Muniz. TCG: Uma Ferramenta para Geração e Seleção de Casos de Teste Funcionais e Estatísticos. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Hermano Anderson Uchôa. Evolução não-intrusiva de uma Aplicação para Geração de Logs em um Banco de dados Relacional: um Relato de Experiência. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "TIAGO ALENCAR MENEZES. DESENVOLVIMENTO DE UM PLUG-IN PARA A VISUALIZAÇÃO DO HISTÓRICO DE COMMITS DE ARQUIVOS DO GITHUB PARA O ECLIPSE. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Custódio Cunha Neto. TIME MANAGER : UMA FERRAMENTA DE AUDITORIA DE TEMPO DE ATIVIDADES COM INTEGRAÇÃO A ISSUE TRACKING SYSTEMS. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Márcia Maria Silva Souza Maciel. Uma Análise Quantitativa da Utilização de Técnicas de Validação de Requisitos no Mercado de TI em Fortaleza. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Caio Holanda Costa. Migração Parcial de um Banco de Dados Relacional para um Banco de Dados NoSQL na Nuvem Através de Adaptações Não-intrusivas: um Relato de Experiência. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Taciana Alves Bezerra. Uma Revisão da Literatura sobre Técnicas de Avalição de Softwares Educativos. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Vianey Batista Moreira Filho. Soluções para Descoberta de Serviços em Sistemas Ubíquos: uma Revisão de Literatura. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Aroldo Marinho dos Santos. Uma Análise sobre o Processo de Ensino e Aprendizagem do Fundamental I na Escola Municipal Maria de Lourdes da Silveira. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maria de Conceição de Menezes Pereira. Gestão Democrática em uma Perspectiva Participativa. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maria Edleuza Souza Feitosa. A Participação da Família no Contexto Escolar: uma Observação da Prática Escolar na Escola Danilo Sá Benevides Magalhães. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Fernanda Goes Sales. Indisciplina no Ensino Fundamental II na Escola Corália Gonzaga Sales. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francinete Silva de Castro Souza. A Implementação da Informática Educativa na Escola de Ensino Infantil e Fundamental São Francisco Das Chagas. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Germana Pinheiro da Rocha Pontes. Análise sobre a relação do uso de drogas na família e o insucesso escolar dos alunos da Escola de Ensino Fundamental Maria Dolores Menezes de Almeida. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Herbene Garcia da Silva. A Importância da Parceria Família e Escola Nos Resultados da Aprendizagem dos Alunos da E. E. I. E. F. Maria das Dores Lima. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Itelvânia Maria de Sousa. Gestão Escolar Democrática: Diagnóstico sobre a Gestão na Escola Aloísio Domingos de Souza ? Pentecostes/CE. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Luiza Alice Lima Rocha. A Importância da Relação Família-Escola na Aprendizagem dos Alunos do 2º ano. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "ISRAEL ÍTALO SILVA FRANÇA. UMA ANÁLISE EMPÍRICA SOBRE A GERAÇÃO DE CÓDIGO DE MICROSSERVIÇOS POR LLMS. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rômulo Lima Fonseca. WE MOVE: UMA SOLUÇÃO DIGITAL PARA A GESTÃO DO TRANSPORTE UNIVERSITÁRIO INTERMUNICIPAL. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Gerardo Rodrigues Carneiro Filho. ESTUDAPP: APLICATIVO DE APOIO AO ESTUDANTE UNIVERSITÁRIO PARA CONTROLE DE ATIVIDADES E DESEMPENHO ACADÊMICO. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Nobre Pinto. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para Microsserviços. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Peixoto Alves Neto. GODANCE: UM APLICATIVO PARA DISPOSITIVOS MÓVEIS QUE AUXILIA DANÇARINOS A ENCONTRAR INFORMAÇÕES SOBRE OS EVENTOS DE ZOUK. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Eduardo de Moura Bernardino. SISTEMA DE GERENCIAMENTO DE SÓCIO TORCEDOR: SOLUCIONANDO PROBLEMAS DE ESCALABILIDADE, SEGURANÇA E INOVAÇÃO COM UMA API WHITE LABEL. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Victor Ribeiro Rodrigues. UTILIZAÇÃO DO SCRUM POR EQUIPES DE DESENVOLVIMENTO DE SOFTWARE EM UM CENTRO DE PESQUISA, DESENVOLVIMENTO E INOVAÇÃO: UM ESTUDO EMPÍRICO. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Yago Saboia Felix Frota. UM ESTUDO COMPARATIVO ENTRE OS DIFERENTES ESTILOS DE CONSTRUÇÃO DA INTERFACE DE USUÁRIO PARA DISPOSITIVOS IOS. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Denis Menezes de Sousa. ARTEMIS: UMA ABORDAGEM BASEADA EM USER-DRIVEN MDE PARA SIMULAÇÃO DE UMA CASA INTELIGENTE AUTOADAPTATIVA. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Sidney Xavier Botão. HEALIN - SISTEMA DE GERENCIAMENTO DE HISTÓRICO MÉDICO. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "JOEL FELIPE ARAUJO DAMASCENO. TAGSUBS: UM ETIQUETADOR DE TEXTOS COM FOCO EM LEGENDAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. LIDANDO COM COMPONENTES RESISTENTES A MUDANÇAS NO CONTEXTO DE INTERNET DAS COISAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. DRAGONFLY 2.0: UM SIMULADOR DE COMPORTAMENTOS AUTO-ADAPTATIVOS DE DRONES. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rafael Braga de Queiroz. SISTEMA DE INDICADORES DE QUALIDADE (SIQ) UTILIZANDO DADOS DOS CURRÍCULOS LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Barros Pires. GIS LATTES: UM SISTEMA PARA VISUALIZAÇÃO GEOGRÁFICA DAS INFORMAÇÕES DO CURRÍCULO LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Victor Mendes Ávila. Minha Consulta: Aplicativo para Facilitar o Atendimento nas Unidades Básicas de Saúde. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Luis Átila Bezerra Freitas. Um Ecossistema de Software para Extração de Conhecimento do Currículo Lattes. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Luiz Freitas Rodrigues. PONTOALL: Um Sistema Móvel para Registro de Ponto de Trabalhadores. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Antônio Darcy Soares Fontenele. Um Relato de Experiência sobre a Migração de um Sistema Monolítico para Microsserviços. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Renan da Silveira Teles. RCPEDIDOS - Tecnologia Complementar a ERP voltada para Vendedores Externos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas dos Reis Freire. Simone: uma Ferramenta para análise dos Dados dos Docentes do Censo Escolar no Ceará. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno Nascimento de Sousa. SISTCC: um Sistema para Gerenciamento e Acompanhamento de Trabalhos da Disciplina de Projeto Final da UECE. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maurício Holanda Freitas Quirino. Sistema de Gerenciamento para Laboratórios Óticos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Alan Portela Bandeira. Categorização de Discussões sobre Microsserviços na Plataforma Stack Overflow. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Aislan da Silva Freitas. PROGAME - AMBIENTE EDUCACIONAL GAMIFICADO COM ELEMENTOS DOS DESCRITORES DE MATEMÁTICA DO SPAECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "JIANNINI BAGGIO DIÓGENES DE SOUSA. NINJA DA MATEMÁTICA: UM SOFTWARE EDUCATIVO OFF-LINE PARA PRÁTICA DAS OPERAÇÕES BÁSICAS DE MATEMÁTICA. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Mesquita Gurgel. Plantão Ativo: a Tecnologia Mudando a Cultura do Profissional da Saúde. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Messias Domingo Pinto de Mesquita Filho. Um Processo para a Migração de Aplicações Negociais Web para a Plataforma Android Utilizando o Framework JustBusiness. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. APLICATIVOS PARA MELHORAR O CONTROLE DE ENTRADA DO RESTAURANTE UNIVERSITÁRIO DA UECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rayane Celestino dos Santos. Dahora: Um Aplicativo para Dispositivos Móveis que Auxilia na Divulgação de Informações das Instituições Religiosas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Adson Roberto Pontes Damasceno. Extensão do Framework JustBusiness para Geração de Interfaces Customizadas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Thiago Carvalho de Araújo. Um Mapeamento Sistemático sobre o Uso da Informática na Educação Básica no Brasil. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Bruno Filgueiras de Souza. PONTUALATTES: Um Sistema Web para Pontuação e Auxílio na Análise e Avaliação do Currículo Lattes. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Erick Barros dos Santos. Um Relato de Experiência sobre a Migração de um Sistema Django para a Nuvem utilizando Padrões Arquiteturais. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MATHEUS LIMA CHAGAS. JUSTSETTINGS: UMA FERRAMENTA DE APOIO AO USO DO FRAMEWORK JUSTBUSINESS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. UMA COMPARAÇÃO ENTRE ALGORITMOS DE GERAÇÃO DE MODELOS DE COMPORTAMENTO A PARTIR DE RASTROS DE EXECUÇÃO. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "LUCAS RAFAEL DUTRA DE LIMA. UMA APLICAÇÃO PARA ENCONTRAR PROMOÇÕES EM FÓRUNS UTILIZANDO WEB SCRAPING E O CONCEITO DE PROGRESSIVE WEB APPS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "WASHINGTON LUIS ALENCAR JÚNIOR. DESENVOLVIMENTO DE MÓDULO NO SISTEMA SIDUECE PARA VERIFICAÇÃO DE NORMAS TÉCNICAS DOS TRABALHOS ACADÊMICOS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Ranniery Jesuíno de oliveira. Um Plugin de Verificação de Propriedades de Alcançabilidade Probabilística para a Ferramenta LoTuS. 2016. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Felipe Chagas Pereira. Timeline Lattes: Uma Ferramenta para Visualização do Currículo Lattes em Forma de Linha do Tempo. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno de Paula Lima. Sistema Colaborativo de Banco de Questões para Alunos de Instituições de Ensino Superior. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "FRANCISCO THIAGO GOMES VIEIRA. ADAPTAÇÃO DO BANCO DE DADOS RELACIONAL DE UMA APLICAÇÃO PARA UM BANCO DE DADOS NOSQL UTILIZANDO ASPECTOS: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diogo Oliveira Peixoto. FEIRA ESPERTA - SUA LISTA DE COMPRAS INTELIGENTE. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Pedro Lopes de Azevedo. UMA ADAPTAÇÃO ENTRE AS METODOLOGIAS ÁGEIS SCRUM E KANBAN: UM RELATO DE EXPERIÊNCIA. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Henrique Guedes Bezerra. ANÁLISE DE QUALIDADE DE CÓDIGO DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "NATÁLIA ALBUQUERQUE CAVALCANTE. ASPECTOS DE MODELAGEM E ANÁLISE DA USABILIDADE DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diego Gomes Tomé. MIGRAÇÃO DE UMA APLICAÇÃO QUE UTILIZA BANCO RELACIONAL PARA BANCO NOSQL: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "OTÁVIO MELO BARRETO. DESENVOLVIMENTO DO SISTEMA DE CONTROLE ACADÊMICO DA ESPECIALIZAÇÃO EM ENGENHARIA DE SOFTWARE DA UNIVERSIDADE ESTADUAL DO CEARÁ. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Renan Gurgel Lins Ramanlho. Sistema Colaborativo de Banco de Questões para Professores de Instituições de Ensino Superior. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcos Guilherme Moraes Alves. Padrões de Projetos Específicos para Jogos Digitais Aplicados em Programas Convencionais. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Cláudio Roberto da Costa Aquino. Uma Proposta de Medidas de Segurança da Informação para uma Empresa de Pequeno Porte Especializada em Cobrança. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Igor F. Queiroz. Uma Análise da Indústria de Desenvolvimento de Jogos Japonesa. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Miguel Cláudio Neto. As Mudanças Trazidas pela Implantação do Sistema ERP nas Organizações. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcelo Cavalcante Rocha. Desenvolvimento na Nuvem ? Um Comparativo entre Amazon EC2, Google App Engine e Windows Azure. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diego Macêdo Wirtzbiki Azerêdo. Atividades de um SAP BASIS para garantir a integridade do sistema. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Paulo Eymard Nascimento de Mendonça. Descrição das Etapas de Customização de Processos Durante a Implantação de Sistemas SAP. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Rafael Gadelha Santiago. Contribuição do Gerenciamento de Incidentes para os Negócios. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Willames Yano Vasconcelos Chagas. Proposta de uma solução para o gerenciamento eletrônico de documentos usando smartphone com Android e assinatura digital. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Afonso de Paiva Junior. Boas práticas para prover serviços de acesso à Internet via rádio. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcio Espindola Freire Maia. GridAspecting: Um Processo Genérico para Reestrutuação de Aplicações que Utilizam Grades Computacionais Baseado em Aspectos. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. CRIAÇÃO DE APLICAÇÕES RESILIENTES BASEADAS EM COMPOSIÇÃO DE MICROSSERVIÇOS UTILIZANDO AUTOADAPTAÇÃO. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Varela de Lima. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. MIGRAÇÃO DA FERRAMENTA LOTUS PARA AMBIENTE DE NUVEM E MICROSERVIÇOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Felipe de Sousa Vidal. FERRAMENTA PARA MONITORAMENTO E VERIFICAÇÃO DE CENÁRIOS EM TEMPO DE EXECUÇÃO EM SISTEMAS AUTOADAPTATIVOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "ADSON ROBERTO PONTES DAMASCENO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Alan Portela Bandeira. UMA ABORDAGEM E FERRAMENTA PARA MODELAGEM E MONITORAMENTO DE SISTEMAS AUTO-ADAPTATIVOS UTILIZANDO CENÁRIOS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "ADSON ROBERTO PONTES DAMASCENO. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno Silva Barbosa. EXTENSÃO DA FERRAMENTA LOTUS PARA APLICAÇÃO NA ENGENHARIA DIRIGIDA POR MODELOS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DA FERRAMENTA LOTUS PARA ESPECIFICAÇÃO E VERIFICAÇÃO FORMAL DE MODELOS DE COMPORTAMENTO DE SOFTWARE. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Yan Augusto Gurgel da Silva. EXTENSÃO DO FRAMEWORK JUSTBUSINESS PARA PROVER PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. EXTENSÃO DA FERRAMENTA TCG PARA TESTES BASEADOS EM MODELOS CONSIDERANDO GUARDAS E SIMULAÇÃO COM DADOS DE ENTRADA. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Erick Barros dos Santos. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Emerson Correia Freitas Lima. Uma Técnica de Verificação Quantitativa em Tempo de Execução de Sistemas Auto-adaptativos Baseada em Refinamento de Estados. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando Aspectos. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Emerson Correia Freitas Lima. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando XML. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcelo Almeida Lima. Aplicação de Programação Orientada a Aspectos a Sistemas J2EE. 2006. Iniciação Científica. (Graduando em Sistemas de Informacao) - Faculdade Integrada do Ceará - FIC. Orientador: Paulo Henrique Mendes Maia."
-    ],
-    "ongoing": [
-      "Matheus Lima Chagas. Relying on Support Network for Uncertainty-Aware Adaptation. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador).",
-      "Antônio Marcos Alves Morais. Um Framework para Facilitar o Desenvolvimento de Sistemas com IA Explicável. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador).",
-      "Lucas Vieira Alves. Adapting Self-adaptive Cyber-physical systems On-the-fly. Início: 2021. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador).",
-      "Francisco Felipe Rodrigues de Oliveira. LLMS AS DESIGN PARTNERS FOR AI-BASED SYSTEM PATTERNS: AN EMPIRICAL EVALUATION. 2025. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ingrid Teles Guedes Coutinho. SP2Mic: Uma Ferramenta para Geração de Código de Microsserviços a partir de Stored Procedures. 2023. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Eduardo Pereira e Silva Filho. IDENTIFICANDO UNIDADES DE DECOMPOSIÇÃO EM MICROSSERVIÇOS EM UM SISTEMA LEGADO COMPLEXO E DE GRANDE PORTE: UM ESTUDO DE CASO. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Anderson Martins Gomes. DoME: an Architecture for Domain Model Evolution at Runtime Using NLP. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. ENVAIOT - AN ENVIRONMENT FOR MODELLING AND SIMULATING ADAPTIVE IOT APPLICATIONS. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Thaís de Almeida Barros. BUPA: BUSINESS PROCESS MODEL AND USER STORIES FOR ADAPTATION SCENARIOS - UM GUIA PARA IDENTIFICAR E MODELAR CENÁRIOS DE ADAPTAÇÃO, EXCEPCIONAIS E DE INCERTEZAS EM SISTEMAS DE SISTEMAS. 2022. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Lima Chagas. FRADE: A CONCEPTUAL FRAMEWORK FOR SELF-ADAPTIVE DEFIANT COMPONENTS. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. DRES-ML: a Domain-specific Language for Modelling Exceptional Scenarios and Self-adaptive Behaviours for Drone-based Applications. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Luiz Alexandre Castelo Branco Gomes. EDITORY: UMA FERRAMENTA DE AUTORIA PARA CRIAÇÃO DE CONTEÚDO DIGITAL ACESSÍVEL PARA EDUCAÇÃO A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Cleyton Carvalho Cândido. REDE ESTADUAL DE GESTÃO COLABORATIVA DAS UNIDADES DE ENSINO: um ambiente colaborativo para profissionais de saúde como estratégia de integração do Observatório Cearense de Educação Permanente em Saúde. 2020. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marcia Maria Silva Souza Maciel. ADORE: An Adaptation-Oriented Requirement Modeling Approach for Systems of Systems. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marx Haron Gomes Barbosa. A PROCESS TO DISCOVER AND EXTRACT MICROSERVICES FROM DATABASE-ORIENTED LEGACY SYSTEMS. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Adson Roberto Pontes Damasceno. \"STUART: UM SISTEMA DE TUTORIA INTELIGENTE ARTIFICIAL PARA AUMENTAR A ESCALABILIDADE DOS CURSOS A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Wanessa de Caldas Teotônio. WAL: UMA FERRAMENTA PARA DIAGNOSTICAR E INSERIR RECURSOS DE ACESSIBILIDADE EM PÁGINAS WEB EM TEMPO DE EXECUÇÃO. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliziana Mendonça Machado. LUZ DO SABER FUNDAMENTAL: RECURSO DIGITAL AUXILIAR NOS PROCESSOS DE ALFABETIZAÇÃO E LETRAMENTOS. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ana Júlia Ferreira Alves. SOFTWARE CRIATIVO: SISTEMA DE APOIO À PRODUÇÃO DE GÊNEROS TEXTUAIS PARA ALUNOS DO ENSINO FUNDAMENTAL 1. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Carlos Alberto Fernandes Medeiros. UMA ANÁLISE DO USO DE TÉCNICAS E FERRAMENTAS DE ENGENHARIA DIRIGIDA POR MODELOS A PARTIR DE PLATAFORMAS DE PERGUNTAS E RESPOSTAS NO ÂMBITO DA ENGENHARIA DE SOFTWARE. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Monteiro Barbosa. BEETHOVEN: AN EVENT-DRIVEN LIGHTWEIGHT PLATFORM FOR MICROSERVICES ORCHESTRATION. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Rômulo Gadelha de Moura Lima. SCEN@RIST: An Approach for Verifying Self-Adaptive Systems Using Runtime Scenarios. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "MARCOS VINÍCIUS DE FREITAS BORGES. CLOUD RESTRICTION SOLVER: A REFACTORING-BASED APPROACH TO MIGRATE APPLICATIONS TO THE CLOUD. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Amanda Souza da Silva. Uma Abordagem Interativa e Semi-automática para a Detecção e Remoção de Cenários Implícitos em Modelos Comportamentais usando Rastros de Execução. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
-      "Fabiano José Gadelha de Freitas. JustModeling: uma Abordagem MDE para Desenvolvimento de Aplicações Negociais para Android. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Programa de Pós-graduação em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Evilásio Costa Júnior. Um framework para desenvolvimento de sistemas adaptativos baseados em serviços. 2013. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Paulo Henrique Mendes Maia.",
-      "Sandra Régia Chaves Carvalho. Economia de Energia em Redes de Sensores Utilizano Boas Práticas da Metodologia Seis Sigma. 2012. Dissertação (Mestrado em Programa de Pós-graduação em Engenharia de TeleInf) - Universidade Federal do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Paulo Henrique Mendes Maia.",
-      "Ricardo Normando Ferreira de Paula. UMA TAXONOMIA PARA REQUISITOS DE METAVERSOS EDUCACIONAIS. 2025. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Ricardo Normando Ferreira de Paula. UMA TAXONOMIA PARA REQUISITOS DE METAVERSOS EDUCACIONAIS. 2025. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
-      "Marcos Vinícius de Freitas Borges. A Syntactic-Semantic Analysis Method for Automatic API Connection Points Discovery in Systems-of-Information Systems. 2025. Tese (Doutorado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará, . Coorientador: Paulo Henrique Mendes Maia.",
-      "Matheus Henrique Esteves Paixão. 2021. Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Paulo Henrique Mendes Maia.",
-      "Carlos Henrique Gouveia Carneiro. DataQI.NET: um Framework para Especificação de Consultas Utilizando o Padrão Repository. 2020. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Wellington Costa pereira. CONVALIDA - UMA BIBLIOTECA BASEADA EM ANOTAÇÕES PARA VALIDAÇÃO DE CAMPOS EM APLICAÇÕES ANDROID. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "ÂNGELO LUSTOSA DE FIGUEIREDO FILHO. GUARDIÃOIMAGEM - UM SISTEMA DE INTEGRAÇÃO ENTRE UM SISTEMA DE INFORMAÇÃO HOSPITALAR E UM SISTEMA DE COMUNICAÇÃO E ARQUIVAMENTO DE IMAGENS. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Laryssa Lima Muniz. TCG: Uma Ferramenta para Geração e Seleção de Casos de Teste Funcionais e Estatísticos. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Hermano Anderson Uchôa. Evolução não-intrusiva de uma Aplicação para Geração de Logs em um Banco de dados Relacional: um Relato de Experiência. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "TIAGO ALENCAR MENEZES. DESENVOLVIMENTO DE UM PLUG-IN PARA A VISUALIZAÇÃO DO HISTÓRICO DE COMMITS DE ARQUIVOS DO GITHUB PARA O ECLIPSE. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Custódio Cunha Neto. TIME MANAGER : UMA FERRAMENTA DE AUDITORIA DE TEMPO DE ATIVIDADES COM INTEGRAÇÃO A ISSUE TRACKING SYSTEMS. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Márcia Maria Silva Souza Maciel. Uma Análise Quantitativa da Utilização de Técnicas de Validação de Requisitos no Mercado de TI em Fortaleza. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Caio Holanda Costa. Migração Parcial de um Banco de Dados Relacional para um Banco de Dados NoSQL na Nuvem Através de Adaptações Não-intrusivas: um Relato de Experiência. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Taciana Alves Bezerra. Uma Revisão da Literatura sobre Técnicas de Avalição de Softwares Educativos. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Vianey Batista Moreira Filho. Soluções para Descoberta de Serviços em Sistemas Ubíquos: uma Revisão de Literatura. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Aroldo Marinho dos Santos. Uma Análise sobre o Processo de Ensino e Aprendizagem do Fundamental I na Escola Municipal Maria de Lourdes da Silveira. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maria de Conceição de Menezes Pereira. Gestão Democrática em uma Perspectiva Participativa. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maria Edleuza Souza Feitosa. A Participação da Família no Contexto Escolar: uma Observação da Prática Escolar na Escola Danilo Sá Benevides Magalhães. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Fernanda Goes Sales. Indisciplina no Ensino Fundamental II na Escola Corália Gonzaga Sales. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francinete Silva de Castro Souza. A Implementação da Informática Educativa na Escola de Ensino Infantil e Fundamental São Francisco Das Chagas. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Germana Pinheiro da Rocha Pontes. Análise sobre a relação do uso de drogas na família e o insucesso escolar dos alunos da Escola de Ensino Fundamental Maria Dolores Menezes de Almeida. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Herbene Garcia da Silva. A Importância da Parceria Família e Escola Nos Resultados da Aprendizagem dos Alunos da E. E. I. E. F. Maria das Dores Lima. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Itelvânia Maria de Sousa. Gestão Escolar Democrática: Diagnóstico sobre a Gestão na Escola Aloísio Domingos de Souza ? Pentecostes/CE. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Luiza Alice Lima Rocha. A Importância da Relação Família-Escola na Aprendizagem dos Alunos do 2º ano. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "ISRAEL ÍTALO SILVA FRANÇA. UMA ANÁLISE EMPÍRICA SOBRE A GERAÇÃO DE CÓDIGO DE MICROSSERVIÇOS POR LLMS. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rômulo Lima Fonseca. WE MOVE: UMA SOLUÇÃO DIGITAL PARA A GESTÃO DO TRANSPORTE UNIVERSITÁRIO INTERMUNICIPAL. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Gerardo Rodrigues Carneiro Filho. ESTUDAPP: APLICATIVO DE APOIO AO ESTUDANTE UNIVERSITÁRIO PARA CONTROLE DE ATIVIDADES E DESEMPENHO ACADÊMICO. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Nobre Pinto. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para Microsserviços. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Peixoto Alves Neto. GODANCE: UM APLICATIVO PARA DISPOSITIVOS MÓVEIS QUE AUXILIA DANÇARINOS A ENCONTRAR INFORMAÇÕES SOBRE OS EVENTOS DE ZOUK. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Eduardo de Moura Bernardino. SISTEMA DE GERENCIAMENTO DE SÓCIO TORCEDOR: SOLUCIONANDO PROBLEMAS DE ESCALABILIDADE, SEGURANÇA E INOVAÇÃO COM UMA API WHITE LABEL. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Victor Ribeiro Rodrigues. UTILIZAÇÃO DO SCRUM POR EQUIPES DE DESENVOLVIMENTO DE SOFTWARE EM UM CENTRO DE PESQUISA, DESENVOLVIMENTO E INOVAÇÃO: UM ESTUDO EMPÍRICO. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Yago Saboia Felix Frota. UM ESTUDO COMPARATIVO ENTRE OS DIFERENTES ESTILOS DE CONSTRUÇÃO DA INTERFACE DE USUÁRIO PARA DISPOSITIVOS IOS. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Denis Menezes de Sousa. ARTEMIS: UMA ABORDAGEM BASEADA EM USER-DRIVEN MDE PARA SIMULAÇÃO DE UMA CASA INTELIGENTE AUTOADAPTATIVA. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Sidney Xavier Botão. HEALIN - SISTEMA DE GERENCIAMENTO DE HISTÓRICO MÉDICO. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "JOEL FELIPE ARAUJO DAMASCENO. TAGSUBS: UM ETIQUETADOR DE TEXTOS COM FOCO EM LEGENDAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. LIDANDO COM COMPONENTES RESISTENTES A MUDANÇAS NO CONTEXTO DE INTERNET DAS COISAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. DRAGONFLY 2.0: UM SIMULADOR DE COMPORTAMENTOS AUTO-ADAPTATIVOS DE DRONES. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rafael Braga de Queiroz. SISTEMA DE INDICADORES DE QUALIDADE (SIQ) UTILIZANDO DADOS DOS CURRÍCULOS LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Barros Pires. GIS LATTES: UM SISTEMA PARA VISUALIZAÇÃO GEOGRÁFICA DAS INFORMAÇÕES DO CURRÍCULO LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Victor Mendes Ávila. Minha Consulta: Aplicativo para Facilitar o Atendimento nas Unidades Básicas de Saúde. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Luis Átila Bezerra Freitas. Um Ecossistema de Software para Extração de Conhecimento do Currículo Lattes. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "João Luiz Freitas Rodrigues. PONTOALL: Um Sistema Móvel para Registro de Ponto de Trabalhadores. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Antônio Darcy Soares Fontenele. Um Relato de Experiência sobre a Migração de um Sistema Monolítico para Microsserviços. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Renan da Silveira Teles. RCPEDIDOS - Tecnologia Complementar a ERP voltada para Vendedores Externos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas dos Reis Freire. Simone: uma Ferramenta para análise dos Dados dos Docentes do Censo Escolar no Ceará. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno Nascimento de Sousa. SISTCC: um Sistema para Gerenciamento e Acompanhamento de Trabalhos da Disciplina de Projeto Final da UECE. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Maurício Holanda Freitas Quirino. Sistema de Gerenciamento para Laboratórios Óticos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Alan Portela Bandeira. Categorização de Discussões sobre Microsserviços na Plataforma Stack Overflow. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Aislan da Silva Freitas. PROGAME - AMBIENTE EDUCACIONAL GAMIFICADO COM ELEMENTOS DOS DESCRITORES DE MATEMÁTICA DO SPAECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "JIANNINI BAGGIO DIÓGENES DE SOUSA. NINJA DA MATEMÁTICA: UM SOFTWARE EDUCATIVO OFF-LINE PARA PRÁTICA DAS OPERAÇÕES BÁSICAS DE MATEMÁTICA. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Davi Mesquita Gurgel. Plantão Ativo: a Tecnologia Mudando a Cultura do Profissional da Saúde. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Messias Domingo Pinto de Mesquita Filho. Um Processo para a Migração de Aplicações Negociais Web para a Plataforma Android Utilizando o Framework JustBusiness. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. APLICATIVOS PARA MELHORAR O CONTROLE DE ENTRADA DO RESTAURANTE UNIVERSITÁRIO DA UECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Rayane Celestino dos Santos. Dahora: Um Aplicativo para Dispositivos Móveis que Auxilia na Divulgação de Informações das Instituições Religiosas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Adson Roberto Pontes Damasceno. Extensão do Framework JustBusiness para Geração de Interfaces Customizadas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Thiago Carvalho de Araújo. Um Mapeamento Sistemático sobre o Uso da Informática na Educação Básica no Brasil. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Bruno Filgueiras de Souza. PONTUALATTES: Um Sistema Web para Pontuação e Auxílio na Análise e Avaliação do Currículo Lattes. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Erick Barros dos Santos. Um Relato de Experiência sobre a Migração de um Sistema Django para a Nuvem utilizando Padrões Arquiteturais. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MATHEUS LIMA CHAGAS. JUSTSETTINGS: UMA FERRAMENTA DE APOIO AO USO DO FRAMEWORK JUSTBUSINESS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. UMA COMPARAÇÃO ENTRE ALGORITMOS DE GERAÇÃO DE MODELOS DE COMPORTAMENTO A PARTIR DE RASTROS DE EXECUÇÃO. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "LUCAS RAFAEL DUTRA DE LIMA. UMA APLICAÇÃO PARA ENCONTRAR PROMOÇÕES EM FÓRUNS UTILIZANDO WEB SCRAPING E O CONCEITO DE PROGRESSIVE WEB APPS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "WASHINGTON LUIS ALENCAR JÚNIOR. DESENVOLVIMENTO DE MÓDULO NO SISTEMA SIDUECE PARA VERIFICAÇÃO DE NORMAS TÉCNICAS DOS TRABALHOS ACADÊMICOS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Ranniery Jesuíno de oliveira. Um Plugin de Verificação de Propriedades de Alcançabilidade Probabilística para a Ferramenta LoTuS. 2016. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Felipe Chagas Pereira. Timeline Lattes: Uma Ferramenta para Visualização do Currículo Lattes em Forma de Linha do Tempo. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno de Paula Lima. Sistema Colaborativo de Banco de Questões para Alunos de Instituições de Ensino Superior. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "FRANCISCO THIAGO GOMES VIEIRA. ADAPTAÇÃO DO BANCO DE DADOS RELACIONAL DE UMA APLICAÇÃO PARA UM BANCO DE DADOS NOSQL UTILIZANDO ASPECTOS: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diogo Oliveira Peixoto. FEIRA ESPERTA - SUA LISTA DE COMPRAS INTELIGENTE. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Pedro Lopes de Azevedo. UMA ADAPTAÇÃO ENTRE AS METODOLOGIAS ÁGEIS SCRUM E KANBAN: UM RELATO DE EXPERIÊNCIA. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Henrique Guedes Bezerra. ANÁLISE DE QUALIDADE DE CÓDIGO DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "NATÁLIA ALBUQUERQUE CAVALCANTE. ASPECTOS DE MODELAGEM E ANÁLISE DA USABILIDADE DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diego Gomes Tomé. MIGRAÇÃO DE UMA APLICAÇÃO QUE UTILIZA BANCO RELACIONAL PARA BANCO NOSQL: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "OTÁVIO MELO BARRETO. DESENVOLVIMENTO DO SISTEMA DE CONTROLE ACADÊMICO DA ESPECIALIZAÇÃO EM ENGENHARIA DE SOFTWARE DA UNIVERSIDADE ESTADUAL DO CEARÁ. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Renan Gurgel Lins Ramanlho. Sistema Colaborativo de Banco de Questões para Professores de Instituições de Ensino Superior. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcos Guilherme Moraes Alves. Padrões de Projetos Específicos para Jogos Digitais Aplicados em Programas Convencionais. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Cláudio Roberto da Costa Aquino. Uma Proposta de Medidas de Segurança da Informação para uma Empresa de Pequeno Porte Especializada em Cobrança. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Igor F. Queiroz. Uma Análise da Indústria de Desenvolvimento de Jogos Japonesa. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Miguel Cláudio Neto. As Mudanças Trazidas pela Implantação do Sistema ERP nas Organizações. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcelo Cavalcante Rocha. Desenvolvimento na Nuvem ? Um Comparativo entre Amazon EC2, Google App Engine e Windows Azure. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Diego Macêdo Wirtzbiki Azerêdo. Atividades de um SAP BASIS para garantir a integridade do sistema. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Paulo Eymard Nascimento de Mendonça. Descrição das Etapas de Customização de Processos Durante a Implantação de Sistemas SAP. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Rafael Gadelha Santiago. Contribuição do Gerenciamento de Incidentes para os Negócios. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Willames Yano Vasconcelos Chagas. Proposta de uma solução para o gerenciamento eletrônico de documentos usando smartphone com Android e assinatura digital. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Francisco Afonso de Paiva Junior. Boas práticas para prover serviços de acesso à Internet via rádio. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcio Espindola Freire Maia. GridAspecting: Um Processo Genérico para Reestrutuação de Aplicações que Utilizam Grades Computacionais Baseado em Aspectos. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Paulo Henrique Mendes Maia.",
-      "Adrilene Pessoa da Fonseca. CRIAÇÃO DE APLICAÇÕES RESILIENTES BASEADAS EM COMPOSIÇÃO DE MICROSSERVIÇOS UTILIZANDO AUTOADAPTAÇÃO. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Matheus Varela de Lima. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "José Davi da Silva Pereira. MIGRAÇÃO DA FERRAMENTA LOTUS PARA AMBIENTE DE NUVEM E MICROSERVIÇOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Felipe de Sousa Vidal. FERRAMENTA PARA MONITORAMENTO E VERIFICAÇÃO DE CENÁRIOS EM TEMPO DE EXECUÇÃO EM SISTEMAS AUTOADAPTATIVOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "ADSON ROBERTO PONTES DAMASCENO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Alan Portela Bandeira. UMA ABORDAGEM E FERRAMENTA PARA MODELAGEM E MONITORAMENTO DE SISTEMAS AUTO-ADAPTATIVOS UTILIZANDO CENÁRIOS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "ADSON ROBERTO PONTES DAMASCENO. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Bruno Silva Barbosa. EXTENSÃO DA FERRAMENTA LOTUS PARA APLICAÇÃO NA ENGENHARIA DIRIGIDA POR MODELOS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DA FERRAMENTA LOTUS PARA ESPECIFICAÇÃO E VERIFICAÇÃO FORMAL DE MODELOS DE COMPORTAMENTO DE SOFTWARE. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Yan Augusto Gurgel da Silva. EXTENSÃO DO FRAMEWORK JUSTBUSINESS PARA PROVER PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. EXTENSÃO DA FERRAMENTA TCG PARA TESTES BASEADOS EM MODELOS CONSIDERANDO GUARDAS E SIMULAÇÃO COM DADOS DE ENTRADA. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Eliaquim Barbosa Pimentel. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Erick Barros dos Santos. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Emerson Correia Freitas Lima. Uma Técnica de Verificação Quantitativa em Tempo de Execução de Sistemas Auto-adaptativos Baseada em Refinamento de Estados. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Lucas Vieira Alves. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando Aspectos. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
-      "Emerson Correia Freitas Lima. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando XML. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
-      "Marcelo Almeida Lima. Aplicação de Programação Orientada a Aspectos a Sistemas J2EE. 2006. Iniciação Científica. (Graduando em Sistemas de Informacao) - Faculdade Integrada do Ceará - FIC. Orientador: Paulo Henrique Mendes Maia."
-    ]
+    "masters": {
+      "completed": [
+        "Francisco Felipe Rodrigues de Oliveira. LLMS AS DESIGN PARTNERS FOR AI-BASED SYSTEM PATTERNS: AN EMPIRICAL EVALUATION. 2025. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Ingrid Teles Guedes Coutinho. SP2Mic: Uma Ferramenta para Geração de Código de Microsserviços a partir de Stored Procedures. 2023. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Eduardo Pereira e Silva Filho. IDENTIFICANDO UNIDADES DE DECOMPOSIÇÃO EM MICROSSERVIÇOS EM UM SISTEMA LEGADO COMPLEXO E DE GRANDE PORTE: UM ESTUDO DE CASO. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Anderson Martins Gomes. DoME: an Architecture for Domain Model Evolution at Runtime Using NLP. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Adrilene Pessoa da Fonseca. ENVAIOT - AN ENVIRONMENT FOR MODELLING AND SIMULATING ADAPTIVE IOT APPLICATIONS. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Thaís de Almeida Barros. BUPA: BUSINESS PROCESS MODEL AND USER STORIES FOR ADAPTATION SCENARIOS - UM GUIA PARA IDENTIFICAR E MODELAR CENÁRIOS DE ADAPTAÇÃO, EXCEPCIONAIS E DE INCERTEZAS EM SISTEMAS DE SISTEMAS. 2022. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Matheus Lima Chagas. FRADE: A CONCEPTUAL FRAMEWORK FOR SELF-ADAPTIVE DEFIANT COMPONENTS. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Lucas Vieira Alves. DRES-ML: a Domain-specific Language for Modelling Exceptional Scenarios and Self-adaptive Behaviours for Drone-based Applications. 2021. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Luiz Alexandre Castelo Branco Gomes. EDITORY: UMA FERRAMENTA DE AUTORIA PARA CRIAÇÃO DE CONTEÚDO DIGITAL ACESSÍVEL PARA EDUCAÇÃO A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Cleyton Carvalho Cândido. REDE ESTADUAL DE GESTÃO COLABORATIVA DAS UNIDADES DE ENSINO: um ambiente colaborativo para profissionais de saúde como estratégia de integração do Observatório Cearense de Educação Permanente em Saúde. 2020. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Marcia Maria Silva Souza Maciel. ADORE: An Adaptation-Oriented Requirement Modeling Approach for Systems of Systems. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Marx Haron Gomes Barbosa. A PROCESS TO DISCOVER AND EXTRACT MICROSERVICES FROM DATABASE-ORIENTED LEGACY SYSTEMS. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Adson Roberto Pontes Damasceno. \"STUART: UM SISTEMA DE TUTORIA INTELIGENTE ARTIFICIAL PARA AUMENTAR A ESCALABILIDADE DOS CURSOS A DISTÂNCIA. 2020. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Paulo Henrique Mendes Maia.",
+        "Wanessa de Caldas Teotônio. WAL: UMA FERRAMENTA PARA DIAGNOSTICAR E INSERIR RECURSOS DE ACESSIBILIDADE EM PÁGINAS WEB EM TEMPO DE EXECUÇÃO. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Eliziana Mendonça Machado. LUZ DO SABER FUNDAMENTAL: RECURSO DIGITAL AUXILIAR NOS PROCESSOS DE ALFABETIZAÇÃO E LETRAMENTOS. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Ana Júlia Ferreira Alves. SOFTWARE CRIATIVO: SISTEMA DE APOIO À PRODUÇÃO DE GÊNEROS TEXTUAIS PARA ALUNOS DO ENSINO FUNDAMENTAL 1. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Carlos Alberto Fernandes Medeiros. UMA ANÁLISE DO USO DE TÉCNICAS E FERRAMENTAS DE ENGENHARIA DIRIGIDA POR MODELOS A PARTIR DE PLATAFORMAS DE PERGUNTAS E RESPOSTAS NO ÂMBITO DA ENGENHARIA DE SOFTWARE. 2019. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Davi Monteiro Barbosa. BEETHOVEN: AN EVENT-DRIVEN LIGHTWEIGHT PLATFORM FOR MICROSERVICES ORCHESTRATION. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Rômulo Gadelha de Moura Lima. SCEN@RIST: An Approach for Verifying Self-Adaptive Systems Using Runtime Scenarios. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "MARCOS VINÍCIUS DE FREITAS BORGES. CLOUD RESTRICTION SOLVER: A REFACTORING-BASED APPROACH TO MIGRATE APPLICATIONS TO THE CLOUD. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Amanda Souza da Silva. Uma Abordagem Interativa e Semi-automática para a Detecção e Remoção de Cenários Implícitos em Modelos Comportamentais usando Rastros de Execução. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Paulo Henrique Mendes Maia.",
+        "Fabiano José Gadelha de Freitas. JustModeling: uma Abordagem MDE para Desenvolvimento de Aplicações Negociais para Android. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Programa de Pós-graduação em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Paulo Henrique Mendes Maia.",
+        "Evilásio Costa Júnior. Um framework para desenvolvimento de sistemas adaptativos baseados em serviços. 2013. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Paulo Henrique Mendes Maia.",
+        "Sandra Régia Chaves Carvalho. Economia de Energia em Redes de Sensores Utilizano Boas Práticas da Metodologia Seis Sigma. 2012. Dissertação (Mestrado em Programa de Pós-graduação em Engenharia de TeleInf) - Universidade Federal do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Paulo Henrique Mendes Maia."
+      ]
+    },
+    "doctoral": {
+      "completed": [
+        "Ricardo Normando Ferreira de Paula. UMA TAXONOMIA PARA REQUISITOS DE METAVERSOS EDUCACIONAIS. 2025. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, . Orientador: Paulo Henrique Mendes Maia.",
+        "Marcos Vinícius de Freitas Borges. A Syntactic-Semantic Analysis Method for Automatic API Connection Points Discovery in Systems-of-Information Systems. 2025. Tese (Doutorado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará, . Coorientador: Paulo Henrique Mendes Maia."
+      ],
+      "ongoing": [
+        "Matheus Lima Chagas. Relying on Support Network for Uncertainty-Aware Adaptation. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador).",
+        "Antônio Marcos Alves Morais. Um Framework para Facilitar o Desenvolvimento de Sistemas com IA Explicável. Início: 2022. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador).",
+        "Lucas Vieira Alves. Adapting Self-adaptive Cyber-physical systems On-the-fly. Início: 2021. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará. (Orientador)."
+      ]
+    },
+    "undergraduate": {
+      "completed": [
+        "ISRAEL ÍTALO SILVA FRANÇA. UMA ANÁLISE EMPÍRICA SOBRE A GERAÇÃO DE CÓDIGO DE MICROSSERVIÇOS POR LLMS. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Rômulo Lima Fonseca. WE MOVE: UMA SOLUÇÃO DIGITAL PARA A GESTÃO DO TRANSPORTE UNIVERSITÁRIO INTERMUNICIPAL. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Gerardo Rodrigues Carneiro Filho. ESTUDAPP: APLICATIVO DE APOIO AO ESTUDANTE UNIVERSITÁRIO PARA CONTROLE DE ATIVIDADES E DESEMPENHO ACADÊMICO. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Matheus Nobre Pinto. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para Microsserviços. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "José Peixoto Alves Neto. GODANCE: UM APLICATIVO PARA DISPOSITIVOS MÓVEIS QUE AUXILIA DANÇARINOS A ENCONTRAR INFORMAÇÕES SOBRE OS EVENTOS DE ZOUK. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Eduardo de Moura Bernardino. SISTEMA DE GERENCIAMENTO DE SÓCIO TORCEDOR: SOLUCIONANDO PROBLEMAS DE ESCALABILIDADE, SEGURANÇA E INOVAÇÃO COM UMA API WHITE LABEL. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "João Victor Ribeiro Rodrigues. UTILIZAÇÃO DO SCRUM POR EQUIPES DE DESENVOLVIMENTO DE SOFTWARE EM UM CENTRO DE PESQUISA, DESENVOLVIMENTO E INOVAÇÃO: UM ESTUDO EMPÍRICO. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Yago Saboia Felix Frota. UM ESTUDO COMPARATIVO ENTRE OS DIFERENTES ESTILOS DE CONSTRUÇÃO DA INTERFACE DE USUÁRIO PARA DISPOSITIVOS IOS. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Denis Menezes de Sousa. ARTEMIS: UMA ABORDAGEM BASEADA EM USER-DRIVEN MDE PARA SIMULAÇÃO DE UMA CASA INTELIGENTE AUTOADAPTATIVA. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Sidney Xavier Botão. HEALIN - SISTEMA DE GERENCIAMENTO DE HISTÓRICO MÉDICO. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "JOEL FELIPE ARAUJO DAMASCENO. TAGSUBS: UM ETIQUETADOR DE TEXTOS COM FOCO EM LEGENDAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Adrilene Pessoa da Fonseca. LIDANDO COM COMPONENTES RESISTENTES A MUDANÇAS NO CONTEXTO DE INTERNET DAS COISAS. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "José Davi da Silva Pereira. DRAGONFLY 2.0: UM SIMULADOR DE COMPORTAMENTOS AUTO-ADAPTATIVOS DE DRONES. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Rafael Braga de Queiroz. SISTEMA DE INDICADORES DE QUALIDADE (SIQ) UTILIZANDO DADOS DOS CURRÍCULOS LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Davi Barros Pires. GIS LATTES: UM SISTEMA PARA VISUALIZAÇÃO GEOGRÁFICA DAS INFORMAÇÕES DO CURRÍCULO LATTES. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "João Victor Mendes Ávila. Minha Consulta: Aplicativo para Facilitar o Atendimento nas Unidades Básicas de Saúde. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Luis Átila Bezerra Freitas. Um Ecossistema de Software para Extração de Conhecimento do Currículo Lattes. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "João Luiz Freitas Rodrigues. PONTOALL: Um Sistema Móvel para Registro de Ponto de Trabalhadores. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Antônio Darcy Soares Fontenele. Um Relato de Experiência sobre a Migração de um Sistema Monolítico para Microsserviços. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Renan da Silveira Teles. RCPEDIDOS - Tecnologia Complementar a ERP voltada para Vendedores Externos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Lucas dos Reis Freire. Simone: uma Ferramenta para análise dos Dados dos Docentes do Censo Escolar no Ceará. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Bruno Nascimento de Sousa. SISTCC: um Sistema para Gerenciamento e Acompanhamento de Trabalhos da Disciplina de Projeto Final da UECE. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Maurício Holanda Freitas Quirino. Sistema de Gerenciamento para Laboratórios Óticos. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Alan Portela Bandeira. Categorização de Discussões sobre Microsserviços na Plataforma Stack Overflow. 2019. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Francisco Aislan da Silva Freitas. PROGAME - AMBIENTE EDUCACIONAL GAMIFICADO COM ELEMENTOS DOS DESCRITORES DE MATEMÁTICA DO SPAECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "JIANNINI BAGGIO DIÓGENES DE SOUSA. NINJA DA MATEMÁTICA: UM SOFTWARE EDUCATIVO OFF-LINE PARA PRÁTICA DAS OPERAÇÕES BÁSICAS DE MATEMÁTICA. 2018. Trabalho de Conclusão de Curso. (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Davi Mesquita Gurgel. Plantão Ativo: a Tecnologia Mudando a Cultura do Profissional da Saúde. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Messias Domingo Pinto de Mesquita Filho. Um Processo para a Migração de Aplicações Negociais Web para a Plataforma Android Utilizando o Framework JustBusiness. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Eliaquim Barbosa Pimentel. APLICATIVOS PARA MELHORAR O CONTROLE DE ENTRADA DO RESTAURANTE UNIVERSITÁRIO DA UECE. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Rayane Celestino dos Santos. Dahora: Um Aplicativo para Dispositivos Móveis que Auxilia na Divulgação de Informações das Instituições Religiosas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Adson Roberto Pontes Damasceno. Extensão do Framework JustBusiness para Geração de Interfaces Customizadas. 2018. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Thiago Carvalho de Araújo. Um Mapeamento Sistemático sobre o Uso da Informática na Educação Básica no Brasil. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Francisco Bruno Filgueiras de Souza. PONTUALATTES: Um Sistema Web para Pontuação e Auxílio na Análise e Avaliação do Currículo Lattes. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Erick Barros dos Santos. Um Relato de Experiência sobre a Migração de um Sistema Django para a Nuvem utilizando Padrões Arquiteturais. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "MATHEUS LIMA CHAGAS. JUSTSETTINGS: UMA FERRAMENTA DE APOIO AO USO DO FRAMEWORK JUSTBUSINESS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Lucas Vieira Alves. UMA COMPARAÇÃO ENTRE ALGORITMOS DE GERAÇÃO DE MODELOS DE COMPORTAMENTO A PARTIR DE RASTROS DE EXECUÇÃO. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "LUCAS RAFAEL DUTRA DE LIMA. UMA APLICAÇÃO PARA ENCONTRAR PROMOÇÕES EM FÓRUNS UTILIZANDO WEB SCRAPING E O CONCEITO DE PROGRESSIVE WEB APPS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "WASHINGTON LUIS ALENCAR JÚNIOR. DESENVOLVIMENTO DE MÓDULO NO SISTEMA SIDUECE PARA VERIFICAÇÃO DE NORMAS TÉCNICAS DOS TRABALHOS ACADÊMICOS. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Ranniery Jesuíno de oliveira. Um Plugin de Verificação de Propriedades de Alcançabilidade Probabilística para a Ferramenta LoTuS. 2016. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Felipe Chagas Pereira. Timeline Lattes: Uma Ferramenta para Visualização do Currículo Lattes em Forma de Linha do Tempo. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Bruno de Paula Lima. Sistema Colaborativo de Banco de Questões para Alunos de Instituições de Ensino Superior. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "FRANCISCO THIAGO GOMES VIEIRA. ADAPTAÇÃO DO BANCO DE DADOS RELACIONAL DE UMA APLICAÇÃO PARA UM BANCO DE DADOS NOSQL UTILIZANDO ASPECTOS: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Diogo Oliveira Peixoto. FEIRA ESPERTA - SUA LISTA DE COMPRAS INTELIGENTE. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Pedro Lopes de Azevedo. UMA ADAPTAÇÃO ENTRE AS METODOLOGIAS ÁGEIS SCRUM E KANBAN: UM RELATO DE EXPERIÊNCIA. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Henrique Guedes Bezerra. ANÁLISE DE QUALIDADE DE CÓDIGO DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "NATÁLIA ALBUQUERQUE CAVALCANTE. ASPECTOS DE MODELAGEM E ANÁLISE DA USABILIDADE DA FERRAMENTA LOTUS. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Diego Gomes Tomé. MIGRAÇÃO DE UMA APLICAÇÃO QUE UTILIZA BANCO RELACIONAL PARA BANCO NOSQL: UM ESTUDO DE CASO. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Renan Gurgel Lins Ramanlho. Sistema Colaborativo de Banco de Questões para Professores de Instituições de Ensino Superior. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Marcos Guilherme Moraes Alves. Padrões de Projetos Específicos para Jogos Digitais Aplicados em Programas Convencionais. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Cláudio Roberto da Costa Aquino. Uma Proposta de Medidas de Segurança da Informação para uma Empresa de Pequeno Porte Especializada em Cobrança. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Igor F. Queiroz. Uma Análise da Indústria de Desenvolvimento de Jogos Japonesa. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Miguel Cláudio Neto. As Mudanças Trazidas pela Implantação do Sistema ERP nas Organizações. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Marcelo Cavalcante Rocha. Desenvolvimento na Nuvem ? Um Comparativo entre Amazon EC2, Google App Engine e Windows Azure. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Faculdade Estácio do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Diego Macêdo Wirtzbiki Azerêdo. Atividades de um SAP BASIS para garantir a integridade do sistema. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
+        "Paulo Eymard Nascimento de Mendonça. Descrição das Etapas de Customização de Processos Durante a Implantação de Sistemas SAP. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
+        "Rafael Gadelha Santiago. Contribuição do Gerenciamento de Incidentes para os Negócios. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
+        "Willames Yano Vasconcelos Chagas. Proposta de uma solução para o gerenciamento eletrônico de documentos usando smartphone com Android e assinatura digital. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
+        "Francisco Afonso de Paiva Junior. Boas práticas para prover serviços de acesso à Internet via rádio. 2012. Trabalho de Conclusão de Curso. (Graduação em Sistemas de Informação) - Centro Universitário Estácio-FIC. Orientador: Paulo Henrique Mendes Maia.",
+        "Marcio Espindola Freire Maia. GridAspecting: Um Processo Genérico para Reestrutuação de Aplicações que Utilizam Grades Computacionais Baseado em Aspectos. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Paulo Henrique Mendes Maia.",
+        "Adrilene Pessoa da Fonseca. CRIAÇÃO DE APLICAÇÕES RESILIENTES BASEADAS EM COMPOSIÇÃO DE MICROSSERVIÇOS UTILIZANDO AUTOADAPTAÇÃO. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "José Davi da Silva Pereira. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Matheus Varela de Lima. ADAPTAÇÃO CAUTELOSA DE COMPONENTES RESISTENTES À MUDANÇA EM SISTEMAS DE SISTEMAS. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "José Davi da Silva Pereira. MIGRAÇÃO DA FERRAMENTA LOTUS PARA AMBIENTE DE NUVEM E MICROSERVIÇOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Felipe de Sousa Vidal. FERRAMENTA PARA MONITORAMENTO E VERIFICAÇÃO DE CENÁRIOS EM TEMPO DE EXECUÇÃO EM SISTEMAS AUTOADAPTATIVOS. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "ADSON ROBERTO PONTES DAMASCENO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DE UM FRAMEWORK PARA GERAÇÃO AUTOMÁTICA DE APLICAÇÕES ANDROID COM PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Alan Portela Bandeira. UMA ABORDAGEM E FERRAMENTA PARA MODELAGEM E MONITORAMENTO DE SISTEMAS AUTO-ADAPTATIVOS UTILIZANDO CENÁRIOS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Eliaquim Barbosa Pimentel. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "ADSON ROBERTO PONTES DAMASCENO. DESENVOLVIMENTO DE UMA FERRAMENTA DE MONITORAMENTO, VERIFICAÇÃO E ADAPTAÇÃO PARA SISTEMAS AUTOADPATATIVOS BASEADOS EM OSGI. 2017. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Bruno Silva Barbosa. EXTENSÃO DA FERRAMENTA LOTUS PARA APLICAÇÃO NA ENGENHARIA DIRIGIDA POR MODELOS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "MESSIAS DOMINGOS PINTO DE MESQUITA FILHO. EXTENSÃO DA FERRAMENTA LOTUS PARA ESPECIFICAÇÃO E VERIFICAÇÃO FORMAL DE MODELOS DE COMPORTAMENTO DE SOFTWARE. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Yan Augusto Gurgel da Silva. EXTENSÃO DO FRAMEWORK JUSTBUSINESS PARA PROVER PERSISTÊNCIA EXTERNA E INTERFACES CUSTOMIZÁVEIS. 2016. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Lucas Vieira Alves. EXTENSÃO DA FERRAMENTA TCG PARA TESTES BASEADOS EM MODELOS CONSIDERANDO GUARDAS E SIMULAÇÃO COM DADOS DE ENTRADA. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Eliaquim Barbosa Pimentel. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Erick Barros dos Santos. MIGRAÇÃO NÃO INTRUSIVA DE APLICAÇÕES PARA A NUVEM. 2015. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Emerson Correia Freitas Lima. Uma Técnica de Verificação Quantitativa em Tempo de Execução de Sistemas Auto-adaptativos Baseada em Refinamento de Estados. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Lucas Vieira Alves. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando Aspectos. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Paulo Henrique Mendes Maia.",
+        "Emerson Correia Freitas Lima. Uma Abordagem para Compreensão de Software Baseada em Engenharia Reversa não Intrusiva utilizando XML. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade Estadual do Ceará, Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Marcelo Almeida Lima. Aplicação de Programação Orientada a Aspectos a Sistemas J2EE. 2006. Iniciação Científica. (Graduando em Sistemas de Informacao) - Faculdade Integrada do Ceará - FIC. Orientador: Paulo Henrique Mendes Maia."
+      ]
+    },
+    "specialization": {
+      "completed": [
+        "Carlos Henrique Gouveia Carneiro. DataQI.NET: um Framework para Especificação de Consultas Utilizando o Padrão Repository. 2020. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Wellington Costa pereira. CONVALIDA - UMA BIBLIOTECA BASEADA EM ANOTAÇÕES PARA VALIDAÇÃO DE CAMPOS EM APLICAÇÕES ANDROID. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "ÂNGELO LUSTOSA DE FIGUEIREDO FILHO. GUARDIÃOIMAGEM - UM SISTEMA DE INTEGRAÇÃO ENTRE UM SISTEMA DE INFORMAÇÃO HOSPITALAR E UM SISTEMA DE COMUNICAÇÃO E ARQUIVAMENTO DE IMAGENS. 2017. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Laryssa Lima Muniz. TCG: Uma Ferramenta para Geração e Seleção de Casos de Teste Funcionais e Estatísticos. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Hermano Anderson Uchôa. Evolução não-intrusiva de uma Aplicação para Geração de Logs em um Banco de dados Relacional: um Relato de Experiência. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "TIAGO ALENCAR MENEZES. DESENVOLVIMENTO DE UM PLUG-IN PARA A VISUALIZAÇÃO DO HISTÓRICO DE COMMITS DE ARQUIVOS DO GITHUB PARA O ECLIPSE. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Custódio Cunha Neto. TIME MANAGER : UMA FERRAMENTA DE AUDITORIA DE TEMPO DE ATIVIDADES COM INTEGRAÇÃO A ISSUE TRACKING SYSTEMS. 2015. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Márcia Maria Silva Souza Maciel. Uma Análise Quantitativa da Utilização de Técnicas de Validação de Requisitos no Mercado de TI em Fortaleza. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Caio Holanda Costa. Migração Parcial de um Banco de Dados Relacional para um Banco de Dados NoSQL na Nuvem Através de Adaptações Não-intrusivas: um Relato de Experiência. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Taciana Alves Bezerra. Uma Revisão da Literatura sobre Técnicas de Avalição de Softwares Educativos. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "João Vianey Batista Moreira Filho. Soluções para Descoberta de Serviços em Sistemas Ubíquos: uma Revisão de Literatura. 2014. Monografia. (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "José Aroldo Marinho dos Santos. Uma Análise sobre o Processo de Ensino e Aprendizagem do Fundamental I na Escola Municipal Maria de Lourdes da Silveira. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Maria de Conceição de Menezes Pereira. Gestão Democrática em uma Perspectiva Participativa. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Maria Edleuza Souza Feitosa. A Participação da Família no Contexto Escolar: uma Observação da Prática Escolar na Escola Danilo Sá Benevides Magalhães. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Fernanda Goes Sales. Indisciplina no Ensino Fundamental II na Escola Corália Gonzaga Sales. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Francinete Silva de Castro Souza. A Implementação da Informática Educativa na Escola de Ensino Infantil e Fundamental São Francisco Das Chagas. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Germana Pinheiro da Rocha Pontes. Análise sobre a relação do uso de drogas na família e o insucesso escolar dos alunos da Escola de Ensino Fundamental Maria Dolores Menezes de Almeida. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Herbene Garcia da Silva. A Importância da Parceria Família e Escola Nos Resultados da Aprendizagem dos Alunos da E. E. I. E. F. Maria das Dores Lima. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Itelvânia Maria de Sousa. Gestão Escolar Democrática: Diagnóstico sobre a Gestão na Escola Aloísio Domingos de Souza ? Pentecostes/CE. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "Luiza Alice Lima Rocha. A Importância da Relação Família-Escola na Aprendizagem dos Alunos do 2º ano. 2012. Monografia. (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará. Orientador: Paulo Henrique Mendes Maia.",
+        "OTÁVIO MELO BARRETO. DESENVOLVIMENTO DO SISTEMA DE CONTROLE ACADÊMICO DA ESPECIALIZAÇÃO EM ENGENHARIA DE SOFTWARE DA UNIVERSIDADE ESTADUAL DO CEARÁ. 2015. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade Estadual do Ceará. Orientador: Paulo Henrique Mendes Maia."
+      ]
+    },
+    "others": {
+      "completed": [
+        "Matheus Henrique Esteves Paixão. 2021. Universidade Estadual do Ceará, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Paulo Henrique Mendes Maia."
+      ]
+    }
   },
   "experience": {
     "items": [
       {
         "institution": "Universidade Estadual do Ceará, UECE",
         "country": "Brasil",
-        "details": [],
         "roles": [
           {
             "interval": {
               "start": 2013,
               "raw": "2013 - Atual"
             },
-            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professor Adjunto, Carga horária: 40, Regime: Dedicação exclusiva.",
-            "details": []
+            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professor Adjunto, Carga horária: 40, Regime: Dedicação exclusiva."
           },
           {
             "interval": {
@@ -1548,8 +1418,7 @@
           "Bolsista DTI-1 do Projeto PADBR",
           "2011 - 2011: Vínculo: Bolsista, Enquadramento Funcional: Bolsista, Carga horária: 20",
           "Bolsista DTI-3 do Projeto INCT-MACC."
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Imperial College London, IC",
@@ -1638,8 +1507,7 @@
         "country": "Brasil",
         "details": [
           "2005 - 2005: Vínculo: Colaborador, Enquadramento Funcional: Analista de sistemas / pesquisador, Carga horária: 40"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Devry Brasil, DEVRY BRASIL",
@@ -1697,32 +1565,28 @@
           "2002 - 2004: Vínculo: Bosista FUNCAP, Enquadramento Funcional: Mestrando, Carga horária: 40",
           "2000 - 2002: Vínculo: Bolsista Motorola, Enquadramento Funcional: Programa de Capacitação Tecnologica (PCT), Carga horária: 20",
           "1999 - 2000: Vínculo: Bolsista CAPES, Enquadramento Funcional: Programa Especial de Treinamento (PET), Carga horária: 20"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "The Open University, OPEN",
         "country": "Inglaterra",
         "details": [
           "2018 - 2018: Vínculo: Professor Visitante, Enquadramento Funcional: Professor Visitante"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Instituto Desenvolvimento, Estratégia e Conhecimento, IDESCO",
         "country": "Brasil",
         "details": [
           "2021 - 2025: Vínculo: Bolsista, Enquadramento Funcional: Pesquisador, Carga horária: 5"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Instituto de Gestão, Redes Tecnológicas e Energias, IREDE",
         "country": "Brasil",
         "details": [
           "2022 - 2024: Vínculo: Bolsista, Enquadramento Funcional: Pesquisador, Carga horária: 5"
-        ],
-        "roles": []
+        ]
       }
     ]
   },
@@ -1736,10 +1600,29 @@
       "Agência de fomento: Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico",
       "Agência de fomento: Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira"
     ],
-    "editorialBoards": [],
     "eventParticipations": [
-      "RODRIGUES, G. N. ; MAIA, P. H. M. . 3rd International Summer School on Robotic Mission Engineering (RoME'25). 2025. (Outro).",
-      "RODRIGUES, G. N. ; MAIA, P. H. M. . 2nd International Summer School on Robotic Mission Engineering (RoME'24). 2024. (Outro)."
+      "14th Symposium on Software Engineering for Adaptive and Self-Managing Systems.Dragonfly: a Tool for Simulating Self-Adaptive Drone Behaviours. 2019. (Simpósio).",
+      "34th IEEE/ACM International Conference on Automated Software Engineering.Cautious Adaptation of Defiant Components. 2019. (Simpósio).",
+      "Feira do Conhecimento - Ciência, Tecnologia, Inovação e Negócios.. 2019. (Feira).",
+      "X Congresso Brasileiro de Software: Teoria e Prática. ADORE: An Adaptation-Oriented Requirement Modeling Approach for Systems of Systems. 2019. (Congresso).",
+      "European Conference on Software Architecture. Beethoven: An Event-Driven Lightweight Platform for Microservice Orchestration. 2018. (Congresso).",
+      "Feira do Conhecimento - Ciência, Tecnologia, Inovação e Negócios. 2018. (Feira).",
+      "12th International Symposium on Software Engineering for Adaptive and Self-Managing Systems S. 2017. (Simpósio).",
+      "18o. Curso de Qualidade.Congresso da Sociedade Brasileira de Computação. 2017. (Seminário).",
+      "VIII Congresso Brasileiro de Software: Teoria e Prática (CBSoft). 2017. (Congresso).",
+      "18th International Conference on Enterprise Information Systens.A Naked Objects based Framework for Developing Android Business Applications. 2016. (Simpósio).",
+      "II Semana de Engenharia de Software e Ciência da Computação.MDE: Conceitos, Aplicações e Pesquisas. 2016. (Encontro).",
+      "XI Semana Acadêmica da Computação.MDE: Conceitos, Aplicações e Pesquisas. 2016. (Encontro).",
+      "V Congresso Brasileiro de Software: Teoria e Prática. LoTuS-TCG: Uma ferramenta para geração e seleção de casos de teste funcionais e estatísticos. 2014. (Congresso).",
+      "2a. Reunião Anual do Fórum dos Pró-reitores de Pesquisa e Pós-Graduação da Região Nordeste (FOPROP NE). 2013. (Encontro).",
+      "IV Congresso Brasileiro de Software: Teoria e Prática (CBSoft 2013). Uma Abordagem Baseada em Eventos para Adaptação Automática de Aplicações para a Nuvem. 2013. (Congresso).",
+      "X Semana da Computação da UECE.Características e Desafios do Software do Futuro. 2013. (Seminário).",
+      "XXIX Encontro Nacional de Pró-Reitores de Pesquisa e Pós-graduação. 2013. (Encontro).",
+      "Semana Acadêmica da Computação da UFC.Introdução à Programação Orientada a Aspectos com AspectJ. 2011. (Seminário).",
+      "ACM SIGSOFT Symposium on the Foundations of Software Engineering (FSESE). Towards Accurate Probabilistic Models Using State Refinement. 2009. (Congresso).",
+      "Bertinoro International Spring School. 2007. (Oficina).",
+      "IEEE International Conference on Software Maintenance. RefaX: A Refactoring Framework Based on XML. 2004. (Congresso).",
+      "Simpósio Brasileiro de Engenharia de Software. Building Flexible Refactoring Tools with XML. 2004. (Congresso)."
     ],
     "eventOrganizations": [
       "RODRIGUES, G. N. ; MAIA, P. H. M. . 3rd International Summer School on Robotic Mission Engineering (RoME'25). 2025. (Outro).",
@@ -1827,100 +1710,9 @@
       "SOUZA, J. T.; MAIA, P. H. M.; CAMPOS, G. A. L.. Participação em banca de Antônio Jailton Carvalho Araújo.Sistema de Acompanhamento de Afastamento de Docente para a Realização de Pós-graduação (SADPG). 2014. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
       "OLIVEIRA, F.; CORTES, M. I.; MAIA, P. H. M.. Participação em banca de Daniel Nascimento Nobre.Estudo de Frameworks de Persistência para Plataforma Android. 2013. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
       "CORTES, M. I.; CAMPOS, G. A. L.; MAIA, P. H. M.. Participação em banca de Emanuela da Rocha Mascarenhas.Suporte Automatizado à Gestão Integrada de Mudanças em Projetos. 2013.",
-      "CORTES, M. I.; MAIA, P. H. M.; SOUZA, J. T.; BRANDAO, M. G.. Participação em banca de Bruno Felipe de Carvalho.Um Processo para Evolução de Sistemas Legados Usando Web Services. 2013. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "MAIA, P. H. M.; DANTAS, A. B. O.; LEITE, G. C.. Banca de concurso público para professor temporário da FUNECE - Setor Banco de Dados. 2021. Universidade Estadual do Ceará.",
-      "MAIA, PAULO H. M.; BARROS, A. L. B. P.; FERNANDEZ, M. P.. Banca de concurso público para professor da FUNECE 2018 - Setor Banco de Dados. 2018. Universidade Estadual do Ceará.",
-      "MAIA, PAULO H. M.; CORTES, M. I.; BARROS, A. L. B. P.. Banca de concurso público para professor da FUNECE 2018 - Setor Algoritmos e Estruturas de Dados. 2018.",
-      "NUNES, D. J.; MACIEL, P. R. M.; MAIA, P. H. M.. Banca de Concurso Público para Cargo de Professor Adjunto da UFC Setor Sistemas de Informação. 2018. Universidade Federal do Ceará.",
-      "Rocha, Lincoln S.; MAIA, P. H. M.; MENDES, M. S.. Banca de Concurso Público para Professor Adjunto da Universidade Federal do Ceará Campus Russas. 2017. Universidade Federal do Ceará.",
-      "FERNANDEZ, M. P.; ROCHA, L. S.; MAIA, P. H. M.. Banca para Professor Substituto da FUNECE - Setor Circuitos Lógicos e Digitais. 2015. Universidade Estadual do Ceará.",
-      "JUCA, I. B.; MAIA, P. H. M.; PAILLARD, G. A. L.. Banca para Professor Adjunto do Departamento de Administração. 2015. Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; MAIA, M. E. F.; SANTOS, E. M.. Banca de Concurso Público para Professor Efetivo categoria Assistente A setor de Estudos: Programação para Design. 2015. Universidade Federal do Ceará.",
-      "JUCA, P. M.; MAIA, P. H. M.; FURTADO, E. S.. Banca de Concurso Público para Professor Efetivo, categoria Assistente A. 2014. Universidade Federal do Ceará."
+      "CORTES, M. I.; MAIA, P. H. M.; SOUZA, J. T.; BRANDAO, M. G.. Participação em banca de Bruno Felipe de Carvalho.Um Processo para Evolução de Sistemas Legados Usando Web Services. 2013. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará."
     ],
     "otherBoards": [
-      "PAIXAO, M. H. E.; CARMO, R. A. F.; FERREIRA FILHO, J. B.; MAIA, P. H. M.. Participação em banca de Lucas Almeida Aguiar. Evaluating Commit Messages Generation Methods through an Elo-Based Approach. 2025. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CARVALHO, W. V.; ROCHA, L. S.; MAIA, P. H. M.; FERREIRA FILHO, J. B.; VERAS, N. L.. Participação em banca de Davi Batista Tabosa. ATOMS OF CONFUSION IN THE ANDROID OPEN SOURCE PROJECT: A PREVALENCE STUDY. 2024. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "COUTINHO, E. F.; MAIA, P. H. M.; MOREIRA, L. O.; PAILLARD, G. A. L.. Participação em banca de Francisco Victor da Silva Pinheiro. UMA ABORDAGEM BASEADA EM REDE DE SUPRIMENTO DE SOFTWARE PARA ANÁLISE DA EVOLUÇÃO DE ECOSSITEMAS DE SOFTWARE. 2023. Dissertação (Mestrado em Programa de Pós-graduação em Computação) - Universidade Federal do Ceará - Campus Quixadá.",
-      "MOREIRA, T. M. M.; OLIVEIRA, S. K. P.; MAIA, P. H. M.. Participação em banca de Florênciq Gamileira Nascimento. Website Educativo para o Cuidado Clínico em Enfermagem e Saúde de Pessoas com Diabetes. 2023. Dissertação (Mestrado em Cuidados Clinicos em Saúde) - Universidade Estadual do Ceará.",
-      "BEZERRA, I. C.; MORAIS, A. C. L. N.; MAIA, P. H. M.. Participação em banca de Fernanda França Cabral. Construção e Validação de um Portal Web para o Campo da Assistência Farmacêutica: uma Ferramenta de Comunicação Institucional da SESA-CEARÁ. 2022. Dissertação (Mestrado em Mestrado Profissional em Gestão em Saúde) - Universidade Estadual do Ceará.",
-      "DUARTE, L. M.; MAIA, P. H. M.; RIBEIRO, L.; SCHNORR, L. M.. Participação em banca de Oseias Ayres Ferreira. Modelling Software Energy Consumption for Energy- Efficiency Analysis. 2022. Dissertação (Mestrado em PPGC - Programa de Pós Graduação em Computação UFRGS) - Universidade Federal do Rio Grande do Sul.",
-      "VERGARA, C. M. A. C.; FE, M. A. B. M.; MAIA, P. H. M.. Participação em banca de MARIA GERLANE BARBOSA DE PAIVA. CONSTRUÇÃO E VALIDAÇÃO DE CHATBOT PARA AUXILIAR NA EXECUÇÃO DO PROGRAMA ALIMENTA BRASIL (PAB). 2022. Dissertação (Mestrado em Mestrado Profissional em Gestão em Saúde) - Universidade Estadual do Ceará.",
-      "ROCHA, L. S.; MAIA, P. H. M.; GOMES, J. P. P.. Participação em banca de ANTÔNIO JOSÉ AMÂNCIO DA SILVA. Towards Automatic Labeling of Exception Handling Bugs: A Case Study of 10 Years Bug-Fixing in Apache Hadoop. 2022. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "DUARTE, L. M.; MAIA, P. H. M.; MACHADO, R.; MOREIRA, A. F.. Participação em banca de Iara Ramos Brito. Uma Metodologia para a Geração de Testes Unitários Baseada em Extração de Modelos. 2021. Dissertação (Mestrado em PPGC - Programa de Pós Graduação em Computação UFRGS) - Universidade Federal do Rio Grande do Sul.",
-      "CORTES, M. I.; BEZERRA, C. I. M.; MAIA, P. H. M.. Participação em banca de Diego Ivo Campos Costa. INVESTIGANDO A RELAÇÃO ENTRE INDICADORES DE DÍVIDA TÉCNICA E CARACTERÍSTICAS DE QUALIDADE DE SOFTWARE EM DISCUSSÕES DO STACK OVERFLOW. 2021. Dissertação (Mestrado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "RAMOS, R. F.; MAIA, P. H. M.; DANTAS, A. B. O.. Participação em banca de MAYUMI PASSOS LOPES. PROPOSTA DE REDEFINIÇÃO DE ROTAS PEDAGÓGICAS PARA O ENSINO MÉDIO A PARTIR DA GESTÃO DE RESULTADOS DA AVALIAÇÃO DIAGNÓSTICA ONLINE. 2020. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará.",
-      "MAIA, P. H. M.; SOUSA, F. R. C.; MOREIRA, L. O.; MACHADO, J. C.. Participação em banca de Carlos Sérgio da Silva Marinho. MOON: An Approach to Data Management on Relational Database and Blockchain. 2020. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "RAMOS, R. F.; GOIS, F. N. B.; MAIA, PAULO H. M.. Participação em banca de Raimundo Mendes de Freitas Neto. IDENTIFICAÇÃO DE DEFEITOS EM IMAGENS DE TECIDO UTILIZANDO VISÃO COMPUTACIONAL E APRENDIZADO DE MÁQUINA. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará.",
-      "MACHADO, J. C.; MAIA, P. H. M.; MONTEIRO FILHO, J. M. S.. Participação em banca de Eder Clayton Medeiros Gomes. FLEXMVCC: Uma Abordagem Flexível para Protocolos de Controle de Concorrência Multi-versão. 2019. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "FERREIRA FILHO, J. B.; SOUSA, F. R. C.; MAIA, P. H. M.; CARVALHO, W. V.. Participação em banca de Iago Avelino Trajano. MedPath: A process-based modeling language for designing care pathways. 2019. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "ROCHA, L. S.; MAIA, P. H. M.; PAIXAO, M. H. E.; BEZERRA, C. I. M.; FERREIRA FILHO, J. B.. Participação em banca de Luan Pereira Lima. Understanding the effectiveness of exception handling testing in long-lived Java libraries. 2019. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "ROCHA, L. S.; MAIA, P. H. M.; PINTO, G. H. L.; FERREIRA FILHO, J. B.. Participação em banca de Anderson Severo de Matos. Splitting APIs: an Exploratory Study of Software Unbundling. 2019. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "FERREIRA FILHO, J. B.; MAIA, P. H. M.; ALCANTARA, J. F. L.; ROCHA, L. S.. Participação em banca de Renan Pereira de Figueiredo. Automated Verification of Care Pathways using Constraint Programming. 2019. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "RAMOS, R. F.; OLIVEIRA, A. M. B.; MAIA, P. H. M.. Participação em banca de Evandro Custódio Gonçalves. Levantamento de Riscos em Campanha de Negociação de Débitos Utilizando Machine Learning. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará.",
-      "RAMOS, R. F.; GOIS, F. N. B.; MAIA, P. H. M.. Participação em banca de Raimundo Mendes de Freitas Neto. Previsão de Clima usando Machine Learning: um Estudo no Nordeste Brasileiro. 2019. Dissertação (Mestrado em Mestrado Profissional em Computação Aplicada) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; ALBUQUERQUE, A. B.; MAIA, P. H. M.. Participação em banca de Francisco José Rêgo Lopes. Caracterização do Valor de Negócio em Projetos de Software para Governo Eletrônico. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "ALBUQUERQUE, A. B.; MAIA, P. H. M.; FURTADO, M. E. S.. Participação em banca de George Lima Santos. Métricas de Software para Avaliação da Qualidade das Subcaracterísticas da Privacidade em sistemas da Internet das Coisas. 2018. Dissertação (Mestrado em Programa de Pós-graduação em Informática Aplicada) - Universidade de Fortaleza.",
-      "BRAYNER, A.; MAIA, PAULO H. M.; MAIA, J. E. B.. Participação em banca de Fabiano Tavares da Silva. LUPPAR: um sistema de Recuperação de informação para Coleções Fechadas de Documentos. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CARVALHO, W. V.; ROCHA, L. S.; VALENTE, M. T. O.; MAIA, P. H. M.; CAVALCANTE NETO, J. B.. Participação em banca de Dêmora Cunha de Sousa. Um Estudo de Caso do Tratamento de Exceção no Domínio de Sistemas Web Corporativos. 2018. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "FERNANDEZ, M. P.; MOREIRA, L. O.; MAIA, P. H. M.. Participação em banca de Lázaro João cá. Uma Abordagem para Modelagem do Desempenho para Sistemas de Banco de Dados NEWSQL e Comparação dos Modelos Gerados com Diferentes Técnicas de Aprendizado de Máquina. 2018. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; CARVALHO, C. R. M.; MAIA, P. H. M.; FURTADO, M. E. S.. Participação em banca de Ludmila Varela Arruda. Uma Avaliação de Propostas Baseadas na Teoria da Visualização da Informação para Tratamento de Dados de uma Ferramenta de Otimização com a Finalidade de Priorizar Casos de Teste. 2017. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SILVA, C. E.; PINHEIRO, M. C. M. A.; MAIA, P. H. M.. Participação em banca de Geomerez Raduan de Oliveira Bandeira. Auto-Gerenciamento de Recursos em Infraestruturas baseadas Contêineres para Desktop-as-a-Service: Um Estudo de Caso nos Laboratórios de Informática da ECT/UFRN. 2017. Dissertação (Mestrado em Programa de Pós-graduação em Engenharia de Software) - Universidade Federal do Rio Grande do Norte.",
-      "LIMA, G. P.; MAIA, P. H. M.; SOUSA, M. S.. Participação em banca de Sandra Wirgynnia de Figueiredo Chaves. Software Educativo: Apoio no Processo de Ensino-Aprendizagem da Saúde da Criança. 2017. Dissertação (Mestrado em Mestrado Profissional em Ensino na Saúde) - Universidade Estadual do Ceará.",
-      "JORGE, M. S. B.; MAIA, PAULO H. M.; PAULA, M. L.. Participação em banca de Fernando Virgílio Albuquerque de Oliveira. Desenvolvimento Tecnológico na Produção do Cuidado dos Profissionais do Núcleo de Apoio à Saúde da Família de Fortaleza, Ceará. 2017. Dissertação (Mestrado em Programa de Pós-graduação em Saúde Coletiva) - Universidade Estadual do Ceará.",
-      "SAMPAIO, A. T. F.; MAIA, PAULO H. M.; FARIAS, P. P. M.. Participação em banca de Luis Heustákio Lima Carvalho. Uma Abordagem de Migração para Arquitetura Microservices a partir de Aplicações Monolíticas em Produção. 2017. Dissertação (Mestrado em Programa de Pós-graduação em Informática Aplicada) - Universidade de Fortaleza.",
-      "JORGE, M. S. B.; MAIA, PAULO H. M.; LINARD, C. F. B. M.. Participação em banca de Rosemeire Souza Gomes. Modelo Tecnológico de Ensino a Distância para Capacitação na Assistência Farmacêutica Hospitalar. 2017. Dissertação (Mestrado em Mestrado Profissional em Gestão em Saúde) - Universidade Estadual do Ceará.",
-      "JORGE, M. S. B.; BEZERRA, I. C.; MAIA, P. H. M.. Participação em banca de Rillma Marques Melo Nunes. Construção e Validação de uma Fan Page para o SAMU CE: uma Ferramenta de Comunicação Institucional. 2017. Dissertação (Mestrado em Mestrado Profissional em Gestão em Saúde) - Universidade Estadual do Ceará.",
-      "CAMILO JUNIOR, C. G.; MAIA, P. H. M.; SOUZA, J. T.. Participação em banca de Altino Dantas Basílio Neto. PLANEJAMENTO DE RELEASE BASEADO EM OTIMIZAÇÃO INTERATIVA ATRAVÉS DA FORMALIZAÇÃO DAS PREFERÊNCIAS DO TOMADOR DE DECISÃO. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CAMILO JUNIOR, C. G.; MAIA, P. H. M.; SOUZA, J. T.. Participação em banca de DUANY DREYTON BEZERRA SOUSA. UMA ABORDAGEM SISTEMÁTICA MULTIOBJETIVO PARA PRIORIZAÇÃO E RECOMENDAÇÃO DE BUGS EM REPOSITÓRIOS DE SOFTWARE LIVRE E CÓDIGO ABERTO. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; MAIA, P. H. M.; SOUZA, C. T.. Participação em banca de Samuel Alves Soares. ELIHU: PROJETO DE SUPORTE AO DESENVOLVIMENTO DIRIGIDO POR MODELOS COM NAKED OBJECTS, DOMAIN-DRIVEN DESIGN E PADRÕES DE SOFTWARE. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "OLIVEIRA, F. C. M. B.; JOYE, C. R.; FURTADO, E. S.; MAIA, P. H. M.. Participação em banca de Lidiane Castro Silva. JLOAD ? JAVA LEARNING OBJECT TO ASSIST THE DEAF UM OBJETO DE APRENDIZAGEM PARA PRÁTICA DE ENSINO DE JAVA BÁSICO PARA ALUNOS SURDOS. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; BONATES, T. O. E.; MAIA, P. H. M.. Participação em banca de LUCAS WINTHER DE ALCANTARA ROQUE. ALOCAÇÃO DE RECURSOS HUMANOS EM PROJETOS DE SOFTWARE ÁGEIS BASEADO EM SIMILARIDADE DE TAREFAS. 2016. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; MAIA, P. H. M.; BONATES, T. O. E.. Participação em banca de Allysson Allex de Paula Araújo. Uma Arquitetura Utilizando Algoritmo Genético Interativo e Aprendizado de Máquina Aplicado ao Problema do Próximo Release. 2015. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CARDOSO, A. R.; CELESTINO JUNIOR, J.; MAIA, P. H. M.; SOUZA, C. T.. Participação em banca de Filipe Fernandes dos Santos Brasil de Matos. VBALANCE: uma Política de Seleção de Máquinas Virtuais para Balanceamento de Cargas em Cloud Computing. 2014. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CAMILO JUNIOR, C. G.; MAIA, P. H. M.; SOUZA, J. T.. Participação em banca de Matheus Henrique Esteves Paixão. Uma Abordagem Baseada em Otimização Robusta para o Problema do Próximo Release na Presença de Incertezas. 2014. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CELESTINO JUNIOR, J.; CARDOSO, A. R.; MACHADO, J. C.; MAIA, P. H. M.. Participação em banca de Sílvio Roberto Martins Amarante. UTILIZANDO O PROBLEMA DE MÚLTIPLAS MOCHILAS PARA MODELAR O PROBLEMA DE ALOCAÇÃO DE MÁQUINAS VIRTUAIS EM COMPUTAÇÃO NAS NUVENS. 2013. Dissertação (Mestrado em Mestrado em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; BONATES, T. O. E.; MAIA, P. H. M.. Participação em banca de Paulo Alberto Melo Barbosa. Uma Abordagem Baseada em Otimização para a Priorização de Requisitos de Software Considerando a Estabilidade do Requisito. 2013. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CAMPOS, G. A. L.; CORTES, M. I.; MAIA, P. H. M.; RABELO, R. A. L.. Participação em banca de Francisca Raquel de Vasconcelos Silveira. Uma Abordagem Fundamentada em Agentes Racionais para o Teste de Agentes Racionais. 2013. Dissertação (Mestrado em Mestrado Acadêmico em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "MAIA, P. H. M.; SCHULZE, B.; FRANKLING, M.; SOUZA, J. N.. Participação em banca de Paulo Antônio Leal Rego. FairCPU: Uma Arquitetura para Provisionamento de Máquinas Virtuais Utilizando Características de Processamento. 2012. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; BRAYNER, A.; GONCALVES, D. G.; ANDRADE, R. M. C.. Participação em banca de Sandra Régia Chaves Carvalho. Economia de Energia em Redes de Sensores utilizando boas práticas da metodologia Seis Sigma. 2012. Dissertação (Mestrado em Programa de Pós-graduação em Engenharia de TeleInf) - Universidade Federal do Ceará.",
-      "CARVALHO JUNIOR, F. H.; BARBOSA, L. S.; CORREA, R.; MAIA, P. H. M.. Participação em banca de Thiago Braga Marcilon. Contratos Formais para Derivação e Verificação de Componentes Paralelos. 2012. Dissertação (Mestrado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "OLIVEIRA, F. C. M. B.; KOPPER, R.; NASCIMENTO, M. D.; MAIA, P. H. M.; SANTOS, I. S.. Participação em banca de Adson Roberto Pontes Damasceno. METAVERSE4DEAF: A FRAMEWORK OF INCLUSIVE AFFORDANCES FOR DEAF AND HARD-OF-HEARING PARTICIPATION IN EDUCATIONAL METAVERSE. 2026. Tese (Doutorado em Programa de Pós-graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "JORGE, M. S. B.; MAIA, P. H. M.; MOREIRA, T. M. M.; VERGARA, C. M. A. C.; SAMPAIO, H. A. C.. Participação em banca de DIEGO DA SILVA FERREIRA. CHATBOT NO CUIDADO À SAÚDE NA ATENÇÃO PRIMÁRIA E PSICOSSOCIAL: DESENVOLVIMENTO E VALIDAÇÃO. 2024. Tese (Doutorado em Programa de Pós-graduação em Saúde Coletiva) - Universidade Estadual do Ceará.",
-      "CARVALHO JUNIOR, F. H.; GOMES, A. T. A.; ANDRADE, R. M. C.; MAIA, P. H. M.; ROCHA, L. S.. Participação em banca de João Marcelo Uchôa de Alencar. Reconfiguração Elástica de Componentes Paralelos sobre Nuvens de Serviços de Computação de Alto Desempenho. 2017. Tese (Doutorado em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "GOMES, A. T. A.; MAIA, P. H. M.; ROCHA, L.. Participação em banca de JOÃO MARCELO UCHÔA DE ALENCAR. ELASTICIDADE DE COMPUTAÇÃO PARALELA EM APLICAÇÕES SOBRE NUVENS DE SERVIÇOS DE COMPUTAÇÃO DE ALTO DESEMPENHO. 2016. Exame de qualificação (Doutorando em Mestrado e Doutorado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "DANTAS, A. B. O.; MAIA, P. H. M.; NOGUEIRA, T. P.. Participação em banca de Francisco Edyvalberty Alenquer Cordeiro. Análise dos Impactos da Refatoração Arquitetural Aplicando os Princípios da Clean Arcgitecture. 2019. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "ARAUJO, A. A. P.; MAIA, P. H. M.; SOUZA, J. T.. Participação em banca de Glauber Ferreira de Castro. Melittus: um aplicativo baseado em gamificação para auxílio no tratamento de pacientes com diabetes. 2018. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "BRASIL, M. M. A.; MAIA, P. H. M.; CARVALHO, C. R. M.. Participação em banca de Vagner dos Santos Xavier. Melhoria na Execução de um Processo de Negócio Aplicando Engenharia de Usabilidade: um Estudo de Caso. 2014. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "LEAL, D. S.; MAIA, P. H. M.; BRASIL, M. M. A.. Participação em banca de José Sharles Weima Costa de Matos. Modificando as Regras de Negócio com Agilidade: Um Estudo de Caso Utilizando Motores de Regras. 2014. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "AQUINO, F. W. C.; MAIA, P. H. M.; SILVA, J. L. C. E.. Participação em banca de Davi Meneses Bessa. Análise de Desempenho de Arquiteturas Distribuídas para sistemas em Lote: Uma Abordagem Baseada em Medições. 2014. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "BRASIL, M. M. A.; MAIA, P. H. M.; MAIA, C. L. B.. Participação em banca de Marcelo da Costa Rebouças. RESTAPIUnifier: uma Biblioteca para Reuso de Web Services Baseados na Arquitetura REST. 2013. Monografia (Aperfeiçoamento/Especialização em Especialização em Engenharia de Software) - Universidade Estadual do Ceará.",
-      "MAIA, P. H. M.; OLIVEIRA, C. S.. Participação em banca de KELLY RIBEIRO DE SOUSA. Brincar na Educação Infantil é Coisa Séria. 2012. Monografia (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; OLIVEIRA, C. S.. Participação em banca de MARIA JOTACÍLIA MATIAS ROCHA. Projeto PARALAPRACÁ: Formação e Planejamento Lúdico na Educação Infantil. 2012. Monografia (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; OLIVEIRA, C. S.. Participação em banca de MARIA NENENZINHA CAVALCANTE DE BRITO. Alunos Surdos: os Desafios da Inclusão Social na Escola de Ensino Fundamental Maria Dolores Menezes de Almeida. 2012. Monografia (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; OLIVEIRA, C. S.. Participação em banca de MARIA FRANCISMAYRE ALVINO. Coordenação Pedagógica: Responsabilidades na Construção do Projeto Político Pedagógico na E.E.I.E.F. Monsenhor André Viana Camurça. 2012. Monografia (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.; OLIVEIRA, C. S.. Participação em banca de FABIANA FEITOSA DOS SANTOS CAETANO. Inovações das Práticas Pedagógicas: um Desafio aos Educadores. 2012. Monografia (Aperfeiçoamento/Especialização em CURSO DE ESPECIALIZAÇÃO EM GESTÃO ESCOLAR) - Universidade Federal do Ceará.",
-      "SOUSA, A. V. C.; MAIA, P. H. M.. Participação em banca de Antônia Deuslir Teixeira de Sousa. Avaliação da Aprendizagem na Escola de Ensino Fundamental Miguel Soares Guimarães: Perspectivas e Desafios. 2012. Monografia (Aperfeiçoamento/Especialização em Curso de Especialização em Coordenação Pedagógica) - Universidade Federal do Ceará.",
-      "SOUSA, A. V. C.; MAIA, P. H. M.. Participação em banca de Djalma Araújo Almeida. Coordenador Pedagógico: Qual é Mesmo o seu Papel?. 2012. Monografia (Aperfeiçoamento/Especialização em Curso de Especialização em Coordenação Pedagógica) - Universidade Federal do Ceará.",
-      "SOUSA, A. V. C.; MAIA, P. H. M.. Participação em banca de Juciléia Felix dos Santos. Dificuldades de Aprendizagem no 7º Ano da Escola Oséas Rodrigues de Matos. 2012. Monografia (Aperfeiçoamento/Especialização em Curso de Especialização em Coordenação Pedagógica) - Universidade Federal do Ceará.",
-      "SOUSA, A. V. C.; MAIA, P. H. M.. Participação em banca de Ritinha Carneiro Lustosa. OS IMPACTOS DAS POLÍTICAS PÚBLICAS NA EDUCAÇÃO: O PROGRAMA MAIS EDUCAÇÃO NA ESCOLA ANTÔNIO MIRANDA DE MELO ? IMPACTOS E POSSIBILIDADES. 2012. Monografia (Aperfeiçoamento/Especialização em Curso de Especialização em Coordenação Pedagógica) - Universidade Federal do Ceará.",
-      "MAIA, P. H. M.. Participação em banca de Helena de Lima Marinho Rodrigues Araújo. Uma proposta de formação continuada para prática docente com uso de mídias digitais nas séries iniciais do ensino fundamental.. 2011. Monografia (Aperfeiçoamento/Especialização em Especialização em Educação à Distância) - Serviço Nacional de Aprendizagem Comercial - CE.",
-      "SANTOS, I. S.; MAIA, P. H. M.; MOREIRA, E. R. P.. Participação em banca de Camila Alves Barbosa.Utilizando o ChatGPT no Aperfeiçoamento de Casos de Uso. 2025. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "OLIVEIRA, F. C. M. B.; MAIA, P. H. M.; CORTES, M. I.. Participação em banca de Jefferson Soares Pinheiro.Tecnologia Educacional e Gerenciamento em Sala de Aula no Ensino Médio - Revisão Sistemática da Literatura. 2019. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "FERNANDEZ, M. P.; MAIA, P. H. M.; VIEIRA FILHO, F. M.. Participação em banca de Daniel de Lima Sales.Uma Proposta de Sistema de IoT para o Monitoramento Residencial. 2019. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "MARTINS JUNIOR, F. R. F.; MAIA, P. H. M.; BESERRA, R. A. M.. Participação em banca de José Almar Santiago de Almeida.Gestão Escolar Informatizada numa Escola Pública do Município de Limoeiro do Norte-CE: Caracterização e Visão dos Gestores. 2018. Trabalho de Conclusão de Curso (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará.",
-      "FREIRE, A. F. A. A.; MAIA, P. H. M.; ALBUQUERQUE, M. C. N.. Participação em banca de Clicério Domingos de Queiroz Neto.Análise do Aplicativo Mobile Hand Talk Aplicado a uma Turma de Licenciatura em Computação na Cidade de Limoeiro do Norte. 2018. Trabalho de Conclusão de Curso (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará.",
-      "MARTINS JUNIOR, F. R. F.; MAIA, P. H. M.; FREIRE, A. F. A. A.. Participação em banca de Yalisson Pinheiro Bezerra.A Utilização de TICs pelos professores no Ensino Fundamental II de uma Escola Pública do Município de Limoeiro do Norte. 2018. Trabalho de Conclusão de Curso (Graduação em Licenciatura em Computação) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; MAIA, P. H. M.; FERNANDEZ, M. P.. Participação em banca de D'Gledson Pinto Rabelo.Sistema Online de suporte ao Processo Seletivo do Mestrado Acadêmico em Ciência da Computação. 2018. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; ARAUJO, A. A. P.; MAIA, P. H. M.. Participação em banca de Gizelle Pauline Mendes Bezerra.Uma Avaliação sobre o Uso da Ferramenta Visual Studio Team Services em uma Fábrica de Software. 2016. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "FURTADO, M. E. S.; CAMINHA NETO, C. O.; MAIA, P. H. M.. Participação em banca de Rubens Pinheiro Gonçalves Cavalcante.Um Framework para Desenvolvimento de Aplicações Web Utilizando Padrões de Projeto. 2015. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "OLIVEIRA, F.; CORTES, M. I.; MAIA, P. H. M.. Participação em banca de Danthy Anderson Macedo Vasconcelos.Tecnologias de Banco de Dados Relacional e Objeto-relacional: um Estudo Comparativo. 2014. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; MAIA, P. H. M.; VERAS, N. L.. Participação em banca de Francisco Roberto Félix Rodrigues Filho.Blog Corporativo: Metodologia de Implementação. 2014. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; MAIA, P. H. M.; BRANDAO, M. G.. Participação em banca de Diego Allyson Alves Chaves.Desenvolvimento de um componente para a Aplicação de Teste Orientado à Comportamento na Filosofia Naked Objects. 2014. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "SOUZA, J. T.; MAIA, P. H. M.; CAMPOS, G. A. L.. Participação em banca de Antônio Jailton Carvalho Araújo.Sistema de Acompanhamento de Afastamento de Docente para a Realização de Pós-graduação (SADPG). 2014. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "OLIVEIRA, F.; CORTES, M. I.; MAIA, P. H. M.. Participação em banca de Daniel Nascimento Nobre.Estudo de Frameworks de Persistência para Plataforma Android. 2013. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
-      "CORTES, M. I.; CAMPOS, G. A. L.; MAIA, P. H. M.. Participação em banca de Emanuela da Rocha Mascarenhas.Suporte Automatizado à Gestão Integrada de Mudanças em Projetos. 2013.",
-      "CORTES, M. I.; MAIA, P. H. M.; SOUZA, J. T.; BRANDAO, M. G.. Participação em banca de Bruno Felipe de Carvalho.Um Processo para Evolução de Sistemas Legados Usando Web Services. 2013. Trabalho de Conclusão de Curso (Graduação em Ciência da Computação) - Universidade Estadual do Ceará.",
       "MAIA, P. H. M.; DANTAS, A. B. O.; LEITE, G. C.. Banca de concurso público para professor temporário da FUNECE - Setor Banco de Dados. 2021. Universidade Estadual do Ceará.",
       "MAIA, PAULO H. M.; BARROS, A. L. B. P.; FERNANDEZ, M. P.. Banca de concurso público para professor da FUNECE 2018 - Setor Banco de Dados. 2018. Universidade Estadual do Ceará.",
       "MAIA, PAULO H. M.; CORTES, M. I.; BARROS, A. L. B. P.. Banca de concurso público para professor da FUNECE 2018 - Setor Algoritmos e Estruturas de Dados. 2018.",
@@ -1933,7 +1725,6 @@
     ]
   },
   "publications": {
-    "metadata": {},
     "items": [
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1949,8 +1740,7 @@
         "volume": "19",
         "pages": "1-10",
         "doi": "http://dx.doi.org/10.1109/JSYST.2024.3465391",
-        "issn": "19379234",
-        "url": "http://dx.doi.org/10.1109/JSYST.2024.3465391"
+        "issn": "19379234"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1967,8 +1757,7 @@
         "volume": "28",
         "pages": "1-43",
         "doi": "http://dx.doi.org/10.1007/s11219-019-09486-x",
-        "issn": "15731367",
-        "url": "http://dx.doi.org/10.1007/s11219-019-09486-x"
+        "issn": "15731367"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1984,8 +1773,7 @@
         "volume": "26",
         "pages": "1-24",
         "doi": "http://dx.doi.org/10.1186/s13173-019-0095-5",
-        "issn": "16784804",
-        "url": "http://dx.doi.org/10.1186/s13173-019-0095-5"
+        "issn": "16784804"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2002,8 +1790,7 @@
         "volume": "27",
         "pages": "72-83",
         "doi": "http://dx.doi.org/10.22456/2175-2745.98904",
-        "issn": "21752745",
-        "url": "http://dx.doi.org/10.22456/2175-2745.98904"
+        "issn": "21752745"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2019,8 +1806,7 @@
         "volume": "14",
         "pages": "243-268",
         "doi": "http://dx.doi.org/10.1007/s11761-020-00300-2",
-        "issn": "18632394",
-        "url": "http://dx.doi.org/10.1007/s11761-020-00300-2"
+        "issn": "18632394"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2035,8 +1821,7 @@
         "volume": "1",
         "pages": "1-37",
         "doi": "http://dx.doi.org/10.1016/j.infsof.2017.11.014",
-        "issn": "09505849",
-        "url": "http://dx.doi.org/10.1016/j.infsof.2017.11.014"
+        "issn": "09505849"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2085,8 +1870,7 @@
         "volume": "14",
         "pages": "4187-4195",
         "doi": "http://dx.doi.org/10.1109/TLA.2016.7785951",
-        "issn": "15480992",
-        "url": "http://dx.doi.org/10.1109/TLA.2016.7785951"
+        "issn": "15480992"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2214,8 +1998,7 @@
         "title": "Towards Automatic Generation of Systems-of-Systems Architectural Configurations.",
         "venue": "SESoS '24: 12th ACM/IEEE International Workshop on Software Engineering for SystemsofSystems and Software Ecosystems, 2024, Lisbon Portugal",
         "pages": "29",
-        "doi": "http://dx.doi.org/10.1145/3643655.3643884",
-        "url": "http://dx.doi.org/10.1145/3643655.3643884"
+        "doi": "http://dx.doi.org/10.1145/3643655.3643884"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2240,8 +2023,7 @@
         "title": "A Pub/Sub-Based Mechanism for Inter-Component Exception Notification in Android Applications.",
         "venue": "2023 IEEE 20th International Conference on Software Architecture (ICSA), 2023, L'Aquila",
         "pages": "105-114",
-        "doi": "http://dx.doi.org/10.1109/icsa56044.2023.00018",
-        "url": "http://dx.doi.org/10.1109/icsa56044.2023.00018"
+        "doi": "http://dx.doi.org/10.1109/icsa56044.2023.00018"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2253,8 +2035,7 @@
         "title": "DoME: An Architecture for Domain Model Evolution at Runtime Using NLP.",
         "venue": "SBES 2023: XXXVII Brazilian Symposium on Software Engineering, 2023, Campo Grande Brazil",
         "pages": "186",
-        "doi": "http://dx.doi.org/10.1145/3613372.3613405",
-        "url": "http://dx.doi.org/10.1145/3613372.3613405"
+        "doi": "http://dx.doi.org/10.1145/3613372.3613405"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2285,8 +2066,7 @@
         "venue": "International Conference on software Engineering, 2022, Pittsburgh",
         "volume": "1",
         "pages": "56-66",
-        "doi": "http://dx.doi.org/10.1145/3510458.3513012",
-        "url": "http://dx.doi.org/10.1145/3510458.3513012"
+        "doi": "http://dx.doi.org/10.1145/3510458.3513012"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2302,8 +2082,7 @@
         "venue": "International Workshop on Emerging Trends in Software Engineering for Blockchain (WETSEB), 2022, Pittsburgh",
         "volume": "1",
         "pages": "39-46",
-        "doi": "http://dx.doi.org/10.1145/3528226.3528371",
-        "url": "http://dx.doi.org/10.1145/3528226.3528371"
+        "doi": "http://dx.doi.org/10.1145/3528226.3528371"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2331,8 +2110,7 @@
         "title": "Self-Adaptive Microservice-based Systems - Landscape and Research Opportunities.",
         "venue": "2021 International Symposium on Software Engineering for Adaptive and SelfManaging Systems (SEAMS), 2021, Madrid",
         "pages": "167",
-        "doi": "http://dx.doi.org/10.1109/SEAMS51251.2021.00030",
-        "url": "http://dx.doi.org/10.1109/SEAMS51251.2021.00030"
+        "doi": "http://dx.doi.org/10.1109/SEAMS51251.2021.00030"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2365,8 +2143,7 @@
         "venue": "2021 IEEE/ACM Joint 9th International Workshop on Software Engineering for SystemsofSystems and 15th Workshop on Distributed Software Development, Software Ecosystems and SystemsofSystems (SESoS/WDES), 2021, Madrid",
         "volume": "1",
         "pages": "24-31",
-        "doi": "http://dx.doi.org/10.1109/sesos-wdes52566.2021.00009",
-        "url": "http://dx.doi.org/10.1109/sesos-wdes52566.2021.00009"
+        "doi": "http://dx.doi.org/10.1109/sesos-wdes52566.2021.00009"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2448,8 +2225,7 @@
         "title": "ASSIS: Assistente Inteligente como Serviço para Plataformas de Ensino a Distância.",
         "venue": "Simpósio Brasileiro de Informática na Educação, 2020, Brasil",
         "pages": "1423-1432",
-        "doi": "http://dx.doi.org/10.5753/cbie.sbie.2020.1423",
-        "url": "http://dx.doi.org/10.5753/cbie.sbie.2020.1423"
+        "doi": "http://dx.doi.org/10.5753/cbie.sbie.2020.1423"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2720,8 +2496,7 @@
         "title": "Lotus@Runtime: A Tool for Runtime Monitoring and Verification of Self-Adaptive Systems.",
         "venue": "2017 IEEE/ACM 12th International Symposium on Software Engineering for Adaptive and SelfManaging Systems (SEAMS), 2017, Buenos Aires",
         "pages": "24",
-        "doi": "http://dx.doi.org/10.1109/seams.2017.18",
-        "url": "http://dx.doi.org/10.1109/seams.2017.18"
+        "doi": "http://dx.doi.org/10.1109/seams.2017.18"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2762,8 +2537,7 @@
         "title": "A Naked Objects based Framework for Developing Android Business Applications.",
         "venue": "18th International Conference on Enterprise Information Systems, 2016, Rome",
         "pages": "348-359",
-        "doi": "http://dx.doi.org/10.5220/0005872203480358",
-        "url": "http://dx.doi.org/10.5220/0005872203480358"
+        "doi": "http://dx.doi.org/10.5220/0005872203480358"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3084,15 +2858,6 @@
       },
       {
         "category": "Apresentações de Trabalho",
-        "year": 2016,
-        "authors": [
-          "MAIA, P"
-        ],
-        "title": "H",
-        "venue": "M.. MDE: Conceitos"
-      },
-      {
-        "category": "Apresentações de Trabalho",
         "year": 2013,
         "authors": [
           "MAIA, P"
@@ -3192,22 +2957,10 @@
       }
     ]
   },
-  "artisticOutput": {
-    "items": []
-  },
   "unmappedSections": {
-    "PotencialInovacao": [
-      "SOUZA, F. B. F. ; MAIA, PAULO H. M. . PontuaLattes. 2017.",
-      "FREITAS, F. J. G. ; MAIA, PAULO H. M. . JustBusiness 1.0. 2016.",
-      "FREITAS, F. J. G. ; MAIA, PAULO H. M. ; FILHO, M. ; CHAGAS, M. L. ; DAMASCENO, A. R. P. . JustBusiness 2.0. 2017.",
-      "BARBOSA, D. M. ; LIMA, R. G. M. ; MAIA, PAULO H. M. . LoTuS@Runtime. 2017."
-    ],
     "EducacaoPopularizacaoCTA": [
       "MAIA, P. H. M.. Características e Desafios do Software do Futuro. 2013. (Apresentação de Trabalho/Conferência ou palestra).",
-      "MAIA, P. H. M.. MDE: Conceitos, Aplicações e Pesquisas. 2016. (Apresentação de Trabalho/Conferência ou palestra).",
-      "MAIA, P. H. M.. Professor da Uece tem trabalho premiado com o Newton Mobility Grant da Inglaterra. 2018. (Programa de rádio ou TV/Comentário).",
-      "MAIA, P. H. M.. Nossa Vida é Toda Baseada em Softwares. 2018. (Programa de rádio ou TV/Entrevista)."
+      "MAIA, P. H. M.. MDE: Conceitos, Aplicações e Pesquisas. 2016. (Apresentação de Trabalho/Conferência ou palestra)."
     ]
-  },
-  "warnings": []
+  }
 }

@@ -154,6 +154,21 @@ def _copy_trace_payload(payload: dict[str, Any], *, source_root: Path, target_ro
     write_json(target_root / trace_ref, load_json(source_trace))
 
 
+def _rewrite_jsonl_with_run_payload(
+    *,
+    path: Path,
+    run_id: str,
+    payload: dict[str, Any],
+) -> None:
+    from copa.util.jsonl import write_jsonl
+
+    existing = []
+    if path.exists():
+        existing = [row for row in read_jsonl(path) if str(row.get("runId") or "") != run_id]
+    existing.append(payload)
+    write_jsonl(path, existing)
+
+
 def eval_command(
     *,
     run_results_dir: str | None,
@@ -162,6 +177,7 @@ def eval_command(
     output_dir: str | None = None,
     output_jsonl: str | None = None,
     output_csv: str | None = None,
+    force: bool = False,
     only: str | None = None,
     mode: str | None = None,
     continue_on_error: bool = False,
@@ -193,7 +209,7 @@ def eval_command(
     jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     progress_tracker.start()
     existing_jsonl_run_ids = _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
-    pending_results = [result for result in results if not _evaluation_path(target_dir, result).exists()]
+    pending_results = results if force else [result for result in results if not _evaluation_path(target_dir, result).exists()]
 
     progress_tracker.total = len(pending_results)
     progress_tracker.current = 0
@@ -207,7 +223,19 @@ def eval_command(
         write_evaluation_file(evaluated, target_dir, artifact_root=file_artifact_root)
         logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=evaluation_path)
         if target_jsonl is not None:
-            append_evaluation_jsonl(evaluated, target_jsonl, artifact_root=jsonl_artifact_root)
+            serialized = evaluated.model_dump(mode="json")
+            if jsonl_artifact_root is not None:
+                from copa.benchmark.results import serialize_evaluation_result
+
+                serialized = serialize_evaluation_result(evaluated, artifact_root=jsonl_artifact_root)
+            if force:
+                _rewrite_jsonl_with_run_payload(
+                    path=target_jsonl,
+                    run_id=evaluated.runId,
+                    payload=serialized,
+                )
+            else:
+                append_evaluation_jsonl(evaluated, target_jsonl, artifact_root=jsonl_artifact_root)
             existing_jsonl_run_ids.add(evaluated.runId)
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=target_jsonl)
         summary_path = target_dir / "evaluation-summary.json"

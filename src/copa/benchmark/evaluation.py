@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import csv
 import json
+import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -26,16 +28,16 @@ from copa.dataset.provider import DatasetProvider
 
 EVALUATION_SYSTEM_INSTRUCTION = (
     "You are evaluating benchmark answers.\n"
-    "Use only the provided question, answer, context and themes.\n"
+    "Use only the provided question, answer and ground truth.\n"
     "Do not use external knowledge.\n"
     "Return only the requested JSON."
 )
 
 JUDGE_PROMPT = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided context and criteria.
 You must be objective, consistent, and conservative in your evaluation.
-Do NOT use external knowledge. Only use the provided context and themes.
+Do NOT use external knowledge. Only use the provided ground truth.
 Your output must strictly follow the requested JSON format.
-Evaluate the answer to the question based on the provided context.
+Evaluate the answer to the question based on the provided ground truth.
 
 # Question
 {question}
@@ -43,11 +45,8 @@ Evaluate the answer to the question based on the provided context.
 # Answer
 {answer}
 
-# Context
-{context_blocks}
-
-# Themes
-{themes}
+# Ground Truth
+{ground_truth}
 
 # Evaluation Scale
 
@@ -59,41 +58,28 @@ Use the following scale for ALL criteria:
 
 # Evaluation Criteria
 
-## Groundedness
-The answer must be fully supported by the provided context.
-- Check whether all claims are grounded in the context.
-- Penalize any hallucinations or unsupported assumptions.
-- Themes MUST NOT be used to justify groundedness.
-
 ## Correctness
-The answer must be factually correct according to the context.
+The answer must be factually correct according to the ground truth.
 - Check whether the information provided is accurate.
-- Use the context as the primary source of truth.
-- Themes can help identify expected subject areas, but MUST NOT override the context.
+- Use the ground truth as the source of truth.
 
 ## Completeness
 The answer must fully address the question.
 - Check whether all parts of the question are answered.
-- Use the themes to verify whether important aspects or topics are covered.
-- Penalize missing relevant topics suggested by the themes.
+- Penalize important omissions relative to the ground truth.
 
 # Important Rules
-- Base your evaluation ONLY on the provided context and themes.
-- Context is the source of truth.
-- Themes are supportive hints, not factual evidence.
+- Base your evaluation ONLY on the provided ground truth.
+- Ground truth is the source of truth.
 - Do NOT assume missing information.
 - Be strict: if unsure, prefer "partially meets" or "does not meet".
-- Each criterion MUST include a short justification grounded in the provided context and/or themes.
+- Each criterion MUST include a short justification grounded in the provided ground truth.
 - Do NOT include chain-of-thought or hidden reasoning. Provide only concise criterion justifications.
 
 # Output Format (STRICT JSON)
 Return ONLY a JSON object in the following format:
 
 {{
-  "groundedness": {{
-    "rating": "meets | partially meets | does not meet",
-    "justification": "short justification"
-  }},
   "correctness": {{
     "rating": "meets | partially meets | does not meet",
     "justification": "short justification"
@@ -105,9 +91,51 @@ Return ONLY a JSON object in the following format:
 }}
 """
 
+RATING_SEVERITY = {
+    "meets": 0,
+    "partially meets": 1,
+    "does not meet": 2,
+}
+
+JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "correctness": {
+            "type": "object",
+            "properties": {
+                "rating": {
+                    "type": "string",
+                    "enum": ["meets", "partially meets", "does not meet"],
+                },
+                "justification": {"type": "string"},
+            },
+            "required": ["rating", "justification"],
+            "additionalProperties": False,
+        },
+        "completeness": {
+            "type": "object",
+            "properties": {
+                "rating": {
+                    "type": "string",
+                    "enum": ["meets", "partially meets", "does not meet"],
+                },
+                "justification": {"type": "string"},
+            },
+            "required": ["rating", "justification"],
+            "additionalProperties": False,
+        },
+    },
+    "required": ["correctness", "completeness"],
+    "additionalProperties": False,
+}
+
 
 def _normalize_text(value: Any) -> str:
-    return " ".join(str(value).strip().lower().split())
+    text = str(value).strip().lower()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(char for char in text if not unicodedata.combining(char))
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return " ".join(text.split())
 
 
 def _coerce_number(value: Any) -> float | None:
@@ -154,7 +182,7 @@ def _heuristic_compare(answer: str, accepted_answers: list[Any], schema: dict[st
     parsed_answer = _parse_candidate_answer(answer, schema)
     normalized_answer = _normalize_structured(parsed_answer)
     normalized_candidates = [_normalize_structured(item) for item in accepted_answers]
-    matched = normalized_answer in normalized_candidates
+    matched = any(_matches_expected(parsed_answer, candidate) for candidate in accepted_answers)
     return {
         "acceptedAnswers": accepted_answers,
         "schema": schema,
@@ -166,10 +194,27 @@ def _heuristic_compare(answer: str, accepted_answers: list[Any], schema: dict[st
     }
 
 
-def _filter_context_blocks(blocks: dict[str, object], refs: list[str]) -> dict[str, object]:
-    if not refs:
-        return blocks
-    return {key: value for key, value in blocks.items() if key in refs}
+def _matches_expected(actual: Any, expected: Any) -> bool:
+    if isinstance(expected, dict):
+        if "aliases" in expected and isinstance(expected["aliases"], list):
+            normalized_actual = _normalize_structured(actual)
+            return any(
+                normalized_actual == _normalize_structured(alias)
+                for alias in expected["aliases"]
+            )
+        if not isinstance(actual, dict):
+            return False
+        for key, expected_value in expected.items():
+            if key not in actual:
+                return False
+            if not _matches_expected(actual[key], expected_value):
+                return False
+        return True
+    if isinstance(expected, list):
+        if not isinstance(actual, list) or len(actual) != len(expected):
+            return False
+        return all(_matches_expected(actual_item, expected_item) for actual_item, expected_item in zip(actual, expected))
+    return _normalize_structured(actual) == _normalize_structured(expected)
 
 
 def _judge_request(
@@ -180,6 +225,18 @@ def _judge_request(
     exp_id: str,
     engine: Engine,
 ) -> tuple[dict[str, Any] | None, EvaluationJudgeInfo, EvaluationTrace]:
+    request_params = {
+        "temperature": config.temperature,
+        **config.params,
+    }
+    request_params.setdefault(
+        "structured_output",
+        {
+            "name": "judge_response",
+            "strict": True,
+            "schema": JUDGE_STRUCTURED_OUTPUT_SCHEMA,
+        },
+    )
     request = AIRequest(
         question=prompt,
         context="{}",
@@ -188,10 +245,7 @@ def _judge_request(
         strategy_name="inline",
         context_format="text",
         system_instruction=EVALUATION_SYSTEM_INSTRUCTION,
-        params={
-            "temperature": config.temperature,
-            **config.params,
-        },
+        params=request_params,
         metadata={
             "run_id": run_id,
             "expId": exp_id,
@@ -230,65 +284,77 @@ def _judge_request(
 def _evaluate_judge(
     result: RunResult,
     question_text: str,
-    blocks: dict[str, object],
-    refs: list[str],
-    themes: list[str],
+    ground_truth: str,
     experiment: Experiment,
     engine: Engine,
 ) -> tuple[dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
-    if experiment.evaluation.judge is None:
+    if not experiment.evaluation.judges:
         return {
             "evaluationMethod": "judge",
-            "error": "Experiment evaluation.judge is required for judge validation.",
+            "error": "Experiment evaluation.judges is required for judge validation.",
         }, EvaluationJudgeInfo(), EvaluationTrace()
-    filtered_blocks = _filter_context_blocks(blocks, refs)
     prompt = JUDGE_PROMPT.format(
         question=question_text,
         answer=result.answer,
-        context_blocks=json.dumps(filtered_blocks, ensure_ascii=False, indent=2),
-        themes=json.dumps(themes, ensure_ascii=False, indent=2),
+        ground_truth=ground_truth,
     )
-    payload, judge_info, trace = _judge_request(
-        config=experiment.evaluation.judge,
-        prompt=prompt,
-        run_id=result.runId,
-        exp_id=result.experimentId,
-        engine=engine,
-    )
-    if payload is None:
+    judge_votes: list[dict[str, Any]] = []
+    judge_infos: list[EvaluationJudgeInfo] = []
+    traces: list[EvaluationTrace] = []
+    valid_votes: list[dict[str, Any]] = []
+    for config in experiment.evaluation.judges:
+        payload, judge_info, trace = _judge_request(
+            config=config,
+            prompt=prompt,
+            run_id=result.runId,
+            exp_id=result.experimentId,
+            engine=engine,
+        )
+        judge_infos.append(judge_info)
+        traces.append(trace)
+        if payload is None:
+            judge_votes.append(
+                {
+                    "provider": config.provider,
+                    "model": config.model,
+                    "error": "Judge did not return valid JSON.",
+                }
+            )
+            continue
+        correctness = _criterion_payload(payload.get("correctness"))
+        completeness = _criterion_payload(payload.get("completeness"))
+        vote = {
+            "provider": config.provider,
+            "model": config.model,
+            "correctness": correctness,
+            "completeness": completeness,
+        }
+        judge_votes.append(vote)
+        valid_votes.append(vote)
+
+    merged_info = _merge_judge_infos(judge_infos)
+    merged_trace = _merge_evaluation_traces(traces)
+    if not valid_votes:
         return {
             "evaluationMethod": "judge",
-            "contextRefs": refs,
-            "themes": themes,
+            "groundTruth": ground_truth,
+            "judges": judge_votes,
             "error": "Judge did not return valid JSON.",
-        }, judge_info, trace
-    groundedness = _criterion_payload(payload.get("groundedness"))
-    correctness = _criterion_payload(payload.get("correctness"))
-    completeness = _criterion_payload(payload.get("completeness"))
-    summary = "meets"
-    ratings = (
-        groundedness["rating"],
+        }, merged_info, merged_trace
+    correctness = _aggregate_votes(valid_votes, "correctness")
+    completeness = _aggregate_votes(valid_votes, "completeness")
+    summary = _outcome_from_ratings(
         correctness["rating"],
         completeness["rating"],
     )
-    if any(item == "does not meet" for item in ratings):
-        summary = "does_not_meet"
-    elif any(item == "partially meets" for item in ratings):
-        summary = "partially_meets"
     return {
         "evaluationMethod": "judge",
-        "contextRefs": refs,
-        "themes": themes,
-        "groundedness": groundedness,
+        "groundTruth": ground_truth,
+        "judges": judge_votes,
         "correctness": correctness,
         "completeness": completeness,
         "outcome": summary,
-        "qualitativeSummary": {
-            "meetsCount": sum(1 for item in ratings if item == "meets"),
-            "partialCount": sum(1 for item in ratings if item == "partially meets"),
-            "doesNotMeetCount": sum(1 for item in ratings if item == "does not meet"),
-        },
-    }, judge_info, trace
+    }, merged_info, merged_trace
 
 
 def _criterion_payload(value: Any) -> dict[str, str]:
@@ -303,6 +369,62 @@ def _criterion_payload(value: Any) -> dict[str, str]:
         "rating": str(value or "").strip(),
         "justification": "",
     }
+
+
+def _aggregate_votes(votes: list[dict[str, Any]], criterion: str) -> dict[str, Any]:
+    counts = {"meets": 0, "partially meets": 0, "does not meet": 0}
+    for vote in votes:
+        payload = vote.get(criterion)
+        if isinstance(payload, dict):
+            rating = str(payload.get("rating", "")).strip()
+            if rating in counts:
+                counts[rating] += 1
+    winner = max(
+        counts,
+        key=lambda item: (counts[item], RATING_SEVERITY[item]),
+    )
+    return {
+        "rating": winner,
+        "votes": counts,
+    }
+
+
+def _outcome_from_ratings(*ratings: str) -> str:
+    if any(item == "does not meet" for item in ratings):
+        return "does_not_meet"
+    if any(item == "partially meets" for item in ratings):
+        return "partially_meets"
+    return "meets"
+
+
+def _merge_judge_infos(judge_infos: list[EvaluationJudgeInfo]) -> EvaluationJudgeInfo:
+    used_infos = [item for item in judge_infos if item.used]
+    if not used_infos:
+        return EvaluationJudgeInfo()
+    providers = {item.provider for item in used_infos if item.provider}
+    models = {item.model for item in used_infos if item.model}
+    input_tokens = [item.inputTokens for item in used_infos if item.inputTokens is not None]
+    output_tokens = [item.outputTokens for item in used_infos if item.outputTokens is not None]
+    durations = [item.durationMs for item in used_infos if item.durationMs is not None]
+    return EvaluationJudgeInfo(
+        used=True,
+        role="judges",
+        provider=next(iter(providers)) if len(providers) == 1 else None,
+        model=next(iter(models)) if len(models) == 1 else None,
+        inputTokens=sum(input_tokens) if input_tokens else None,
+        outputTokens=sum(output_tokens) if output_tokens else None,
+        durationMs=sum(durations) if durations else None,
+    )
+
+
+def _merge_evaluation_traces(traces: list[EvaluationTrace]) -> EvaluationTrace:
+    return EvaluationTrace(
+        aiTrace={
+            "judges": [trace.aiTrace for trace in traces if trace.aiTrace]
+        },
+        rawResponse=[trace.rawResponse for trace in traces if trace.rawResponse is not None],
+        error="; ".join(trace.error for trace in traces if trace.error) or None,
+    )
 
 
 def evaluate_run_result(
@@ -350,13 +472,15 @@ def evaluate_run_result(
         judge_info = EvaluationJudgeInfo()
         trace = EvaluationTrace()
     elif validation_type == "judge":
-        blocks = provider.get_context_blocks(result.instanceId)
+        ground_truth = instance_question.groundTruth or ""
+        if not ground_truth:
+            raise ValueError(
+                f"Missing ground truth for judge evaluation on question '{result.questionId}' and instance '{result.instanceId}'."
+            )
         details, judge_info, trace = _evaluate_judge(
             result,
             rendered_question,
-            blocks,
-            list(instance_question.contextRefs),
-            list(instance_question.themes),
+            ground_truth,
             experiment,
             active_engine,
         )
@@ -495,7 +619,54 @@ def build_evaluation_summary_rows(rows: Iterable[dict[str, Any]]) -> EvaluationB
         experimentId=experiment_id,
         runCount=len(row_list),
         itemCount=len(row_list),
+        questions=[_build_evaluation_question_summary(row) for row in row_list],
     )
+
+
+def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
+    details = row.get("details", {})
+    if not isinstance(details, dict):
+        details = {}
+    summary: dict[str, Any] = {
+        "runId": row.get("runId"),
+        "questionId": row.get("questionId"),
+        "instanceId": row.get("instanceId"),
+        "status": row.get("status"),
+        "evaluationMethod": row.get("evaluationMethod"),
+    }
+    if "outcome" in details:
+        summary["outcome"] = details.get("outcome")
+    if summary["evaluationMethod"] == "heuristic":
+        if "matched" in details:
+            summary["matched"] = details.get("matched")
+        return summary
+
+    judges = details.get("judges")
+    if isinstance(judges, list):
+        summary["judgeRatings"] = [
+            {
+                "provider": item.get("provider"),
+                "model": item.get("model"),
+                "correctness": item.get("correctness", {}).get("rating")
+                if isinstance(item.get("correctness"), dict)
+                else None,
+                "completeness": item.get("completeness", {}).get("rating")
+                if isinstance(item.get("completeness"), dict)
+                else None,
+                "error": item.get("error"),
+            }
+            for item in judges
+            if isinstance(item, dict)
+        ]
+    summary["aggregate"] = {
+        "correctness": details.get("correctness", {}).get("rating")
+        if isinstance(details.get("correctness"), dict)
+        else None,
+        "completeness": details.get("completeness", {}).get("rating")
+        if isinstance(details.get("completeness"), dict)
+        else None,
+    }
+    return summary
 
 
 def export_evaluation_rows_csv(rows: Iterable[dict[str, Any]], path: str | Path) -> Path:

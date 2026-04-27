@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-25T16:57:28.160Z",
+    "generatedAt": "2026-04-27T05:52:03.723Z",
     "lattesId": "2342739419247924",
     "lastUpdated": "2026-03-12T03:00:00.000Z",
     "sourceUrl": "https://lattes.cnpq.br/2342739419247924",
@@ -12,14 +12,11 @@
     "fellowship": "Bolsista de Produtividade em Pesquisa do CNPq - Nível 1C",
     "summary": "Possui graduação em Ciência da Computação pela USP (1990) e em Música (Percussão) pela UNESP (1992). PhD em Ciência da Computação pela University Of Illinois At Urbana-Champaign (2000), atualmente, é Professor Titular da Universidade de São Paulo. Tem 30 anos de experiência em Desenvolvimento de Software e, atualmente, conduz pesquisas nas áreas de Sistemas de Software, Ciência de Dados e Cidades Inteligentes. Fabio é Distinguished Scientist da ACM e Editor-in-Chief Emeritus do SpringerNature Journal of Internet Services and Applications. Foi coordenador do INCT da Internet do Futuro para Cidades Inteligentes, diretor internacional da Open Source Initiative (http://www.opensource.org) e Diretor do Centro de Competência em Software Livre (http://ccsl.ime.usp.br) do IME/USP. Foi Coordenador-Adjunto de Pesquisa para Inovação e de Ciências Exatas e Engenharia da FAPESP  e avaliador de propostas altamente inovadoras do programa Horizon 2020 da European Commission. Em 2014, foi Professor Visitante em Technion, Israel, onde pesquisou Inovação, Empreendedorismo e Ecossistemas de Startups e, em 2018/2019, foi Professor Visitante no MIT, onde desenvolveu pesquisas na área de Cidades inteligentes. Atualmente, é membro do Conselho da SBC e Editor Associado da revista Communications of the ACM. (Texto informado pelo autor)",
     "nationality": "Brasil",
+    "orcid": "https://orcid.org/0000-0003-3888-7340",
     "citationNames": [
       "KON, F.",
       "Kon, Fabio",
       "Fabio Kon NULL"
-    ],
-    "extraFields": [
-      "Nome: Fabio Kon",
-      "Orcid iD: ? https://orcid.org/0000-0003-3888-7340"
     ],
     "addresses": [
       {
@@ -30,8 +27,6 @@
         "fax": [
           "(11) 30916134"
         ],
-        "emails": [],
-        "extra": [],
         "organization": "Universidade de São Paulo",
         "unit": "Instituto de Matemática, Estatística e Ciência da Computação, Departamento de Ciência da Computação.",
         "street": "Rua do Matão, 1010",
@@ -156,11 +151,9 @@
         "degreeName": "Graduação em Música Instrumento Percussão",
         "institution": "Universidade Estadual Paulista Júlio de Mesquita Filho, UNESP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
         "funding": [
           "Fundação de Amparo à Pesquisa do Estado de São Paulo, FAPESP, Brasil."
         ],
-        "details": [],
         "kind": "academic"
       },
       {
@@ -172,9 +165,6 @@
         "degreeName": "Graduação em Ciência da Computação",
         "institution": "Universidade de São Paulo, USP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "academic"
       }
     ]
@@ -428,8 +418,7 @@
           "raw": ""
         },
         "name": "Descrição: Startup de Mobilidade Urbana. Situação: Em andamento; Natureza: Desenvolvimento. Integrantes: Fabio Kon - Integrante / Roberto Speicys Cardoso - Coordenador.",
-        "description": "",
-        "details": []
+        "description": ""
       },
       {
         "kind": "researchInnovation",
@@ -660,216 +649,135 @@
           "raw": ""
         },
         "name": "Descrição: Startup de Mobilidade Urbana. Situação: Em andamento; Natureza: Desenvolvimento. Integrantes: Fabio Kon - Integrante / Roberto Speicys Cardoso - Coordenador.",
-        "description": "",
-        "details": []
+        "description": ""
       }
     ]
   },
   "supervisions": {
-    "completed": [
-      "Eduardo Rocha Laurentino. Inferência Causal usando Aprendizado de Máquina. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Gustavo H. S. Rodrigues. Algoritmos para Mobilidade Urbana. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Leonardo Yuiti Ono. Ciência de Dados para Análise de Poluição do Ar. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Lucas Pires Stankus. Next Generation Bundling. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador).",
-      "Giovanni Aparecido da Silva Oliveira. Escalonamento de FaaS em IoT. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador).",
-      "Pedro H. R. Mendonça. Análise e mensuração do risco de remoção via aprendizado de máquina multimodal. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Darwish Ahmad Herati. Sustentabilidade Ambiental em Engenharia de Software. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Isaque Alves de Lima. Teorias Fundamentadas em Dados de DevOps. Início: 2022. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Dayanne Cristina Pereira Gomes. Efeito de pares de gênero na escolha de curso superior: Uma abordagem de ciência de dados. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Abordando ambiguidade: visualizando e controlando erros gerados por agrupamento de trajetórias. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Victor Luiz Gonçalves Serra. Análise Espacial da Violência: Estudo de Concentrações de Crimes para a Região Metropolitana de São Paulo. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Victor Foscarini Almeida. Variação sazonal da mortalidade no Brasil. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Giovana Martinelli. Análise da distribuição geográfica de doenças causadoras de óbitos na cidade de São Paulo utilizando aprendizado de máquina. 2023. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Gabriely Rangel Pereira. Análise e Visualização do Processo de Regionalização do Sistema Único de Saúde no Brasil: Uma Perspectiva em Sistemas Complexos. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Robson Pereira Aleixo. Predição de surtos de dengue e diagnóstico de Sífilis Congênita utilizando Aprendizado de Máquina. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
-      "Karlson Tellicio Bezerra de Lima. Simulação de redes de sensores sem fio para o monitoramento de deslizamentos de terra. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Melissa Shihfan Ribeiro Wen. What Happens When The Bazaar Grows: A comprehensive study on the contemporary Linux kernel development model. 2021. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
-      "Tallys Gustavo Martins. Visualização de Fluxos de Mobilidade Urbana com Bundling. 2021. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Rodrigo Siqueira Jordão. Uma visão sobre a próxima geração de abstrações de processos em sistemas operacionais. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Lucas Kanashiro Duarte. Experimentação baseada em simulação em sistemas para cidades inteligentes. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Arthur de Moura Del Esposte. A scalable microservice-based open source platform for smart cities. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Athos Coimbra Ribeiro. Ranking source code static analysis warnings for continuous monitoring of free/libre/open source software repositories. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Wilson Kazuo Mizutani. VORPAL: a middleware for real-time soundtracks in digital games. 2017. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Thiago Furtado de Mendonça. Um middleware para coreografias de serviços web escaláveis em ambientes de computação em nuvem. 2015. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Monna Cleide F. R. dos Santos. O ecossistema de startups de software da cidade de São Paulo. 2015. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Carlos Morais de Oliveira Filho. Kalibro: Interpretação de métricas de código-fonte. 2013. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Ana Paula Oliveira dos Santos. Aplicação de práticas de usabilidade ágil em software livre. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Felipe Besson. Rehearsal: Um arcabouço para teste automatizado de coreografias de serviços web. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Paulo César Siécola. VoIPFix: Uma ferramenta para análise e detecção de falhas em sistemas de telefonia IP. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Rafael José Peres Correia. Borboleta: um sistema de telessaúde para auxílio à atenção primária domiciliar. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Edwin Miguel Triana Gómez. Reconhecimento de fala para navegação em aplicativos móveis para português brasileiro. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Paulo Cheque Bernardo. Padrões de Testes Automatizados. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Vanessa Cristina Sabino. Um estudo sistemático de licenças de software livre. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Daniel Cukier. Padrões para Introduzir Novas Ideias na Indústria de Software. 2009. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Giuliano Mega. Depuração simbólica extensível para sistemas de objetos distribuídos. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Mário Henrique Cruz Tôrres. Simulação Acústica no Ambiente AcMus. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Alexandre Freire da Silva. Reflexões sobre o Ensino de Metodologias Ágeis na Academia, na Indústria e no Governo. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Jeferson Roberto Marques. Gerenciamento de Recursos Distribuídos em Sistemas Escaláveis. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Ricardo Koji Ushizaki. Um Arcabouço para Reconfiguração Dinâmica de Aplicações em Java. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Roberto Speicys Cardoso. Adaptação Dinâmica Utilizando Agentes Móveis em Computação Ubíqua. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Vladimir Moreira Rocha. Protocolos P2P para Interligação de Aglomerados em Grades Computacionais. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Nelson Posse Lago. Processamento Distribuído de Áudio em Tempo Real. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Leo Kazuhiro Ueda. Andante - Composição e Performance Musical Utilizando Agentes Móveis. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Andrei Goldchleger. InteGrade: Um Sistema de Middleware para Computação em Grade Oportunista. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Herbert Yutaka Watanabe. Configuração Automática de Sistemas na Plataforma Enterprise JavaBeans. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "João Marcos de Mattos Barguil. Análise de viés em um sistema de crowdsourcing de acessibilidade utilizando jogos sérios. 2023. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
-      "Leonardo Alexandre Ferreira Leite. A grounded theory of organizational structures for development and infrastructure professionals in software-producing organizations. 2022. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
-      "Wilson Kazuo Mizutani. The Unlimited Rulebook: architecting the economy mechanics of games. 2021. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Eduardo Felipe Zambom Santana. InterSCSimulator: a scalable, open source, smart city simulator. 2019. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Higor Amario de Souza. Assessment of Spectrum-based Fault Localization for Practical Use. 2018. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Daniel Cukier. Software startup ecosystems evolution: a maturity model. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Paulo Bittencourt Moura. Dynamic resource allocation for elastic systems based on scalability modeling. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Ivanilton Polato. Economia de energia e aumento de desempenho usando SSDs no Hadoop Distributed File System. 2016. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Claudia de Oliveira Melo. Productivity of Agile Teams: An Empirical Evaluation of Factors and Monitoring Processes. 2013. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Paulo Roberto Miranda de Meirelles. Monitoramento de métricas de código-fonte em projetos de software livre. 2013. Tese (Doutorado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Helves Humberto Domingues. Replicação assíncrona em bancos de dados evolutivos. 2011. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Jose de Ribamar Braga Pinheiro Junior. Xenia: um sistema de segurança para grades computacionais baseado em cadeias de confiança. 2008. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Raphael Yokoingawa de Camargo. Armazenamento distribuído de dados e checkpointing de aplicações paralelas em grades oportunistas. 2007. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Arlindo Flávio da Conceição. Voz e vídeo sobre redes sem fio IEEE 802.11. 2006. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Francisco José da Silva e Silva. Adaptação Dinâmica de Sistemas Distribuídos. 2003. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Fabio Kon.",
-      "Mosab Hamdan Adam Mohamed Alhassan. 2022. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Paulo Roberto Miranda Meirelles. 2018. Universidade de São Paulo, . Fabio Kon.",
-      "Fabio Moreira Costa. 2017. Universidade de São Paulo, Fundação de Amparo a Pesquisa do Estado de Goiás. Fabio Kon.",
-      "Carlos Denner dos Santos Jr.. Estudo Longitudinal Empírico da Atratividade de Projetos de Software Livre. 2010. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Raphael Yokoingawa de Camargo. 2008. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon.",
-      "Fernando José Castor De Lima Filho. 2007. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Eloiza Sonoda. 2006. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon.",
-      "Maysa Cristina Claudino da Silva. Simulação do impacto de eventos pluviométricos na mobilidade urbana da cidade de São Paulo. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Yesman Choque Mamani. DeSmell: Avaliação de Qualidade de Código para Projetos de Ciência de Dados e Aprendizado de Máquina. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Mikhael Abdallah de Oliveira Pinto. Projeto e implementação do Painel Administrativo para Apoio à Implementação do Programa BikeSP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Filipe Tressmann Velozo. Projeto e implementação de um dashboard analítico para o piloto Bike SP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Ana Yoon Faria de Lima. Cycling promotion using financial incentives: A pilot design to inform public policy in São Paulo, Brazil. 2024. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Andre Nogueira Ribeiro. Quantum Walk Control Plane Implementation. 2024. Iniciação Científica - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Eduardo Bobrow Falbel. Previsão de fluxos urbanos de bicicletas: métodos tradicionais vs. aprendizado de máquina explicável. 2023. Iniciação Científica - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Milena Correa da Silva. Análise visual de fluxos de mobilidade de pedestres com bundling. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Thiago Pena. BikeScienceWeb. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "André Nogueira Ribeiro. Computação e Internet Quântica. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Ana Yoon Faria de Lima. Análise do Impacto da Pandemia no uso de bicicletas compartilhadas em São Paulo. 2022. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Gustavo de Medeiros Carlos. Monitoramento e visualização geoespacial da saúde pública nas cidades brasileiras. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Visualização de Dados de Saúde. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Pedro Gigeck Freire. Índice de ciclabilidade baseado em dados. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Mobilidade e internações hospitalares: uma análise integrada. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Gabriely Rangel Pereira. Projeto e implementação de uma arquitetura baseada em serviços e suas aplicações para visualização de dados de saúde georreferenciados. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Yurick Yussuke Honda. Desenvolvimento de Painel de Saúde para o SUS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Caio Truzzi Lente. Empreendedorismo: uma abordagem orientada por dados. 2015. Iniciação Científica. (Graduando em Ciências de Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Luciano Kenji Sugiura. Beerspot - vivendo uma startup. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Daniel Stein. Encenação de coreografias em nuvens Open Stack. 2012. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "João Machini de Miranda. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Lucianna Thomaz Almeida. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Pedro Leal. Testes Automatizados de Coreografias de Serviços Web. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
-      "Thiago Colucci. Escalabilidade de Coreografias em Ambientes de Computação em Nuvem. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
-      "Carlos Eduardo Moreira dos Santos. Gerenciamento de Recursos para Grades Computacionais - Node Control Center. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Carlos Morais de Oliveira Filho. Kalibro: Uma ferramenta de configuração e interpretação de métricas de código-fonte. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Márcio Vinicius dos Santos. Uso de Virtualização em Grades Computacionais. 2008. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Renato Lundberg. Desenvolvimento de portal Web para submissão e controle em grades computacionais. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Paulo Cheque Bernardo. Testes Automatizados em Métodos Ágeis de Desenvolvimento de Software. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Andreza Silva de Oliveira. Acompanhamento (tracking) de projetos de desenvolvimento de software com métodos ágeis. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Ana Paula dos Santos Mota. Borboleta: sistema móvel para atendimento domiciliar de saúde. 2006. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Yang Yili. AcMus - Software para cálculo de parâmetros acústicos. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Christian Asmussen. Programação eXtrema. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon."
-    ],
-    "ongoing": [
-      "Eduardo Rocha Laurentino. Inferência Causal usando Aprendizado de Máquina. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Gustavo H. S. Rodrigues. Algoritmos para Mobilidade Urbana. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Leonardo Yuiti Ono. Ciência de Dados para Análise de Poluição do Ar. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
-      "Lucas Pires Stankus. Next Generation Bundling. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador).",
-      "Giovanni Aparecido da Silva Oliveira. Escalonamento de FaaS em IoT. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador).",
-      "Pedro H. R. Mendonça. Análise e mensuração do risco de remoção via aprendizado de máquina multimodal. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Darwish Ahmad Herati. Sustentabilidade Ambiental em Engenharia de Software. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Isaque Alves de Lima. Teorias Fundamentadas em Dados de DevOps. Início: 2022. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
-      "Dayanne Cristina Pereira Gomes. Efeito de pares de gênero na escolha de curso superior: Uma abordagem de ciência de dados. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Abordando ambiguidade: visualizando e controlando erros gerados por agrupamento de trajetórias. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Victor Luiz Gonçalves Serra. Análise Espacial da Violência: Estudo de Concentrações de Crimes para a Região Metropolitana de São Paulo. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Victor Foscarini Almeida. Variação sazonal da mortalidade no Brasil. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Giovana Martinelli. Análise da distribuição geográfica de doenças causadoras de óbitos na cidade de São Paulo utilizando aprendizado de máquina. 2023. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Gabriely Rangel Pereira. Análise e Visualização do Processo de Regionalização do Sistema Único de Saúde no Brasil: Uma Perspectiva em Sistemas Complexos. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Robson Pereira Aleixo. Predição de surtos de dengue e diagnóstico de Sífilis Congênita utilizando Aprendizado de Máquina. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
-      "Karlson Tellicio Bezerra de Lima. Simulação de redes de sensores sem fio para o monitoramento de deslizamentos de terra. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Melissa Shihfan Ribeiro Wen. What Happens When The Bazaar Grows: A comprehensive study on the contemporary Linux kernel development model. 2021. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
-      "Tallys Gustavo Martins. Visualização de Fluxos de Mobilidade Urbana com Bundling. 2021. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Rodrigo Siqueira Jordão. Uma visão sobre a próxima geração de abstrações de processos em sistemas operacionais. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Lucas Kanashiro Duarte. Experimentação baseada em simulação em sistemas para cidades inteligentes. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Arthur de Moura Del Esposte. A scalable microservice-based open source platform for smart cities. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Athos Coimbra Ribeiro. Ranking source code static analysis warnings for continuous monitoring of free/libre/open source software repositories. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Wilson Kazuo Mizutani. VORPAL: a middleware for real-time soundtracks in digital games. 2017. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Thiago Furtado de Mendonça. Um middleware para coreografias de serviços web escaláveis em ambientes de computação em nuvem. 2015. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Monna Cleide F. R. dos Santos. O ecossistema de startups de software da cidade de São Paulo. 2015. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Carlos Morais de Oliveira Filho. Kalibro: Interpretação de métricas de código-fonte. 2013. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Ana Paula Oliveira dos Santos. Aplicação de práticas de usabilidade ágil em software livre. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Felipe Besson. Rehearsal: Um arcabouço para teste automatizado de coreografias de serviços web. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Paulo César Siécola. VoIPFix: Uma ferramenta para análise e detecção de falhas em sistemas de telefonia IP. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Rafael José Peres Correia. Borboleta: um sistema de telessaúde para auxílio à atenção primária domiciliar. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Edwin Miguel Triana Gómez. Reconhecimento de fala para navegação em aplicativos móveis para português brasileiro. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Paulo Cheque Bernardo. Padrões de Testes Automatizados. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Vanessa Cristina Sabino. Um estudo sistemático de licenças de software livre. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Daniel Cukier. Padrões para Introduzir Novas Ideias na Indústria de Software. 2009. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Giuliano Mega. Depuração simbólica extensível para sistemas de objetos distribuídos. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Mário Henrique Cruz Tôrres. Simulação Acústica no Ambiente AcMus. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Alexandre Freire da Silva. Reflexões sobre o Ensino de Metodologias Ágeis na Academia, na Indústria e no Governo. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Jeferson Roberto Marques. Gerenciamento de Recursos Distribuídos em Sistemas Escaláveis. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Ricardo Koji Ushizaki. Um Arcabouço para Reconfiguração Dinâmica de Aplicações em Java. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Roberto Speicys Cardoso. Adaptação Dinâmica Utilizando Agentes Móveis em Computação Ubíqua. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Vladimir Moreira Rocha. Protocolos P2P para Interligação de Aglomerados em Grades Computacionais. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Nelson Posse Lago. Processamento Distribuído de Áudio em Tempo Real. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Leo Kazuhiro Ueda. Andante - Composição e Performance Musical Utilizando Agentes Móveis. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Andrei Goldchleger. InteGrade: Um Sistema de Middleware para Computação em Grade Oportunista. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Herbert Yutaka Watanabe. Configuração Automática de Sistemas na Plataforma Enterprise JavaBeans. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "João Marcos de Mattos Barguil. Análise de viés em um sistema de crowdsourcing de acessibilidade utilizando jogos sérios. 2023. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
-      "Leonardo Alexandre Ferreira Leite. A grounded theory of organizational structures for development and infrastructure professionals in software-producing organizations. 2022. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
-      "Wilson Kazuo Mizutani. The Unlimited Rulebook: architecting the economy mechanics of games. 2021. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Eduardo Felipe Zambom Santana. InterSCSimulator: a scalable, open source, smart city simulator. 2019. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Higor Amario de Souza. Assessment of Spectrum-based Fault Localization for Practical Use. 2018. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Daniel Cukier. Software startup ecosystems evolution: a maturity model. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Paulo Bittencourt Moura. Dynamic resource allocation for elastic systems based on scalability modeling. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Ivanilton Polato. Economia de energia e aumento de desempenho usando SSDs no Hadoop Distributed File System. 2016. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
-      "Claudia de Oliveira Melo. Productivity of Agile Teams: An Empirical Evaluation of Factors and Monitoring Processes. 2013. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Paulo Roberto Miranda de Meirelles. Monitoramento de métricas de código-fonte em projetos de software livre. 2013. Tese (Doutorado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Helves Humberto Domingues. Replicação assíncrona em bancos de dados evolutivos. 2011. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
-      "Jose de Ribamar Braga Pinheiro Junior. Xenia: um sistema de segurança para grades computacionais baseado em cadeias de confiança. 2008. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
-      "Raphael Yokoingawa de Camargo. Armazenamento distribuído de dados e checkpointing de aplicações paralelas em grades oportunistas. 2007. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Arlindo Flávio da Conceição. Voz e vídeo sobre redes sem fio IEEE 802.11. 2006. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Francisco José da Silva e Silva. Adaptação Dinâmica de Sistemas Distribuídos. 2003. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Fabio Kon.",
-      "Mosab Hamdan Adam Mohamed Alhassan. 2022. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Paulo Roberto Miranda Meirelles. 2018. Universidade de São Paulo, . Fabio Kon.",
-      "Fabio Moreira Costa. 2017. Universidade de São Paulo, Fundação de Amparo a Pesquisa do Estado de Goiás. Fabio Kon.",
-      "Carlos Denner dos Santos Jr.. Estudo Longitudinal Empírico da Atratividade de Projetos de Software Livre. 2010. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Raphael Yokoingawa de Camargo. 2008. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon.",
-      "Fernando José Castor De Lima Filho. 2007. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
-      "Eloiza Sonoda. 2006. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon.",
-      "Maysa Cristina Claudino da Silva. Simulação do impacto de eventos pluviométricos na mobilidade urbana da cidade de São Paulo. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Yesman Choque Mamani. DeSmell: Avaliação de Qualidade de Código para Projetos de Ciência de Dados e Aprendizado de Máquina. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Mikhael Abdallah de Oliveira Pinto. Projeto e implementação do Painel Administrativo para Apoio à Implementação do Programa BikeSP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Filipe Tressmann Velozo. Projeto e implementação de um dashboard analítico para o piloto Bike SP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Ana Yoon Faria de Lima. Cycling promotion using financial incentives: A pilot design to inform public policy in São Paulo, Brazil. 2024. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Andre Nogueira Ribeiro. Quantum Walk Control Plane Implementation. 2024. Iniciação Científica - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Eduardo Bobrow Falbel. Previsão de fluxos urbanos de bicicletas: métodos tradicionais vs. aprendizado de máquina explicável. 2023. Iniciação Científica - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Milena Correa da Silva. Análise visual de fluxos de mobilidade de pedestres com bundling. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Thiago Pena. BikeScienceWeb. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "André Nogueira Ribeiro. Computação e Internet Quântica. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Ana Yoon Faria de Lima. Análise do Impacto da Pandemia no uso de bicicletas compartilhadas em São Paulo. 2022. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Gustavo de Medeiros Carlos. Monitoramento e visualização geoespacial da saúde pública nas cidades brasileiras. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Visualização de Dados de Saúde. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Pedro Gigeck Freire. Índice de ciclabilidade baseado em dados. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Lucas Pires Stankus. Mobilidade e internações hospitalares: uma análise integrada. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Gabriely Rangel Pereira. Projeto e implementação de uma arquitetura baseada em serviços e suas aplicações para visualização de dados de saúde georreferenciados. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Yurick Yussuke Honda. Desenvolvimento de Painel de Saúde para o SUS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Caio Truzzi Lente. Empreendedorismo: uma abordagem orientada por dados. 2015. Iniciação Científica. (Graduando em Ciências de Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Luciano Kenji Sugiura. Beerspot - vivendo uma startup. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Daniel Stein. Encenação de coreografias em nuvens Open Stack. 2012. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "João Machini de Miranda. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Lucianna Thomaz Almeida. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
-      "Pedro Leal. Testes Automatizados de Coreografias de Serviços Web. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
-      "Thiago Colucci. Escalabilidade de Coreografias em Ambientes de Computação em Nuvem. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
-      "Carlos Eduardo Moreira dos Santos. Gerenciamento de Recursos para Grades Computacionais - Node Control Center. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Carlos Morais de Oliveira Filho. Kalibro: Uma ferramenta de configuração e interpretação de métricas de código-fonte. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
-      "Márcio Vinicius dos Santos. Uso de Virtualização em Grades Computacionais. 2008. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Renato Lundberg. Desenvolvimento de portal Web para submissão e controle em grades computacionais. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
-      "Paulo Cheque Bernardo. Testes Automatizados em Métodos Ágeis de Desenvolvimento de Software. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Andreza Silva de Oliveira. Acompanhamento (tracking) de projetos de desenvolvimento de software com métodos ágeis. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Ana Paula dos Santos Mota. Borboleta: sistema móvel para atendimento domiciliar de saúde. 2006. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
-      "Yang Yili. AcMus - Software para cálculo de parâmetros acústicos. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
-      "Christian Asmussen. Programação eXtrema. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon."
-    ]
+    "masters": {
+      "completed": [
+        "Dayanne Cristina Pereira Gomes. Efeito de pares de gênero na escolha de curso superior: Uma abordagem de ciência de dados. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Lucas Pires Stankus. Abordando ambiguidade: visualizando e controlando erros gerados por agrupamento de trajetórias. 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Victor Luiz Gonçalves Serra. Análise Espacial da Violência: Estudo de Concentrações de Crimes para a Região Metropolitana de São Paulo. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Victor Foscarini Almeida. Variação sazonal da mortalidade no Brasil. 2024. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Giovana Martinelli. Análise da distribuição geográfica de doenças causadoras de óbitos na cidade de São Paulo utilizando aprendizado de máquina. 2023. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Gabriely Rangel Pereira. Análise e Visualização do Processo de Regionalização do Sistema Único de Saúde no Brasil: Uma Perspectiva em Sistemas Complexos. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Robson Pereira Aleixo. Predição de surtos de dengue e diagnóstico de Sífilis Congênita utilizando Aprendizado de Máquina. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
+        "Karlson Tellicio Bezerra de Lima. Simulação de redes de sensores sem fio para o monitoramento de deslizamentos de terra. 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Melissa Shihfan Ribeiro Wen. What Happens When The Bazaar Grows: A comprehensive study on the contemporary Linux kernel development model. 2021. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Coorientador: Fabio Kon.",
+        "Tallys Gustavo Martins. Visualização de Fluxos de Mobilidade Urbana com Bundling. 2021. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Rodrigo Siqueira Jordão. Uma visão sobre a próxima geração de abstrações de processos em sistemas operacionais. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Lucas Kanashiro Duarte. Experimentação baseada em simulação em sistemas para cidades inteligentes. 2019. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Arthur de Moura Del Esposte. A scalable microservice-based open source platform for smart cities. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Athos Coimbra Ribeiro. Ranking source code static analysis warnings for continuous monitoring of free/libre/open source software repositories. 2018. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Wilson Kazuo Mizutani. VORPAL: a middleware for real-time soundtracks in digital games. 2017. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Thiago Furtado de Mendonça. Um middleware para coreografias de serviços web escaláveis em ambientes de computação em nuvem. 2015. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Monna Cleide F. R. dos Santos. O ecossistema de startups de software da cidade de São Paulo. 2015. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Carlos Morais de Oliveira Filho. Kalibro: Interpretação de métricas de código-fonte. 2013. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Ana Paula Oliveira dos Santos. Aplicação de práticas de usabilidade ágil em software livre. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
+        "Felipe Besson. Rehearsal: Um arcabouço para teste automatizado de coreografias de serviços web. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
+        "Paulo César Siécola. VoIPFix: Uma ferramenta para análise e detecção de falhas em sistemas de telefonia IP. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Rafael José Peres Correia. Borboleta: um sistema de telessaúde para auxílio à atenção primária domiciliar. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Edwin Miguel Triana Gómez. Reconhecimento de fala para navegação em aplicativos móveis para português brasileiro. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Paulo Cheque Bernardo. Padrões de Testes Automatizados. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Vanessa Cristina Sabino. Um estudo sistemático de licenças de software livre. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Daniel Cukier. Padrões para Introduzir Novas Ideias na Indústria de Software. 2009. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Giuliano Mega. Depuração simbólica extensível para sistemas de objetos distribuídos. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Mário Henrique Cruz Tôrres. Simulação Acústica no Ambiente AcMus. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Alexandre Freire da Silva. Reflexões sobre o Ensino de Metodologias Ágeis na Academia, na Indústria e no Governo. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Jeferson Roberto Marques. Gerenciamento de Recursos Distribuídos em Sistemas Escaláveis. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Ricardo Koji Ushizaki. Um Arcabouço para Reconfiguração Dinâmica de Aplicações em Java. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Roberto Speicys Cardoso. Adaptação Dinâmica Utilizando Agentes Móveis em Computação Ubíqua. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Vladimir Moreira Rocha. Protocolos P2P para Interligação de Aglomerados em Grades Computacionais. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Nelson Posse Lago. Processamento Distribuído de Áudio em Tempo Real. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Leo Kazuhiro Ueda. Andante - Composição e Performance Musical Utilizando Agentes Móveis. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Andrei Goldchleger. InteGrade: Um Sistema de Middleware para Computação em Grade Oportunista. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Herbert Yutaka Watanabe. Configuração Automática de Sistemas na Plataforma Enterprise JavaBeans. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo, . Orientador: Fabio Kon."
+      ],
+      "ongoing": [
+        "Eduardo Rocha Laurentino. Inferência Causal usando Aprendizado de Máquina. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
+        "Gustavo H. S. Rodrigues. Algoritmos para Mobilidade Urbana. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
+        "Leonardo Yuiti Ono. Ciência de Dados para Análise de Poluição do Ar. Início: 2025. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo. (Orientador).",
+        "Lucas Pires Stankus. Next Generation Bundling. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador).",
+        "Giovanni Aparecido da Silva Oliveira. Escalonamento de FaaS em IoT. Início: 2022. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica. (Orientador)."
+      ]
+    },
+    "doctoral": {
+      "completed": [
+        "João Marcos de Mattos Barguil. Análise de viés em um sistema de crowdsourcing de acessibilidade utilizando jogos sérios. 2023. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
+        "Leonardo Alexandre Ferreira Leite. A grounded theory of organizational structures for development and infrastructure professionals in software-producing organizations. 2022. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Coorientador: Fabio Kon.",
+        "Wilson Kazuo Mizutani. The Unlimited Rulebook: architecting the economy mechanics of games. 2021. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Eduardo Felipe Zambom Santana. InterSCSimulator: a scalable, open source, smart city simulator. 2019. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Higor Amario de Souza. Assessment of Spectrum-based Fault Localization for Practical Use. 2018. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Daniel Cukier. Software startup ecosystems evolution: a maturity model. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Paulo Bittencourt Moura. Dynamic resource allocation for elastic systems based on scalability modeling. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Ivanilton Polato. Economia de energia e aumento de desempenho usando SSDs no Hadoop Distributed File System. 2016. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, . Orientador: Fabio Kon.",
+        "Claudia de Oliveira Melo. Productivity of Agile Teams: An Empirical Evaluation of Factors and Monitoring Processes. 2013. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Paulo Roberto Miranda de Meirelles. Monitoramento de métricas de código-fonte em projetos de software livre. 2013. Tese (Doutorado em Ciências da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Helves Humberto Domingues. Replicação assíncrona em bancos de dados evolutivos. 2011. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica, . Orientador: Fabio Kon.",
+        "Jose de Ribamar Braga Pinheiro Junior. Xenia: um sistema de segurança para grades computacionais baseado em cadeias de confiança. 2008. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Fabio Kon.",
+        "Raphael Yokoingawa de Camargo. Armazenamento distribuído de dados e checkpointing de aplicações paralelas em grades oportunistas. 2007. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Arlindo Flávio da Conceição. Voz e vídeo sobre redes sem fio IEEE 802.11. 2006. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Francisco José da Silva e Silva. Adaptação Dinâmica de Sistemas Distribuídos. 2003. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Fabio Kon."
+      ],
+      "ongoing": [
+        "Pedro H. R. Mendonça. Análise e mensuração do risco de remoção via aprendizado de máquina multimodal. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
+        "Darwish Ahmad Herati. Sustentabilidade Ambiental em Engenharia de Software. Início: 2025. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador).",
+        "Isaque Alves de Lima. Teorias Fundamentadas em Dados de DevOps. Início: 2022. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo. (Orientador)."
+      ]
+    },
+    "undergraduate": {
+      "completed": [
+        "Maysa Cristina Claudino da Silva. Simulação do impacto de eventos pluviométricos na mobilidade urbana da cidade de São Paulo. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Yesman Choque Mamani. DeSmell: Avaliação de Qualidade de Código para Projetos de Ciência de Dados e Aprendizado de Máquina. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Mikhael Abdallah de Oliveira Pinto. Projeto e implementação do Painel Administrativo para Apoio à Implementação do Programa BikeSP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Filipe Tressmann Velozo. Projeto e implementação de um dashboard analítico para o piloto Bike SP. 2025. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Ana Yoon Faria de Lima. Cycling promotion using financial incentives: A pilot design to inform public policy in São Paulo, Brazil. 2024. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Andre Nogueira Ribeiro. Quantum Walk Control Plane Implementation. 2024. Iniciação Científica - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Eduardo Bobrow Falbel. Previsão de fluxos urbanos de bicicletas: métodos tradicionais vs. aprendizado de máquina explicável. 2023. Iniciação Científica - Instituto de Matemática e Estatistica, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Milena Correa da Silva. Análise visual de fluxos de mobilidade de pedestres com bundling. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Thiago Pena. BikeScienceWeb. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "André Nogueira Ribeiro. Computação e Internet Quântica. 2022. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Ana Yoon Faria de Lima. Análise do Impacto da Pandemia no uso de bicicletas compartilhadas em São Paulo. 2022. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatistica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Gustavo de Medeiros Carlos. Monitoramento e visualização geoespacial da saúde pública nas cidades brasileiras. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Lucas Pires Stankus. Visualização de Dados de Saúde. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Pedro Gigeck Freire. Índice de ciclabilidade baseado em dados. 2021. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Lucas Pires Stankus. Mobilidade e internações hospitalares: uma análise integrada. 2020. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Gabriely Rangel Pereira. Projeto e implementação de uma arquitetura baseada em serviços e suas aplicações para visualização de dados de saúde georreferenciados. 2019. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Yurick Yussuke Honda. Desenvolvimento de Painel de Saúde para o SUS. 2018. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Caio Truzzi Lente. Empreendedorismo: uma abordagem orientada por dados. 2015. Iniciação Científica. (Graduando em Ciências de Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Luciano Kenji Sugiura. Beerspot - vivendo uma startup. 2014. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Daniel Stein. Encenação de coreografias em nuvens Open Stack. 2012. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
+        "João Machini de Miranda. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
+        "Lucianna Thomaz Almeida. Código limpo e seu mapeamento em métricas de código-fonte. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, European Commission. Orientador: Fabio Kon.",
+        "Pedro Leal. Testes Automatizados de Coreografias de Serviços Web. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
+        "Thiago Colucci. Escalabilidade de Coreografias em Ambientes de Computação em Nuvem. 2010. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, HP Brasil Ltda.. Orientador: Fabio Kon.",
+        "Carlos Eduardo Moreira dos Santos. Gerenciamento de Recursos para Grades Computacionais - Node Control Center. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Carlos Morais de Oliveira Filho. Kalibro: Uma ferramenta de configuração e interpretação de métricas de código-fonte. 2009. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo. Orientador: Fabio Kon.",
+        "Márcio Vinicius dos Santos. Uso de Virtualização em Grades Computacionais. 2008. Iniciação Científica. (Graduando em Ciência da Computação) - Universidade de São Paulo, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Renato Lundberg. Desenvolvimento de portal Web para submissão e controle em grades computacionais. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Fabio Kon.",
+        "Paulo Cheque Bernardo. Testes Automatizados em Métodos Ágeis de Desenvolvimento de Software. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
+        "Andreza Silva de Oliveira. Acompanhamento (tracking) de projetos de desenvolvimento de software com métodos ágeis. 2007. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
+        "Ana Paula dos Santos Mota. Borboleta: sistema móvel para atendimento domiciliar de saúde. 2006. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon.",
+        "Yang Yili. AcMus - Software para cálculo de parâmetros acústicos. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística, Fundação de Amparo à Pesquisa do Estado de São Paulo. Orientador: Fabio Kon.",
+        "Christian Asmussen. Programação eXtrema. 2002. Iniciação Científica. (Graduando em Bacharelado em Ciência da Computação) - Instituto de Matemática e Estatística. Orientador: Fabio Kon."
+      ]
+    },
+    "specialization": {
+      "completed": [
+        "Raphael Yokoingawa de Camargo. 2008. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon.",
+        "Eloiza Sonoda. 2006. Universidade de São Paulo, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Fabio Kon."
+      ]
+    },
+    "others": {
+      "completed": [
+        "Mosab Hamdan Adam Mohamed Alhassan. 2022. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
+        "Paulo Roberto Miranda Meirelles. 2018. Universidade de São Paulo, . Fabio Kon.",
+        "Fabio Moreira Costa. 2017. Universidade de São Paulo, Fundação de Amparo a Pesquisa do Estado de Goiás. Fabio Kon.",
+        "Carlos Denner dos Santos Jr.. Estudo Longitudinal Empírico da Atratividade de Projetos de Software Livre. 2010. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon.",
+        "Fernando José Castor De Lima Filho. 2007. Universidade de São Paulo, Fundação de Amparo à Pesquisa do Estado de São Paulo. Fabio Kon."
+      ]
+    }
   },
   "experience": {
     "items": [
@@ -878,16 +786,14 @@
         "country": "Brasil",
         "details": [
           "2017 - 2020: Vínculo: Colaborador, Enquadramento Funcional: Conselheiro, Carga horária: 0"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Technion-Israel Institute Of Technology, TI",
         "country": "Israel",
         "details": [
           "2013 - 2013: Vínculo: Professor Visitante, Enquadramento Funcional: Visiting Professor, Carga horária: 40"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "(FAPESP) Fundação de Amparo à Pesquisa do Estado de São Paulo",
@@ -897,8 +803,7 @@
           "Coordenador Adjunto de Pesquisa para Inovação",
           "2012 - 2014: Vínculo: Assessor, Enquadramento Funcional: Coordenador de Área, Carga horária: 4",
           "Coordenador de Área de Engenharia e Ciência da Computação"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "University Of Illinois At Urbana Champaign, UIUC",
@@ -962,8 +867,7 @@
               "start": 2011,
               "raw": "2011 - Atual"
             },
-            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professor titular, Carga horária: 40, Regime: Dedicação exclusiva.",
-            "details": []
+            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professor titular, Carga horária: 40, Regime: Dedicação exclusiva."
           },
           {
             "interval": {
@@ -1130,29 +1034,25 @@
         "details": [
           "2018 - 2019: Vínculo: Professor Visitante, Enquadramento Funcional: Fulbright Visiting Professor, Carga horária: 40",
           "MIT Senseable City Lab"
-        ],
-        "roles": []
+        ]
       }
     ]
   },
   "academicActivities": {
-    "reviewerRoles": [],
     "editorialBoards": [
       {
         "interval": {
           "start": 2024,
           "raw": "2024 - Atual"
         },
-        "venue": "Periódico: COMMUNICATIONS OF THE ACM",
-        "details": []
+        "venue": "Periódico: COMMUNICATIONS OF THE ACM"
       },
       {
         "interval": {
           "start": 2020,
           "raw": "2020 - Atual"
         },
-        "venue": "Periódico: Journal of Internet Services and Applications - Editor-Chefe Emérito",
-        "details": []
+        "venue": "Periódico: Journal of Internet Services and Applications - Editor-Chefe Emérito"
       },
       {
         "interval": {
@@ -1160,16 +1060,14 @@
           "end": 2019,
           "raw": "2009 - 2019"
         },
-        "venue": "Periódico: Springer Journal of Internet Services and Applications - Editor-in-Chief",
-        "details": []
+        "venue": "Periódico: Springer Journal of Internet Services and Applications - Editor-in-Chief"
       },
       {
         "interval": {
           "start": 2008,
           "raw": "2008 - Atual"
         },
-        "venue": "Periódico: Revista Brasileira de Redes de Computadores e Sistemas Distribuídos",
-        "details": []
+        "venue": "Periódico: Revista Brasileira de Redes de Computadores e Sistemas Distribuídos"
       },
       {
         "interval": {
@@ -1177,11 +1075,9 @@
           "end": 2007,
           "raw": "2003 - 2007"
         },
-        "venue": "Periódico: Journal of the Brazilian Computer Society",
-        "details": []
+        "venue": "Periódico: Journal of the Brazilian Computer Society"
       }
     ],
-    "eventParticipations": [],
     "eventOrganizations": [
       "KON, F.. Des-Habitar Escutas ? Exposição de Arte Ciência e Tecnologia. 2024. (Exposição).",
       "KON, F.. 2o Workshop do InterSCity. 2019. (Congresso).",
@@ -1299,116 +1195,9 @@
       "VIEGAS, S. M. M.; KON, F.. Participação em banca de Alex Ignacio da Silva. Sistemas em Absorção de QSOs e as Linhas de Estrutura Fina. 2004. Tese (Doutorado em Astronomia) - Universidade de São Paulo.",
       "SANTANA, M. J.; KON, F.. Participação em banca de Mário Antonio Meireles Teixeira. Suporte a Serviços Diferenciados em Servidores Web. 2004. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
       "ENDLER, M.; KON, F.. Participação em banca de Francisco José da Silva e Silva. Adaptação Dinâmica de Sistemas Distribuídos. 2003. Tese (Doutorado em Ciências da Computação) - Universidade de São Paulo.",
-      "MASIERO, P. C.; KON, F.. Participação em banca de Rosana Teresinha Vaccare Braga. Um Processo para Construção e Instanciação de Frameworks baseados em uma Linguagem de Padrões para um Domínio Específico. 2003. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "KON, F.. Professor Doutor na área de Banco de Dados - IME. 2012. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor em Tecnologia Musical - ECA/USP. 2010. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor em Sistemas de Software - IME. 2010. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor - IC/UNICAMP. 2009. Universidade Estadual de Campinas.",
-      "KON, F.. Professor Doutor Biblioteconomia e Informática - ECA/USP. 2006. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor - IME. 2005. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor - ECA/USP. 2005. Universidade de São Paulo.",
-      "KON, F.. Professores Doutores USPLeste. 2005. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor - ICMC São Carlos. 2004. Universidade de São Paulo.",
-      "KON, F.. Professor Doutor - IME. 2004. Universidade de São Paulo.",
-      "KON, F.. Efetivação Carlos Stasi - IA/UNESP. 2003. Universidade Estadual Paulista Júlio de Mesquita Filho.",
-      "KON, F.. Efetivação Eduardo Gianezela - IA/UNESP. 2003. Universidade Estadual Paulista Júlio de Mesquita Filho.",
-      "KON, F.. Professor Doutor - IME. 2002. Universidade de São Paulo.",
-      "KON, F.. Concurso de Livre-Docência de Regina Melo Silveira na POLI-USP.. 2016. Universidade de São Paulo.",
-      "KON, F.. Concurso de Livre-Docência de Alan M. Durham. 2014. Universidade de São Paulo.",
-      "KON, F.. Concurso de Livre-Docência de Marco Aurélio Gerosa. 2013. Universidade de São Paulo.",
-      "Kon, Fabio. Concurso de Livre-docência de Marcelo Queiroz em Computação Musical - IME. 2012. Universidade de São Paulo.",
-      "KON, F.. Concurso Livre-docência Fernando Iazzetta ECA/USP. 2006. Universidade de São Paulo."
+      "MASIERO, P. C.; KON, F.. Participação em banca de Rosana Teresinha Vaccare Braga. Um Processo para Construção e Instanciação de Frameworks baseados em uma Linguagem de Padrões para um Domínio Específico. 2003. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo."
     ],
     "otherBoards": [
-      "ASTUDILLO, H.; KON, F.. Participação em banca de NICOLÁS ALEJANDRO ESTRADA IRRIBARRA. Arquitectura Orientada a Eventos para Redes de Sensores Aplicada a Control de Tráfico. 2017. Dissertação (Mestrado em Magíster en Ciencias de la Ingeniería en Informática) - Universidad Tecnica Federico Santa Maria - Chile.",
-      "QUEIROZ, M. G.; KON, F.; IAZZETTA, F. H. O.. Participação em banca de Roberto Piassi Passos Bodo. Técnicas determinísticas para acompanhamento musical automatizado. 2016. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "ORTEGA, L. M.; KON, F.. Participação em banca de Renata Malagoli Rocha. Empreendedorismo e Inovação na Jornanda da Startup: um framework da sintonia entre processos. 2016. Dissertação (Mestrado em Administração) - Faculdade de Economia, Administração e Contabilidade - USP.",
-      "NAKAGAWA, E. Y.; KON, F.; MALDONADO, J. C.. Participação em banca de Vinícius Augusto Tagliatti Zani. AGIRA - Um processo ágil de desenvolvimento de software baseado em arquiteturas de referência. 2013. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; GOLDMAN, A.; FILGUEIRAS, L.. Participação em banca de Ana Paula Oliveira dos Santos. Aplicação de práticas de usabilidade ágil em software livre. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "BREITMAN, K. K.; KON, F.; ENDLER, M.. Participação em banca de Rafael Silva Pereira. A Split&Merge Architecture for Distributed Video Processing in the Cloud. 2011. Dissertação (Mestrado em Programa de Pós-Graduação em Informática) - Pontifícia Universidade Católica do Rio de Janeiro.",
-      "KON, F.; FINGER, M.; Bates, R.. Participação em banca de Edwin Miguel Triana Gómez. Reconhecimento de fala para navegação em aplicativos móveis para português brasileiro. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.; GOLDMAN, A.. Participação em banca de Hugo Corbucci. Métodos ágeis e software livre: um estudo da relação entre estas duas comunidades. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.; GOLDMAN, A.. Participação em banca de Mariana Vivien Bravo. Abordagens para o ensino de práticas de programação extrema. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.. Participação em banca de Rafael José Peres Correia. Um sistema de telessaúde para auxílio à atenção primária domiciliar. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.; GOLDMAN, A.; MALDONADO, J. C.. Participação em banca de Paulo Cheque Bernardo. Padrões de testes automatizados. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.; BATISTA, D.; MARANHÃO, J.. Participação em banca de Vanessa Cristina Sabino. Um estudo sistemático de licenças de software livre. 2011. Dissertação (Mestrado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "FERREIRA, J. E.; KON, F.. Participação em banca de Gustavo Luiz Duarte. Metadados para reconciliação de transações em bancos de dados autônomos. 2011. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "BRAGA, R. T. V.; KON, F.. Participação em banca de Otávio Augusto Cardoso Macedo. Diretrizes para Desenvolvimento de Linhas de Produtos de Software com Base em Domain-Driven Design e Métodos Ágeis. 2009. Dissertação (Mestrado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "KON, F.. Participação em banca de Daniel Cukier. Padrões para Introduzir Novas Ideias na Indústria de Software. 2009. Dissertação (Mestrado em Ciência da Informação) - Universidade de São Paulo.",
-      "GOLDMAN, A.; KON, F.. Participação em banca de Vinicius Gama Pinheiro. Agentes móveis em grades oportunistas: uma abordagem para tolerância a falhas. 2009. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "DEBONI, J. E. Z.; KON, F.. Participação em banca de Simone Tejo Salgado Beato. Casos de teste de uso: uma contribuição para o desenvolvimento de software orientado por testes. 2008. Dissertação (Mestrado em Mestrado Profissional em Engenharia de Computação) - Instituto de Pesquisas Tecnológicas do Estado de São Paulo.",
-      "QUEIROZ, M. G.; KON, F.. Participação em banca de Mariana Zaparolli Martins. Audible Images: um sistema para síntese de imagens controladas por áudio. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "FABBRI, S. C. P. F.; KON, F.. Participação em banca de Arnaldo Napolitano Sanchez. PCU|PSP: Uma estratégia que promove agilidade na gerência de projetos de software. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal de São Carlos.",
-      "KON, F.; DURHAM, A. M.; CERQUEIRA, R.. Participação em banca de Giuliano Mega. Depuração simbólica extensível para sistemas de objetos distribuídos. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "COLLI, E.; KON, F.; CONCEICAO, A. F.. Participação em banca de Dairton Bassi Filho. Experiências com desenvolvimento ágil. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "FINGER, M.; KON, F.; CONCEICAO, A. F.. Participação em banca de Danilo M. Rubio Conde. Análise de padrões de uso em grades computacionais. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "KON, F.; REVERBEL, F.. Participação em banca de Cristiano Malanga Breuel. Seletores de pontos de junção: um mecanismo de extensão para linguagens e arcabouços orientados a aspectos. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "COSTA, F. M.; KON, F.. Participação em banca de Marcelo de Castro Cardoso. MPICH-IG Uma Infra-Estrutura de Execução de Aplicações de Execução de Aplicações Paralelas do Tipo MPI em Grades Computacionais Oportunistas. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal de Goiás.",
-      "MELLO, R. F.; KON, F.. Participação em banca de José Augusto Andrade Filho. MidHPC: Um suporte para a execução transparente de aplicações em grids computacionais. 2008. Dissertação (Mestrado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "Kon, Fabio; GOMES, M. A.; QUEIROZ, M. G.. Participação em banca de Mário Henrique Cruz Tôrres. Simulação Acústica no Ambiente AcMus. 2008. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "REVERBEL, F.; KON, F.. Participação em banca de Flavia Rainone. Combinação Dinâmica de Aspectos: Uma Abordagem Eficiente. 2008. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "DURHAM, A. M.; KON, F.. Participação em banca de Luiz Henrique Rorato Decaro. FOUNDATION: Middleware para desenvolvimento de aplicações JAVAEE que gerenciam a persistência de dados apresentados em formulários HTML. 2008. Dissertação (Mestrado em Mestrado Profissional em Engenharia de Computação) - Instituto de Pesquisas Tecnológicas do Estado de São Paulo.",
-      "REVERBEL, F.; KON, F.; BARRETO, P.. Participação em banca de Stefan Neusatz Guilhen. Um serviço de autorização Java EE baseado em certificados de atributos X.509. 2008. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "KOFUJI, S. T.; KON, F.; BARRETO, P.. Participação em banca de Fernando Teubl Ferreira. Técnicas de Gerenciamento de Chaves Compatrilhadas em Grupos Multicast. 2007. Dissertação (Mestrado em Engenharia Elétrica) - Universidade de São Paulo.",
-      "GOLDMAN, A.; KON, F.; CERQUEIRA, R.. Participação em banca de Eduardo Leal Guerra. InGride: um ambiente integrado de desenvolvimento para grades computacionais. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "REVERBEL, F.; BRESSAN, G.; KON, F.. Participação em banca de Emílio de Camargo Francesquini. Hermes: Um Arcabouço para a Programação de Aplicações P2P. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "Fernandez, F. J. R.; KON, F.. Participação em banca de Aislan Gomide Foina. Monitoração de rede de sensores com transponders. 2007. Dissertação (Mestrado em Engenharia Elétrica) - Universidade de São Paulo.",
-      "SILVA, F. S. C.; KON, F.; KOFUJI, S. T.. Participação em banca de Crhistian Alberto Noriega Guerra. Um modelo para ambientes inteligentes baseado em serviços web semânticos. 2007. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; DURHAM, A. M.; FERNANDES, C. T.. Participação em banca de Alexandre Freire da Silva. Reflexões sobre o ensino de Metodologias Ágeis na academia, na indústria e no governo. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "REVERBEL, F.; KON, F.. Participação em banca de Ivan Silva Neto. Um Serviço de Transações Atômicas para Web Services. 2007. Dissertação (Mestrado em Ciência da Computação) - Universidade de São Paulo.",
-      "FINGER, M.; KON, F.. Participação em banca de Germano Capristano Bezerra. Análise de conglomerados aplicada ao reconhecimento de padrões de uso de recursos computacionais. 2006. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "MANDEL, A.; KON, F.. Participação em banca de Eider Oliveira. Um sistema de arquivos dedicado a correio eletrônico. 2006. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "REZENDE, J. F.; KON, F.. Participação em banca de Marcel William Rocha da Silva. Alocação de Canal em Redes sem Fio IEEE 802.11 Independentes. 2006. Dissertação (Mestrado em Engenharia Elétrica) - Universidade Federal do Rio de Janeiro.",
-      "OLIVEIRA, C. T.; KON, F.. Participação em banca de Dalila Muniz Paiva. Dédalus: um Ambiente Distribuído para Auto-Hospedagem de Conteúdo e Computação Ponto-a-Ponto. 2005. Dissertação (Mestrado em Informática) - Universidade Federal do Rio de Janeiro.",
-      "KON, F.; SILVA, F. J. S. E.; REVERBEL, F.. Participação em banca de Jeferson Roberto Marques. Gerenciamento de Recursos Distribuídos em Sistemas Escaláveis. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; COSTA, F. M.; REVERBEL, F.. Participação em banca de Ricardo Koji Ushizaki. Um Arcabouço para Reconfiguração Dinâmica de Aplicações em Java. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; CERQUEIRA, R.; GOLDMAN, A.. Participação em banca de Roberto Speicys Cardoso. Adaptação Dinâmica Utilizando Agentes Móveis em Computação Ubíqua. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "IAZZETTA, F.; KON, F.. Participação em banca de Geraldo Henrique Torres Lima. O músico invisível - Instrumentos automáticos de musica. 2005 - Universidade de São Paulo.",
-      "FORTES, R. P. M.; KON, F.. Participação em banca de Marco Aurélio Graciotto Silva. Uma Ferramenta Web Colaborativa para Apoiar a Engenharia de Requisitos em Software Livre. 2005. Dissertação (Mestrado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "OKUDA, K.; KON, F.. Participação em banca de Rachel de Paula Cavalcanti. Protocolos de Comunicação entre Agentes Móveis. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; CERQUEIRA, R.; FINGER, M.. Participação em banca de Vladimir Moreira Rocha. Protocolos P2P para Interligação de Aglomerados em Grades Computacionais. 2005. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; FERNANDES, C. T.. Participação em banca de Eduardo Martins Guerra. Um Estudo sobre Refatoração de Código de Teste. 2005. Dissertação (Mestrado em Engenharia Eletrônica e Computação) - Instituto Tecnológico de Aeronáutica.",
-      "KON, F.; IAZZETTA, F.; QUEIROZ, M. G.. Participação em banca de Nelson Posse Lago. Processamento Distribuído de Áudio em Tempo Real. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "CALSAVARA, A.; KON, F.. Participação em banca de Juarez da Costa Cesar Filho. Mecanismo de Mobilidade de Objetos para a Virtuosi. 2004. Dissertação (Mestrado em Informática) - Pontifícia Universidade Católica do Paraná.",
-      "MANDEL, A.; KON, F.. Participação em banca de Nélio Alves Pereira Filho. Serviços de Pertinência para Clusters de Alta Disponibilidade. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; FINGER, M.; SZTAJNBERG, A.. Participação em banca de Andrei Goldchleger. InteGrade: Um Sistema de Middleware para Computação em Grade Oportunista. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; SILVA, F. S. C.; IAZZETTA, F.. Participação em banca de Leo Kazuhiro Ueda. Composição e Performance Musical Utilizando Agentes Móveis. 2004. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "DUARTE, O. C. M. B.; KON, F.. Participação em banca de Eric Ricardo Anton. Estabelecimento de chave de grupo em redes ad hoc. 2003. Dissertação (Mestrado em Informática) - Universidade Federal do Rio de Janeiro.",
-      "TERADA, R.; KON, F.. Participação em banca de Cesar Alison Paixao. Implementacao e Analise Comparativa de Quatro Variacoes do Criptossistema RSA. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "IAZZETTA, F.; KON, F.. Participação em banca de Samuel de Andrade Barros. Acústica Musical - Antecedentes e Nascimento de uma Ciência - A 1a metade do século XX. 2003. Dissertação (Mestrado em Artes) - Universidade de São Paulo.",
-      "DURHAM, A. M.; KON, F.. Participação em banca de Weslley Emmanuel Martins Lima. Uma biblioteca para a simulação de protocolos de entrega de mensagens em redes móveis. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.. Participação em banca de Herbert Yutaka Watanabe. Configuração Automática de Sistemas na Plataforma Enterprise JavaBeans. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "GOLDMAN, A.; KON, F.. Participação em banca de Leonardo Marques Alves de Pinho. Sistemas de localização dinâmica de serviços em ambientes de computação móvel. 2003. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "ASTUDILLO, H.; KON, F.. Participação em banca de Ane Cristina Varoto. Visões em Arquitetura de Software. 2002. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "ENDLER, M.; KON, F.. Participação em banca de Mateus de Freitas Ribeiro. Análise e Otimização de um Protocolo para Multicast Atômico em Computação Móvel. 2002. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "IAZZETTA, F.; KON, F.. Participação em banca de Theophilo Augusto Pinto. Música e Eletrônica no Brasil - Vôos abortados de uma pesquisa frutífera. 2002 - Universidade de São Paulo.",
-      "SANTANA, R. H. C.; KON, F.. Participação em banca de João Carlos Pinheiro. Avaliação de políticas de substituição de objetos em CACHES na WEB. 2001. Dissertação (Mestrado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "REVERBEL, F.; KON, F.. Participação em banca de Gustavo Scalco Isquierdo. Integração do Serviço de Diretório LDAP com o Serviço de Nomes CORBA. 2001. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "SILVA, D. M.; KON, F.. Participação em banca de Jorge Chaves Radel Bittencourt. RMIRep: Suporte para Replicação de Objetos em Redes de Alta Latência. 2001. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "KON, F.; GOLDMAN, A.; CORDEIRO, D.; CAMARGO, R. Y.; ENDLER, M.. Participação em banca de Paulo Bittencourt Moura. Dynamic resource allocation for elastic systems based on scalability modeling. 2017. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo.",
-      "KON, F.; BATISTA, D.; BARBOSA, DENILSON; COSTA, F. M.; CAMARGO, R. Y.. Participação em banca de Ivanilton Polato. Economia de energia e aumento de desempenho usando SSDs no Hadoop Distributed File System.. 2016. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo.",
-      "QUEIROZ, M. G.; KON, F.; Faria, Regis R. A.; MANZOLLI, J.; GARCIA, S. F.. Participação em banca de Alexandre Torres Porres. Modelos psicoacústicos de dissonância para eletrônica ao vivo. 2012. Tese (Doutorado em Música) - Universidade de São Paulo.",
-      "KON, F.. Participação em banca de Célio Andrade de Santana Junior. Avaliação da Utilização de Melhoria de Processo de Software Baseada em Metodologias Ágeis em Empresas CMMI e MPS.BR. 2012. Tese (Doutorado em Ciências da Computação) - Universidade Federal de Pernambuco.",
-      "MALDONADO, J. C.; KON, F.. Participação em banca de Marco Aurélio Graciotto Silva. LOD: uma abordagem para desenvolvimento de objetos de aprendizagem multimídias e interativos. 2012. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "ARAÚJO, G.; KON, F.. Participação em banca de Daniel Henricus de Knegt Dutra Nicácio. LUTS: A Light-Weight User-Level Transaction Scheduler. 2012. Tese (Doutorado em Ciência da Computação) - Universidade Estadual de Campinas.",
-      "THOMAZ, L. F.; QUEIROZ, M. G.; KON, F.. Participação em banca de Marcelo Gomes de Queiroz. Um arcabouço para construção de sistemas multiagente musicais. 2011. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "KON, F.; FERREIRA, J. E.. Participação em banca de Helves Humberto Domingues. Replicação assíncrona em bancos de dados evolutivos. 2011. Tese (Doutorado em Ciência da Computação) - Instituto de Matemática e Estatistica.",
-      "MALDONADO, J. C.; KON, F.. Participação em banca de Viviane Dias Malheiros de Pinho. Uma contribuição para a melhoria colaborativa e distribuída de processos de software. 2010. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "FERNANDES, C. T.; KON, F.. Participação em banca de Eduardo Martins Guerra. A Conceptual Model for Metadata-based Frameworks. 2010. Tese (Doutorado em Engenharia Eletrônica e Computação) - Instituto Tecnológico de Aeronáutica.",
-      "FRAGA, J. S.; KON, F.. Participação em banca de Fábio Favarim. Escalonamento Baseado em Espaços de Tuplas para Grades Computacionais. 2009. Tese (Doutorado em Engenharia Elétrica) - Universidade Federal de Santa Catarina.",
-      "CERQUEIRA, R.; KON, F.. Participação em banca de Renato Figueiró Maia. Uma Avaliação do Uso de Linguagens Dinâmicas no Desenvolvimento de Middleware: Estudo de Caso da Implementação de um ORB na Linguagem Lua. 2009. Tese (Doutorado em Informática) - Pontifícia Universidade Católica do Rio de Janeiro.",
-      "ISSARNY, V.; KON, F.. Participação em banca de Roberto Speicys Cardoso. A Service-oriented Middleware for Privacy Protection in Pervasive Computing. 2009. Tese (Doutorado em Informatique) - Université Pierre et Marie Curie.",
-      "MADEIRA, Edmundo; Kon, Fabio. Participação em banca de Evandro Baccarin. Negociação Automática de Contratos Multi-laterais em Cadeias Produtivas Agropecuárias. 2009. Tese (Doutorado em Ciência da Computação) - Universidade Estadual de Campinas.",
-      "KON, F.; FRAGA, J. S.; GASPARY, L. P.; CERQUEIRA, R.; TERADA, R.. Participação em banca de Jose de Ribamar Braga Pinheiro Junior. Xenia: um sistema de segurança para grades computacionais baseado em cadeias de confiança. 2008. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo.",
-      "MADEIRA, Edmundo; KON, F.. Participação em banca de Ivo José Garcia dos Santos. CoGPlat: Um Middleware para Serviços de Governo Eletrônico Centrados no Cidadão. 2008. Tese (Doutorado em Ciência da Computação) - Universidade Estadual de Campinas.",
-      "KON, F.; BRASILEIRO, F. V.; ENDLER, M.; BUZATO, L. E.; GUBITOSO, M. D.. Participação em banca de Raphael Yokoingawa de Camargo. Armazenamento distribuído de dados e checkpointing de aplicações paralelas em grades oportunistas. 2007. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo.",
-      "ZUFFO, J. A.; KON, F.. Participação em banca de Leonardo Mattes. GridMultiPolicy: Gerenciamento e efetivação de múltiplas políticas de controle de acesso em ambientes de grades computacionais. 2007. Tese (Doutorado em Engenharia Elétrica) - Universidade de São Paulo.",
-      "KOFUJI, S. T.; KON, F.. Participação em banca de Alexandre César Tavares Vidal. Abordagem Semântica Aplicada à Integração e Gerenciamento de Recursos e Aplicações em Grades Computacionais. 2007. Tese (Doutorado em Engenharia Elétrica) - Universidade de São Paulo.",
-      "KON, F.; GOLDMAN, A.; COSTA, F. M.; DUARTE, O. C. M. B.; KOFUJI, S. T.. Participação em banca de Arlindo Flávio da Conceição. Voz e vídeo sobre redes sem fio IEEE 802.11. 2006. Tese (Doutorado em Ciencia da Computacao) - Universidade de São Paulo.",
-      "VIEGAS, S. M. M.; KON, F.. Participação em banca de Alex Ignacio da Silva. Sistemas em Absorção de QSOs e as Linhas de Estrutura Fina. 2004. Tese (Doutorado em Astronomia) - Universidade de São Paulo.",
-      "SANTANA, M. J.; KON, F.. Participação em banca de Mário Antonio Meireles Teixeira. Suporte a Serviços Diferenciados em Servidores Web. 2004. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
-      "ENDLER, M.; KON, F.. Participação em banca de Francisco José da Silva e Silva. Adaptação Dinâmica de Sistemas Distribuídos. 2003. Tese (Doutorado em Ciências da Computação) - Universidade de São Paulo.",
-      "MASIERO, P. C.; KON, F.. Participação em banca de Rosana Teresinha Vaccare Braga. Um Processo para Construção e Instanciação de Frameworks baseados em uma Linguagem de Padrões para um Domínio Específico. 2003. Tese (Doutorado em Ciências da Computação e Matemática Computacional) - Universidade de São Paulo.",
       "KON, F.. Professor Doutor na área de Banco de Dados - IME. 2012. Universidade de São Paulo.",
       "KON, F.. Professor Doutor em Tecnologia Musical - ECA/USP. 2010. Universidade de São Paulo.",
       "KON, F.. Professor Doutor em Sistemas de Software - IME. 2010. Universidade de São Paulo.",
@@ -1455,8 +1244,7 @@
         "volume": "36",
         "pages": "101794",
         "doi": "http://dx.doi.org/10.1016/j.trip.2025.101794",
-        "issn": "25901982",
-        "url": "http://dx.doi.org/10.1016/j.trip.2025.101794"
+        "issn": "25901982"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1474,8 +1262,7 @@
         "volume": "219",
         "pages": "112252",
         "doi": "http://dx.doi.org/10.1016/j.jss.2024.112252",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2024.112252"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1490,8 +1277,7 @@
         "volume": "243",
         "pages": "105703",
         "doi": "http://dx.doi.org/10.1016/j.puhe.2025.03.017",
-        "issn": "00333506",
-        "url": "http://dx.doi.org/10.1016/j.puhe.2025.03.017"
+        "issn": "00333506"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1505,8 +1291,7 @@
         "venue": "AMERICAN JOURNAL OF EPIDEMIOLOGY",
         "pages": "kwaf071",
         "doi": "http://dx.doi.org/10.1093/aje/kwaf071",
-        "issn": "00029262",
-        "url": "http://dx.doi.org/10.1093/aje/kwaf071"
+        "issn": "00029262"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1525,8 +1310,7 @@
         "volume": "208",
         "pages": "111908",
         "doi": "http://dx.doi.org/10.1016/j.jss.2023.111908",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2023.111908"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1543,8 +1327,7 @@
         "volume": "71",
         "pages": "1-31",
         "doi": "http://dx.doi.org/10.1109/tem.2023.3287759",
-        "issn": "15580040",
-        "url": "http://dx.doi.org/10.1109/tem.2023.3287759"
+        "issn": "15580040"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1558,8 +1341,7 @@
         "volume": "16",
         "pages": "711-721",
         "doi": "http://dx.doi.org/10.1109/tg.2024.3359439",
-        "issn": "24751502",
-        "url": "http://dx.doi.org/10.1109/tg.2024.3359439"
+        "issn": "24751502"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1576,8 +1358,7 @@
         "volume": "22",
         "pages": "21-30",
         "doi": "http://dx.doi.org/10.5753/reic.2024.4645",
-        "issn": "15198219",
-        "url": "http://dx.doi.org/10.5753/reic.2024.4645"
+        "issn": "15198219"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1593,8 +1374,7 @@
         "volume": "36",
         "pages": "1",
         "doi": "http://dx.doi.org/10.1002/smr.2622",
-        "issn": "20477473",
-        "url": "http://dx.doi.org/10.1002/smr.2622"
+        "issn": "20477473"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1611,8 +1391,7 @@
         "volume": "49",
         "pages": "1898-1911",
         "doi": "http://dx.doi.org/10.1109/tse.2022.3199169",
-        "issn": "19393520",
-        "url": "http://dx.doi.org/10.1109/tse.2022.3199169"
+        "issn": "19393520"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1630,8 +1409,7 @@
         "volume": "107",
         "pages": "102210",
         "doi": "http://dx.doi.org/10.1016/j.simpat.2020.102210",
-        "issn": "1569190X",
-        "url": "http://dx.doi.org/10.1016/j.simpat.2020.102210"
+        "issn": "1569190X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1646,8 +1424,7 @@
         "volume": "38",
         "pages": "100421",
         "doi": "http://dx.doi.org/10.1016/j.entcom.2021.100421",
-        "issn": "18759521",
-        "url": "http://dx.doi.org/10.1016/j.entcom.2021.100421"
+        "issn": "18759521"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1665,8 +1442,7 @@
         "volume": "12",
         "pages": "6",
         "doi": "http://dx.doi.org/10.1186/s13174-021-00136-9",
-        "issn": "18674828",
-        "url": "http://dx.doi.org/10.1186/s13174-021-00136-9"
+        "issn": "18674828"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1682,8 +1458,7 @@
         "volume": "139",
         "pages": "106672",
         "doi": "http://dx.doi.org/10.1016/j.infsof.2021.106672",
-        "issn": "09505849",
-        "url": "http://dx.doi.org/10.1016/j.infsof.2021.106672"
+        "issn": "09505849"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1700,8 +1475,7 @@
         "volume": "31",
         "pages": "1-1",
         "doi": "http://dx.doi.org/10.1002/nem.2115",
-        "issn": "10557148",
-        "url": "http://dx.doi.org/10.1002/nem.2115"
+        "issn": "10557148"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1719,8 +1493,7 @@
         "volume": "33",
         "pages": "1",
         "doi": "http://dx.doi.org/10.1002/cpe.6039",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.6039"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1738,8 +1511,7 @@
         "volume": "1",
         "pages": "1-37",
         "doi": "http://dx.doi.org/10.1007/s12469-020-00259-5",
-        "issn": "1866749X",
-        "url": "http://dx.doi.org/10.1007/s12469-020-00259-5"
+        "issn": "1866749X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1758,8 +1530,7 @@
         "volume": "164",
         "pages": "110548",
         "doi": "http://dx.doi.org/10.1016/j.jss.2020.110548",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2020.110548"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1776,8 +1547,7 @@
         "volume": "63",
         "pages": "51-52",
         "doi": "http://dx.doi.org/10.1145/3416961",
-        "issn": "00010782",
-        "url": "http://dx.doi.org/10.1145/3416961"
+        "issn": "00010782"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1794,8 +1564,7 @@
         "volume": "52",
         "pages": "1-35",
         "doi": "http://dx.doi.org/10.1145/3359981",
-        "issn": "03600300",
-        "url": "http://dx.doi.org/10.1145/3359981"
+        "issn": "03600300"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1811,8 +1580,7 @@
         "volume": "109",
         "pages": "92-107",
         "doi": "http://dx.doi.org/10.1016/j.infsof.2019.02.001",
-        "issn": "09505849",
-        "url": "http://dx.doi.org/10.1016/j.infsof.2019.02.001"
+        "issn": "09505849"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1831,8 +1599,7 @@
         "volume": "93",
         "pages": "427-441",
         "doi": "http://dx.doi.org/10.1016/j.future.2018.10.026",
-        "issn": "0167739X",
-        "url": "http://dx.doi.org/10.1016/j.future.2018.10.026"
+        "issn": "0167739X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1849,8 +1616,7 @@
         "volume": "80",
         "pages": "102501",
         "doi": "http://dx.doi.org/10.1016/j.jtrangeo.2019.102501",
-        "issn": "09666923",
-        "url": "http://dx.doi.org/10.1016/j.jtrangeo.2019.102501"
+        "issn": "09666923"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1867,8 +1633,7 @@
         "volume": "35",
         "pages": "1-1",
         "doi": "http://dx.doi.org/10.1109/MS.2018.111095426",
-        "issn": "07407459",
-        "url": "http://dx.doi.org/10.1109/MS.2018.111095426"
+        "issn": "07407459"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1884,8 +1649,7 @@
         "volume": "94",
         "pages": "245-261",
         "doi": "http://dx.doi.org/10.1016/j.infsof.2017.10.014",
-        "issn": "09505849",
-        "url": "http://dx.doi.org/10.1016/j.infsof.2017.10.014"
+        "issn": "09505849"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1899,8 +1663,7 @@
         "volume": "7",
         "pages": "1",
         "doi": "http://dx.doi.org/10.1186/s13731-018-0091-6",
-        "issn": "21925372",
-        "url": "http://dx.doi.org/10.1186/s13731-018-0091-6"
+        "issn": "21925372"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1917,8 +1680,7 @@
         "volume": "50",
         "pages": "1-37",
         "doi": "http://dx.doi.org/10.1145/3124391",
-        "issn": "03600300",
-        "url": "http://dx.doi.org/10.1145/3124391"
+        "issn": "03600300"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1935,8 +1697,7 @@
         "volume": "13",
         "pages": "74-101",
         "doi": "http://dx.doi.org/10.4018/IJWSR.2016040105",
-        "issn": "15465004",
-        "url": "http://dx.doi.org/10.4018/IJWSR.2016040105"
+        "issn": "15465004"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1952,8 +1713,7 @@
         "volume": "98",
         "pages": "73-92",
         "doi": "http://dx.doi.org/10.1007/s00607-014-0428-3",
-        "issn": "14365057",
-        "url": "http://dx.doi.org/10.1007/s00607-014-0428-3"
+        "issn": "14365057"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1971,8 +1731,7 @@
         "volume": "10",
         "pages": "89-124",
         "doi": "http://dx.doi.org/10.5277/e-Inf160105",
-        "issn": "20844840",
-        "url": "http://dx.doi.org/10.5277/e-Inf160105"
+        "issn": "20844840"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1988,8 +1747,7 @@
         "volume": "99",
         "pages": "135-154",
         "doi": "http://dx.doi.org/10.1016/j.jss.2014.09.034",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2014.09.034"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2018,8 +1776,7 @@
         "volume": "46",
         "pages": "1-25",
         "doi": "http://dx.doi.org/10.1016/j.jnca.2014.07.022",
-        "issn": "10848045",
-        "url": "http://dx.doi.org/10.1016/j.jnca.2014.07.022"
+        "issn": "10848045"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2035,8 +1792,7 @@
         "volume": "55",
         "pages": "412-427",
         "doi": "http://dx.doi.org/10.1016/j.infsof.2012.09.004",
-        "issn": "09505849",
-        "url": "http://dx.doi.org/10.1016/j.infsof.2012.09.004"
+        "issn": "09505849"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2052,8 +1808,7 @@
         "volume": "22",
         "pages": "26-45",
         "doi": "http://dx.doi.org/10.1016/j.jsis.2012.07.004",
-        "issn": "09638687",
-        "url": "http://dx.doi.org/10.1016/j.jsis.2012.07.004"
+        "issn": "09638687"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2069,8 +1824,7 @@
         "volume": "0",
         "pages": "71-80",
         "doi": "http://dx.doi.org/10.11606/issn.2316-9036.v0i97p71-81",
-        "issn": "01039989",
-        "url": "http://dx.doi.org/10.11606/issn.2316-9036.v0i97p71-81"
+        "issn": "01039989"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2089,8 +1843,7 @@
         "volume": "1",
         "pages": "1",
         "doi": "http://dx.doi.org/10.1007/s13173-013-0114-x",
-        "issn": "16784804",
-        "url": "http://dx.doi.org/10.1007/s13173-013-0114-x"
+        "issn": "16784804"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2108,8 +1861,7 @@
         "volume": "7",
         "pages": "199-216",
         "doi": "http://dx.doi.org/10.1007/s11761-012-0125-z",
-        "issn": "18632394",
-        "url": "http://dx.doi.org/10.1007/s11761-012-0125-z"
+        "issn": "18632394"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2124,8 +1876,7 @@
         "volume": "23",
         "pages": "2078-2091",
         "doi": "http://dx.doi.org/10.1002/cpe.1706",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.1706"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2144,8 +1895,7 @@
         "volume": "70",
         "pages": "573-583",
         "doi": "http://dx.doi.org/10.1016/j.jpdc.2010.01.010",
-        "issn": "07437315",
-        "url": "http://dx.doi.org/10.1016/j.jpdc.2010.01.010"
+        "issn": "07437315"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2160,8 +1910,7 @@
         "volume": "16",
         "pages": "177-190",
         "doi": "http://dx.doi.org/10.1007/s13173-010-0016-0",
-        "issn": "01046500",
-        "url": "http://dx.doi.org/10.1007/s13173-010-0016-0"
+        "issn": "01046500"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2177,8 +1926,7 @@
         "volume": "21",
         "pages": "1725-1741",
         "doi": "http://dx.doi.org/10.1002/cpe.1395",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.1395"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2196,8 +1944,7 @@
         "volume": "5770",
         "pages": "48-66",
         "doi": "http://dx.doi.org/10.1007/978-3-642-10832-7_2",
-        "issn": "18696015",
-        "url": "http://dx.doi.org/10.1007/978-3-642-10832-7_2"
+        "issn": "18696015"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2219,8 +1966,7 @@
         "volume": "14",
         "pages": "87-103",
         "doi": "http://dx.doi.org/10.1590/S0104-65002008000300007",
-        "issn": "01046500",
-        "url": "http://dx.doi.org/10.1590/S0104-65002008000300007"
+        "issn": "01046500"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2236,8 +1982,7 @@
         "volume": "18, n.6",
         "pages": "567-579",
         "doi": "http://dx.doi.org/10.1002/cpe.966",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.966"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2252,8 +1997,7 @@
         "volume": "7",
         "pages": "0609-o9001",
         "doi": "http://dx.doi.org/10.1109/MDSO.2006.56",
-        "issn": "15414922",
-        "url": "http://dx.doi.org/10.1109/MDSO.2006.56"
+        "issn": "15414922"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2270,8 +2014,7 @@
         "volume": "12",
         "pages": "45-64",
         "doi": "http://dx.doi.org/10.1007/BF03194495",
-        "issn": "01046500",
-        "url": "http://dx.doi.org/10.1007/BF03194495"
+        "issn": "01046500"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2288,8 +2031,7 @@
         "volume": "35, n.7",
         "pages": "667-703",
         "doi": "http://dx.doi.org/10.1002/spe.654",
-        "issn": "00380644",
-        "url": "http://dx.doi.org/10.1002/spe.654"
+        "issn": "00380644"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2306,8 +2048,7 @@
         "volume": "16",
         "pages": "449-459",
         "doi": "http://dx.doi.org/10.1002/cpe.824",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.824"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2323,8 +2064,7 @@
         "volume": "10, n.2",
         "pages": "5-21",
         "doi": "http://dx.doi.org/10.1007/BF03192356",
-        "issn": "01046500",
-        "url": "http://dx.doi.org/10.1007/BF03192356"
+        "issn": "01046500"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2340,8 +2080,7 @@
         "volume": "45",
         "pages": "33-38",
         "doi": "http://dx.doi.org/10.1145/508448.508470",
-        "issn": "00010782",
-        "url": "http://dx.doi.org/10.1145/508448.508470"
+        "issn": "00010782"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2357,8 +2096,7 @@
         "volume": "24",
         "pages": "105-123",
         "doi": "http://dx.doi.org/10.1016/S0140-3664(00)00293-0",
-        "issn": "01403664",
-        "url": "http://dx.doi.org/10.1016/S0140-3664(00)00293-0"
+        "issn": "01403664"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2373,8 +2111,7 @@
         "volume": "2, n.5",
         "pages": "1",
         "doi": "http://dx.doi.org/10.1109/MDSO.2001.5",
-        "issn": "15414922",
-        "url": "http://dx.doi.org/10.1109/MDSO.2001.5"
+        "issn": "15414922"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2413,8 +2150,7 @@
         "volume": "8, n.1",
         "pages": "26-36",
         "doi": "http://dx.doi.org/10.1109/4434.824310",
-        "issn": "10923063",
-        "url": "http://dx.doi.org/10.1109/4434.824310"
+        "issn": "10923063"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2432,8 +2168,7 @@
         "volume": "30, n.6",
         "pages": "589-615",
         "doi": "http://dx.doi.org/10.1002/(SICI)1097-024X(200005)30:6<589::AID-SPE307>3.3.CO;2-B",
-        "issn": "00380644",
-        "url": "http://dx.doi.org/10.1002/(SICI)1097-024X(200005)30:6<589::AID-SPE307>3.3.CO;2-B"
+        "issn": "00380644"
       },
       {
         "category": "Livros publicados/organizados ou edições",
@@ -2455,8 +2190,7 @@
         ],
         "title": "Rethinking Sustainability in Urban Areas: São Paulo, London, Berlin",
         "venue": "1. ed.",
-        "doi": "http://dx.doi.org/10.2139/ssrn.4780408",
-        "url": "http://dx.doi.org/10.2139/ssrn.4780408"
+        "doi": "http://dx.doi.org/10.2139/ssrn.4780408"
       },
       {
         "category": "Livros publicados/organizados ou edições",
@@ -2503,8 +2237,7 @@
         ],
         "title": "Jornada de Atualização em Informática 2019",
         "venue": "1. ed. SBC",
-        "doi": "http://dx.doi.org/10.5753/sbc.471.7",
-        "url": "http://dx.doi.org/10.5753/sbc.471.7"
+        "doi": "http://dx.doi.org/10.5753/sbc.471.7"
       },
       {
         "category": "Livros publicados/organizados ou edições",
@@ -2645,8 +2378,7 @@
         "venue": "Advances in Intelligent Systems and Computing. 1ed.Heidelberg: Springer International Publishing",
         "volume": "1",
         "pages": "630-640",
-        "doi": "http://dx.doi.org/10.1007/978-3-030-72660-7_60",
-        "url": "http://dx.doi.org/10.1007/978-3-030-72660-7_60"
+        "doi": "http://dx.doi.org/10.1007/978-3-030-72660-7_60"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2660,8 +2392,7 @@
         "title": "Startup Ecosystem Maturity and Visualization: The Cases of New York, Tel Aviv, and San Paolo.",
         "venue": "Anh Nguyen-Duc; Jürgen Münch; Rafael Prikladnicki; Xiaofeng Wang; Pekka Abrahamsson",
         "pages": "179-194",
-        "doi": "http://dx.doi.org/10.1007/978-3-030-35983-6_11",
-        "url": "http://dx.doi.org/10.1007/978-3-030-35983-6_11"
+        "doi": "http://dx.doi.org/10.1007/978-3-030-35983-6_11"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2673,8 +2404,7 @@
         "title": "Early-Stage Software Startups: Main Challenges and Possible Answers",
         "venue": "Fundamentals of Software Startups. 1ed.: Springer International Publishing",
         "pages": "129-143",
-        "doi": "http://dx.doi.org/10.1007/978-3-030-35983-6_8",
-        "url": "http://dx.doi.org/10.1007/978-3-030-35983-6_8"
+        "doi": "http://dx.doi.org/10.1007/978-3-030-35983-6_8"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2688,8 +2418,7 @@
         "title": "Ranking Source Code Static Analysis Warnings for Continuous Monitoring of FLOSS Repositories",
         "venue": "IFIP Advances in Information and Communication Technology. 1ed.: Springer International Publishing",
         "pages": "90-101",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_8",
-        "url": "http://dx.doi.org/10.1007/978-3-319-92375-8_8"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_8"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2705,8 +2434,7 @@
         "title": "Using PageRank to Reveal Relevant Issues to Support Decision-Making on Open Source Projects",
         "venue": "IFIP Advances in Information and Communication Technology. 1ed.: Springer International Publishing",
         "pages": "102-113",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_9",
-        "url": "http://dx.doi.org/10.1007/978-3-319-92375-8_9"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_9"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2720,8 +2448,7 @@
         "title": "FLOSS Project Management in Government-Academia Collaboration",
         "venue": "IFIP Advances in Information and Communication Technology. 1ed.: Springer International Publishing",
         "pages": "15-25",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_2",
-        "url": "http://dx.doi.org/10.1007/978-3-319-92375-8_2"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-92375-8_2"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2735,8 +2462,7 @@
         "title": "InterSCSimulator: Large-Scale Traffic Simulation in Smart Cities Using Erlang",
         "venue": "Lecture Notes in Computer Science. 1ed.: Springer International Publishing",
         "pages": "211-227",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-91587-6_15",
-        "url": "http://dx.doi.org/10.1007/978-3-319-91587-6_15"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-91587-6_15"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2761,8 +2487,7 @@
         "venue": "Product-Focused Software Process Improvement",
         "volume": "9459",
         "pages": "600-606",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-26844-6_45",
-        "url": "http://dx.doi.org/10.1007/978-3-319-26844-6_45"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-26844-6_45"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2776,8 +2501,7 @@
         "title": "Using Performance Forecasting to Accelerate Elasticity",
         "venue": "Lecture Notes in Computer Science. 1ed.: Springer International Publishing",
         "pages": "17-31",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-28448-4_2",
-        "url": "http://dx.doi.org/10.1007/978-3-319-28448-4_2"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-28448-4_2"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2805,8 +2529,7 @@
         "venue": "Aaron Marcus",
         "volume": "8517",
         "pages": "33-44",
-        "doi": "http://dx.doi.org/10.1007/978-3-319-07668-3_4",
-        "url": "http://dx.doi.org/10.1007/978-3-319-07668-3_4"
+        "doi": "http://dx.doi.org/10.1007/978-3-319-07668-3_4"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2846,8 +2569,7 @@
         "venue": "Federico Álvarez et al",
         "volume": "7281",
         "pages": "81-92",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-30241-1_8",
-        "url": "http://dx.doi.org/10.1007/978-3-642-30241-1_8"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-30241-1_8"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2875,8 +2597,7 @@
         "title": "Apache Sustained Competitive Advantage in the Web Server Industry.",
         "venue": "Rahman, H., & Ramos, I",
         "pages": "259-273",
-        "doi": "http://dx.doi.org/10.4018/978-1-61350-519-9.ch013",
-        "url": "http://dx.doi.org/10.4018/978-1-61350-519-9.ch013"
+        "doi": "http://dx.doi.org/10.4018/978-1-61350-519-9.ch013"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -3137,8 +2858,7 @@
         "title": "Automatically Augmenting GitHub Issues with Informative User Reviews.",
         "venue": "2025 IEEE International Conference on Software Maintenance and Evolution (ICSME), 2025, Auckland",
         "pages": "418",
-        "doi": "http://dx.doi.org/10.1109/icsme64153.2025.00045",
-        "url": "http://dx.doi.org/10.1109/icsme64153.2025.00045"
+        "doi": "http://dx.doi.org/10.1109/icsme64153.2025.00045"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3150,8 +2870,7 @@
         "title": "Compatibilização de setores censitários baseada em grafos para análise histórica de processos urbanos em escala local.",
         "venue": "Workshop de Computação Urbana, 2025, Brasil",
         "pages": "29",
-        "doi": "http://dx.doi.org/10.5753/courb.2025.7950",
-        "url": "http://dx.doi.org/10.5753/courb.2025.7950"
+        "doi": "http://dx.doi.org/10.5753/courb.2025.7950"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3166,8 +2885,7 @@
         "title": "Urban Digital Twins for Megalopolises: Requirements, Challenges and Opportunities.",
         "venue": "Workshop em Engenharia de Software para Gêmeos Digitais, 2025, Brasil",
         "pages": "7",
-        "doi": "http://dx.doi.org/10.5753/sedt.2025.14274",
-        "url": "http://dx.doi.org/10.5753/sedt.2025.14274"
+        "doi": "http://dx.doi.org/10.5753/sedt.2025.14274"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3194,8 +2912,7 @@
         "title": "Multilingual Crowd-Based Requirements Engineering Using Large Language Models.",
         "venue": "Simpósio Brasileiro de Engenharia de Software, 2024, Brasil",
         "pages": "679-685",
-        "doi": "http://dx.doi.org/10.5753/sbes.2024.3646",
-        "url": "http://dx.doi.org/10.5753/sbes.2024.3646"
+        "doi": "http://dx.doi.org/10.5753/sbes.2024.3646"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3209,8 +2926,7 @@
         "title": "Distributed Quantum Walk Control Plane Implementation.",
         "venue": "Workshop de Redes Quânticas, 2024, Brasil",
         "pages": "31",
-        "doi": "http://dx.doi.org/10.5753/wqunets.2024.3392",
-        "url": "http://dx.doi.org/10.5753/wqunets.2024.3392"
+        "doi": "http://dx.doi.org/10.5753/wqunets.2024.3392"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3228,8 +2944,7 @@
         "title": "A Two-Tier Anomaly-based Intrusion Detection Approach for IoT-Enabled Smart Cities.",
         "venue": "IEEE INFOCOM 2023 IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS), 2023, Hoboken",
         "pages": "1-7",
-        "doi": "http://dx.doi.org/10.1109/infocomwkshps57453.2023.10225834",
-        "url": "http://dx.doi.org/10.1109/infocomwkshps57453.2023.10225834"
+        "doi": "http://dx.doi.org/10.1109/infocomwkshps57453.2023.10225834"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3242,8 +2957,7 @@
         "title": "Predição de Surtos de Dengue e Diagnóstico de Sífilis Congênita Utilizando Aprendizado de Máquina.",
         "venue": "Anais Estendidos do Simpósio Brasileiro de Computação Aplicada à Saúde, 2023, Brasil",
         "pages": "96-101",
-        "doi": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229432",
-        "url": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229432"
+        "doi": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229432"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3256,8 +2970,7 @@
         "title": "Análise e visualização do processo de regionalização do tema Único de Saúde (SUS): Uma perspectiva em sistemas complexos.",
         "venue": "Anais Estendidos do Simpósio Brasileiro de Computação Aplicada à Saúde, 2023, Brasil",
         "pages": "84-89",
-        "doi": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229367",
-        "url": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229367"
+        "doi": "http://dx.doi.org/10.5753/sbcas_estendido.2023.229367"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3270,8 +2983,7 @@
         "title": "A grounded theory of organizational structures for development and infrastructure professionals in software-producing organizations.",
         "venue": "Anais Estendidos do Congresso Brasileiro de Software: Teoria e Prática, 2023, Brasil",
         "pages": "29",
-        "doi": "http://dx.doi.org/10.5753/cbsoft_estendido.2023.233238",
-        "url": "http://dx.doi.org/10.5753/cbsoft_estendido.2023.233238"
+        "doi": "http://dx.doi.org/10.5753/cbsoft_estendido.2023.233238"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3286,8 +2998,7 @@
         "title": "Predicting Dengue Outbreaks with Explainable Machine Learning.",
         "venue": "2022 22nd International Symposium on Cluster, Cloud and Internet Computing (CCGrid), 2022, Taormina",
         "pages": "940",
-        "doi": "http://dx.doi.org/10.1109/ccgrid54584.2022.00114",
-        "url": "http://dx.doi.org/10.1109/ccgrid54584.2022.00114"
+        "doi": "http://dx.doi.org/10.1109/ccgrid54584.2022.00114"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3304,8 +3015,7 @@
         "title": "A Stacked Ensemble Classifier for an Intrusion Detection System in the Edge of IoT and IIoT Networks.",
         "venue": "2022 IEEE LatinAmerican Conference on Communications (LATINCOM), 2022, Rio de Janeiro",
         "pages": "1-6",
-        "doi": "http://dx.doi.org/10.1109/latincom56090.2022.10000559",
-        "url": "http://dx.doi.org/10.1109/latincom56090.2022.10000559"
+        "doi": "http://dx.doi.org/10.1109/latincom56090.2022.10000559"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3318,8 +3028,7 @@
         "title": "Optimizing Bike Sharing System Flows Using Graph Mining, Convolutional and Recurrent Neural Networks.",
         "venue": "2020 IEEE European Technology and Engineering Management Summit (ETEMS), 2020, Dortmund",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1109/E-TEMS46250.2020.9111707",
-        "url": "http://dx.doi.org/10.1109/E-TEMS46250.2020.9111707"
+        "doi": "http://dx.doi.org/10.1109/E-TEMS46250.2020.9111707"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3331,8 +3040,7 @@
         "title": "Unlimited Rulebook: a Reference Architecture for Economy Mechanics in Digital Games.",
         "venue": "2020 IEEE International Conference on Software Architecture (ICSA), 2020, Salvador",
         "pages": "58",
-        "doi": "http://dx.doi.org/10.1109/icsa47634.2020.00014",
-        "url": "http://dx.doi.org/10.1109/icsa47634.2020.00014"
+        "doi": "http://dx.doi.org/10.1109/icsa47634.2020.00014"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3346,8 +3054,7 @@
         "title": "Understanding FLOSS through community publications.",
         "venue": "ICSE '20: 42nd International Conference on Software Engineering, 2020, Seoul South Korea",
         "pages": "89",
-        "doi": "http://dx.doi.org/10.1145/3377816.3381729",
-        "url": "http://dx.doi.org/10.1145/3377816.3381729"
+        "doi": "http://dx.doi.org/10.1145/3377816.3381729"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3364,8 +3071,7 @@
         "venue": "Workshop de Computação Urbana, 2020, Brasil",
         "volume": "1",
         "pages": "178",
-        "doi": "http://dx.doi.org/10.5753/courb.2020.12362",
-        "url": "http://dx.doi.org/10.5753/courb.2020.12362"
+        "doi": "http://dx.doi.org/10.5753/courb.2020.12362"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3394,8 +3100,7 @@
         "venue": "XI Congresso Brasileiro de Software: Teoria e Prática, 2020, Brasil",
         "volume": "1",
         "pages": "54",
-        "doi": "http://dx.doi.org/10.5753/cbsoft_estendido.2020.14609",
-        "url": "http://dx.doi.org/10.5753/cbsoft_estendido.2020.14609"
+        "doi": "http://dx.doi.org/10.5753/cbsoft_estendido.2020.14609"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3409,8 +3114,7 @@
         "title": "Platform Teams.",
         "venue": "ICSE '20: 42nd International Conference on Software Engineering, 2020, Seoul Republic of Korea",
         "pages": "505",
-        "doi": "http://dx.doi.org/10.1145/3387940.3391455",
-        "url": "http://dx.doi.org/10.1145/3387940.3391455"
+        "doi": "http://dx.doi.org/10.1145/3387940.3391455"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3424,8 +3128,7 @@
         "venue": "33rd International ECMS Conference on Modelling and Simulation, 2019, Caserta",
         "volume": "1",
         "pages": "206",
-        "doi": "http://dx.doi.org/10.7148/2019-0206",
-        "url": "http://dx.doi.org/10.7148/2019-0206"
+        "doi": "http://dx.doi.org/10.7148/2019-0206"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3441,8 +3144,7 @@
         "venue": "2019 ACM/IEEE International Symposium on Empirical Software Engineering and Measurement (ESEM), 2019, Porto de Galinhas",
         "volume": "1",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1109/esem.2019.8870182",
-        "url": "http://dx.doi.org/10.1109/esem.2019.8870182"
+        "doi": "http://dx.doi.org/10.1109/esem.2019.8870182"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3456,8 +3158,7 @@
         "venue": "2019 IEEE/ACM 41st International Conference on Software Engineering: New Ideas and Emerging Results (ICSENIER), 2019, Montreal",
         "volume": "1",
         "pages": "113",
-        "doi": "http://dx.doi.org/10.1109/ICSE-NIER.2019.00037",
-        "url": "http://dx.doi.org/10.1109/ICSE-NIER.2019.00037"
+        "doi": "http://dx.doi.org/10.1109/ICSE-NIER.2019.00037"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3472,8 +3173,7 @@
         "venue": "the 15th International Symposium, 2019, Skövde",
         "volume": "1",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1145/3306446.3340828",
-        "url": "http://dx.doi.org/10.1145/3306446.3340828"
+        "doi": "http://dx.doi.org/10.1145/3306446.3340828"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3499,8 +3199,7 @@
         "title": "Analyzing Urban Mobility Carbon Footprint with Large-scale, Agent-based Simulation.",
         "venue": "7th International Conference on Smart Cities and Green ICT Systems, 2018, Funchal",
         "pages": "143",
-        "doi": "http://dx.doi.org/10.5220/0006662201430150",
-        "url": "http://dx.doi.org/10.5220/0006662201430150"
+        "doi": "http://dx.doi.org/10.5220/0006662201430150"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3516,8 +3215,7 @@
         "venue": "the 3rd ACM SIGPLAN International Workshop, 2018, Boston",
         "volume": "1",
         "pages": "15",
-        "doi": "http://dx.doi.org/10.1145/3281074.3281078",
-        "url": "http://dx.doi.org/10.1145/3281074.3281078"
+        "doi": "http://dx.doi.org/10.1145/3281074.3281078"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3532,8 +3230,7 @@
         "title": "Jaguar: A Spectrum-Based Fault Localization Tool for Real-World Software.",
         "venue": "2018 IEEE 11th International Conference on Software Testing, Verification and Validation (ICST), 2018, Vasteras",
         "pages": "404",
-        "doi": "http://dx.doi.org/10.1109/icst.2018.00048",
-        "url": "http://dx.doi.org/10.1109/icst.2018.00048"
+        "doi": "http://dx.doi.org/10.1109/icst.2018.00048"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3547,8 +3244,7 @@
         "title": "Model-Driven Domain-Specific Middleware.",
         "venue": "2017 IEEE 37th International Conference on Distributed Computing Systems (ICDCS), 2017, Atlanta",
         "pages": "1961",
-        "doi": "http://dx.doi.org/10.1109/ICDCS.2017.197",
-        "url": "http://dx.doi.org/10.1109/ICDCS.2017.197"
+        "doi": "http://dx.doi.org/10.1109/ICDCS.2017.197"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3562,8 +3258,7 @@
         "title": "InterSCity: A Scalable Microservice-based Open Source Platform for Smart Cities.",
         "venue": "6th International Conference on Smart Cities and Green ICT Systems, 2017, Porto",
         "pages": "35",
-        "doi": "http://dx.doi.org/10.5220/0006306200350046",
-        "url": "http://dx.doi.org/10.5220/0006306200350046"
+        "doi": "http://dx.doi.org/10.5220/0006306200350046"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3578,8 +3273,7 @@
         "title": "Implementing Federated Social Networking.",
         "venue": "the 13th International Symposium, 2017, Galway",
         "pages": "1-10",
-        "doi": "http://dx.doi.org/10.1145/3125433.3125455",
-        "url": "http://dx.doi.org/10.1145/3125433.3125455"
+        "doi": "http://dx.doi.org/10.1145/3125433.3125455"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3618,8 +3312,7 @@
         "venue": "the 31st Annual ACM Symposium, 2016, Pisa",
         "volume": "16",
         "pages": "406-411",
-        "doi": "http://dx.doi.org/10.1145/2851613.2851623",
-        "url": "http://dx.doi.org/10.1145/2851613.2851623"
+        "doi": "http://dx.doi.org/10.1145/2851613.2851623"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3644,8 +3337,7 @@
         "title": "Dynamic resource allocation using performance forecasting.",
         "venue": "2016 International Conference on High Performance Computing & Simulation (HPCS), 2016, Innsbruck",
         "pages": "18",
-        "doi": "http://dx.doi.org/10.1109/HPCSim.2016.7568311",
-        "url": "http://dx.doi.org/10.1109/HPCSim.2016.7568311"
+        "doi": "http://dx.doi.org/10.1109/HPCSim.2016.7568311"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3672,8 +3364,7 @@
         "title": "InterSCity: Addressing Future Internet research challenges for Smart Cities.",
         "venue": "2016 7th International Conference on the Network of the Future (NOF), 2016, Búzios",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1109/NOF.2016.7810114",
-        "url": "http://dx.doi.org/10.1109/NOF.2016.7810114"
+        "doi": "http://dx.doi.org/10.1109/NOF.2016.7810114"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3689,8 +3380,7 @@
         "venue": "IEEE International Symposium on Network Computing and Applications, 2014, Cambridge, MA, EUA",
         "volume": "1",
         "pages": "121-128",
-        "doi": "http://dx.doi.org/10.1109/NCA.2014.25",
-        "url": "http://dx.doi.org/10.1109/NCA.2014.25"
+        "doi": "http://dx.doi.org/10.1109/NCA.2014.25"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3704,8 +3394,7 @@
         "title": "Towards an Enactment Engine for Dynamically Reconfigurable and Scalable Choreographies.",
         "venue": "2014 IEEE World Congress on Services (SERVICES), 2014, Anchorage",
         "pages": "325",
-        "doi": "http://dx.doi.org/10.1109/SERVICES.2014.64",
-        "url": "http://dx.doi.org/10.1109/SERVICES.2014.64"
+        "doi": "http://dx.doi.org/10.1109/SERVICES.2014.64"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3720,8 +3409,7 @@
         "venue": "Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos, 2014, Florianopolis",
         "volume": "1",
         "pages": "457-470",
-        "doi": "http://dx.doi.org/10.1109/SBRC.2014.26",
-        "url": "http://dx.doi.org/10.1109/SBRC.2014.26"
+        "doi": "http://dx.doi.org/10.1109/SBRC.2014.26"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3735,8 +3423,7 @@
         "title": "A middleware for reflective web service choreographies on the cloud.",
         "venue": "the 13th Workshop, 2014, Bordeaux",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1145/2677017.2677026",
-        "url": "http://dx.doi.org/10.1145/2677017.2677026"
+        "doi": "http://dx.doi.org/10.1145/2677017.2677026"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3776,8 +3463,7 @@
         "venue": "2013 8th International Workshop on Automation of Software Test (AST), 2013, San Francisco",
         "volume": "1",
         "pages": "8",
-        "doi": "http://dx.doi.org/10.1109/IWAST.2013.6595784",
-        "url": "http://dx.doi.org/10.1109/IWAST.2013.6595784"
+        "doi": "http://dx.doi.org/10.1109/IWAST.2013.6595784"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3789,8 +3475,7 @@
         ],
         "title": "Developers Motivation in Agile Teams.",
         "venue": "2012 38th EUROMICRO Conference on Software Engineering and Advanced Applications (SEAA), 2012, Cesme",
-        "doi": "http://dx.doi.org/10.1109/SEAA.2012.45",
-        "url": "http://dx.doi.org/10.1109/SEAA.2012.45"
+        "doi": "http://dx.doi.org/10.1109/SEAA.2012.45"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3833,8 +3518,7 @@
         "title": "Intellectual property policy and attractiveness: a longitudinal study of free and open source software projects.",
         "venue": "ACM Computer Supported Cooperative Work (CSCW), 2011, Hangzhou, China",
         "pages": "705-708",
-        "doi": "http://dx.doi.org/10.1145/1958824.1958950",
-        "url": "http://dx.doi.org/10.1145/1958824.1958950"
+        "doi": "http://dx.doi.org/10.1145/1958824.1958950"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3848,8 +3532,7 @@
         "title": "Agile Team Perceptions of Productivity Factors.",
         "venue": "AGILE Conference (AGILE), 2011, Salt Lake City",
         "pages": "57-66",
-        "doi": "http://dx.doi.org/10.1109/AGILE.2011.35",
-        "url": "http://dx.doi.org/10.1109/AGILE.2011.35"
+        "doi": "http://dx.doi.org/10.1109/AGILE.2011.35"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3866,8 +3549,7 @@
         "venue": "SBES 2011, 2011, São Paulo - SP",
         "volume": "0",
         "pages": "82-91",
-        "doi": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.19",
-        "url": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.19"
+        "doi": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.19"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3882,8 +3564,7 @@
         "title": "Genesis and Evolution of the Agile Movement in Brazil -- Perspective from Academia and Industry.",
         "venue": "SBES 2011, 2011, São Paulo - SP",
         "pages": "98-107",
-        "doi": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.26",
-        "url": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.26"
+        "doi": "http://dx.doi.org/http://doi.ieeecomputersociety.org/10.1109/SBES.2011.26"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3989,8 +3670,7 @@
         ],
         "title": "A Study of the Relationships between Source Code Metrics and Attractiveness in Free Software Projects.",
         "venue": "Simpósio Brasileiro de Engenharia de Software (SBES), 2010, Salvador",
-        "doi": "http://dx.doi.org/10.1109/SBES.2010.27",
-        "url": "http://dx.doi.org/10.1109/SBES.2010.27"
+        "doi": "http://dx.doi.org/10.1109/SBES.2010.27"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4032,8 +3712,7 @@
         "title": "Efficient Maintenance of Distributed Data in Highly Dynamic Opportunistic Grids.",
         "venue": "24th ACM Symposium on Applied Computing (SAC 2009), Track on Dependable and Adaptive Distributed Systems (DADS), 2009, Honolulu",
         "pages": "1067-1071",
-        "doi": "http://dx.doi.org/10.1145/1529282.1529515",
-        "url": "http://dx.doi.org/10.1145/1529282.1529515"
+        "doi": "http://dx.doi.org/10.1145/1529282.1529515"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4103,8 +3782,7 @@
         "title": "Towards an Adaptive Middleware for Opportunistic Environment: A Mobile Agent Approach.",
         "venue": "7th International Workshop on Middleware for Grids, Clouds and e-Science - MGC 2009, 2009, Urbana-Champaign",
         "volume": "1",
-        "doi": "http://dx.doi.org/10.1145/1657120.1657126",
-        "url": "http://dx.doi.org/10.1145/1657120.1657126"
+        "doi": "http://dx.doi.org/10.1145/1657120.1657126"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4135,8 +3813,7 @@
         "venue": "23rd Annual ACM Symposium on Applied Computing - Track on Computer Applications in Health Care, 2008, Fortaleza",
         "volume": "1",
         "pages": "1343-1347",
-        "doi": "http://dx.doi.org/10.1145/1363686.1363998",
-        "url": "http://dx.doi.org/10.1145/1363686.1363998"
+        "doi": "http://dx.doi.org/10.1145/1363686.1363998"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4165,8 +3842,7 @@
         "venue": "6th International Workshop on Middleware for Grid Computing, 2008, Leuven",
         "volume": "1",
         "pages": "1-6",
-        "doi": "http://dx.doi.org/10.1145/1462704.1462707",
-        "url": "http://dx.doi.org/10.1145/1462704.1462707"
+        "doi": "http://dx.doi.org/10.1145/1462704.1462707"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4179,8 +3855,7 @@
         "venue": "IEEE International Symposium on Cluster Computing and the Grid, 2007, Rio de Janeiro",
         "volume": "1",
         "pages": "23-30",
-        "doi": "http://dx.doi.org/10.1109/CCGRID.2007.37",
-        "url": "http://dx.doi.org/10.1109/CCGRID.2007.37"
+        "doi": "http://dx.doi.org/10.1109/CCGRID.2007.37"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4194,8 +3869,7 @@
         "venue": "8th International Conference on Extreme Programming and Agile Processes in Sofware Engineering (XP'2007), 2007, Como, Italia",
         "volume": "4536",
         "pages": "84-92",
-        "doi": "http://dx.doi.org/10.1007/978-3-540-73101-6_12",
-        "url": "http://dx.doi.org/10.1007/978-3-540-73101-6_12"
+        "doi": "http://dx.doi.org/10.1007/978-3-540-73101-6_12"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4233,8 +3907,7 @@
         "venue": "9th International Symposium on Distributed Objects, Middleware, and Applications (DOA'2007), 2007, Algarve, Portugal",
         "volume": "4803",
         "pages": "648-666",
-        "doi": "http://dx.doi.org/10.1007/978-3-540-76848-7_44",
-        "url": "http://dx.doi.org/10.1007/978-3-540-76848-7_44"
+        "doi": "http://dx.doi.org/10.1007/978-3-540-76848-7_44"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4247,8 +3920,7 @@
         ],
         "title": "Semantics-based grid resource management.",
         "venue": "5th ACM/IFIP/USENIX International Workshop on Middleware for Grid Computing, 2007, Newport Beach, California",
-        "doi": "http://dx.doi.org/10.1145/1376849.1376856",
-        "url": "http://dx.doi.org/10.1145/1376849.1376856"
+        "doi": "http://dx.doi.org/10.1145/1376849.1376856"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4362,8 +4034,7 @@
         "venue": "8th IEEE International Workshop Multimedia Signal Processing (MMSP'2006), 2006, Victoria",
         "volume": "1",
         "pages": "108-113",
-        "doi": "http://dx.doi.org/10.1109/MMSP.2006.285278",
-        "url": "http://dx.doi.org/10.1109/MMSP.2006.285278"
+        "doi": "http://dx.doi.org/10.1109/MMSP.2006.285278"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4377,8 +4048,7 @@
         "title": "Trust in Large-Scale Computational Grids: An SPKI/SDSI Extension for Representing Opinion.",
         "venue": "ACM/IFIP/USENIX 4th International Workshop on Middleware for Grid Computing (MGC 2006), 2006, Melbourne",
         "volume": "1",
-        "doi": "http://dx.doi.org/10.1145/1186675.1186683",
-        "url": "http://dx.doi.org/10.1145/1186675.1186683"
+        "doi": "http://dx.doi.org/10.1145/1186675.1186683"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4391,8 +4061,7 @@
         "venue": "ACM/IFIP/USENIX Middleware Doctoral Symposium, 2006, Melbourne",
         "volume": "1",
         "pages": "3-9",
-        "doi": "http://dx.doi.org/10.1145/1169100.1169103",
-        "url": "http://dx.doi.org/10.1145/1169100.1169103"
+        "doi": "http://dx.doi.org/10.1145/1169100.1169103"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4445,8 +4114,7 @@
         "venue": "International Conference on eXtreme Programming and Agile Processes in Software Engineering (XP'2005), 2005, Sheffield, Inglaterra",
         "volume": "3556",
         "pages": "10-18",
-        "doi": "http://dx.doi.org/10.1007/11499053_2",
-        "url": "http://dx.doi.org/10.1007/11499053_2"
+        "doi": "http://dx.doi.org/10.1007/11499053_2"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4474,8 +4142,7 @@
         "venue": "11th Workshop on Job Scheduling Strategies for Parallel Processing, 2005, Cambridge, MA",
         "volume": "3834",
         "pages": "157-172",
-        "doi": "http://dx.doi.org/10.1007/11605300_8",
-        "url": "http://dx.doi.org/10.1007/11605300_8"
+        "doi": "http://dx.doi.org/10.1007/11605300_8"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4515,8 +4182,7 @@
         "venue": "17th International Symposium on Computer Architecture and High Performance Computing, 2005, Rio de Janeiro",
         "volume": "1",
         "pages": "226-234",
-        "doi": "http://dx.doi.org/10.1109/CAHPC.2005.33",
-        "url": "http://dx.doi.org/10.1109/CAHPC.2005.33"
+        "doi": "http://dx.doi.org/10.1109/CAHPC.2005.33"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4543,8 +4209,7 @@
         "title": "A Middleware for Experimentation on Dynamic Adaptation.",
         "venue": "4th ACM/IFIP/USENIX Workshop on Adaptive and Reflective Middleware, 2005, Grenoble",
         "volume": "1",
-        "doi": "http://dx.doi.org/1101516.1101519",
-        "url": "http://dx.doi.org/1101516.1101519"
+        "doi": "http://dx.doi.org/1101516.1101519"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4572,8 +4237,7 @@
         "venue": "3rd ACM/IFIP/USENIX International Workshop on Middleware for Grid Computing, 2005, Grenoble",
         "volume": "1",
         "pages": "1-12",
-        "doi": "http://dx.doi.org/1101499.1101504",
-        "url": "http://dx.doi.org/1101499.1101504"
+        "doi": "http://dx.doi.org/1101499.1101504"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4851,8 +4515,7 @@
         ],
         "title": "2K: A Distributed Operating System for Dynamic Heterogeneous Environments.",
         "venue": "IEEE International Symposium on High Performance Distributed Computing, 2000, Pittsburgh",
-        "doi": "http://dx.doi.org/10.1109/HPDC.2000.868651",
-        "url": "http://dx.doi.org/10.1109/HPDC.2000.868651"
+        "doi": "http://dx.doi.org/10.1109/HPDC.2000.868651"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -5120,8 +4783,7 @@
         "venue": "ICSE '20: 42nd International Conference on Software Engineering, 2020, Seoul South Korea",
         "volume": "1",
         "pages": "296",
-        "doi": "http://dx.doi.org/10.1145/3377812.3390807",
-        "url": "http://dx.doi.org/10.1145/3377812.3390807"
+        "doi": "http://dx.doi.org/10.1145/3377812.3390807"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5138,8 +4800,7 @@
         "title": "Software Engineering Practices in the development of applications for Smart Cities.",
         "venue": "the XXXIII Brazilian Symposium, 2019, Salvador",
         "pages": "150",
-        "doi": "http://dx.doi.org/10.1145/3350768.3351801",
-        "url": "http://dx.doi.org/10.1145/3350768.3351801"
+        "doi": "http://dx.doi.org/10.1145/3350768.3351801"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5153,8 +4814,7 @@
         "title": "Hadoop branching: Architectural impacts on energy and performance.",
         "venue": "2015 Sixth International Green and Sustainable Computing Conference (IGSC), 2015, Las Vegas",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1109/IGCC.2015.7393709",
-        "url": "http://dx.doi.org/10.1109/IGCC.2015.7393709"
+        "doi": "http://dx.doi.org/10.1109/IGCC.2015.7393709"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5165,8 +4825,7 @@
         ],
         "title": "Empirical evaluation of agile practices impact on team productivity.",
         "venue": "PhD Symposium at 12th International Conference on Agile Software Development (XP'2011), 2011, Madrid",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-20677-1_26",
-        "url": "http://dx.doi.org/10.1007/978-3-642-20677-1_26"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-20677-1_26"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5181,8 +4840,7 @@
         "title": "Towards Automated Testing of Web Service.",
         "venue": "6th IEEE/ACM International Workshop on Automation of Software Test (AST'11), 2011, Waikiki-Hawaii - USA",
         "pages": "109-110",
-        "doi": "http://dx.doi.org/10.1145/1982595.1982621",
-        "url": "http://dx.doi.org/10.1145/1982595.1982621"
+        "doi": "http://dx.doi.org/10.1145/1982595.1982621"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5209,8 +4867,7 @@
         "venue": "The 10th International Conference on Ontologies, DataBases, and Applications of Semantics (ODBASE 2011), 2011, Hersonissos - Crete - Greece",
         "volume": "7045",
         "pages": "818-825",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-25106-1_29",
-        "url": "http://dx.doi.org/10.1007/978-3-642-25106-1_29"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-25106-1_29"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5250,8 +4907,7 @@
         "venue": "5th MW4SOC Workshop of the 11th International Middleware Conference, 2010, Bangalore",
         "volume": "1",
         "pages": "1-3",
-        "doi": "http://dx.doi.org/10.1145/1930028.1930036",
-        "url": "http://dx.doi.org/10.1145/1930028.1930036"
+        "doi": "http://dx.doi.org/10.1145/1930028.1930036"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5264,8 +4920,7 @@
         "title": "A Network of FLOSS Competence Centres.",
         "venue": "6th International IFIP WG 2.13 Conference on Open Source Systems, OSS'2010, 2010, Notre Dame, IN, USA",
         "pages": "348-353",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-13244-5_30",
-        "url": "http://dx.doi.org/10.1007/978-3-642-13244-5_30"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-13244-5_30"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5307,8 +4962,7 @@
         "title": "Defining and Exploring a Grid System Ontology.",
         "venue": "ACM/IFIP/USENIX 4th International Workshop on Middleware for Grid Computing (MGC 2006), 2006, Melbourne",
         "volume": "1",
-        "doi": "http://dx.doi.org/10.1145/1186675.1186693",
-        "url": "http://dx.doi.org/10.1145/1186675.1186693"
+        "doi": "http://dx.doi.org/10.1145/1186675.1186693"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -5385,8 +5039,7 @@
         "venue": "ACM OOPSLA Poster Session, 2004, Vancouver",
         "volume": "1",
         "pages": "206-207",
-        "doi": "http://dx.doi.org/1028664.1028752",
-        "url": "http://dx.doi.org/1028664.1028752"
+        "doi": "http://dx.doi.org/1028664.1028752"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -6542,46 +6195,5 @@
       "KON, F.. Atuação em aproximadamente 120 concertos musicais eruditos e populares como solista ou em grupo (1988 a 2000). 2000. Interpretação.",
       "KON, F.. Composição de 5 peças musicais para grupo de percussão e computador (1992 a 1998)."
     ]
-  },
-  "unmappedSections": {
-    "PotencialInovacao": [
-      "MEIRELLES, P. ; OLIVEIRA FILHO, C. M. ; TERCEIRO, A. ; KON, F. . Mezuro: collaborative platform for source code metrics analysis. 2011.",
-      "ISSARNY, V. ; HAMIDA, A. ; GEORGANTAS, N. ; BERTOLINO, A. ; AUTILI, M. ; MADEN, N. ; KON, F. . Choreos middleware for the enactment of large-scale web service compositions. 2013.",
-      "SANTANA, E. Z. ; KON, F. . InterSCimulator: Highly-Scalable Smart City Simulator. 2018.",
-      "ESPOSTE, A. ; KON, F. . InterSCity Platform for Smart City application development. 2018.",
-      "KON, F.; FERREIRA, E. C. ; SOUZA, H. A. . BikeScience - Urban Mobility Analytics. 2019.",
-      "KON, F.. HealthDashboard: A Urban Public Health Geospatial Visualization Platform. 2019.",
-      "KON, F.; MEIRELLES, PAULO . BikeSP App. 2023.",
-      "BESSON, F. ; KON, F. . Reharsal Distributed Testing Framework. 2012."
-    ],
-    "EducacaoPopularizacaoCTA": [
-      "FERREIRA LEITE, LEONARDO ALEXANDRE ; KON, F. ; MEIRELLES, PAULO . Como se faz DevOps: Organizando pessoas, dos silos aos times de plataforma. 1. ed. São Paulo: Casa do Código, 2023. v. 1. 185p .",
-      "SANTROS JR., C. D. ; KON, F. . Colaboração e Software Livre. In: CONSEGI; SERPRO. (Org.). Congresso Internacional de Software Livre e Governo Eletrônico. 1ed.Brasília: , 2013, v. 3, p. 43-66.",
-      "KON, F.; Monteiro, J. . Empreendedorismo em Computação e Startups de Software. In: Ana Carolina Salgado e Bernadette Farias Lóscio. (Org.). Jornadas de Atualização em Informática (JAI'2014). 1ed.Porto Alegre: SBC, 2014, v. 1, p. 176-216.",
-      "KON, F.; Iazzetta, Fernando ; CAMPESATO, L. ; BONAFE, V. . A Cidade em Conflito: o projeto Des-habitar Escutas. In: David Sperling, Ruy Sardinha Lopes, Ana Carolina Tonetti. (Org.). Arte, ciência e tecnologia: entre mídias, métodos e mundos. 1ed.São Paulo: IEA - USP, 2026, v. , p. 57-76.",
-      "MELO, C. O. ; KON, F. . Produtividade de times ágeis. Engenharia de Software Magazine, Brasil, p. 1 - 9, 05 dez. 2011.",
-      "VARGAS, C. D. ; KON, F. . Em defesa do compartilhamento público de dados científicos. Le Monde Diplomatique - Brasil, São Paulo, p. 32 - 33, 05 maio 2014.",
-      "SOUZA, H. A. ; VIANNA, E. O. ; SOUZA, E. C. ; KON, F. . Implantação e uso da ferramenta de análise de mobilidade de bicicletas BikeScience na CET: Identificando caminhos cicláveis em São Paulo. Revista UniCET, , v. 1, 07 abr. 2021.",
-      "KON, F.. Ciência Aberta, Dados Abertos e Código Aberto. Computação Brasil, Porto Alegre, p. 22 - 29, 01 jul. 2013.",
-      "KON, F.. Palestra na University of Tromsø (Noruega): Future Directions in MiddlewareResearch and Technology. 2001. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Palestra no INRIA-Paris (França): Borboleta: A Mobile Telehealth System for Primary Homecare.. 2009. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Palestra no Google Campus Tel-Aviv (Israel): The Power of Open Source. 2013. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Palestra no MIT (EUA): 10 Best Practices for Agile Software Development. 2018. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Seminário na Texas A&M University (EUA): Software and science making cities better through university-city collaborations. 2018. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Seminário na Brown University (EUA): Improving the Quality of Life in Cities with Computer Science. 2018. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Webinar ABES: Ciência de Dados para Cidades. 2023. (Apresentação de Trabalho/Seminário).",
-      "KON, F.. Palestra na Sorbonne Université: Urban Public Policies based on evidence from Computer and Data Science. 2024. (Apresentação de Trabalho/Conferência ou palestra).",
-      "KON, F.. Keynote na Python Brasil 2025: Qualidade de código Por que estamos piorando? E como reverter isso?. 2025. (Apresentação de Trabalho/Conferência ou palestra).",
-      "Kon, Fabio. Keynote na Escola de Ciência Avançada em Mudança Sistêmica e Sustentabilidade, intitulada Responsible Innovation and Sustainable IT. 2025. (Apresentação de Trabalho/Conferência ou palestra).",
-      "MEIRELLES, P. ; OLIVEIRA FILHO, C. M. ; TERCEIRO, A. ; KON, F. . Mezuro: collaborative platform for source code metrics analysis. 2011.",
-      "KON, F.. O avanço e os desafios da Web ao completar 30 anos. 2019. (Programa de rádio ou TV/Entrevista).",
-      "KON, F.. Métodos Ágeis com Prof. Fabio Kon. 2020. (Programa de rádio ou TV/Entrevista).",
-      "KON, F.; MEIRELLES, P. ; TERCEIRO, A. ; BATISTA, D. . Workshop Internacional de Software Livre (WSL). 2012. (Congresso).",
-      "KON, F.. 1o Workshop do InterSCity. 2017. (Congresso).",
-      "KON, F.. 2o Workshop do InterSCity. 2019. (Congresso).",
-      "KON, F.. Jornada de Atualização em Informática 2019. 2019. (Outro).",
-      "KON, F.. Des-Habitar Escutas ? Exposição de Arte Ciência e Tecnologia. 2024. (Exposição)."
-    ]
-  },
-  "warnings": []
+  }
 }

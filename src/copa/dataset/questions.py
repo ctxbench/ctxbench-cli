@@ -79,6 +79,7 @@ class QuestionDataset(BaseModel):
 class QuestionInstanceEntry(BaseModel):
     id: str
     acceptedAnswers: list[Any] = Field(default_factory=list)
+    groundTruth: str | None = None
     contextRefs: list[str] = Field(default_factory=list)
     themes: list[str] = Field(default_factory=list)
     templateParameters: dict[str, str] = Field(default_factory=dict)
@@ -94,6 +95,7 @@ class QuestionInstanceEntry(BaseModel):
             acceptedAnswers=list(data.get("acceptedAnswers", []))
             if isinstance(data.get("acceptedAnswers", []), list)
             else [],
+            groundTruth=str(data.get("ground_truth", "")).strip() or None,
             contextRefs=[str(item) for item in data.get("contextRefs", []) if isinstance(item, str)],
             themes=[str(item) for item in data.get("themes", []) if isinstance(item, str)],
             templateParameters={

@@ -66,6 +66,7 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("--output-dir", help="Directory to write evaluation JSON files")
     eval_parser.add_argument("--output-jsonl", help="Optional JSONL file for flattened evaluation rows")
     eval_parser.add_argument("--output-csv", help="Optional CSV file for flattened evaluation rows")
+    eval_parser.add_argument("--force", action="store_true", help="Re-evaluate runs even when evaluation artifacts already exist")
     eval_parser.add_argument("--only", help="Evaluate only one question id")
     eval_parser.add_argument(
         "--mode",
@@ -84,6 +85,7 @@ def build_parser() -> argparse.ArgumentParser:
             output_dir=args.output_dir,
             output_jsonl=args.output_jsonl,
             output_csv=args.output_csv,
+            force=args.force,
             only=args.only,
             mode=args.mode,
             continue_on_error=args.continue_on_error,

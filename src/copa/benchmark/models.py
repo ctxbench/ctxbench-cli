@@ -134,8 +134,7 @@ class ExperimentEvaluation(BaseModel):
     enabled: bool = False
     output: str | None = None
     jsonl: str | None = None
-    judge: EvaluationModelConfig | None = None
-    fallback: EvaluationModelConfig | None = None
+    judges: list[EvaluationModelConfig] = Field(default_factory=list)
     config: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
@@ -147,18 +146,17 @@ class ExperimentEvaluation(BaseModel):
         config = {
             key: value
             for key, value in data.items()
-            if key not in {"enabled", "output", "jsonl", "judge", "fallback"}
+            if key not in {"enabled", "output", "jsonl", "judges"}
         }
         return cls(
             enabled=bool(data.get("enabled", False)),
             output=data.get("output"),
             jsonl=data.get("jsonl"),
-            judge=EvaluationModelConfig.model_validate(data["judge"])
-            if isinstance(data.get("judge"), dict)
-            else None,
-            fallback=EvaluationModelConfig.model_validate(data["fallback"])
-            if isinstance(data.get("fallback"), dict)
-            else None,
+            judges=[
+                EvaluationModelConfig.model_validate(item)
+                for item in data.get("judges", [])
+                if isinstance(item, dict)
+            ],
             config=config,
         )
 
@@ -515,3 +513,4 @@ class EvaluationBatchSummary(BaseModel):
     experimentId: str
     runCount: int = 0
     itemCount: int = 0
+    questions: list[dict[str, Any]] = Field(default_factory=list)

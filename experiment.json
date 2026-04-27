@@ -1,20 +1,24 @@
 {
-  "id": "lattes_full_001",
-  "name": "basic benchmark example",
-  "output": "/home/michel/repos/doutorado/copa-benchmark/outputs",
-  "dataset": ".",
+  "id": "exp_baseline_001",
+  "name": "Baseline run including only inline executions",
+  "output": "outputs",
+  "dataset": "datasets/lattes",
   "scope": {
-    "instances": ["2342739419247924"],
-    "questions": ["q_aligned", "q_not_aligned"]
+    "instances": ["9674541381385819", "9039182932747194"],
+    "questions": []
   },
   "factors": {
     "model": [
       {
         "provider": "openai",
         "name": "gpt-5.4-2026-03-05"
+      },
+      {
+        "provider": "google",
+        "name": "gemini-3.1-flash-lite-preview"
       }
     ],
-    "strategy": ["local_function"],
+    "strategy": ["inline"],
     "format": ["html", "json"]
   },
   "params": {
@@ -22,47 +26,43 @@
       "temperature": 0.3
     },
     "gpt-5.4-2026-03-05": {
-      "max_output_tokens": 5000,
+      "max_output_tokens": 8000,
       "rate_limit": {
-        "tpm": 200000,
+        "tpm": 400000,
         "max_concurrency": 1,
         "max_attempts": 5,
         "base_delay_ms": 1000,
         "max_delay_ms": 20000,
-        "estimated_output_tokens": 1000
+        "estimated_output_tokens": 6000
       }
     },
     "gemini-3.1-flash-lite-preview": {
-      "max_output_tokens": 5000,
+      "max_output_tokens": 8000,
       "rate_limit": {
-        "tpm": 200000,
+        "tpm": 400000,
         "max_concurrency": 1,
         "max_attempts": 5,
         "base_delay_ms": 1000,
         "max_delay_ms": 20000,
-        "estimated_output_tokens": 1000
+        "estimated_output_tokens": 6000
       }
     },
     "claude-sonnet-4-6": {
-      "max_output_tokens": 5000,
+      "max_output_tokens": 8000,
       "rate_limit": {
-        "tpm": 30000,
+        "tpm": 90000,
         "max_concurrency": 1,
         "max_attempts": 5,
         "base_delay_ms": 1000,
         "max_delay_ms": 20000,
-        "estimated_output_tokens": 5000
+        "estimated_output_tokens": 6000
       }
     }
   },
   "evaluation": {
-    "enabled": false,
+    "enabled": true,
     "judges": [
-      {
-        "provider": "anthropic",
-        "model": "claude-sonnet-4-6",
-        "temperature": 0
-      }
+      { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 }
     ]
   },
   "trace": {

@@ -33,7 +33,7 @@ def list_lattes_tool_specs() -> list[ToolSpec]:
         ToolSpec(name="get_expertise", description="Return the researcher's expertise, research lines and awards.", input_schema=IDENTITY_SCHEMA),
         ToolSpec(name="get_education", description="Return the researcher's academic background.", input_schema=TEMPORAL_SCHEMA),
         ToolSpec(name="get_projects", description="Return the researcher's projects.", input_schema=TEMPORAL_SCHEMA),
-        ToolSpec(name="get_supervisions", description="Return the researcher's supervision activities.", input_schema=TEMPORAL_SCHEMA),
+        ToolSpec(name="get_supervisions", description="Return the researcher's supervision activities grouped by level (masters, doctoral, undergraduate, specialization, others), each with completed and ongoing lists.", input_schema=TEMPORAL_SCHEMA),
         ToolSpec(name="get_experience", description="Return the researcher's professional experience.", input_schema=TEMPORAL_SCHEMA),
         ToolSpec(name="get_academic_activities", description="Return academic service, boards, events and related activities.", input_schema=TEMPORAL_SCHEMA),
         ToolSpec(name="get_publications", description="Return the researcher's bibliographic production.", input_schema=TEMPORAL_SCHEMA),

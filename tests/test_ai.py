@@ -18,6 +18,7 @@ from copa.benchmark.models import (
     RunMetadata,
     RunSpec,
 )
+from copa.dataset.provider import DatasetProvider
 import json
 
 
@@ -50,7 +51,7 @@ def make_experiment() -> Experiment:
             },
             "evaluation": {
                 "enabled": True,
-                "judge": {"provider": "mock", "model": "mock", "temperature": 0},
+                "judges": [{"provider": "mock", "model": "mock", "temperature": 0}],
             },
         }
     )
@@ -92,18 +93,31 @@ def write_mock_dataset(root: Path) -> ExperimentDataset:
     )
     (instance_dir / "parsed.json").write_text(json.dumps({"answers": {"q_year": 2020}}), encoding="utf-8")
     (instance_dir / "raw.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
-    (instance_dir / "cleaned.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
+    (instance_dir / "clean.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
     (instance_dir / "blocks.json").write_text(json.dumps({"summary": "PhD in 2020"}), encoding="utf-8")
     return ExperimentDataset(root=str(root.resolve()))
+
+
+def test_dataset_provider_context_blocks_falls_back_to_instance_blocks_file(tmp_path):
+    dataset = write_mock_dataset(tmp_path / "dataset")
+    payload = json.loads((Path(dataset.root) / "questions.instance.json").read_text(encoding="utf-8"))
+    payload["instances"][0].pop("contextBlocks", None)
+    (Path(dataset.root) / "questions.instance.json").write_text(json.dumps(payload), encoding="utf-8")
+
+    provider = DatasetProvider.from_dataset(dataset)
+
+    assert provider.get_context_blocks("cv-demo") == {"summary": "PhD in 2020"}
 
 
 class RecordingModel(ModelAdapter):
     def __init__(self) -> None:
         super().__init__()
         self.last_input: ModelInput | None = None
+        self.last_request: AIRequest | None = None
 
     def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
         self.last_input = model_input
+        self.last_request = request
         return ModelResponse(
             text="3",
             raw_response={"provider": "recording"},
@@ -112,6 +126,26 @@ class RecordingModel(ModelAdapter):
             total_tokens=12,
             duration_ms=7,
             metadata={"provider": "recording"},
+        )
+
+
+class RecordingJudgeModel(ModelAdapter):
+    def __init__(self) -> None:
+        super().__init__()
+        self.last_input: ModelInput | None = None
+        self.last_request: AIRequest | None = None
+
+    def generate(self, model_input: ModelInput, request: AIRequest, trace: TraceCollector | None = None) -> ModelResponse:
+        self.last_input = model_input
+        self.last_request = request
+        return ModelResponse(
+            text='{"correctness":{"rating":"meets","justification":"ok"},"completeness":{"rating":"meets","justification":"ok"}}',
+            raw_response={"provider": "recording-judge"},
+            input_tokens=10,
+            output_tokens=10,
+            total_tokens=20,
+            duration_ms=5,
+            metadata={"provider": "recording-judge"},
         )
 
 
@@ -206,18 +240,39 @@ def test_heuristic_compare_supports_structured_answers():
     assert details["outcome"] == "accepted"
 
 
+def test_heuristic_compare_supports_aliases_and_text_normalization():
+    details = _heuristic_compare(
+        '{"where": "PUC Rio", "yearsAgo": 26}',
+        [
+            {
+                "where": {
+                    "aliases": [
+                        "PUC-Rio",
+                        "Pontifícia Universidade Católica do Rio de Janeiro",
+                        "Pontifical Catholic University of Rio de Janeiro",
+                    ]
+                },
+                "yearsAgo": 26,
+            }
+        ],
+        {"type": "object"},
+    )
+
+    assert details["matched"] is True
+    assert details["outcome"] == "accepted"
+
+
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     from copa.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
-        del kwargs
+        config = kwargs["config"]
         return (
             {
-                "groundedness": {"rating": "meets", "justification": "Supported by summary."},
-                "correctness": {"rating": "meets", "justification": "Consistent with the section."},
-                "completeness": {"rating": "partially meets", "justification": "Misses some nuance."},
+                "correctness": {"rating": "meets", "justification": f"Consistent according to {config.model}."},
+                "completeness": {"rating": "partially meets", "justification": f"Partial according to {config.model}."},
             },
-            EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            EvaluationJudgeInfo(used=True, role="judge", provider=config.provider, model=config.model),
             EvaluationTrace(),
         )
 
@@ -226,17 +281,109 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     details, judge_info, _ = _evaluate_judge(
         result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1"})(),
         question_text="Question?",
-        blocks={"summary": "Summary text", "research": "Research text"},
-        refs=["summary", "research"],
-        themes=["software engineering"],
+        ground_truth="Ground truth answer.",
         experiment=make_experiment(),
         engine=Engine(),
     )
 
-    assert details["groundedness"]["rating"] == "meets"
-    assert details["groundedness"]["justification"] == "Supported by summary."
+    assert details["correctness"]["rating"] == "meets"
+    assert details["completeness"]["rating"] == "partially meets"
+    assert len(details["judges"]) == 1
     assert details["outcome"] == "partially_meets"
     assert judge_info.used is True
+
+
+def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
+    from copa.benchmark import evaluation as evaluation_module
+
+    experiment = Experiment.model_validate(
+        {
+            "id": "exp-test",
+            "output": "outputs",
+            "dataset": str((Path.cwd() / "datasets" / "lattes").resolve()),
+            "scope": {"instances": [], "questions": []},
+            "factors": {
+                "model": [{"provider": "mock", "name": "mock"}],
+                "strategy": ["inline"],
+                "format": ["json"],
+            },
+            "evaluation": {
+                "enabled": True,
+                "judges": [
+                    {"provider": "mock", "model": "judge-a", "temperature": 0},
+                    {"provider": "mock", "model": "judge-b", "temperature": 0},
+                ],
+            },
+        }
+    )
+
+    def fake_judge_request(**kwargs):
+        config = kwargs["config"]
+        if config.model == "judge-a":
+            return (
+                {
+                    "correctness": {"rating": "meets", "justification": "A says correct."},
+                    "completeness": {"rating": "partially meets", "justification": "A says partial."},
+                },
+                EvaluationJudgeInfo(used=True, role="judge", provider=config.provider, model=config.model),
+                EvaluationTrace(),
+            )
+        return (
+            {
+                "correctness": {"rating": "does not meet", "justification": "B says incorrect."},
+                "completeness": {"rating": "partially meets", "justification": "B says partial."},
+            },
+            EvaluationJudgeInfo(used=True, role="judge", provider=config.provider, model=config.model),
+            EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    details, judge_info, _ = _evaluate_judge(
+        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1"})(),
+        question_text="Question?",
+        ground_truth="Ground truth answer.",
+        experiment=experiment,
+        engine=Engine(),
+    )
+
+    assert details["correctness"]["rating"] == "does not meet"
+    assert details["correctness"]["votes"] == {"meets": 1, "partially meets": 0, "does not meet": 1}
+    assert details["completeness"]["rating"] == "partially meets"
+    assert len(details["judges"]) == 2
+    assert details["outcome"] == "does_not_meet"
+    assert judge_info.used is True
+
+
+def test_judge_request_injects_structured_output_schema():
+    from copa.benchmark.evaluation import _judge_request
+
+    engine = Engine()
+    model = RecordingJudgeModel()
+    engine._models["recording_judge"] = model
+
+    payload, judge_info, _ = _judge_request(
+        config=type(
+            "Cfg",
+            (),
+            {
+                "provider": "recording_judge",
+                "model": "recording_judge",
+                "temperature": 0,
+                "params": {},
+            },
+        )(),
+        prompt="Judge this answer.",
+        run_id="run-1",
+        exp_id="exp-1",
+        engine=engine,
+    )
+
+    assert payload is not None
+    assert judge_info.used is True
+    assert model.last_request is not None
+    assert model.last_request.params["structured_output"]["schema"]["type"] == "object"
+    assert model.last_request.params["structured_output"]["schema"]["required"] == ["correctness", "completeness"]
 
 
 def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
@@ -272,3 +419,45 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
     assert result.metricsSummary["tool_call_count"] is None
     assert result.metricsSummary["function_call_count"] is None
     assert result.metricsSummary["prompt_tokens"] is None
+
+
+def test_execute_runspec_injects_structured_output_for_heuristic_questions(tmp_path):
+    dataset = write_mock_dataset(tmp_path / "dataset")
+    runspec = RunSpec(
+        id="run-1",
+        runId="run-1",
+        experimentId="exp-1",
+        dataset=dataset,
+        questionId="q_year",
+        question="In which year did the researcher obtain their PhD?",
+        questionTemplate="In which year did the researcher obtain their PhD?",
+        instanceId="cv-demo",
+        provider="recording",
+        modelName="recording",
+        strategy="inline",
+        format="json",
+        repeatIndex=1,
+        params={},
+        metadata=RunMetadata(
+            canonicalId="exp-1|q_year|cv-demo|recording|recording|inline|json|1",
+            questionId="q_year",
+            instanceId="cv-demo",
+            provider="recording",
+            modelName="recording",
+            strategy="inline",
+            format="json",
+            repeatIndex=1,
+        ),
+    )
+    engine = Engine()
+    model = RecordingModel()
+    engine._models["recording"] = model
+
+    execute_runspec(runspec, engine)
+
+    assert model.last_request is not None
+    assert model.last_request.params["structured_output"] == {
+        "name": "q_year_response",
+        "strict": True,
+        "schema": {"type": "number"},
+    }

@@ -47,6 +47,7 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
                             {
                                 "id": "q_summary",
                                 "template_parameters": {"researcher_name": "CV Demo"},
+                                "ground_truth": "CV Demo works mainly in software engineering and distributed systems.",
                                 "contextRefs": ["summary", "research"],
                                 "themes": ["software engineering", "distributed systems"],
                             },
@@ -68,7 +69,7 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
         encoding="utf-8",
     )
     (instance_dir / "raw.html").write_text("ANSWER[q_year]: 2018\n", encoding="utf-8")
-    (instance_dir / "cleaned.html").write_text("ANSWER[q_year]: 2018\n", encoding="utf-8")
+    (instance_dir / "clean.html").write_text("ANSWER[q_year]: 2018\n", encoding="utf-8")
     (instance_dir / "blocks.json").write_text(
         json.dumps(
             {
@@ -94,7 +95,7 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
                 "params": {"common": {"temperature": 0}},
                 "evaluation": {
                     "enabled": evaluation_enabled,
-                    "judge": {"provider": "mock", "model": "mock", "temperature": 0},
+                    "judges": [{"provider": "mock", "model": "mock", "temperature": 0}],
                 },
                 "trace": {
                     "enabled": True,
@@ -179,7 +180,7 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
                     {
                         "instanceId": "cv_demo",
                         "contextBlocks": "context/cv_demo/blocks.json",
-                        "questions": [{"id": "q_missing", "contextRefs": ["summary"], "themes": ["summary"]}],
+                        "questions": [{"id": "q_missing", "ground_truth": "Research summary", "contextRefs": ["summary"], "themes": ["summary"]}],
                     }
                 ],
             }
@@ -188,7 +189,7 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
     )
     (instance_dir / "parsed.json").write_text(json.dumps({"summary": {"text": "Research summary"}}), encoding="utf-8")
     (instance_dir / "raw.html").write_text("Research summary\n", encoding="utf-8")
-    (instance_dir / "cleaned.html").write_text("Research summary\n", encoding="utf-8")
+    (instance_dir / "clean.html").write_text("Research summary\n", encoding="utf-8")
     (instance_dir / "blocks.json").write_text(json.dumps({"summary": "Research summary"}), encoding="utf-8")
     experiment_path = tmp_path / "experiment.json"
     experiment_path.write_text(
@@ -281,14 +282,13 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     from copa.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
-        del kwargs
+        config = kwargs["config"]
         return (
             {
-                "groundedness": {"rating": "meets", "justification": "Supported by summary."},
-                "correctness": {"rating": "meets", "justification": "Consistent with research section."},
-                "completeness": {"rating": "partially meets", "justification": "Covers the main areas but remains short."},
+                "correctness": {"rating": "meets", "justification": f"Consistent with research section according to {config.model}."},
+                "completeness": {"rating": "partially meets", "justification": f"Covers the main areas but remains short according to {config.model}."},
             },
-            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider=config.provider, model=config.model),
             evaluation_module.EvaluationTrace(),
         )
 
@@ -316,6 +316,81 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     heuristic = next(row for row in rows if row["questionId"] == "q_year")
     judge = next(row for row in rows if row["questionId"] == "q_summary")
     assert heuristic["details"]["outcome"] == "accepted"
-    assert judge["details"]["groundedness"]["justification"] == "Supported by summary."
+    assert judge["details"]["correctness"]["rating"] == "meets"
+    assert judge["details"]["completeness"]["rating"] == "partially meets"
+    assert len(judge["details"]["judges"]) == 1
     assert "score" not in heuristic
     assert eval_csv.exists()
+    summary = json.loads((eval_dir / "evaluation-summary.json").read_text(encoding="utf-8"))
+    assert len(summary["questions"]) == 2
+    judge_summary = next(item for item in summary["questions"] if item["questionId"] == "q_summary")
+    assert judge_summary["aggregate"]["correctness"] == "meets"
+    assert judge_summary["aggregate"]["completeness"] == "partially meets"
+    assert len(judge_summary["judgeRatings"]) == 1
+
+
+def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    runspec_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    eval_dir = tmp_path / "eval"
+    eval_jsonl = tmp_path / "eval.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspec_dir)]) == 0
+    assert main(["run", str(runspec_dir), "--out", str(results_dir)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    state = {"version": 0}
+
+    def fake_judge_request(**kwargs):
+        state["version"] += 1
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": f"judge-v{state['version']}"},
+                "completeness": {"rating": "meets", "justification": f"judge-v{state['version']}"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(
+        [
+            "eval",
+            "--run-results-dir",
+            str(results_dir),
+            "--experiment",
+            str(experiment_path),
+            "--output-dir",
+            str(eval_dir),
+            "--output-jsonl",
+            str(eval_jsonl),
+        ]
+    ) == 0
+
+    judge_path = next(path for path in sorted(eval_dir.glob("re_*.json")) if json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_summary")
+    first_payload = json.loads(judge_path.read_text(encoding="utf-8"))
+    assert first_payload["details"]["judges"][0]["correctness"]["justification"] == "judge-v1"
+
+    state["version"] = 9
+    assert main(
+        [
+            "eval",
+            "--run-results-dir",
+            str(results_dir),
+            "--experiment",
+            str(experiment_path),
+            "--output-dir",
+            str(eval_dir),
+            "--output-jsonl",
+            str(eval_jsonl),
+            "--force",
+        ]
+    ) == 0
+
+    second_payload = json.loads(judge_path.read_text(encoding="utf-8"))
+    assert second_payload["details"]["judges"][0]["correctness"]["justification"] == "judge-v10"
+    rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-25T16:57:35.590Z",
+    "generatedAt": "2026-04-27T05:52:11.037Z",
     "lattesId": "4208603228366576",
     "lastUpdated": "2026-03-25T03:00:00.000Z",
     "sourceUrl": "https://lattes.cnpq.br/4208603228366576",
@@ -14,18 +14,12 @@
     "citationNames": [
       "LEGROSKI, M. C."
     ],
-    "extraFields": [
-      "Nome: Marina Chiara Legroski"
-    ],
     "addresses": [
       {
         "type": "Profissional",
         "phones": [
           "(41) 33605096"
         ],
-        "fax": [],
-        "emails": [],
-        "extra": [],
         "organization": "Universidade Federal do Paraná",
         "unit": "Setor de Ciências Humanas.",
         "street": "Rua General Carneiro",
@@ -38,11 +32,9 @@
     ]
   },
   "expertise": {
-    "areasOfExpertise": [],
     "linesOfResearch": [
       "Significação na Língua Natural e Diálogos Interdisciplinares"
-    ],
-    "awards": []
+    ]
   },
   "education": {
     "items": [
@@ -115,7 +107,6 @@
         "funding": [
           "Conselho Nacional de Desenvolvimento Científico e Tecnológico, CNPq, Brasil."
         ],
-        "details": [],
         "kind": "academic"
       },
       {
@@ -126,9 +117,6 @@
         "degreeName": "Clínica e manejo educacional em AH/SD. (Carga horária: 21h)",
         "institution": "Instituto Cuidar Mediar Brincar, CBM, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -140,9 +128,6 @@
         "degreeName": "Extensão universitária em Curso de Extensão Universitária na modalidade de Difusão: Inteligência Arti. (Carga horária: 6h)",
         "institution": "Universidade de São Paulo, USP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -154,9 +139,6 @@
         "degreeName": "Extensão universitária em Minicurso de formação para bancas de heteroidentificação. (Carga horária: 40h)",
         "institution": "Universidade Estadual de Ponta Grossa, UEPG, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -168,9 +150,6 @@
         "degreeName": "Semântica formal. (Carga horária: 8h)",
         "institution": "Universidade Estadual de Campinas, UNICAMP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -182,9 +161,6 @@
         "degreeName": "On the ambivalence of the present tense. (Carga horária: 8h)",
         "institution": "Universidade Estadual de Campinas, UNICAMP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -196,9 +172,6 @@
         "degreeName": "Introdução à Neurolinguística. (Carga horária: 8h)",
         "institution": "Universidade Estadual de Campinas, UNICAMP, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -210,9 +183,6 @@
         "degreeName": "Semântica de Eventos. (Carga horária: 25h)",
         "institution": "XX Instituto da Abralin, ABRALIN, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -224,9 +194,6 @@
         "degreeName": "Semântica e Pragmática da articulação informaciona. (Carga horária: 25h)",
         "institution": "XX Instituto da Abralin, ABRALIN, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -238,9 +205,6 @@
         "degreeName": "Aspect in the nominal and verbal domain. (Carga horária: 20h)",
         "institution": "Universidade Federal do Paraná, UFPR, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -252,9 +216,6 @@
         "degreeName": "Tense - Aspect Systems. (Carga horária: 15h)",
         "institution": "Universidade Federal do Paraná, UFPR, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -266,9 +227,6 @@
         "degreeName": "Extensão universitária em O ensino de Línguas Clássicas no Celin da UFPR. (Carga horária: 30h)",
         "institution": "Universidade Federal do Paraná, UFPR, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -280,9 +238,6 @@
         "degreeName": "Poesia da Roma antiga e os tradutores brasileiros. (Carga horária: 12h)",
         "institution": "Universidade Federal do Paraná, UFPR, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       },
       {
@@ -294,9 +249,6 @@
         "degreeName": "Formação de Professores de Português para Estrange. (Carga horária: 3h)",
         "institution": "Universidade Federal do Paraná, UFPR, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       }
     ]
@@ -385,90 +337,60 @@
     ]
   },
   "supervisions": {
-    "completed": [
-      "Brunno Abati SantAna da Silva. UMA ANÁLISE DIALÓGICA DOS DISCURSOS SOBRE A LUDOPATIA: ENTRE O POLÍTICO, O SOCIAL E O IDEOLÓGICO. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "GISELLE MAYRA FEITOZA AGUIAR DE SOUZA. ?Semântica e português como língua adicional: contribuições da semântica para sala de aula de PLA?. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "Luiza Medeiros Baldança. INTERTEXTUALIDADE E INTERDISCURSIVIDADE NA CONSTRUÇÃO DE SENTIDOS EM POSTAGENS ANTIBOLSONARISTAS NO INSTAGRAM. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "Paula Eduarda Marconi. PRAGMÁTICA CLÍNICA E ALZHEIMER: INVESTIGANDO O IMPACTO DA AFASIA DE FALA NA COMUNICAÇÃO DOS IDOSOS. 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná, . Orientador: Marina Chiara Legroski.",
-      "Silvio Cesar de Alcântara. Ensinando a leitura e a escrita a partir do gênero paródia: de consumidores a produtores de linguagem. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Jeanine Sabedotti Breda Capri. Memórias como construção da identidade, sequências didáticas e suas perspectivas de encaminhamento em sala de aula. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Josiane Blum Chinato. A Fábula como princípio motivador para prática de leitura e escrita de textos. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Cristiane Silva Lopes. INTERPRETAÇÕES DO TEXTO NAS REDES SOCIAIS: QUANDO MEIA PALAVRA NÃO BASTA.. 2025. Trabalho de Conclusão de Curso. (Graduação em Abi - Letras Português) - Universidade Federal do Paraná. Orientador: Marina Chiara Legroski.",
-      "Ana Caroline Neri. Linguagem e Desinformação: Uma Análise Pragmática das Fake News. 2023. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. Fake news como atos de fala: uma análise fundamentada através de John Austin e John Searle. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Anthony Felipe Galvão Soares. O verbo \"jantar\": entendendo a construção polissêmica. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Camargo Ribas. Honrar a todas nós: análise discursiva da formação do discurso machista nos filmes ?Mulan? e ?Valente? da Disney e Pixar.. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda Ferreira Godoi. Click baits: verdade ou sensacionalismo. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Luiz Felipe Silva de Almeida. Alteridade: conceito do eu-outro relacionado com a cisgeneridade e a heteronormatividade. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Vitória Klunk da Silva. As Marcas morfossintáticas na Oralidade de Falantes não-nativos de Língua Portuguesa Brasileira,. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Ilto da Cruz Pires Filho. O mangá e sua textualidade: descrevendo os critérios conforme a Linguística de Texto. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Johnny William Pinto. O signo e a abordagem do self: aproximações e distanciamentos entre Charles S. Peirce e Douglas R. Hofstadter. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Sandi Patrícia Posseban. A Teoria da Polidez e o Princípio da Cooperação no quadro ?Entrevista com o especialista?. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. Gramática e ensino: a linguística na sala de aula. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "João Victor Chiquetto Silva. \"Você poderia chamar um táxi?\": implicaturas conversacionais e distinções pragmáticas em interações entre brasileiros e portugueses. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Roberta Diogo. A semântica e a pragmática dos palavrões. 2016. Trabalho de Conclusão de Curso. (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Tatiane Protachevicz. Influência da Internet na escrita. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Claudete Benedita Xavier Kaiss. Linguagem utilizada pelos adolescentes nas redes sociais e sua contribuição no ambiente escolar. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Ronaldo de Oliveira. A influência da didática sobre a prática pedagógica. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Késia Miranda Alves Lemes. O uso das redes sociais como metodologia de ensino e incentivo à leitura: um estudo sobre a acepção no 3º ano do ensino médio do Colégio Estadual Wolff Klabin. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Valdirene Ávila Kautk. A Compreensão Textual a partir das Sequências Didáticas. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. A Teoria dos Atos De Fala: uma perspectiva através da mentira. 2021. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Alana Gabriela dos Santos Bastos. A Contribuição Da Mídia Em Discursos Gordofóbicos. 2021. Iniciação Científica. (Graduando em Letras - Francês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Fabiana Simeoni Avais. RELAÇÕES EPISTEMOLÓGICAS ENTRE NOAM CHOMSKY E IMMANUEL KANT. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Anthony Felipe Galvão Soares. Análise de mudança de significado atrelada à mudança morfossintática. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Kimberly Nathalie Diehl. Estudo das expressões idiomáticas na região de Ponta Grossa. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fabiana Simeoni Avais. Relações epistemológicas entre Immanuel Kant e Noam Chomsky. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. Análise da linguagem emprega na criação de fake news. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Luiz Guilherme Sandeski. Semântica dos palavrões. 2018. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Letícia Kovalski Monico. Variação linguística dentro da comunidade LGBT. 2018. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "João Victor Chiquetto Silva. Psiconeurolinguística e doença de Alzheimer: interfaces possíveis. 2017. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. OS IMPACTOS DA NGB NO ENSINO DE GRAMÁTICA NAS ESCOLAS. 2017. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Meriliane de Lima. Metáfora conceitual. 2016. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Amanda da Matta Costa. A construção do feminino e do masculino: uma análise semântico-lexical. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. Gramáticas tradicionais revisitadas: a noção de sujeito. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski."
-    ],
-    "ongoing": [
-      "Brunno Abati SantAna da Silva. UMA ANÁLISE DIALÓGICA DOS DISCURSOS SOBRE A LUDOPATIA: ENTRE O POLÍTICO, O SOCIAL E O IDEOLÓGICO. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "GISELLE MAYRA FEITOZA AGUIAR DE SOUZA. ?Semântica e português como língua adicional: contribuições da semântica para sala de aula de PLA?. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "Luiza Medeiros Baldança. INTERTEXTUALIDADE E INTERDISCURSIVIDADE NA CONSTRUÇÃO DE SENTIDOS EM POSTAGENS ANTIBOLSONARISTAS NO INSTAGRAM. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
-      "Paula Eduarda Marconi. PRAGMÁTICA CLÍNICA E ALZHEIMER: INVESTIGANDO O IMPACTO DA AFASIA DE FALA NA COMUNICAÇÃO DOS IDOSOS. 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná, . Orientador: Marina Chiara Legroski.",
-      "Silvio Cesar de Alcântara. Ensinando a leitura e a escrita a partir do gênero paródia: de consumidores a produtores de linguagem. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Jeanine Sabedotti Breda Capri. Memórias como construção da identidade, sequências didáticas e suas perspectivas de encaminhamento em sala de aula. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Josiane Blum Chinato. A Fábula como princípio motivador para prática de leitura e escrita de textos. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Cristiane Silva Lopes. INTERPRETAÇÕES DO TEXTO NAS REDES SOCIAIS: QUANDO MEIA PALAVRA NÃO BASTA.. 2025. Trabalho de Conclusão de Curso. (Graduação em Abi - Letras Português) - Universidade Federal do Paraná. Orientador: Marina Chiara Legroski.",
-      "Ana Caroline Neri. Linguagem e Desinformação: Uma Análise Pragmática das Fake News. 2023. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. Fake news como atos de fala: uma análise fundamentada através de John Austin e John Searle. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Anthony Felipe Galvão Soares. O verbo \"jantar\": entendendo a construção polissêmica. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Camargo Ribas. Honrar a todas nós: análise discursiva da formação do discurso machista nos filmes ?Mulan? e ?Valente? da Disney e Pixar.. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda Ferreira Godoi. Click baits: verdade ou sensacionalismo. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Luiz Felipe Silva de Almeida. Alteridade: conceito do eu-outro relacionado com a cisgeneridade e a heteronormatividade. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Vitória Klunk da Silva. As Marcas morfossintáticas na Oralidade de Falantes não-nativos de Língua Portuguesa Brasileira,. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Ilto da Cruz Pires Filho. O mangá e sua textualidade: descrevendo os critérios conforme a Linguística de Texto. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Johnny William Pinto. O signo e a abordagem do self: aproximações e distanciamentos entre Charles S. Peirce e Douglas R. Hofstadter. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Sandi Patrícia Posseban. A Teoria da Polidez e o Princípio da Cooperação no quadro ?Entrevista com o especialista?. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. Gramática e ensino: a linguística na sala de aula. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "João Victor Chiquetto Silva. \"Você poderia chamar um táxi?\": implicaturas conversacionais e distinções pragmáticas em interações entre brasileiros e portugueses. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Roberta Diogo. A semântica e a pragmática dos palavrões. 2016. Trabalho de Conclusão de Curso. (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Tatiane Protachevicz. Influência da Internet na escrita. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Claudete Benedita Xavier Kaiss. Linguagem utilizada pelos adolescentes nas redes sociais e sua contribuição no ambiente escolar. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Ronaldo de Oliveira. A influência da didática sobre a prática pedagógica. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Késia Miranda Alves Lemes. O uso das redes sociais como metodologia de ensino e incentivo à leitura: um estudo sobre a acepção no 3º ano do ensino médio do Colégio Estadual Wolff Klabin. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Valdirene Ávila Kautk. A Compreensão Textual a partir das Sequências Didáticas. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. A Teoria dos Atos De Fala: uma perspectiva através da mentira. 2021. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Alana Gabriela dos Santos Bastos. A Contribuição Da Mídia Em Discursos Gordofóbicos. 2021. Iniciação Científica. (Graduando em Letras - Francês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Fabiana Simeoni Avais. RELAÇÕES EPISTEMOLÓGICAS ENTRE NOAM CHOMSKY E IMMANUEL KANT. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Anthony Felipe Galvão Soares. Análise de mudança de significado atrelada à mudança morfossintática. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Kimberly Nathalie Diehl. Estudo das expressões idiomáticas na região de Ponta Grossa. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fabiana Simeoni Avais. Relações epistemológicas entre Immanuel Kant e Noam Chomsky. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Fernanda de Fátima Geremias. Análise da linguagem emprega na criação de fake news. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Luiz Guilherme Sandeski. Semântica dos palavrões. 2018. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Letícia Kovalski Monico. Variação linguística dentro da comunidade LGBT. 2018. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "João Victor Chiquetto Silva. Psiconeurolinguística e doença de Alzheimer: interfaces possíveis. 2017. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. OS IMPACTOS DA NGB NO ENSINO DE GRAMÁTICA NAS ESCOLAS. 2017. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
-      "Meriliane de Lima. Metáfora conceitual. 2016. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Amanda da Matta Costa. A construção do feminino e do masculino: uma análise semântico-lexical. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
-      "Franciele Renata Ribeiro. Gramáticas tradicionais revisitadas: a noção de sujeito. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski."
-    ]
+    "masters": {
+      "completed": [
+        "Paula Eduarda Marconi. PRAGMÁTICA CLÍNICA E ALZHEIMER: INVESTIGANDO O IMPACTO DA AFASIA DE FALA NA COMUNICAÇÃO DOS IDOSOS. 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná, . Orientador: Marina Chiara Legroski."
+      ],
+      "ongoing": [
+        "Brunno Abati SantAna da Silva. UMA ANÁLISE DIALÓGICA DOS DISCURSOS SOBRE A LUDOPATIA: ENTRE O POLÍTICO, O SOCIAL E O IDEOLÓGICO. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
+        "GISELLE MAYRA FEITOZA AGUIAR DE SOUZA. ?Semântica e português como língua adicional: contribuições da semântica para sala de aula de PLA?. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador).",
+        "Luiza Medeiros Baldança. INTERTEXTUALIDADE E INTERDISCURSIVIDADE NA CONSTRUÇÃO DE SENTIDOS EM POSTAGENS ANTIBOLSONARISTAS NO INSTAGRAM. Início: 2026. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná. (Orientador)."
+      ]
+    },
+    "undergraduate": {
+      "completed": [
+        "Cristiane Silva Lopes. INTERPRETAÇÕES DO TEXTO NAS REDES SOCIAIS: QUANDO MEIA PALAVRA NÃO BASTA.. 2025. Trabalho de Conclusão de Curso. (Graduação em Abi - Letras Português) - Universidade Federal do Paraná. Orientador: Marina Chiara Legroski.",
+        "Ana Caroline Neri. Linguagem e Desinformação: Uma Análise Pragmática das Fake News. 2023. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fernanda de Fátima Geremias. Fake news como atos de fala: uma análise fundamentada através de John Austin e John Searle. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Anthony Felipe Galvão Soares. O verbo \"jantar\": entendendo a construção polissêmica. 2022. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fernanda de Camargo Ribas. Honrar a todas nós: análise discursiva da formação do discurso machista nos filmes ?Mulan? e ?Valente? da Disney e Pixar.. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fernanda Ferreira Godoi. Click baits: verdade ou sensacionalismo. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Luiz Felipe Silva de Almeida. Alteridade: conceito do eu-outro relacionado com a cisgeneridade e a heteronormatividade. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Vitória Klunk da Silva. As Marcas morfossintáticas na Oralidade de Falantes não-nativos de Língua Portuguesa Brasileira,. 2021. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Ilto da Cruz Pires Filho. O mangá e sua textualidade: descrevendo os critérios conforme a Linguística de Texto. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Johnny William Pinto. O signo e a abordagem do self: aproximações e distanciamentos entre Charles S. Peirce e Douglas R. Hofstadter. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Sandi Patrícia Posseban. A Teoria da Polidez e o Princípio da Cooperação no quadro ?Entrevista com o especialista?. 2020. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Franciele Renata Ribeiro. Gramática e ensino: a linguística na sala de aula. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "João Victor Chiquetto Silva. \"Você poderia chamar um táxi?\": implicaturas conversacionais e distinções pragmáticas em interações entre brasileiros e portugueses. 2019. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Roberta Diogo. A semântica e a pragmática dos palavrões. 2016. Trabalho de Conclusão de Curso. (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Tatiane Protachevicz. Influência da Internet na escrita. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Claudete Benedita Xavier Kaiss. Linguagem utilizada pelos adolescentes nas redes sociais e sua contribuição no ambiente escolar. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Ronaldo de Oliveira. A influência da didática sobre a prática pedagógica. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Késia Miranda Alves Lemes. O uso das redes sociais como metodologia de ensino e incentivo à leitura: um estudo sobre a acepção no 3º ano do ensino médio do Colégio Estadual Wolff Klabin. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Valdirene Ávila Kautk. A Compreensão Textual a partir das Sequências Didáticas. 2014. Trabalho de Conclusão de Curso. (Graduação em Letras Português - Espanhol (UAB)) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fernanda de Fátima Geremias. A Teoria dos Atos De Fala: uma perspectiva através da mentira. 2021. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
+        "Alana Gabriela dos Santos Bastos. A Contribuição Da Mídia Em Discursos Gordofóbicos. 2021. Iniciação Científica. (Graduando em Letras - Francês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
+        "Fabiana Simeoni Avais. RELAÇÕES EPISTEMOLÓGICAS ENTRE NOAM CHOMSKY E IMMANUEL KANT. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
+        "Anthony Felipe Galvão Soares. Análise de mudança de significado atrelada à mudança morfossintática. 2020. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Kimberly Nathalie Diehl. Estudo das expressões idiomáticas na região de Ponta Grossa. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fabiana Simeoni Avais. Relações epistemológicas entre Immanuel Kant e Noam Chomsky. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Fernanda de Fátima Geremias. Análise da linguagem emprega na criação de fake news. 2019. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Luiz Guilherme Sandeski. Semântica dos palavrões. 2018. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
+        "Letícia Kovalski Monico. Variação linguística dentro da comunidade LGBT. 2018. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "João Victor Chiquetto Silva. Psiconeurolinguística e doença de Alzheimer: interfaces possíveis. 2017. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Franciele Renata Ribeiro. OS IMPACTOS DA NGB NO ENSINO DE GRAMÁTICA NAS ESCOLAS. 2017. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa, Fundação Araucária de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Marina Chiara Legroski.",
+        "Meriliane de Lima. Metáfora conceitual. 2016. Iniciação Científica. (Graduando em Letras - Espanhol) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Amanda da Matta Costa. A construção do feminino e do masculino: uma análise semântico-lexical. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Franciele Renata Ribeiro. Gramáticas tradicionais revisitadas: a noção de sujeito. 2016. Iniciação Científica. (Graduando em Letras - Inglês) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski."
+      ]
+    },
+    "specialization": {
+      "completed": [
+        "Silvio Cesar de Alcântara. Ensinando a leitura e a escrita a partir do gênero paródia: de consumidores a produtores de linguagem. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Jeanine Sabedotti Breda Capri. Memórias como construção da identidade, sequências didáticas e suas perspectivas de encaminhamento em sala de aula. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski.",
+        "Josiane Blum Chinato. A Fábula como princípio motivador para prática de leitura e escrita de textos. 2016. Monografia. (Aperfeiçoamento/Especialização em PDE) - Universidade Estadual de Ponta Grossa. Orientador: Marina Chiara Legroski."
+      ]
+    }
   },
   "experience": {
     "items": [
@@ -477,8 +399,7 @@
         "country": "Brasil",
         "details": [
           "2015 - 2024: Vínculo: Servidor público, Enquadramento Funcional: Professor Adjunto, Carga horária: 40"
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Universidade Federal do Paraná, UFPR",
@@ -493,8 +414,7 @@
               "start": 2024,
               "raw": "2024 - Atual"
             },
-            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professora adjunta, Carga horária: 40, Regime: Dedicação exclusiva.",
-            "details": []
+            "description": "Vínculo: Servidor público, Enquadramento Funcional: Professora adjunta, Carga horária: 40, Regime: Dedicação exclusiva."
           },
           {
             "interval": {
@@ -527,8 +447,7 @@
           "2006 - 2008: Vínculo: Estagiário, Enquadramento Funcional: Professor de redação, Carga horária: 8",
           "Atuação como professora estagiária de Redação em Língua Portuguesa.",
           "2007 - 2007: Vínculo: Professor cooperado, Enquadramento Funcional: Professor de Latim, Carga horária: 3"
-        ],
-        "roles": []
+        ]
       }
     ]
   },
@@ -544,31 +463,51 @@
           "start": 2016,
           "raw": "2016 - Atual"
         },
-        "venue": "Periódico: Versalete",
-        "details": []
+        "venue": "Periódico: Versalete"
       },
       {
         "interval": {
           "start": 2013,
           "raw": "2013 - Atual"
         },
-        "venue": "Periódico: Revista Vitrine de Produção Acadêmica",
-        "details": []
+        "venue": "Periódico: Revista Vitrine de Produção Acadêmica"
       }
     ],
     "eventParticipations": [
-      "MUELLER, A. L. P. ; SILVA, F. R. ; LEGROSKI, M. C. . 14º Congresso Internacional da Abralin. 2026. (Congresso).",
-      "MORAIS, E. ; SCHEIFFER, P. ; SKEIKA, J. A. ; LEGROSKI, M. C. . Ciclo Virtual de Atividades Complementares em Letras. 2020. (Outro).",
-      "LEGROSKI, M. C.; CARMO, M. C. ; CARREIRA, M. B. ; FUJIHARA, A. K. . Escola de Teoria e Análise Linguística. 2. ed. 2019. (Outro).",
-      "LEGROSKI, M. C.; CARMO, M. C. ; CARREIRA, M. B. ; FUJIHARA, A. K. . Ii Ciclo de Palestras do Laboratório de Teoria e Análise Linguística - LabTal. 2019. (Outro).",
-      "LEGROSKI, M. C.; CARMO, M. C. ; CARREIRA, M. B. ; FUJIHARA, A. K. . Escola de Teoria e Análise Linguística.. 2018. (Outro).",
-      "MORAIS, E. ; LEGROSKI, M. C. . II Congresso Internacional de Estudos da Linguagem, Identidade e Subjetividades. 2017. (Congresso).",
-      "LEGROSKI, M. C.; CARMO, M. C. ; CARREIRA, M. B. ; FUJIHARA, A. K. . I Ciclo de Palestras do Laboratório de Teoria e Análise Linguística - LabTal. 2017. (Outro).",
-      "MORAIS, E. ; CARREIRA, M. ; LEGROSKI, M. C. . II SELIS - Simpósio de Estudos da Linguagem, Identidade e Subjetividade. 2016. (Outro).",
-      "LEGROSKI, M. C.; WACHOWICZ, T.C. . II Fórum de Produção Discente. 2011. (Outro).",
-      "FOLTRAN, M. J. G. D. ; BORGES NETO, J. ; NEGRI, L. ; WACHOWICZ, T.C. ; SILVA, A. H. P. ; LEGROSKI, M. C. . XX Instituto de Linguística. 2011. (Congresso).",
-      "LEGROSKI, M. C.; CONTO, L. ; CARDOSO, L. D. . I Fórum de Produção Discente. 2010. (Outro).",
-      "LEGROSKI, M. C.; PETRY, S.C. ; WACHOWICZ, T.C. . V Seminário de Teses e Dissertações. 2009. (Outro)."
+      "16a Siepe.ENSINO DE PRODUÇÃO E COMPREENSÃO DE TEXTOS NO CELIN. 2025. (Outra).",
+      "XIV Encontro Brasileiro Internacional de Ciência Cognitiva (EBICC),.Mecanismos cognitivos e sociais da mentira. 2024. (Encontro).",
+      "CELSUL. Aspectos formais da mentira. 2022. (Congresso).",
+      "Linguistweets.A mentira como ato de fala. 2022. (Outra).",
+      "65º Seminário do GEL.Escala de ofensividade: quão ofensiva essa expressão é?. 2017. (Seminário).",
+      "II Congresso Internacional de Estudos da Linguagem. \"Qualquer\" como operador semântico. 2017. (Congresso).",
+      "II Congresso Internacional de Estudos da Linguagem. ?Não tenho preconceito, mas...?: Análise semântica de sentenças com presença da conjunção adversativa \"mas\". 2017. (Congresso).",
+      "III Workshop Internacional de Pragmática. Palavrões, agressividade e ofensividade. 2016. (Congresso).",
+      "Newton Fund Conference on the Philosophies of Mind, Language & Action. Linguistic Analisys in Philosophy of Science. 2016. (Congresso).",
+      "XI Workshop on Formal Linguistics. Remarks on the pragmatic meaning of Brazilian Portuguese Quantifiers 'todo', 'qualquer' and 'cada'. 2016. (Congresso).",
+      "Semana de Cursos de Licenciatura - Faculdades Santa Cruz.Significando Significados. 2015. (Simpósio).",
+      "(In)definites and weak referentiality. 2012. (Outra).",
+      "60º Seminário do GEL.Controvérsias em torno do sentido literal. 2012. (Seminário).",
+      "6ª Semana Literária de Campo Largo.Desmitificando a produção de textos. 2012. (Oficina).",
+      "I Workshop Internacional de Pragmática.Teoria das Controvérsias, Pragmática e Cooperação. 2012. (Oficina).",
+      "VI Simpósio Antigos e Modernos da UFPR.\"No amor e na guerra vale tudo: ditados populares, provérbios e metáforas conceituais sobre amor e guerra\". 2012. (Simpósio).",
+      "X Encontro do CELSUL. Um tratamento formal para expressões idiomáticas e ditados populares. 2012. (Congresso).",
+      "59º Seminário do GEL.Graduação de composicionalidade: um estudo de caso com expressões idiomáticas e ditados populares. 2011. (Seminário).",
+      "I Fórum de Produção Discente.Uma abordagem dos ditados populares na interface entre a semântica e a pragmática. 2010. (Seminário).",
+      "Debatendo semântica formal com Rodolfo Ilari.Ditados populares: uma perspectiva de interface entre a semântica e a pragmática. 2009. (Encontro).",
+      "Semana de Letras.Dando murro em ponta de faca: uma proposta de tratamento dos ditos populares na interface da semântica e da pragmática. 2009. (Simpósio).",
+      "V Seminário de Teses e Dissertações em Andamento.Semântica e Pragmática nos ditos populares. 2009. (Seminário).",
+      "XIX Seminário do CELLIP.A interpretação dinâmica das expressões definidas. 2009. (Seminário).",
+      "56° Seminário do GEL. Uma abordagem da significação pela Semântica da Enunciação e da Semântica Clássica. 2008. (Congresso).",
+      "III SEMAD - Seminário de Pesquisa em Análise do Discurso: Sujeito e Subjetividade.. Não vamos estar nos comunicando: diálogos entre a mídia e a lingüística acerca do gerundismo. 2008. (Congresso).",
+      "I Simpósio de Estudos Lingüísticos e Literários.Tradução de Poesia Clássica em Versos: Discussões sobre Métrica. 2008. (Simpósio).",
+      "I Simpósio de Estudos Lingüísticos e Literários.Limites da Semântica Formal e da pragmática: definindo metáfora. 2008. (Simpósio).",
+      "VII Workshop on Formal Linguistics. 2008. (Outra).",
+      "XVI EVINCI. Conceitos básicos de pragmática para análise gramatical: definindo metáfora. 2008. (Congresso).",
+      "I Simpósio de Estudos Antigos e Modernos UFPR.Tradução de Poesia Clássica em Versos: a tradição de Carlos Alberto Nunes. 2007. (Simpósio).",
+      "XV EVINCI. O diálogo entre a mídia e a lingüística: o caso do gerundismo. 2007. (Congresso).",
+      "7º Encontro do Círculo de Estudos Lingüísticos do Sul - CELSUL. Variação da marca de plural em letras de músicas. 2006. (Congresso).",
+      "Fórum de Letras da PUC-Pr. Uma leitura da Teoria da Argumentação na Língua. 2006. (Congresso).",
+      "I Encontro de Estudos Clássicos da UFPR. 2006. (Encontro)."
     ],
     "eventOrganizations": [
       "MUELLER, A. L. P. ; SILVA, F. R. ; LEGROSKI, M. C. . 14º Congresso Internacional da Abralin. 2026. (Congresso).",
@@ -624,58 +563,9 @@
       "RAMOS, E. M.; SANTOS, S. L.; BRAGA, L. A.; LEGROSKI, M. C.. Participação em banca de Ericiane Marilisa de Ramos.O humor sob o enfoque da Teoria da Relevância: a interpretação das tirinhas de Carlos Ruas. 2016. Trabalho de Conclusão de Curso (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa.",
       "BERTON, A.; CARREIRA, M. B.; GAVIOLI-PRESTES, C. M.; LEGROSKI, M. C.. Participação em banca de Alana Berton.Predicação secundária: uma investigação dos contextos de ocorrência relacionados aos diferentes tipos de stage level. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
       "MIGLIORINI, M. L.; CARREIRA, M. B.; DUTRA, J. A. S.; LEGROSKI, M. C.. Participação em banca de Mayara Luiza Migliorini.O quantificador \"tudo\" como parte de sintagmas intensificadores. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "CUNHA, J.; CARREIRA, M. B.; GAVIOLI-PRESTES, C. M.; LEGROSKI, M. C.. Participação em banca de Jessica da Cunha.Um olhar sobre as orações relativas com pronome lembrete. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "GUIMARAES, M. R.; MIRANDA, M. G.; LEGROSKI, M. C.. Teste seletivo para professor substituto. 2024. Universidade Federal do Paraná.",
-      "LEGROSKI, M. C.; ANGELO, C. M. P.; CARREIRA, M. B.. Teste Seletivo para Admissão de Professores Colaboradores. 2021. Universidade Estadual do Centro-Oeste.",
-      "LEGROSKI, M. C.; CORREA, D. A.; SANTOS, R. M. B.. Processo Seletivo Simplificado para o cargo de Professor Colaborador - CRES, na área de Linguística e Língua Portuguesa. 2021. Universidade Estadual de Ponta Grossa.",
-      "OLIVEIRA, J. K.; CARMO, M. C.; LEGROSKI, M. C.. PROCESSO SELETIVO SIMPLIFICADO AO CARGO DE PROFESSOR COLABORADOR, na área de Língua Portuguesa e Linguística. 2019. Universidade Estadual de Ponta Grossa.",
-      "SALEH, P. B. O.; CORREA, D. A.; LEGROSKI, M. C.. Processo Seletivo Simplificado para o cargo de Professor Colaborador - CRES, na área de Linguística e Língua Portuguesa. 2017. Universidade Estadual de Ponta Grossa.",
-      "LEGROSKI, M. C.. Prefeitura Municipal de Curitiba - Prova de desenvolvimento didático. 2011. Prefeitura Municipal de Curitiba.",
-      "LEGROSKI, M. C.. 12º Encontro das atividades formativas. 2013. Universidade Federal do Paraná.",
-      "LEGROSKI, M. C.. 10º Encontro das Atividades Formativas da 3ª Semana Integrada de Ensino, Pesquisa e Extensão da UFPR. 2011. Universidade Federal do Paraná.",
-      "LEGROSKI, M. C.. 18º Evento de Iniciação Científica. 2010. Universidade Federal do Paraná."
+      "CUNHA, J.; CARREIRA, M. B.; GAVIOLI-PRESTES, C. M.; LEGROSKI, M. C.. Participação em banca de Jessica da Cunha.Um olhar sobre as orações relativas com pronome lembrete. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa."
     ],
     "otherBoards": [
-      "BRAGA, L. A.; FACHIN, P. C.; LEGROSKI, M. C.. Participação em banca de Dayana Rafaela Antunes. Os atos de fala e seus impactos no corpo feminino: o caso da cantora Maiara (da dupla Maiara & Maraisa). 2026. Dissertação (Mestrado em Linguagem, Identidade e Subjetividade) - Universidade Estadual de Ponta Grossa.",
-      "AVAIS, F. S.; SOUZA, L. M.; RIBEIRO, P. N.; LEGROSKI, M. C.. Participação em banca de Fabiana Simeoni Avais. O efeito holístico-partitivo pelo olhar da semântica conceitual. 2025. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná.",
-      "NEGRI, L.; ROHLING, N.; LEGROSKI, M. C.. Participação em banca de Marcelo Darlan de Oliveira. Rap Nacional - Compromisso e Viagem: um panorama de 1989 a 2019 sob a ótica da análise do Discurso. Ethos, heterogeneidade discursiva e história.. 2025. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná.",
-      "NEGRI, L.; SILVA, M. C. F.; LEGROSKI, M. C.. Participação em banca de Nádia Carina da Silva Melo José. NEOLOGISMOS DO PORTUGUÊS FALADO EM ANGOLA: UMA ANÁLISE LINGUÍSTICA DAS NOVAS UNIDADES LEXICAIS E DA SUA DIFUSÃO ENTRE OS FALANTES ANGOLANOS.. 2022. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná.",
-      "SILVA, J. V. C.; NEGRI, L.; SOUZA, L. M.; LEGROSKI, M. C.. Participação em banca de João Victor Chiquetto Silva. ?VOU VER E TE AVISO?: POLIDEZ E ESTRATÉGIAS DE RECUSA VELADA POR FALANTES NATIVOS DE PORTUGUÊS BRASILEIRO. 2022. Dissertação (Mestrado em Letras) - Universidade Federal do Paraná.",
-      "RIBEIRO, M. F.; LEITE, S.; MARQUES, B. C.; LEGROSKI, M. C.. Participação em banca de Mylena Fernanda Ribeiro. O ser estranho e estrangeiro no quadrinho \"Persépolis\". 2020. Dissertação (Mestrado em Letras) - Universidade Estadual de Londrina.",
-      "WIELER, B. L. M.; NEGRI, L.; WACHOWICZ, T.C.; RASIA, G. L. S.; LEGROSKI, M. C.. Participação em banca de Bárbara Luisa Martins Wieler. Desabafo, amor e curtidas ? O ethos materno projetado na Internet. 2024. Tese (Doutorado em Letras) - Universidade Federal do Paraná.",
-      "BORGES NETO, J.; NEGRI, L.; BASSO, R. M.; PAGANI, L. A.; LEGROSKI, M. C.. Participação em banca de Álvaro Kasuaki Fujihara. Pragmática e não cooperação. 2016. Tese (Doutorado em Letras) - Universidade Federal do Paraná.",
-      "GODOI, E.; CHAGAS, P. D.; SANTOS, S. L.; MAZUROSKI JR., A.; LEGROSKI, M. C.. Participação em banca de Maurício Fernandes Neves Benfatti. Por uma sociobiolinguística cognitiva: a Pragmática como gatilho da dimensão cultural da evolução. 2016. Tese (Doutorado em Letras) - Universidade Federal do Paraná.",
-      "NEGRI, L.; WACHOWICZ, T.C.; LEGROSKI, M. C.. Participação em banca de Marcelo Darlan de Oliveira. Rap nacional: Identidade, Heterogeneidade e História em suas letras. Um olhar sob as lentes da Análise do Discurso. 2025. Exame de qualificação (Mestrando em Letras) - Universidade Federal do Paraná.",
-      "NEGRI, L.; WACHOWICZ, T.C.; LEGROSKI, M. C.. Participação em banca de Barbara Belnoski. JUSTIÇA 4.0: A TECNOLOGIZAÇÃO DO DIREITO E A ERA PÓS VERBO. 2025. Exame de qualificação (Mestrando em Letras) - Universidade Federal do Paraná.",
-      "WACHOWICZ, T.C.; CONTO, L.; LEGROSKI, M. C.; FREIRES, L. M.. Participação em banca de Lívia Mara Freires. A (DES)CONSTRUÇÃO DE IMAGINÁRIOS SOCIODISCURSIVOS PELO PERSONAGEM SOLUÇO EM ?COMO TREINAR O SEU DRAGÃO?. 2025. Exame de qualificação (Mestrando em Letras) - Universidade Federal do Paraná.",
-      "ANTUNES, D. R.; BRAGA, L. A.; FACHIN, P. C.; LEGROSKI, M. C.. Participação em banca de Dayana Rafaela Antunes. Os atos de fala e seus impactos no corpo feminino: O caso da cantora Maiara. 2025. Exame de qualificação (Mestrando em Linguagem, Identidade e Subjetividade) - Universidade Estadual de Ponta Grossa.",
-      "SOUZA, L. M.; RIBEIRO, P. N.; LEGROSKI, M. C.. Participação em banca de Fabiana Simeoni Avais. O EFEITO HOLÍSTICO-PARTITIVO PELO OLHAR DA SEMÂNTICA CONCEITUAL. 2024. Exame de qualificação (Mestrando em Letras) - Universidade Federal do Paraná.",
-      "FUJIHARA, A. K.; SIMAO, D.; LEGROSKI, M. C.. Participação em banca de Nicolas Roberto Liebelt.ATOS DE FALA E RPGs DE MESA: A AVENTURA DE CRIAR MUNDOS INTEIROS POR MEIO DA PALAVRA. 2024. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "SANTOS, R. M. B.; RAUPP, E. S.; LEGROSKI, M. C.. Participação em banca de Emanuelle Mendes Bricailo.PRESSÃO ESTÉTICA SOBRE O CORPO FEMININO: UMA ANÁLISE DOS DISCURSOS VEICULADOS EM REDES SOCIAIS. 2023. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "SANTOS, R. M. B.; SIMAO, D.; LEGROSKI, M. C.. Participação em banca de Maíza de Cássia Gandini Paes.Divulgação científica no instagram: uma análise de posts científicos com elementos da cultura pop. 2023. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "SANTOS, R. M. B.; ZANON, D. P.; LEGROSKI, M. C.. Participação em banca de Bryan Henrique Machado.CHATGPT NA EDUCAÇÃO: SEQUÊNCIAS DIDÁTICAS QUE EXPLORAM O USO CONSCIENTE DA INTELIGÊNCIA ARTIFICIAL POR ALUNOS E PROFESSORES. 2023. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "FUJIHARA, A. K.; LEGROSKI, M. C.; BENFATTI, M. F. N.. Participação em banca de Kimberly Natalie Diehl.Estreitar o âmbito do pensamento: Os reflexos do Relativismo Linguístico na Novafala, em ?1984?,. 2022. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "CARREIRA, M. B.; REAL, L.; LEGROSKI, M. C.; SOUZA, R. A. S.. Participação em banca de Fabiana Simeoni Avais.INVESTIGATING THE NATURAL LANGUAGE INFERENCE TASK ON ASSIN 2 CORPUS THROUGH A SEMANTICAL PRISM. 2022. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "FUJIHARA, A. K.; LEGROSKI, M. C.; MESQUITA, F.. Participação em banca de Samanta Aparecida Machado.A Linguagem dos Animais. 2022. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "SOUSA JUNIOR, M. J. V.; CARREON, R. O.; LEGROSKI, M. C.. Participação em banca de Juliana Meni.O ?Vírus chinês?: Discurso e estereótipo. 2022. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "SOUSA JUNIOR, M. J. V.; LEGROSKI, M. C.; JUST, R. C. S. B.. Participação em banca de Jéssica Fernanda Cardana.O Estereótipo da mulher negra em propagandas: Uma abordagem discursiva. 2021. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "CARREON, R. O.; SANTOS, E. L.; BARONAS, R. L.; LEGROSKI, M. C.. Participação em banca de Emely Larissa dos Santos.OS JOGOS ELETRÔNICOS COMO REPRODUÇÃO DE VELHAS PRÁTICAS: A REPRESENTAÇÃO DISCURSIVA DAS MULHERES EM LEAGUE OF LEGENDS. 2020. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "VIEIRA, V. G.; FERREIRA, M. X.; SANTOS, S. L.; LEGROSKI, M. C.. Participação em banca de Vanessa Giroldo Vieira.A AMBIGUIDADE COMO ESTRATÉGIA EM DISCURSOS POLÍTICOS: UMA VISÃO PRAGMÁTICA. 2020. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "LEGROSKI, M. C.; CARMO, M. C.; GUTHS, T. R.. Participação em banca de Anna Carolina do Carmo Castro.Variação Linguística em gêneros textuais do turismo: alternância do modo imperativo. 2019. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "CARREIRA, M. B.; KNOPFLE, A.; LEGROSKI, M. C.. Participação em banca de Paulo Henrique Scudlarek Guilherme.Um olhar bibliográfico sobre o fenômeno dos auxiliares. 2019. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "BENFATTI, M. F. N.; SKEIKA, J.; LEGROSKI, M. C.. Participação em banca de Ida dos Passos.A humanização através da linguagem. 2018. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "CARREIRA, M. B.; CARMO, M. C.; LEGROSKI, M. C.. Participação em banca de Leydyane da Silva Ribeiro.O ensino de gramática como ciência: uma reflexão sobre o método científico e o preconceito linguístico. 2018. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "BRAGA, L. A.; KAESEMODEL, K. M. F.; LEGROSKI, M. C.. Participação em banca de Erick Roberto Teixeira.A diversidade pelo olhar do professor homossexual em ação. 2018. Trabalho de Conclusão de Curso (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa.",
-      "CARREIRA, M. B.; GUTHS, T. R.; LEGROSKI, M. C.. Participação em banca de Flaviana Orlonski.A gramática como uma disciplina científica: uma proposta de construção de gramática pelo estudante. 2017. Trabalho de Conclusão de Curso (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa.",
-      "CARREIRA, M. B.; CONTO, L.; LEGROSKI, M. C.. Participação em banca de Gabriel Maciel de Lima.Uma análise comparativa entre o português brasileiro e o francês da França: predicação secundária e small clauses. 2017. Trabalho de Conclusão de Curso (Graduação em Letras - Francês) - Universidade Estadual de Ponta Grossa.",
-      "LEGROSKI, M. C.; SANTOS, S. L.; CARREIRA, M. B.. Participação em banca de Meriliane de Lima.Textos jornalísticos: uma análise segundo a teoria da metáfora conceitual. 2017. Trabalho de Conclusão de Curso (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa.",
-      "LEGROSKI, M. C.; BORGES, E. F. V.; MORAES, I. T.. Participação em banca de Luís Antonio Machado.Aquisição de segunda língua: um olhar sobre os verbos irregulares do inglês. 2017. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "LEGROSKI, M. C.; SANTOS, R. M. B.; HOLLAS, G. S.. Participação em banca de Natacha Iria Pereira Lopes.A representação social da mulher gorda em mídias alternativas. 2017. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "RIBEIRO, M. F.; SOARES, M. C.; FONTES, L. C. S.; LEGROSKI, M. C.. Participação em banca de Mylena Fernanda Ribeiro.Construção social de gênero e identidade feminina em Persépolis. 2016. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "RAMOS, E. M.; SANTOS, S. L.; BRAGA, L. A.; LEGROSKI, M. C.. Participação em banca de Ericiane Marilisa de Ramos.O humor sob o enfoque da Teoria da Relevância: a interpretação das tirinhas de Carlos Ruas. 2016. Trabalho de Conclusão de Curso (Graduação em Letras - Espanhol) - Universidade Estadual de Ponta Grossa.",
-      "BERTON, A.; CARREIRA, M. B.; GAVIOLI-PRESTES, C. M.; LEGROSKI, M. C.. Participação em banca de Alana Berton.Predicação secundária: uma investigação dos contextos de ocorrência relacionados aos diferentes tipos de stage level. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "MIGLIORINI, M. L.; CARREIRA, M. B.; DUTRA, J. A. S.; LEGROSKI, M. C.. Participação em banca de Mayara Luiza Migliorini.O quantificador \"tudo\" como parte de sintagmas intensificadores. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
-      "CUNHA, J.; CARREIRA, M. B.; GAVIOLI-PRESTES, C. M.; LEGROSKI, M. C.. Participação em banca de Jessica da Cunha.Um olhar sobre as orações relativas com pronome lembrete. 2015. Trabalho de Conclusão de Curso (Graduação em Letras - Inglês) - Universidade Estadual de Ponta Grossa.",
       "GUIMARAES, M. R.; MIRANDA, M. G.; LEGROSKI, M. C.. Teste seletivo para professor substituto. 2024. Universidade Federal do Paraná.",
       "LEGROSKI, M. C.; ANGELO, C. M. P.; CARREIRA, M. B.. Teste Seletivo para Admissão de Professores Colaboradores. 2021. Universidade Estadual do Centro-Oeste.",
       "LEGROSKI, M. C.; CORREA, D. A.; SANTOS, R. M. B.. Processo Seletivo Simplificado para o cargo de Professor Colaborador - CRES, na área de Linguística e Língua Portuguesa. 2021. Universidade Estadual de Ponta Grossa.",
@@ -688,7 +578,6 @@
     ]
   },
   "publications": {
-    "metadata": {},
     "items": [
       {
         "category": "Artigos completos publicados em periódicos",
@@ -715,8 +604,7 @@
         "volume": "13",
         "pages": "1-11",
         "doi": "http://dx.doi.org/10.5380/vers.v13i24.99845",
-        "issn": "23181028",
-        "url": "http://dx.doi.org/10.5380/vers.v13i24.99845"
+        "issn": "23181028"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -743,8 +631,7 @@
         "volume": "45",
         "pages": "1",
         "doi": "http://dx.doi.org/10.5212/Uniletras.v.45.22467.2023",
-        "issn": "19833431",
-        "url": "http://dx.doi.org/10.5212/Uniletras.v.45.22467.2023"
+        "issn": "19833431"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -797,8 +684,7 @@
         "volume": "09",
         "pages": "328-340",
         "doi": "http://dx.doi.org/10.5212/MuitasVozes.v.9i1.0019",
-        "issn": "22387196",
-        "url": "http://dx.doi.org/10.5212/MuitasVozes.v.9i1.0019"
+        "issn": "22387196"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -811,8 +697,7 @@
         "volume": "47",
         "pages": "169-180",
         "doi": "http://dx.doi.org/10.21165/el.v47i1.1958",
-        "issn": "14130939",
-        "url": "http://dx.doi.org/10.21165/el.v47i1.1958"
+        "issn": "14130939"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -986,8 +871,7 @@
         "venue": "Linguagens em múltiplas faces: uma agenda de estudos teóricos e aplicados. 1ed.São Paulo: Pimenta Cultural",
         "volume": "1",
         "pages": "536-559",
-        "doi": "http://dx.doi.org/10.31560/pimentacultural/2023.97778",
-        "url": "http://dx.doi.org/10.31560/pimentacultural/2023.97778"
+        "doi": "http://dx.doi.org/10.31560/pimentacultural/2023.97778"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -1001,8 +885,7 @@
         "venue": "Coletânea de Pragmática. 1ed.Curitiba: Brazil Publishing",
         "volume": "2",
         "pages": "146-163",
-        "doi": "http://dx.doi.org/10.31012/978-65-5861-431-9",
-        "url": "http://dx.doi.org/10.31012/978-65-5861-431-9"
+        "doi": "http://dx.doi.org/10.31012/978-65-5861-431-9"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -1574,15 +1457,6 @@
       },
       {
         "category": "Apresentações de Trabalho",
-        "year": 2008,
-        "authors": [
-          "LEGROSKI, M"
-        ],
-        "title": "C",
-        "venue": "Conceitos básicos de pragmática para análise gramatical: definindo metáfora"
-      },
-      {
-        "category": "Apresentações de Trabalho",
         "year": 2007,
         "authors": [
           "CONTO, L.",
@@ -1621,15 +1495,6 @@
         ],
         "title": "C",
         "venue": "Uma aproximação entre a Semântica Clássica e a Semântica Formal"
-      },
-      {
-        "category": "Apresentações de Trabalho",
-        "year": 2007,
-        "authors": [
-          "LEGROSKI, M"
-        ],
-        "title": "C",
-        "venue": "O diálogo entre a mídia e a lingüística: o caso do gerundismo"
       },
       {
         "category": "Apresentações de Trabalho",
@@ -1736,9 +1601,6 @@
       }
     ]
   },
-  "artisticOutput": {
-    "items": []
-  },
   "unmappedSections": {
     "EducacaoPopularizacaoCTA": [
       "LEGROSKI, M. C.. 7 fatos para entender a relação entre os palavrões e a Síndrome de Tourette. Portal Mega Curioso, 26 jul. 2016.",
@@ -1746,12 +1608,7 @@
       "LEGROSKI, M. C.. Desmitificando a produção de textos - Oficina. 2012. (Apresentação de Trabalho/Outra).",
       "LEGROSKI, M. C.; REBLIN, F. ; SIMAO, D. . As mídias podem ajudar na construção de leitores?. 2012. (Apresentação de Trabalho/Conferência ou palestra).",
       "LEGROSKI, M. C.. Significando significados. 2015. (Apresentação de Trabalho/Conferência ou palestra).",
-      "LEGROSKI, M. C.. Intolerância - questão linguística: O debate-combate. 2016. (Apresentação de Trabalho/Conferência ou palestra).",
-      "MIZANZUK, I. A. ; LEGROSKI, M. C. . Analisando Palavrões e Ofensas. 2017. (Programa de rádio ou TV/Entrevista).",
-      "LEGROSKI, M. C.; DANTAS, R. O. . Palavrão. 2019. (Programa de rádio ou TV/Entrevista).",
-      "LEGROSKI, M. C.; QUINALHA, B. . Palavrão é desrespeitoso ou normal?. 2023. (Programa de rádio ou TV/Entrevista).",
-      "LEGROSKI, M. C.; DANTAS, R. O. ; CONTO, L. . O que é semântica?. 2021."
+      "LEGROSKI, M. C.. Intolerância - questão linguística: O debate-combate. 2016. (Apresentação de Trabalho/Conferência ou palestra)."
     ]
-  },
-  "warnings": []
+  }
 }

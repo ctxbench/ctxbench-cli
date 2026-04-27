@@ -21,6 +21,13 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     context_path = provider.get_context_artifact_path(runspec.instanceId, runspec.format)
     instance_dir = provider.get_instance_dir(runspec.instanceId)
     lattes_id = runspec.instanceId
+    request_params = dict(runspec.params)
+    if question.validation.type == "heuristic" and question.validation.schema:
+        request_params["structured_output"] = {
+            "name": f"{runspec.questionId}_response",
+            "strict": True,
+            "schema": question.validation.schema,
+        }
 
     request = AIRequest(
         question=runspec.question or question.question,
@@ -29,7 +36,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         model_name=str(runspec.params.get("model_name", "")),
         strategy_name=runspec.strategy,
         context_format=runspec.format,
-        params=runspec.params,
+        params=request_params,
         metadata={
             "run_id": runspec.runId,
             "runId": runspec.runId,

@@ -55,6 +55,22 @@ def test_tool_service_exposes_resource_tools():
     assert "items" in education
 
 
+def test_provider_returns_grouped_supervisions():
+    provider = LattesProvider()
+
+    supervisions = provider.get_supervisions(
+        contexts_dir=_contexts_dir(),
+        lattes_id="9674541381385819",
+    )
+
+    assert isinstance(supervisions, dict)
+    assert "masters" in supervisions
+    assert "doctoral" in supervisions
+    assert "undergraduate" in supervisions
+    assert isinstance(supervisions["masters"]["completed"], list)
+    assert isinstance(supervisions["masters"]["ongoing"], list)
+
+
 def test_mcp_server_routes_resource_tools():
     server = LattesMCPServer(contexts_dir=_contexts_dir())
 

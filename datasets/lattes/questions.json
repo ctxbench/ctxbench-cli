@@ -8,31 +8,21 @@
       "question": "Where and how long ago did the researcher complete their PhD?",
       "tags": ["objective", "factual", "simple"],
       "validation": {
-        "type": "heuristic",
-        "schema": {
-          "type": "object",
-          "properties": {
-            "where": { "type": "string" },
-            "yearsAgo": { "type": "number" }
-          },
-          "required": ["where", "yearsAgo"],
-          "additionalProperties": false
-        }
+        "type": "judge"
       }
     },
     {
       "id": "q_field",
       "question": "What is the main field of knowledge in which this researcher works?",
-      "tags": ["objective", "factual", "simple"],
+      "tags": ["subjective", "factual", "simple"],
       "validation": {
-        "type": "heuristic",
-        "schema": { "type": "string" }
+        "type": "judge"
       }
     },
     {
       "id": "q_venue",
       "question": "Where does this researcher publish most frequently?",
-      "tags": ["objective", "factual", "simple"],
+      "tags": ["subjective", "inference", "simple"],
       "validation": {
         "type": "judge"
       }
@@ -40,132 +30,222 @@
     {
       "id": "q_coauth",
       "question": "Who are the most frequent co-authors of this researcher?",
-      "tags": ["subjective", "factual", "simple"],
+      "tags": ["subjective", "counting", "simple"],
       "validation": {
         "type": "judge"
       }
     },
     {
-      "id": "q_with_advisees",
+      "id": "q_advpub",
       "question": "Does this researcher usually publish with their advisees?",
-      "tags": ["subjective", "factual", "simple"],
+      "tags": ["subjective", "cross", "inference", "counting", "simple"],
       "validation": {
         "type": "judge"
       }
     },
     {
-      "id": "q_adv_areas",
-      "question": "What are the research areas of this researcher's advisees?",
-      "tags": ["subjective", "simple"],
+      "id": "q_advareas",
+      "question": "What are the research areas of this researcher’s advisees?",
+      "tags": ["subjective", "factual", "supervision", "simple"],
       "validation": {
         "type": "judge"
       }
     },
     {
-      "id": "q_pub_2024",
-      "question": "What is the most relevant bibliographic production of this researcher in 2024?",
-      "tags": ["subjective", "simple"],
+      "id": "q_pubyear",
+      "question": "What is the most relevant bibliographic production of this researcher in {pub_year}?",
+      "tags": ["subjective", "weak-data", "simple"],
       "validation": {
         "type": "judge"
       }
     },
     {
-      "id": "q_english",
+      "id": "q_en",
       "question": "Does this researcher speak English?",
       "tags": ["objective", "factual", "simple"],
       "validation": {
         "type": "heuristic",
         "schema": {
-          "type": "string",
-          "enum": ["yes", "no"]
-        }
-      }
-    },
-    {
-      "id": "q_not_aligned",
-      "question": "How does the candidate’s academic and professional background align with the project '{project_not_aligned}'?",
-      "tags": ["subjective", "factual", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_aligned",
-      "question": "How does the candidate’s academic and professional background align with the project '{project_aligned}' ?",
-      "tags": ["subjective", "factual", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_qualis_count",
-      "question": "How many articles has the researcher published in indexed journals, and how many of them are in journals classified as A1 or A2 in the Qualis ranking of the field?",
-      "tags": ["subjective", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_indexed_concentration",
-      "question": "Are the researcher’s publications concentrated in indexed journals or conferences (e.g., Scopus, Web of Science, Qualis A1/A2)?",
-      "tags": ["objective", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_citations",
-      "question": "How many citations have the researcher’s articles received, and what is the average number of citations per article?",
-      "tags": ["objective", "out-of-context", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_hindex",
-      "question": "What is the researcher’s h-index, and how does it compare to the average in their field?",
-      "tags": ["subjective", "out-of-context", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_projects_funding",
-      "question": "How many funded research projects has the researcher coordinated or participated in, and which funding agencies supported them?",
-      "tags": ["objective", "context-dependent", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_funding_amount",
-      "question": "What is the total amount of research funding obtained by the researcher in the last five years?",
-      "tags": ["objective", "out-of-context", "complex"],
-      "validation": {
-        "type": "judge"
-      }
-    },
-    {
-      "id": "q_supervision",
-      "question": "How many students has the researcher supervised, and how many have completed their programs?",
-      "tags": ["objective", "factual", "complex"],
-      "validation": {
-        "type": "heuristic",
-        "schema": {
           "type": "object",
           "properties": {
-            "supervised": { "type": "number" },
-            "completed": { "type": "number" }
+            "answer": {
+              "type": "string",
+              "enum": ["yes", "no"]
+            }
           },
-          "required": ["supervised", "completed"],
+          "required": ["answer"],
           "additionalProperties": false
         }
       }
     },
     {
+      "id": "q_projfit_1",
+      "question": "How does the candidate’s academic and professional background align with the project “{project}”?",
+      "tags": ["subjective", "inference", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_projfit_2",
+      "question": "How does the candidate’s academic and professional background align with the project “{project}”?",
+      "tags": ["subjective", "inference", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_qualis",
+      "question": "How many articles has the researcher published in indexed journals, and how many of them are in journals classified as A1 or A2 in the field by the Qualis platform?",
+      "tags": ["weak-data", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_indexed",
+      "question": "Are the researcher’s publications concentrated in journals or conferences indexed in databases such as Scopus or Web of Science, or classified as A1/A2 in the field by Qualis?",
+      "tags": ["subjective", "weak-data", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_cites",
+      "question": "How many citations have the researcher’s articles received in databases such as Scopus, Web of Science, or Google Scholar, also considering the average number of citations per article?",
+      "tags": ["subjective", "factual", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_hidx",
+      "question": "What is the researcher’s h-index in databases such as Scopus or Google Scholar, and how does it compare with the average in their field of activity?",
+      "tags": ["subjective", "weak-data", "factual", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_funded",
+      "question": "How many approved funded research projects has the researcher coordinated or participated in as a proponent, and what were the respective funding agencies, such as CNPq, FAPESP, or CAPES?",
+      "tags": ["subjective", "weak-data", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_fundamt",
+      "question": "What was the total amount of research funding obtained by the researcher in the last five years through calls from public or private funding agencies?",
+      "tags": ["weak-data", "out-of-context", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_sup",
+      "question": "How many master’s, doctoral, and undergraduate research students has the researcher supervised, and how many of them have completed their respective programs?",
+      "tags": ["objective", "factual", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_stupubs",
+      "question": "How many publications or presentations at scientific events were produced by students supervised by the researcher, and how many of these took place in indexed events or journals?",
+      "tags": [
+        "subjective",
+        "context-dependent",
+        "weak-data",
+        "cross",
+        "complex"
+      ],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
       "id": "q_tcc5y",
-      "question": "How many undergraduate thesis projects or research projects has the researcher supervised in the last five years?",
-      "tags": ["objective", "context-dependent", "complex"],
+      "question": "How many undergraduate thesis projects or undergraduate research projects has the researcher supervised in the last five years?",
+      "tags": ["objective", "factual", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_careers",
+      "question": "How many of the researcher’s advisees pursued an academic career, such as entering graduate programs, or were employed in areas related to their training?",
+      "tags": ["subjective", "weak-data", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_networks",
+      "question": "In how many national or international scientific collaboration networks does the researcher formally participate, such as interinstitutional projects or research consortia?",
+      "tags": [
+        "subjective",
+        "context-dependent",
+        "counting",
+        "cross",
+        "complex"
+      ],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_extcoauth",
+      "question": "How many articles or projects has the researcher developed in co-authorship with faculty members or researchers from other institutions, and how many of these co-authors have recognized research productivity, such as a CNPq PQ fellowship or qualified scientific production?",
+      "tags": ["subjective", "weak-data", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_admin",
+      "question": "What administrative positions has the researcher held, such as course coordinator, department chair, academic unit director, or coordinator of a stricto sensu graduate program?",
+      "tags": ["subjective", "factual", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_group",
+      "question": "Does the researcher lead CNPq-certified research groups, and how many active members does the group currently have?",
+      "tags": ["subjective", "out-of-context", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_impact",
+      "question": "Are there documented records, such as reports, news articles, or institutional partnerships, showing that the results of the researcher’s research were used in public policies, technological development, or social actions?",
+      "tags": ["subjective", "weak-data", "cross", "complex"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_techprod",
+      "question": "How many patents, software registrations, prototypes, cultivars, or other technological products does the researcher have registered with INPI or other official institutions?",
+      "tags": ["subjective", "context-dependent", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_talks",
+      "question": "How many times has the researcher been invited as a speaker or keynote speaker at national or international scientific events with a selection process or institutional curation?",
+      "tags": ["objective", "context-dependent", "cross", "simple"],
+      "validation": {
+        "type": "judge"
+      }
+    },
+    {
+      "id": "q_awards",
+      "question": "How many awards, honorable mentions, or titles has the researcher received for their scientific, technical, or academic work, and which institutions granted these recognitions?",
+      "tags": ["subjective", "factual", "complex"],
       "validation": {
         "type": "judge"
       }

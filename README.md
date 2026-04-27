@@ -219,6 +219,19 @@ The parsed curriculum in `parsed.json` is treated as the source of truth for too
 
 All tools are read-only. Temporal filters are exposed only where they make sense through `start_year` and `end_year`.
 
+`get_supervisions` returns a grouped structure by supervision level:
+
+- `masters`
+- `doctoral`
+- `undergraduate`
+- `specialization`
+- `others`
+
+Each level contains:
+
+- `completed`
+- `ongoing`
+
 This keeps the benchmark simpler and makes tool usage easier to compare across strategies.
 
 ## CLI

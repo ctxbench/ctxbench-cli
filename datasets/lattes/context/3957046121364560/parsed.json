@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-25T16:57:33.062Z",
+    "generatedAt": "2026-04-27T05:52:08.560Z",
     "lattesId": "3957046121364560",
     "lastUpdated": "2026-01-22T03:00:00.000Z",
     "sourceUrl": "https://lattes.cnpq.br/3957046121364560",
@@ -12,6 +12,7 @@
     "fellowship": "Bolsista de Produtividade em Pesquisa do CNPq - Nível 1A - CA CC - Ciências da Computação",
     "summary": "Obteve bacharelado (1982) e mestrado (1984) em Matemática na PUC-Rio, mestrado (1987) em Matemática no UMIST (UK), doutorado (1991) em Engenharia de Sistemas e Computação na COPPE/UFRJ com período sanduíche na University of Waterloo, Canadá. Fez carreira docente na UFRJ, onde ingressou no Instituto de Matemática em 1989, e na COPPE em 1991. Fez pós-doutorado em 1995 na University of Waterloo, Canadá. Desde 2011, é professora titular do Programa de Engenharia de Sistemas e Computação da COPPE, onde coordena o Núcleo de Excelência em Algoritmos Randomizados, Quânticos, e Aproximativos: Projeto, Análise e Implementação de Soluções Eficientes para problemas Combinatórios Fundamentais.  É pesquisadora na área de Ciência da Computação, com ênfase em Teoria da Computação, e lidera o grupo de algoritmos e combinatória da COPPE, atuando principalmente nos seguintes temas: teoria dos grafos, algoritmos e complexidade computacional. Tem bolsa de produtividade em pesquisa do CNPq desde 1992, estando desde 2012 no nível 1A. É desde 2005 Cientista do Nosso Estado FAPERJ. Recebeu em 2006 o Prêmio Giulio Massarani de Mérito Acadêmico da COPPE. Recebeu em 2013 homenagem na solenidade comemorativa dos 50 anos da COPPE. Foi eleita em 2022 membra titular da Academia Brasileira de Ciências. Foi eleita em 2025 Fellow da TWAS, a Academia Mundial de Ciências para o avanço da ciência nos países em desenvolvimento. (Texto informado pelo autor)",
     "nationality": "Brasil",
+    "orcid": "https://orcid.org/0000-0002-6393-0876",
     "citationNames": [
       "FIGUEIREDO, C. M. H.",
       "DE FIGUEIREDO, CELINA M.H.",
@@ -40,10 +41,6 @@
       "FIGUEIREDO, CELINA",
       "FIGUEIREDO, CELINA M. H."
     ],
-    "extraFields": [
-      "Nome: Celina Miraglia Herrera de Figueiredo",
-      "Orcid iD: ? https://orcid.org/0000-0002-6393-0876"
-    ],
     "addresses": [
       {
         "type": "Profissional",
@@ -53,7 +50,6 @@
         "fax": [
           "(021) 25628676"
         ],
-        "emails": [],
         "extra": [
           "URL da Homepage: http://www.cos.ufrj.br/~celina/"
         ],
@@ -74,7 +70,6 @@
       "Grande área: Ciências Exatas e da Terra / Área: Matemática / Subárea: Matematica Discreta e Combinatoria.",
       "Grande área: Ciências Exatas e da Terra / Área: Ciência da Computação / Subárea: Teoria da Computação/Especialidade: Análise de Algoritmos e Complexidade de Computação."
     ],
-    "linesOfResearch": [],
     "awards": [
       "Fellow da TWAS, a Academia Mundial de Ciências para o avanço da ciência nos países em desenvolvimento., TWAS.",
       "Cientista do Estado do Rio de Janeiro, FAPERJ.",
@@ -180,9 +175,6 @@
         "degreeName": "Graduação em Bacharelado em Matemática",
         "institution": "Pontifícia Universidade Católica do Rio de Janeiro, PUC-Rio, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "academic"
       },
       {
@@ -194,11 +186,9 @@
         "degreeName": "Pós-Doutorado",
         "institution": "University of Waterloo, U.WATERLOO, Canadá",
         "country": "Canadá.",
-        "advisors": [],
         "funding": [
           "Conselho Nacional de Desenvolvimento Científico e Tecnológico, CNPq, Brasil."
         ],
-        "details": [],
         "kind": "postDoctoral"
       }
     ]
@@ -296,164 +286,105 @@
     ]
   },
   "supervisions": {
-    "completed": [
-      "Diego Amaro Ferraz. Sobre a coloração de arestas e total em Grafos Split. Início: 2025. Tese (Doutorado em PESC - Programa de Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Fundação Carlos Chagas Filho de Amparo à Pesquisa do Estado do RJ. (Orientador).",
-      "Rieli Araújo Souza. Coloração total equilibrada de grafos snarks. Início: 2024. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. (Orientador).",
-      "Mariana Martins Ferreira da Cruz. Coloração Total de Grafos. Início: 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador).",
-      "Matheus Cunha Simões. Hyper-heuristics for the time-dependent ATSP variants applied to air travel. 2023. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Matheus Nunes Adauto. Equitable total coloring of small cubic graphs. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Mariana Martins Ferreira da Cruz. FULLERENE NANODISCS: FROM CHEMISTRY TO COMBINATORICS. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alesom Zorzi. Coloração Total de Potências de Ciclo. 2019. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexsander Andrade de Melo. Conexão de terminais com limitação de roteadores: complexidade e relação com fluxos e caminhos disjuntos. 2017. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo Ming Zhou. Rotulação graciosa de grafos. 2016. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Aline Azevedo. Uma Abordagem de Teoria dos Jogos para Coloração de Grafos. 2015. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. Limites para distância e diâmetro em rearranjo de genomas por transposições. 2013. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Marcelo Pereira Lopes. Distância de transposição através da transformação em permutação simples. 2011. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. Coloração total de famílias de snarks. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Hélio Bomfim de Macêdo Filho. Algoritmos de planejamento em dimensão arbitrária. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Caroline da Silva Reis. Ciclos hamiltonianos em grafos de rearranjos por transposições pré-fixadas. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Danilo Artigas. Sobre a complexidade de jogos combinatórios. 2006. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. Cortes-Estrela e Cortes-Clique Sanduiche. 2004. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Listas de Prioridades Cineticas. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo de Alencar Hausen. Algoritmos eficientes para o reconhecimento de grafos de Intervalo Unitario. 2003. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. O Problema Sanduiche para conjuntos homogeneos em Grafos. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Wagner Pimentel. Planejamento de Rotas Aéreas Utilizando Algoritmos Genéticos. 2001. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Edinson Raul Montoro Alegre. Algoritmos Dinâmicos para Problema de Árvore Geradora Mínima. 1998. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Paulo Mello de Souza. Métodos de Busca Local para o Problema de Clique Máxima. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense da Silva Leite. Duplas Pares em Grafos Perfeitos. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luerbio Faria. O Crossing Number do $n$-cubo. 1994. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "FABIO PROTTI. Grafos de Intervalo: Caracterizacoes, Problemas e Algoritmos. 1993. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Matheus Nunes Adauto. SOBRE O PROBLEMA DE EMPILHAMENTO EM GRAFOS REGULARES. 2025. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexsander Andrade de Melo. ON (IN)TRACTABILITY OF CONNECTION AND CUT PROBLEMS. 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Caroline da Silva Reis Patrão. Coloração total de famílias de grafos Kneser, de produto direto de completos e de produto direto de ciclos. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Edinelço Dalcumune. Síntese de circuitos para computação reversível usando portas Toffoli generalizadas. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexandre Santiago de Abreu. Tessellations on Graphs: Theory, Algorithms and Complexity. 2020. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. Rearranjo de Genomas: Algoritmos e Complexidade. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Ana Luisa Carvalho. Jogos Combinatórios em Grafos: Jogo Timber e Jogo de Coloração. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Hélio Bomfim de Macêdo Filho. Colorações de cliques, de bicliques e de estrelas. 2014. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "André da Cunha Ribeiro. Sobre grafos de Cayley, permutações e circuitos reversíveis. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. Sobre a coloração total de grafos cúbicos. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Carlos Santos Machado. Decomposições para coloração de arestas e coloração total de grafos. 2010. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Letícia Rodrigues Bueno. Ciclos Hamiltonianos em grafos Kneser. 2009. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. Problemas Sanduíche em Grafos: Classes Hereditárias e Partições. 2008. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo de Alencar Hausen. Rearranjos de genomas: teoria e aplicações. 2007. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. Dez algoritmos para o problema-sanduíche do conjunto homogêneo. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luis Antonio Brasil Kowada. Construção de Algoritmos Reversíveis e Quânticos. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Claudia Regina Villela Maciel. Duplas pares em grafos Berge touro-redutiveis. 2005. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vania Maria Felix Dias. Geração de Bicliques em Grafos. 2004. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Simone Dantas de Souza. Particoes em Grafos: Caracterizacoes, Algoritmos e Complexidade. 2002. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luerbio Faria. Resultados em não Planaridade em Grafos: Abordagem Estrutural e de Complexidade. 1998. Tese (Doutorado em Doutorado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. 2019. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. 2018. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. 2013. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Emilio Ashton Vital Brazil. 2012. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Marília Dias Vieira Braga. 2011. Instituto Nacional de Metrologia, Qualidade e Tecnologia, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Letícia Rodrigues Bueno. 2010. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Murilo Vicente Gonçalves da Silva. 2009. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. 2007. Universidade Federal do Estado do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. 2006. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Eduardo Sany Laber. 2001. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Cesar Eduardo Barros. Propagação de Confiança em uma Rede de Usuários. 2006. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Machado. Sobre busca em largura e diâmetro de grafos. 2005. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexandre Stauffer. Diagrama de Voronoi: Algoritmos e Aplicacoes. 2003. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Perret. Algoritmos Aproximativos para o Problema da Mochila. 2001. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Casamentos Estaveis com Casais Proibidos. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Bruno R. Brandi. Algoritmos Geometricos para Intersecoes e Fecho Convexo. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense. Problemas de Paridade em Grafos Perfeitos. 1994. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Monica Lyra Barreto de Sa. Algoritmos para Grafos Triangularizados. 1993. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Thales Souza Fernandes. Introdução à Matemática Discreta. 2010. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Lucas Gabriel da Silva Silva. Com quantas cores se colore um mapa?. 2009. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Danilo Artigas. Casamentos Estáveis. 2003. Iniciação Científica. (Graduando em Bacharelado em Matematica) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Tahuana Araujo Cirati Gomes. Coloracao em Grafos. 2001. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Bruno Crotman. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Perret. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Thiago Souza Mendes Guimaraes. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Casamentos Estaveis. 1999. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Leonardo Barbosa Soares. Animus: Ferramenta para Algoritmos e Grafos. 1996. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense. Grafos Perfeitos. 1993. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Monica Lyra Barreto de Sa. Algoritmos de Otimizacao em Grafos. 1992. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo."
-    ],
-    "ongoing": [
-      "Diego Amaro Ferraz. Sobre a coloração de arestas e total em Grafos Split. Início: 2025. Tese (Doutorado em PESC - Programa de Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Fundação Carlos Chagas Filho de Amparo à Pesquisa do Estado do RJ. (Orientador).",
-      "Rieli Araújo Souza. Coloração total equilibrada de grafos snarks. Início: 2024. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. (Orientador).",
-      "Mariana Martins Ferreira da Cruz. Coloração Total de Grafos. Início: 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador).",
-      "Matheus Cunha Simões. Hyper-heuristics for the time-dependent ATSP variants applied to air travel. 2023. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Matheus Nunes Adauto. Equitable total coloring of small cubic graphs. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Mariana Martins Ferreira da Cruz. FULLERENE NANODISCS: FROM CHEMISTRY TO COMBINATORICS. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alesom Zorzi. Coloração Total de Potências de Ciclo. 2019. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexsander Andrade de Melo. Conexão de terminais com limitação de roteadores: complexidade e relação com fluxos e caminhos disjuntos. 2017. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo Ming Zhou. Rotulação graciosa de grafos. 2016. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Aline Azevedo. Uma Abordagem de Teoria dos Jogos para Coloração de Grafos. 2015. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. Limites para distância e diâmetro em rearranjo de genomas por transposições. 2013. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Marcelo Pereira Lopes. Distância de transposição através da transformação em permutação simples. 2011. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. Coloração total de famílias de snarks. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Hélio Bomfim de Macêdo Filho. Algoritmos de planejamento em dimensão arbitrária. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Caroline da Silva Reis. Ciclos hamiltonianos em grafos de rearranjos por transposições pré-fixadas. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Danilo Artigas. Sobre a complexidade de jogos combinatórios. 2006. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. Cortes-Estrela e Cortes-Clique Sanduiche. 2004. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Listas de Prioridades Cineticas. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo de Alencar Hausen. Algoritmos eficientes para o reconhecimento de grafos de Intervalo Unitario. 2003. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. O Problema Sanduiche para conjuntos homogeneos em Grafos. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Wagner Pimentel. Planejamento de Rotas Aéreas Utilizando Algoritmos Genéticos. 2001. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Edinson Raul Montoro Alegre. Algoritmos Dinâmicos para Problema de Árvore Geradora Mínima. 1998. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Paulo Mello de Souza. Métodos de Busca Local para o Problema de Clique Máxima. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense da Silva Leite. Duplas Pares em Grafos Perfeitos. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luerbio Faria. O Crossing Number do $n$-cubo. 1994. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "FABIO PROTTI. Grafos de Intervalo: Caracterizacoes, Problemas e Algoritmos. 1993. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Matheus Nunes Adauto. SOBRE O PROBLEMA DE EMPILHAMENTO EM GRAFOS REGULARES. 2025. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexsander Andrade de Melo. ON (IN)TRACTABILITY OF CONNECTION AND CUT PROBLEMS. 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Caroline da Silva Reis Patrão. Coloração total de famílias de grafos Kneser, de produto direto de completos e de produto direto de ciclos. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Edinelço Dalcumune. Síntese de circuitos para computação reversível usando portas Toffoli generalizadas. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexandre Santiago de Abreu. Tessellations on Graphs: Theory, Algorithms and Complexity. 2020. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. Rearranjo de Genomas: Algoritmos e Complexidade. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Ana Luisa Carvalho. Jogos Combinatórios em Grafos: Jogo Timber e Jogo de Coloração. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Hélio Bomfim de Macêdo Filho. Colorações de cliques, de bicliques e de estrelas. 2014. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "André da Cunha Ribeiro. Sobre grafos de Cayley, permutações e circuitos reversíveis. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. Sobre a coloração total de grafos cúbicos. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Carlos Santos Machado. Decomposições para coloração de arestas e coloração total de grafos. 2010. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Letícia Rodrigues Bueno. Ciclos Hamiltonianos em grafos Kneser. 2009. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. Problemas Sanduíche em Grafos: Classes Hereditárias e Partições. 2008. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Rodrigo de Alencar Hausen. Rearranjos de genomas: teoria e aplicações. 2007. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. Dez algoritmos para o problema-sanduíche do conjunto homogêneo. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luis Antonio Brasil Kowada. Construção de Algoritmos Reversíveis e Quânticos. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Claudia Regina Villela Maciel. Duplas pares em grafos Berge touro-redutiveis. 2005. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Vania Maria Felix Dias. Geração de Bicliques em Grafos. 2004. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Simone Dantas de Souza. Particoes em Grafos: Caracterizacoes, Algoritmos e Complexidade. 2002. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luerbio Faria. Resultados em não Planaridade em Grafos: Abordagem Estrutural e de Complexidade. 1998. Tese (Doutorado em Doutorado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. 2019. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
-      "Luís Felipe Ignácio Cunha. 2018. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
-      "Diana Sasaki de Souza Pereira. 2013. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Emilio Ashton Vital Brazil. 2012. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Marília Dias Vieira Braga. 2011. Instituto Nacional de Metrologia, Qualidade e Tecnologia, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Letícia Rodrigues Bueno. 2010. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Murilo Vicente Gonçalves da Silva. 2009. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Rafael Bernardo Teixeira. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. 2007. Universidade Federal do Estado do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Vinicius Gusmao Pereira de Sa. 2006. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Eduardo Sany Laber. 2001. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
-      "Cesar Eduardo Barros. Propagação de Confiança em uma Rede de Usuários. 2006. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Machado. Sobre busca em largura e diâmetro de grafos. 2005. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Alexandre Stauffer. Diagrama de Voronoi: Algoritmos e Aplicacoes. 2003. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Perret. Algoritmos Aproximativos para o Problema da Mochila. 2001. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Casamentos Estaveis com Casais Proibidos. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Bruno R. Brandi. Algoritmos Geometricos para Intersecoes e Fecho Convexo. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense. Problemas de Paridade em Grafos Perfeitos. 1994. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Monica Lyra Barreto de Sa. Algoritmos para Grafos Triangularizados. 1993. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Thales Souza Fernandes. Introdução à Matemática Discreta. 2010. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Lucas Gabriel da Silva Silva. Com quantas cores se colore um mapa?. 2009. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Danilo Artigas. Casamentos Estáveis. 2003. Iniciação Científica. (Graduando em Bacharelado em Matematica) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Tahuana Araujo Cirati Gomes. Coloracao em Grafos. 2001. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Bruno Crotman. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Raphael Perret. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Thiago Souza Mendes Guimaraes. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Guilherme Dias da Fonseca. Casamentos Estaveis. 1999. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Leonardo Barbosa Soares. Animus: Ferramenta para Algoritmos e Grafos. 1996. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Laura Silvia Bahiense. Grafos Perfeitos. 1993. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
-      "Monica Lyra Barreto de Sa. Algoritmos de Otimizacao em Grafos. 1992. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo."
-    ]
+    "masters": {
+      "completed": [
+        "Matheus Cunha Simões. Hyper-heuristics for the time-dependent ATSP variants applied to air travel. 2023. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Matheus Nunes Adauto. Equitable total coloring of small cubic graphs. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Mariana Martins Ferreira da Cruz. FULLERENE NANODISCS: FROM CHEMISTRY TO COMBINATORICS. 2022. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Alesom Zorzi. Coloração Total de Potências de Ciclo. 2019. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Alexsander Andrade de Melo. Conexão de terminais com limitação de roteadores: complexidade e relação com fluxos e caminhos disjuntos. 2017. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Rodrigo Ming Zhou. Rotulação graciosa de grafos. 2016. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Aline Azevedo. Uma Abordagem de Teoria dos Jogos para Coloração de Grafos. 2015. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Luís Felipe Ignácio Cunha. Limites para distância e diâmetro em rearranjo de genomas por transposições. 2013. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Marcelo Pereira Lopes. Distância de transposição através da transformação em permutação simples. 2011. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Diana Sasaki de Souza Pereira. Coloração total de famílias de snarks. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Hélio Bomfim de Macêdo Filho. Algoritmos de planejamento em dimensão arbitrária. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Caroline da Silva Reis. Ciclos hamiltonianos em grafos de rearranjos por transposições pré-fixadas. 2010. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Danilo Artigas. Sobre a complexidade de jogos combinatórios. 2006. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Rafael Bernardo Teixeira. Cortes-Estrela e Cortes-Clique Sanduiche. 2004. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Guilherme Dias da Fonseca. Listas de Prioridades Cineticas. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Rodrigo de Alencar Hausen. Algoritmos eficientes para o reconhecimento de grafos de Intervalo Unitario. 2003. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Vinicius Gusmao Pereira de Sa. O Problema Sanduiche para conjuntos homogeneos em Grafos. 2003. Dissertação (Mestrado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Wagner Pimentel. Planejamento de Rotas Aéreas Utilizando Algoritmos Genéticos. 2001. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Edinson Raul Montoro Alegre. Algoritmos Dinâmicos para Problema de Árvore Geradora Mínima. 1998. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Paulo Mello de Souza. Métodos de Busca Local para o Problema de Clique Máxima. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Laura Silvia Bahiense da Silva Leite. Duplas Pares em Grafos Perfeitos. 1995. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Luerbio Faria. O Crossing Number do $n$-cubo. 1994. Dissertação (Mestrado em Mestrado) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "FABIO PROTTI. Grafos de Intervalo: Caracterizacoes, Problemas e Algoritmos. 1993. Dissertação (Mestrado em Mestrado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo."
+      ]
+    },
+    "doctoral": {
+      "completed": [
+        "Matheus Nunes Adauto. SOBRE O PROBLEMA DE EMPILHAMENTO EM GRAFOS REGULARES. 2025. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Alexsander Andrade de Melo. ON (IN)TRACTABILITY OF CONNECTION AND CUT PROBLEMS. 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Caroline da Silva Reis Patrão. Coloração total de famílias de grafos Kneser, de produto direto de completos e de produto direto de ciclos. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Edinelço Dalcumune. Síntese de circuitos para computação reversível usando portas Toffoli generalizadas. 2021. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Alexandre Santiago de Abreu. Tessellations on Graphs: Theory, Algorithms and Complexity. 2020. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Luís Felipe Ignácio Cunha. Rearranjo de Genomas: Algoritmos e Complexidade. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Ana Luisa Carvalho. Jogos Combinatórios em Grafos: Jogo Timber e Jogo de Coloração. 2017. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Hélio Bomfim de Macêdo Filho. Colorações de cliques, de bicliques e de estrelas. 2014. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "André da Cunha Ribeiro. Sobre grafos de Cayley, permutações e circuitos reversíveis. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Diana Sasaki de Souza Pereira. Sobre a coloração total de grafos cúbicos. 2013. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Raphael Carlos Santos Machado. Decomposições para coloração de arestas e coloração total de grafos. 2010. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Letícia Rodrigues Bueno. Ciclos Hamiltonianos em grafos Kneser. 2009. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Rafael Bernardo Teixeira. Problemas Sanduíche em Grafos: Classes Hereditárias e Partições. 2008. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Rodrigo de Alencar Hausen. Rearranjos de genomas: teoria e aplicações. 2007. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Vinicius Gusmao Pereira de Sa. Dez algoritmos para o problema-sanduíche do conjunto homogêneo. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Luis Antonio Brasil Kowada. Construção de Algoritmos Reversíveis e Quânticos. 2006. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Claudia Regina Villela Maciel. Duplas pares em grafos Berge touro-redutiveis. 2005. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, . Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Vania Maria Felix Dias. Geração de Bicliques em Grafos. 2004. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Simone Dantas de Souza. Particoes em Grafos: Caracterizacoes, Algoritmos e Complexidade. 2002. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Luerbio Faria. Resultados em não Planaridade em Grafos: Abordagem Estrutural e de Complexidade. 1998. Tese (Doutorado em Doutorado) - Programa de Engenharia de Sistemas, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo."
+      ],
+      "ongoing": [
+        "Diego Amaro Ferraz. Sobre a coloração de arestas e total em Grafos Split. Início: 2025. Tese (Doutorado em PESC - Programa de Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Fundação Carlos Chagas Filho de Amparo à Pesquisa do Estado do RJ. (Orientador).",
+        "Rieli Araújo Souza. Coloração total equilibrada de grafos snarks. Início: 2024. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. (Orientador).",
+        "Mariana Martins Ferreira da Cruz. Coloração Total de Grafos. Início: 2022. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. (Orientador)."
+      ]
+    },
+    "undergraduate": {
+      "completed": [
+        "Cesar Eduardo Barros. Propagação de Confiança em uma Rede de Usuários. 2006. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Raphael Machado. Sobre busca em largura e diâmetro de grafos. 2005. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informática) - Universidade Federal do Rio de Janeiro. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Alexandre Stauffer. Diagrama de Voronoi: Algoritmos e Aplicacoes. 2003. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Raphael Perret. Algoritmos Aproximativos para o Problema da Mochila. 2001. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Guilherme Dias da Fonseca. Casamentos Estaveis com Casais Proibidos. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Bruno R. Brandi. Algoritmos Geometricos para Intersecoes e Fecho Convexo. 2000. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Laura Silvia Bahiense. Problemas de Paridade em Grafos Perfeitos. 1994. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Monica Lyra Barreto de Sa. Algoritmos para Grafos Triangularizados. 1993. Trabalho de Conclusão de Curso. (Graduação em Bacharelado em Informatica) - Instituto de matematica. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Thales Souza Fernandes. Introdução à Matemática Discreta. 2010. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Lucas Gabriel da Silva Silva. Com quantas cores se colore um mapa?. 2009. Iniciação Científica - Colégio de Aplicação - UFRJ. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Danilo Artigas. Casamentos Estáveis. 2003. Iniciação Científica. (Graduando em Bacharelado em Matematica) - Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Bruno Crotman. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Raphael Perret. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Thiago Souza Mendes Guimaraes. Algoritmos Paralelos. 2000. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Monica Lyra Barreto de Sa. Algoritmos de Otimizacao em Grafos. 1992. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Orientador: Celina Miraglia Herrera de Figueiredo."
+      ]
+    },
+    "specialization": {
+      "completed": [
+        "Luís Felipe Ignácio Cunha. 2019. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
+        "Luís Felipe Ignácio Cunha. 2018. Universidade Federal do Rio de Janeiro, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Celina Miraglia Herrera de Figueiredo.",
+        "Tahuana Araujo Cirati Gomes. Coloracao em Grafos. 2001. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Guilherme Dias da Fonseca. Casamentos Estaveis. 1999. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Leonardo Barbosa Soares. Animus: Ferramenta para Algoritmos e Grafos. 1996. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo.",
+        "Laura Silvia Bahiense. Grafos Perfeitos. 1993. Iniciação Científica. (Graduando em Bacharelado em Informatica) - Instituto de matematica, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Orientador: Celina Miraglia Herrera de Figueiredo."
+      ]
+    },
+    "others": {
+      "completed": [
+        "Diana Sasaki de Souza Pereira. 2013. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Emilio Ashton Vital Brazil. 2012. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Marília Dias Vieira Braga. 2011. Instituto Nacional de Metrologia, Qualidade e Tecnologia, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Letícia Rodrigues Bueno. 2010. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Murilo Vicente Gonçalves da Silva. 2009. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Guilherme Dias da Fonseca. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Rafael Bernardo Teixeira. 2008. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Vinicius Gusmao Pereira de Sa. 2007. Universidade Federal do Estado do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Vinicius Gusmao Pereira de Sa. 2006. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo.",
+        "Eduardo Sany Laber. 2001. Universidade Federal do Rio de Janeiro, Conselho Nacional de Desenvolvimento Científico e Tecnológico. Celina Miraglia Herrera de Figueiredo."
+      ]
+    }
   },
   "experience": {
     "items": [
@@ -471,8 +402,7 @@
               "start": 2012,
               "raw": "2012 - Atual"
             },
-            "description": "Vínculo: COPPE Engenharia de Computação, Enquadramento Funcional: Professor titular, Carga horária: 40, Regime: Dedicação exclusiva.",
-            "details": []
+            "description": "Vínculo: COPPE Engenharia de Computação, Enquadramento Funcional: Professor titular, Carga horária: 40, Regime: Dedicação exclusiva."
           },
           {
             "interval": {
@@ -527,16 +457,14 @@
           "start": 2026,
           "raw": "2026 - Atual"
         },
-        "venue": "Periódico: THEORETICAL COMPUTER SCIENCE",
-        "details": []
+        "venue": "Periódico: THEORETICAL COMPUTER SCIENCE"
       },
       {
         "interval": {
           "start": 2024,
           "raw": "2024 - Atual"
         },
-        "venue": "Periódico: Bulletin of the Brazilian Mathematical Society",
-        "details": []
+        "venue": "Periódico: Bulletin of the Brazilian Mathematical Society"
       },
       {
         "interval": {
@@ -544,49 +472,39 @@
           "end": 2024,
           "raw": "2023 - 2024"
         },
-        "venue": "Periódico: RAIRO-OPERATIONS RESEARCH",
-        "details": []
+        "venue": "Periódico: RAIRO-OPERATIONS RESEARCH"
       },
       {
         "interval": {
           "start": 2022,
           "raw": "2022 - Atual"
         },
-        "venue": "Periódico: SBMAC-Brazilian Society for Applied and Computational Mathematics SpringerB",
-        "details": []
+        "venue": "Periódico: SBMAC-Brazilian Society for Applied and Computational Mathematics SpringerB"
       },
       {
         "interval": {
           "start": 2022,
           "raw": "2022 - Atual"
         },
-        "venue": "Periódico: The Institute for Pure and Applied Mathematics (IMPA) Editorial Committee",
-        "details": []
+        "venue": "Periódico: The Institute for Pure and Applied Mathematics (IMPA) Editorial Committee"
       },
       {
         "interval": {
           "start": 2021,
           "raw": "2021 - Atual"
         },
-        "venue": "Periódico: Matemática Contemporânea",
-        "details": []
+        "venue": "Periódico: Matemática Contemporânea"
       },
       {
         "interval": {
           "start": 2011,
           "raw": "2011 - Atual"
         },
-        "venue": "Periódico: RAIRO. Informatique Théorique et Applications (0988-3754)",
-        "details": []
+        "venue": "Periódico: RAIRO. Informatique Théorique et Applications (0988-3754)"
       }
-    ],
-    "eventParticipations": [],
-    "eventOrganizations": [],
-    "defenseBoards": [],
-    "otherBoards": []
+    ]
   },
   "publications": {
-    "metadata": {},
     "items": [
       {
         "category": "Artigos completos publicados em periódicos",
@@ -601,8 +519,7 @@
         "venue": "DISCRETE MATHEMATICS AND THEORETICAL COMPUTER SCIENCE (ONLINE)",
         "pages": "4",
         "doi": "http://dx.doi.org/10.46298/dmtcs.15003",
-        "issn": "13658050",
-        "url": "http://dx.doi.org/10.46298/dmtcs.15003"
+        "issn": "13658050"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -618,8 +535,7 @@
         "volume": "361",
         "pages": "336-346",
         "doi": "http://dx.doi.org/10.1016/j.dam.2024.10.020",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2024.10.020"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -635,8 +551,7 @@
         "volume": "348",
         "pages": "114383",
         "doi": "http://dx.doi.org/10.1016/j.disc.2024.114383",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2024.114383"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -651,8 +566,7 @@
         "volume": "31",
         "pages": "2796-2798",
         "doi": "http://dx.doi.org/10.1111/itor.13432",
-        "issn": "09696016",
-        "url": "http://dx.doi.org/10.1111/itor.13432"
+        "issn": "09696016"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -670,8 +584,7 @@
         "volume": "58",
         "pages": "1609-1632",
         "doi": "http://dx.doi.org/10.1051/ro/2024045",
-        "issn": "03990559",
-        "url": "http://dx.doi.org/10.1051/ro/2024045"
+        "issn": "03990559"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -688,8 +601,7 @@
         "volume": "58",
         "pages": "2055-2073",
         "doi": "http://dx.doi.org/10.1051/ro/2024068",
-        "issn": "03990559",
-        "url": "http://dx.doi.org/10.1051/ro/2024068"
+        "issn": "03990559"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -705,8 +617,7 @@
         "volume": "84",
         "pages": "132-147",
         "doi": "http://dx.doi.org/10.1002/net.22220",
-        "issn": "00283045",
-        "url": "http://dx.doi.org/10.1002/net.22220"
+        "issn": "00283045"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -725,8 +636,7 @@
         "volume": "19",
         "pages": "121-136",
         "doi": "http://dx.doi.org/10.55016/ojs/cdm.v19i3.72392",
-        "issn": "17150868",
-        "url": "http://dx.doi.org/10.55016/ojs/cdm.v19i3.72392"
+        "issn": "17150868"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -743,8 +653,7 @@
         "volume": "346",
         "pages": "113340-113350",
         "doi": "http://dx.doi.org/10.1016/j.disc.2023.113340",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2023.113340"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -759,8 +668,7 @@
         "volume": "57",
         "pages": "3-23",
         "doi": "http://dx.doi.org/10.1051/ita/2023002",
-        "issn": "09883754",
-        "url": "http://dx.doi.org/10.1051/ita/2023002"
+        "issn": "09883754"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -776,8 +684,7 @@
         "volume": "104",
         "pages": "5-16",
         "doi": "http://dx.doi.org/10.1002/jgt.22948",
-        "issn": "03649024",
-        "url": "http://dx.doi.org/10.1002/jgt.22948"
+        "issn": "03649024"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -793,8 +700,7 @@
         "volume": "57",
         "pages": "2757-2767",
         "doi": "http://dx.doi.org/10.1051/ro/2023150",
-        "issn": "03990559",
-        "url": "http://dx.doi.org/10.1051/ro/2023150"
+        "issn": "03990559"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -810,8 +716,7 @@
         "volume": "71",
         "pages": "893-917",
         "doi": "http://dx.doi.org/10.1007/s00454-023-00508-x",
-        "issn": "01795376",
-        "url": "http://dx.doi.org/10.1007/s00454-023-00508-x"
+        "issn": "01795376"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -828,8 +733,7 @@
         "volume": "312",
         "pages": "86-105",
         "doi": "http://dx.doi.org/10.1016/j.dam.2021.09.013",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2021.09.013"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -845,8 +749,7 @@
         "volume": "44",
         "pages": "119-135",
         "doi": "http://dx.doi.org/10.1007/s10878-021-00816-z",
-        "issn": "15732886",
-        "url": "http://dx.doi.org/10.1007/s10878-021-00816-z"
+        "issn": "15732886"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -863,8 +766,7 @@
         "volume": "323",
         "pages": "349-363",
         "doi": "http://dx.doi.org/10.1016/j.dam.2021.06.012",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2021.06.012"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -881,8 +783,7 @@
         "volume": "27",
         "pages": "544-563",
         "doi": "http://dx.doi.org/10.3897/jucs.69617",
-        "issn": "09486968",
-        "url": "http://dx.doi.org/10.3897/jucs.69617"
+        "issn": "09486968"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -898,8 +799,7 @@
         "volume": "323",
         "pages": "184-200",
         "doi": "http://dx.doi.org/10.1016/j.dam.2021.05.021",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2021.05.021"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -917,8 +817,7 @@
         "volume": "323",
         "pages": "149-161",
         "doi": "http://dx.doi.org/10.1016/j.dam.2021.09.032",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2021.09.032"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -937,8 +836,7 @@
         "volume": "801",
         "pages": "175-191",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2019.09.013",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2019.09.013"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -955,8 +853,7 @@
         "volume": "274",
         "pages": "26-34",
         "doi": "http://dx.doi.org/10.1016/j.dam.2019.04.002",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2019.04.002"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -971,8 +868,7 @@
         "volume": "111",
         "pages": "22-41",
         "doi": "http://dx.doi.org/10.1016/j.jcss.2020.02.001",
-        "issn": "00220000",
-        "url": "http://dx.doi.org/10.1016/j.jcss.2020.02.001"
+        "issn": "00220000"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -985,8 +881,7 @@
         "volume": "281",
         "pages": "162-171",
         "doi": "http://dx.doi.org/10.1016/j.dam.2019.02.039",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2019.02.039"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1001,8 +896,7 @@
         "volume": "77",
         "pages": "559-571",
         "doi": "http://dx.doi.org/10.1002/net.21976",
-        "issn": "00283045",
-        "url": "http://dx.doi.org/10.1002/net.21976"
+        "issn": "00283045"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1018,8 +912,7 @@
         "volume": "40",
         "pages": "e236329",
         "doi": "http://dx.doi.org/10.1590/0101-7438.2020.040.00236329",
-        "issn": "16785142",
-        "url": "http://dx.doi.org/10.1590/0101-7438.2020.040.00236329"
+        "issn": "16785142"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1038,8 +931,7 @@
         "volume": "858",
         "pages": "81-89",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2020.11.045",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2020.11.045"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1056,8 +948,7 @@
         "volume": "342",
         "pages": "1318-1324",
         "doi": "http://dx.doi.org/10.1016/j.disc.2019.01.012",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2019.01.012"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1073,8 +964,7 @@
         "volume": "256",
         "pages": "157-162",
         "doi": "http://dx.doi.org/10.1016/j.dam.2018.05.007",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2018.05.007"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1090,8 +980,7 @@
         "volume": "261",
         "pages": "193-202",
         "doi": "http://dx.doi.org/10.1016/j.dam.2017.11.011",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2017.11.011"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1107,8 +996,7 @@
         "volume": "245",
         "pages": "101-108",
         "doi": "http://dx.doi.org/10.1016/j.dam.2017.01.009",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2017.01.009"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1123,8 +1011,7 @@
         "volume": "80",
         "pages": "3618-3645",
         "doi": "http://dx.doi.org/10.1007/s00453-018-0409-6",
-        "issn": "01784617",
-        "url": "http://dx.doi.org/10.1007/s00453-018-0409-6"
+        "issn": "01784617"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1138,8 +1025,7 @@
         "volume": "251",
         "pages": "146-154",
         "doi": "http://dx.doi.org/10.1016/j.dam.2018.05.054",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2018.05.054"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1154,8 +1040,7 @@
         "volume": "77",
         "pages": "786-814",
         "doi": "http://dx.doi.org/10.1007/s00453-015-0106-7",
-        "issn": "14320541",
-        "url": "http://dx.doi.org/10.1007/s00453-015-0106-7"
+        "issn": "14320541"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1170,8 +1055,7 @@
         "volume": "27",
         "pages": "255-276",
         "doi": "http://dx.doi.org/10.1142/S0218195917500078",
-        "issn": "02181959",
-        "url": "http://dx.doi.org/10.1142/S0218195917500078"
+        "issn": "02181959"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1187,8 +1071,7 @@
         "volume": "234",
         "pages": "67-75",
         "doi": "http://dx.doi.org/10.1016/j.dam.2017.02.006",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2017.02.006"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1204,8 +1087,7 @@
         "volume": "116",
         "pages": "294-298",
         "doi": "http://dx.doi.org/10.1016/j.ipl.2015.11.004",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/j.ipl.2015.11.004"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1223,8 +1105,7 @@
         "volume": "339",
         "pages": "1471-1475",
         "doi": "http://dx.doi.org/10.1016/j.disc.2015.12.010",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2015.12.010"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1239,8 +1120,7 @@
         "volume": "618",
         "pages": "122-134",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2016.01.027",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2016.01.027"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1254,8 +1134,7 @@
         "volume": "23",
         "pages": "843-851",
         "doi": "http://dx.doi.org/10.1111/itor.12236",
-        "issn": "09696016",
-        "url": "http://dx.doi.org/10.1111/itor.12236"
+        "issn": "09696016"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1272,8 +1151,7 @@
         "volume": "210",
         "pages": "290-296",
         "doi": "http://dx.doi.org/10.1016/j.dam.2015.08.001",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2015.08.001"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1289,8 +1167,7 @@
         "volume": "210",
         "pages": "112-122",
         "doi": "http://dx.doi.org/10.1016/j.dam.2014.12.006",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2014.12.006"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1308,8 +1185,7 @@
         "volume": "209",
         "pages": "84-91",
         "doi": "http://dx.doi.org/10.1016/j.dam.2015.10.013",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2015.10.013"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1325,8 +1201,7 @@
         "volume": "83",
         "pages": "19-33",
         "doi": "http://dx.doi.org/10.1002/jgt.21910",
-        "issn": "03649024",
-        "url": "http://dx.doi.org/10.1002/jgt.21910"
+        "issn": "03649024"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1342,8 +1217,7 @@
         "volume": "182",
         "pages": "15-24",
         "doi": "http://dx.doi.org/10.1016/j.dam.2013.09.004",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2013.09.004"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1376,8 +1250,7 @@
         "volume": "192",
         "pages": "65-76",
         "doi": "http://dx.doi.org/10.1016/j.dam.2014.05.001",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2014.05.001"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1394,8 +1267,7 @@
         "volume": "192",
         "pages": "82-86",
         "doi": "http://dx.doi.org/10.1016/j.dam.2014.05.003",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2014.05.003"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1411,8 +1283,7 @@
         "volume": "197",
         "pages": "3-19",
         "doi": "http://dx.doi.org/10.1016/j.dam.2014.08.014",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2014.08.014"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1428,8 +1299,7 @@
         "volume": "22",
         "pages": "1044-1056",
         "doi": "http://dx.doi.org/10.1089/cmb.2014.0298",
-        "issn": "15578666",
-        "url": "http://dx.doi.org/10.1089/cmb.2014.0298"
+        "issn": "15578666"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1444,8 +1314,7 @@
         "volume": "164",
         "pages": "191-199",
         "doi": "http://dx.doi.org/10.1016/j.dam.2012.02.016",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2012.02.016"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1461,8 +1330,7 @@
         "volume": "164",
         "pages": "470-481",
         "doi": "http://dx.doi.org/10.1016/j.dam.2013.04.006",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2013.04.006"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1478,8 +1346,7 @@
         "volume": "540",
         "pages": "70-81",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2014.01.023",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2014.01.023"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1493,8 +1360,7 @@
         "volume": "121",
         "pages": "600-609",
         "doi": "http://dx.doi.org/10.4169/amer.math.monthly.121.07.600",
-        "issn": "00029890",
-        "url": "http://dx.doi.org/10.4169/amer.math.monthly.121.07.600"
+        "issn": "00029890"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1509,8 +1375,7 @@
         "volume": "313",
         "pages": "1547-1552",
         "doi": "http://dx.doi.org/10.1016/j.disc.2013.03.020",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2013.03.020"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1526,8 +1391,7 @@
         "volume": "506",
         "pages": "29-42",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2013.07.020",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2013.07.020"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1543,8 +1407,7 @@
         "volume": "27",
         "pages": "1682-1709",
         "doi": "http://dx.doi.org/10.1137/120899753",
-        "issn": "08954801",
-        "url": "http://dx.doi.org/10.1137/120899753"
+        "issn": "08954801"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1557,8 +1420,7 @@
         "volume": "160",
         "pages": "2681-2693",
         "doi": "http://dx.doi.org/10.1016/j.dam.2010.12.014",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2010.12.014"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1574,8 +1436,7 @@
         "volume": "312",
         "pages": "2690-2693",
         "doi": "http://dx.doi.org/10.1016/j.disc.2012.01.019",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2012.01.019"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1589,8 +1450,7 @@
         "volume": "57",
         "pages": "261-269",
         "doi": "http://dx.doi.org/10.1002/net.20424",
-        "issn": "00283045",
-        "url": "http://dx.doi.org/10.1002/net.20424"
+        "issn": "00283045"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1605,8 +1465,7 @@
         "volume": "159",
         "pages": "661-673",
         "doi": "http://dx.doi.org/10.1016/j.dam.2010.03.015",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2010.03.015"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1621,8 +1480,7 @@
         "volume": "159",
         "pages": "561-573",
         "doi": "http://dx.doi.org/10.1016/j.dam.2010.05.011",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2010.05.011"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1639,8 +1497,7 @@
         "volume": "188",
         "pages": "133-139",
         "doi": "http://dx.doi.org/10.1007/s10479-010-0792-0",
-        "issn": "15729338",
-        "url": "http://dx.doi.org/10.1007/s10479-010-0792-0"
+        "issn": "15729338"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1656,8 +1513,7 @@
         "volume": "159",
         "pages": "1717-1725",
         "doi": "http://dx.doi.org/10.1016/j.dam.2010.11.010",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2010.11.010"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1671,8 +1527,7 @@
         "volume": "159",
         "pages": "1851-1864",
         "doi": "http://dx.doi.org/10.1016/j.dam.2011.03.024",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2011.03.024"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1688,8 +1543,7 @@
         "volume": "412",
         "pages": "2370-2379",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2011.01.018",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2011.01.018"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1703,8 +1557,7 @@
         "volume": "17",
         "pages": "281-285",
         "doi": "http://dx.doi.org/10.1007/s13173-011-0040-8",
-        "issn": "01046500",
-        "url": "http://dx.doi.org/10.1007/s13173-011-0040-8"
+        "issn": "01046500"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1718,8 +1571,7 @@
         "volume": "158",
         "pages": "1336-1342",
         "doi": "http://dx.doi.org/10.1016/j.dam.2009.01.009",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2009.01.009"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1735,8 +1587,7 @@
         "volume": "158",
         "pages": "1279-1285",
         "doi": "http://dx.doi.org/10.1016/j.dam.2009.01.011",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2009.01.011"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1751,8 +1602,7 @@
         "volume": "158",
         "pages": "1286-1304",
         "doi": "http://dx.doi.org/10.1016/j.dam.2009.12.002",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2009.12.002"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1769,8 +1619,7 @@
         "volume": "310",
         "pages": "1259-1264",
         "doi": "http://dx.doi.org/10.1016/j.disc.2009.11.030",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2009.11.030"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1785,8 +1634,7 @@
         "volume": "411",
         "pages": "1221-1234",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2009.12.018",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2009.12.018"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1802,8 +1650,7 @@
         "volume": "24",
         "pages": "792-807",
         "doi": "http://dx.doi.org/10.1137/08074413X",
-        "issn": "08954801",
-        "url": "http://dx.doi.org/10.1137/08074413X"
+        "issn": "08954801"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1834,8 +1681,7 @@
         "volume": "410",
         "pages": "2072-2083",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2009.01.018",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2009.01.018"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1851,8 +1697,7 @@
         "volume": "3",
         "pages": "386-394",
         "doi": "http://dx.doi.org/10.2298/AADM0902386B",
-        "issn": "14528630",
-        "url": "http://dx.doi.org/10.2298/AADM0902386B"
+        "issn": "14528630"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1866,8 +1711,7 @@
         "volume": "109",
         "pages": "1216-1221",
         "doi": "http://dx.doi.org/10.1016/j.ipl.2009.09.001",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/j.ipl.2009.09.001"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1883,8 +1727,7 @@
         "volume": "6",
         "pages": "427-436",
         "doi": "http://dx.doi.org/10.1142/S021974990800361X",
-        "issn": "02197499",
-        "url": "http://dx.doi.org/10.1142/S021974990800361X"
+        "issn": "02197499"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1900,8 +1743,7 @@
         "volume": "59",
         "pages": "145-161",
         "doi": "http://dx.doi.org/10.1002/jgt.20330",
-        "issn": "03649024",
-        "url": "http://dx.doi.org/10.1002/jgt.20330"
+        "issn": "03649024"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1933,8 +1775,7 @@
         "volume": "155",
         "pages": "686-694",
         "doi": "http://dx.doi.org/10.1016/j.dam.2005.01.001",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2005.01.001"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1949,8 +1790,7 @@
         "volume": "155",
         "pages": "1826-1832",
         "doi": "http://dx.doi.org/10.1016/j.dam.2007.03.017",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2007.03.017"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1966,8 +1806,7 @@
         "volume": "381",
         "pages": "57-67",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2007.04.007",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2007.04.007"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1999,8 +1838,7 @@
         "volume": "306",
         "pages": "2438-2449",
         "doi": "http://dx.doi.org/10.1016/j.disc.2005.12.034",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2005.12.034"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2015,8 +1853,7 @@
         "volume": "306",
         "pages": "2461-2472",
         "doi": "http://dx.doi.org/10.1016/j.disc.2006.05.018",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/j.disc.2006.05.018"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2032,8 +1869,7 @@
         "volume": "46",
         "pages": "149-180",
         "doi": "http://dx.doi.org/10.1007/s00453-005-1198-2",
-        "issn": "01784617",
-        "url": "http://dx.doi.org/10.1007/s00453-005-1198-2"
+        "issn": "01784617"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2050,8 +1886,7 @@
         "volume": "154",
         "pages": "1774-1782",
         "doi": "http://dx.doi.org/10.1016/j.dam.2006.03.021",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2006.03.021"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2065,8 +1900,7 @@
         "volume": "154",
         "pages": "1791-1798",
         "doi": "http://dx.doi.org/10.1016/j.dam.2006.03.023",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2006.03.023"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2081,8 +1915,7 @@
         "volume": "98",
         "pages": "87-91",
         "doi": "http://dx.doi.org/10.1016/j.ipl.2005.12.010",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/j.ipl.2005.12.010"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2097,8 +1930,7 @@
         "volume": "12",
         "pages": "499-511",
         "doi": "http://dx.doi.org/10.3217/jucs-012-05-0499",
-        "issn": "0948695X",
-        "url": "http://dx.doi.org/10.3217/jucs-012-05-0499"
+        "issn": "0948695X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2130,8 +1962,7 @@
         "volume": "39",
         "pages": "145-160",
         "doi": "http://dx.doi.org/10.1051/ita:2005009",
-        "issn": "09883754",
-        "url": "http://dx.doi.org/10.1051/ita:2005009"
+        "issn": "09883754"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2145,8 +1976,7 @@
         "volume": "93",
         "pages": "75-81",
         "doi": "http://dx.doi.org/10.1016/j.ipl.2004.09.022",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/j.ipl.2004.09.022"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2162,8 +1992,7 @@
         "volume": "39",
         "pages": "133-144",
         "doi": "http://dx.doi.org/10.1051/ita:2005008",
-        "issn": "09883754",
-        "url": "http://dx.doi.org/10.1051/ita:2005008"
+        "issn": "09883754"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2178,8 +2007,7 @@
         "volume": "337",
         "pages": "240-248",
         "doi": "http://dx.doi.org/10.1016/j.tcs.2005.01.014",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/j.tcs.2005.01.014"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2194,8 +2022,7 @@
         "volume": "141",
         "pages": "119-134",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(03)00370-6",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(03)00370-6"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2210,8 +2037,7 @@
         "volume": "89",
         "pages": "151-157",
         "doi": "http://dx.doi.org/10.1016/j.ipl.2003.10.010",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/j.ipl.2003.10.010"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2228,8 +2054,7 @@
         "volume": "143",
         "pages": "17-22",
         "doi": "http://dx.doi.org/10.1016/j.dam.2004.01.001",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2004.01.001"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2244,8 +2069,7 @@
         "volume": "143",
         "pages": "155-165",
         "doi": "http://dx.doi.org/10.1016/j.dam.2004.02.008",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/j.dam.2004.02.008"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2259,8 +2083,7 @@
         "volume": "18",
         "pages": "226-240",
         "doi": "http://dx.doi.org/10.1137/S0895480198339237",
-        "issn": "08954801",
-        "url": "http://dx.doi.org/10.1137/S0895480198339237"
+        "issn": "08954801"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2276,8 +2099,7 @@
         "volume": "297",
         "pages": "145-155",
         "doi": "http://dx.doi.org/10.1016/S0304-3975(02)00636-9",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/S0304-3975(02)00636-9"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2291,8 +2113,7 @@
         "volume": "85",
         "pages": "165-169",
         "doi": "http://dx.doi.org/10.1016/S0020-0190(02)00366-6",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/S0020-0190(02)00366-6"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2308,8 +2129,7 @@
         "volume": "306",
         "pages": "391-405",
         "doi": "http://dx.doi.org/10.1016/S0304-3975(03)00319-0",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/S0304-3975(03)00319-0"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2324,8 +2144,7 @@
         "volume": "121",
         "pages": "73-82",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(01)00246-3",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(01)00246-3"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2341,8 +2160,7 @@
         "volume": "120",
         "pages": "91-95",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(01)00283-9",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(01)00283-9"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2374,8 +2192,7 @@
         "volume": "232, n.1-3",
         "pages": "105-108",
         "doi": "http://dx.doi.org/10.1016/S0012-365X(00)00352-6",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/S0012-365X(00)00352-6"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2390,8 +2207,7 @@
         "volume": "108",
         "pages": "65-83",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(00)00220-1",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(00)00220-1"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2406,8 +2222,7 @@
         "volume": "17",
         "pages": "435-456",
         "doi": "http://dx.doi.org/10.1007/BF01202235",
-        "issn": "09110119",
-        "url": "http://dx.doi.org/10.1007/BF01202235"
+        "issn": "09110119"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2421,8 +2236,7 @@
         "volume": "113",
         "pages": "255-260",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(00)00290-0",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(00)00290-0"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2438,8 +2252,7 @@
         "volume": "37",
         "pages": "505-521",
         "doi": "http://dx.doi.org/10.1006/jagm.1999.1122",
-        "issn": "01966774",
-        "url": "http://dx.doi.org/10.1006/jagm.1999.1122"
+        "issn": "01966774"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2466,8 +2279,7 @@
         "volume": "216",
         "pages": "169-193",
         "doi": "http://dx.doi.org/10.1016/s0012-365x(99)00240-x",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/s0012-365x(99)00240-x"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2497,8 +2309,7 @@
         "volume": "91",
         "pages": "293-297",
         "doi": "http://dx.doi.org/10.1016/S0166-218X(98)00139-5",
-        "issn": "0166218X",
-        "url": "http://dx.doi.org/10.1016/S0166-218X(98)00139-5"
+        "issn": "0166218X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2513,8 +2324,7 @@
         "volume": "70",
         "pages": "147-152",
         "doi": "http://dx.doi.org/10.1016/S0020-0190(99)00050-2",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/S0020-0190(99)00050-2"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2530,8 +2340,7 @@
         "volume": "67",
         "pages": "31-35",
         "doi": "http://dx.doi.org/10.1016/s0020-0190(98)00076-3",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/s0020-0190(98)00076-3"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2547,8 +2356,7 @@
         "volume": "14",
         "pages": "75-83",
         "doi": "http://dx.doi.org/10.1023/a:1005803107931",
-        "issn": "01678094",
-        "url": "http://dx.doi.org/10.1023/a:1005803107931"
+        "issn": "01678094"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2563,8 +2371,7 @@
         "volume": "181",
         "pages": "91-106",
         "doi": "http://dx.doi.org/10.1016/S0304-3975(96)00264-2",
-        "issn": "03043975",
-        "url": "http://dx.doi.org/10.1016/S0304-3975(96)00264-2"
+        "issn": "03043975"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2582,8 +2389,7 @@
         "volume": "165",
         "pages": "233-252",
         "doi": "http://dx.doi.org/10.1016/s0012-365x(96)00174-4",
-        "issn": "0012365X",
-        "url": "http://dx.doi.org/10.1016/s0012-365x(96)00174-4"
+        "issn": "0012365X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2598,8 +2404,7 @@
         "volume": "13",
         "pages": "31-55",
         "doi": "http://dx.doi.org/10.1007/BF01202235",
-        "issn": "09110119",
-        "url": "http://dx.doi.org/10.1007/BF01202235"
+        "issn": "09110119"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2627,8 +2432,7 @@
         "volume": "56",
         "pages": "179-184",
         "doi": "http://dx.doi.org/10.1016/0020-0190(95)00133-W",
-        "issn": "00200190",
-        "url": "http://dx.doi.org/10.1016/0020-0190(95)00133-W"
+        "issn": "00200190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -2848,8 +2652,7 @@
         "title": "Wilson",
         "venue": "(Org.). Topics in Algorithmic Graph Theory. 1ed.: Cambridge University Press",
         "pages": "52-67",
-        "doi": "http://dx.doi.org/10.1017/9781108592376.006",
-        "url": "http://dx.doi.org/10.1017/9781108592376.006"
+        "doi": "http://dx.doi.org/10.1017/9781108592376.006"
       },
       {
         "category": "Capítulos de livros publicados",
@@ -2957,8 +2760,7 @@
         "venue": "XIII Latin-American Algorithms, Graphs and Optimization Symposium (LAGOS 2025), 2025, Buenos Aires",
         "volume": "273",
         "pages": "199-206",
-        "doi": "https://doi.org/10.1016/j.procs.2025.10.299",
-        "url": "https://doi.org/10.1016/j.procs.2025.10.299"
+        "doi": "https://doi.org/10.1016/j.procs.2025.10.299"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2972,8 +2774,7 @@
         "venue": "XIII Latin-American Algorithms, Graphs and Optimization Symposium (LAGOS 2025), 2025, Buenos Aires",
         "volume": "273",
         "pages": "70-77",
-        "doi": "https://doi.org/10.1016/j.procs.2025.10.282",
-        "url": "https://doi.org/10.1016/j.procs.2025.10.282"
+        "doi": "https://doi.org/10.1016/j.procs.2025.10.282"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2990,8 +2791,7 @@
         "venue": "Latin American Symposium on Theoretical Informatics, 2024, Puerto Varas",
         "volume": "14579",
         "pages": "46-60",
-        "doi": "https://https://doi.org/10.1007/978-3-031-55601-2_4",
-        "url": "https://https://doi.org/10.1007/978-3-031-55601-2_4"
+        "doi": "https://https://doi.org/10.1007/978-3-031-55601-2_4"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3005,8 +2805,7 @@
         "venue": "XII Latin-American Algorithms, Graphs and Optimization Symposium (LAGOS 2023), 2023, Huatulco",
         "volume": "223",
         "pages": "35-42",
-        "doi": "https://doi.org/10.1016/j.procs.2023.08.211",
-        "url": "https://doi.org/10.1016/j.procs.2023.08.211"
+        "doi": "https://doi.org/10.1016/j.procs.2023.08.211"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3021,8 +2820,7 @@
         "venue": "WALCOM 2022 -- The 16th International Conference and Workshops on Algorithms and Computation, 2022, Jember",
         "volume": "13174",
         "pages": "251-262",
-        "doi": "https://https://doi.org/10.1007/978-3-030-96731-4_21",
-        "url": "https://https://doi.org/10.1007/978-3-030-96731-4_21"
+        "doi": "https://https://doi.org/10.1007/978-3-030-96731-4_21"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3036,8 +2834,7 @@
         "venue": "47th International Conference on Current Trends in Theory and Practice of Computer Science, 2021, Bozen-Bolzano",
         "volume": "12607",
         "pages": "278-292",
-        "doi": "https://doi.org/10.1007/978-3-030-67731-2_20",
-        "url": "https://doi.org/10.1007/978-3-030-67731-2_20"
+        "doi": "https://doi.org/10.1007/978-3-030-67731-2_20"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3052,8 +2849,7 @@
         "venue": "46th International Symposium on Mathematical Foundations of Computer Science (MFCS 2021), 2021, Tallinn",
         "volume": "202",
         "pages": "1-26",
-        "doi": "http://dx.doi.org/10.4230/LIPIcs.MFCS.2021.38",
-        "url": "http://dx.doi.org/10.4230/LIPIcs.MFCS.2021.38"
+        "doi": "http://dx.doi.org/10.4230/LIPIcs.MFCS.2021.38"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3070,8 +2866,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2021, São Paulo",
         "volume": "195",
         "pages": "306-314",
-        "doi": "https://doi.org/10.1016/j.procs.2021.11.038",
-        "url": "https://doi.org/10.1016/j.procs.2021.11.038"
+        "doi": "https://doi.org/10.1016/j.procs.2021.11.038"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3088,8 +2883,7 @@
         "venue": "Eurocomb 2019 -- EUROPEAN CONFERENCE ON COMBINATORICS, GRAPH THEORY AND APPLICATIONS, 2019, Bratislava",
         "volume": "88",
         "pages": "1071-1077",
-        "doi": "http://www.iam.fmph.uniba.sk/amuc/ojs/index.php/amuc/article/view/1208",
-        "url": "http://www.iam.fmph.uniba.sk/amuc/ojs/index.php/amuc/article/view/1208"
+        "doi": "http://www.iam.fmph.uniba.sk/amuc/ojs/index.php/amuc/article/view/1208"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3104,8 +2898,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2019, Belo Horizonte",
         "volume": "346",
         "pages": "747-758",
-        "doi": "http://dx.doi.org/10.1016/j.entcs.2019.08.065",
-        "url": "http://dx.doi.org/10.1016/j.entcs.2019.08.065"
+        "doi": "http://dx.doi.org/10.1016/j.entcs.2019.08.065"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3120,8 +2913,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2019, Belo Horizonte",
         "volume": "346",
         "pages": "461-472",
-        "doi": "https://doi.org/10.1016/j.entcs.2019.08.041",
-        "url": "https://doi.org/10.1016/j.entcs.2019.08.041"
+        "doi": "https://doi.org/10.1016/j.entcs.2019.08.041"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3136,8 +2928,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2019, Belo Horizonte",
         "volume": "346",
         "pages": "393-400",
-        "doi": "https://doi.org/10.1016/j.entcs.2019.08.035",
-        "url": "https://doi.org/10.1016/j.entcs.2019.08.035"
+        "doi": "https://doi.org/10.1016/j.entcs.2019.08.035"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3156,8 +2947,7 @@
         "venue": "Latin American Symposium on Theoretical Informatics, 2018, Buenos Aires",
         "volume": "10807",
         "pages": "1-13",
-        "doi": "https://dx.doi.org/10.1007/978-3-319-77404-6_1",
-        "url": "https://dx.doi.org/10.1007/978-3-319-77404-6_1"
+        "doi": "https://dx.doi.org/10.1007/978-3-319-77404-6_1"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3171,8 +2961,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2017, Marseille",
         "volume": "62",
         "pages": "279-284",
-        "doi": "https://doi.org/10.1016/j.endm.2017.10.048",
-        "url": "https://doi.org/10.1016/j.endm.2017.10.048"
+        "doi": "https://doi.org/10.1016/j.endm.2017.10.048"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3186,8 +2975,7 @@
         "venue": "Workshop on Approximation and Online Algorithms WAOA 2014, 2015, Wroclaw",
         "volume": "8952",
         "pages": "132-143",
-        "doi": "https://doi.org/10.1007/978-3-319-18263-6_12",
-        "url": "https://doi.org/10.1007/978-3-319-18263-6_12"
+        "doi": "https://doi.org/10.1007/978-3-319-18263-6_12"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3202,8 +2990,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2015, Fortaleza",
         "volume": "50",
         "pages": "187-192",
-        "doi": "https://doi.org/10.1016/j.endm.2015.07.032",
-        "url": "https://doi.org/10.1016/j.endm.2015.07.032"
+        "doi": "https://doi.org/10.1016/j.endm.2015.07.032"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3219,8 +3006,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2015, Fortaleza",
         "volume": "50",
         "pages": "169-174",
-        "doi": "https://doi.org/10.1016/j.endm.2015.07.029",
-        "url": "https://doi.org/10.1016/j.endm.2015.07.029"
+        "doi": "https://doi.org/10.1016/j.endm.2015.07.029"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3234,8 +3020,7 @@
         "venue": "LATIN 2014, 2014, Montivideo",
         "volume": "8392",
         "pages": "13-23",
-        "doi": "https://doi.org/10.1007/978-3-642-54423-1_2",
-        "url": "https://doi.org/10.1007/978-3-642-54423-1_2"
+        "doi": "https://doi.org/10.1007/978-3-642-54423-1_2"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3250,8 +3035,7 @@
         "venue": "WABI 2014, 14th Workshop on Algorithms in Bioinformatics, 2014, Wroclaw",
         "volume": "8701",
         "pages": "26-37",
-        "doi": "https://doi.org/10.1007/978-3-662-44753-6_3",
-        "url": "https://doi.org/10.1007/978-3-662-44753-6_3"
+        "doi": "https://doi.org/10.1007/978-3-662-44753-6_3"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3266,8 +3050,7 @@
         "venue": "Workshop on Approximation and Online Algorithms WAOA 2012, 2013, Ljubljana",
         "volume": "7846",
         "pages": "82-92",
-        "doi": "https://doi.org/10.1007/978-3-642-38016-7_8",
-        "url": "https://doi.org/10.1007/978-3-642-38016-7_8"
+        "doi": "https://doi.org/10.1007/978-3-642-38016-7_8"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3282,8 +3065,7 @@
         "venue": "X-Meeting & BSB 2013 - Brazilian Symposium on Bioinformatics, 2013, Recife",
         "volume": "8213",
         "pages": "126-135",
-        "doi": "https://doi.org/10.1007/978-3-319-02624-4_12",
-        "url": "https://doi.org/10.1007/978-3-319-02624-4_12"
+        "doi": "https://doi.org/10.1007/978-3-319-02624-4_12"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3298,8 +3080,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2013, Mexico",
         "volume": "44",
         "pages": "39-45",
-        "doi": "https://doi.org/10.1016/j.endm.2013.10.007",
-        "url": "https://doi.org/10.1016/j.endm.2013.10.007"
+        "doi": "https://doi.org/10.1016/j.endm.2013.10.007"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3314,8 +3095,7 @@
         "venue": "39th International Workshop on Graph-Theoretic Concepts in Computer Science WG 2013, 2013, Lübeck",
         "volume": "8165",
         "pages": "249-260",
-        "doi": "https://doi.org/10.1007/978-3-642-45043-3_22",
-        "url": "https://doi.org/10.1007/978-3-642-45043-3_22"
+        "doi": "https://doi.org/10.1007/978-3-642-45043-3_22"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3329,8 +3109,7 @@
         "venue": "LATIN 2012, 2012, Arequipa",
         "volume": "7256",
         "pages": "530-541",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-29344-3_45",
-        "url": "http://dx.doi.org/10.1007/978-3-642-29344-3_45"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-29344-3_45"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3345,8 +3124,7 @@
         "venue": "Brazilian Symposium on Bioinformatics BSB 2012, 2012, Campo Grande",
         "volume": "7409",
         "pages": "1-12",
-        "doi": "https://doi.org/10.1007/978-3-642-31927-3_1",
-        "url": "https://doi.org/10.1007/978-3-642-31927-3_1"
+        "doi": "https://doi.org/10.1007/978-3-642-31927-3_1"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3389,8 +3167,7 @@
         "venue": "37th International Workshop on Graph-Theoretic Concepts in Computer Science, 2011, Tepla",
         "volume": "6986",
         "pages": "11-22",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-25870-1_3",
-        "url": "http://dx.doi.org/10.1007/978-3-642-25870-1_3"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-25870-1_3"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3406,8 +3183,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2011, Bariloche",
         "volume": "37",
         "pages": "291-296",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2011.05.050",
-        "url": "http://dx.doi.org/10.1016/j.endm.2011.05.050"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2011.05.050"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3421,8 +3197,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2011, Bariloche",
         "volume": "37",
         "pages": "45-50",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2011.05.009",
-        "url": "http://dx.doi.org/10.1016/j.endm.2011.05.009"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2011.05.009"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3438,8 +3213,7 @@
         "venue": "Brazilian Symposium on Bioinformatics BSB 2011, 2011, Brasília",
         "volume": "6832",
         "pages": "42-49",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-22825-4_6",
-        "url": "http://dx.doi.org/10.1007/978-3-642-22825-4_6"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-22825-4_6"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3468,8 +3242,7 @@
         "venue": "International Symposium on Combinatorial Optimization, 2010",
         "volume": "36",
         "pages": "391-398",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2010.05.050",
-        "url": "http://dx.doi.org/10.1016/j.endm.2010.05.050"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2010.05.050"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3482,8 +3255,7 @@
         "venue": "International Symposium on Combinatorial Optimization, 2010",
         "volume": "36",
         "pages": "671-678",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2010.05.085",
-        "url": "http://dx.doi.org/10.1016/j.endm.2010.05.085"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2010.05.085"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3497,8 +3269,7 @@
         "venue": "Brazilian Symposium on Bioinformatics (BSB 2010), 2010, Rio de Janeiro",
         "volume": "6268",
         "pages": "35-46",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-15060-9_4",
-        "url": "http://dx.doi.org/10.1007/978-3-642-15060-9_4"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-15060-9_4"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3523,8 +3294,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2009, Gramado",
         "volume": "35",
         "pages": "9-14",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2009.11.003",
-        "url": "http://dx.doi.org/10.1016/j.endm.2009.11.003"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2009.11.003"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3540,8 +3310,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2008, Puerto Varas",
         "volume": "30",
         "pages": "291-296",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.050",
-        "url": "http://dx.doi.org/10.1016/j.endm.2008.01.050"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.050"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3555,8 +3324,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2008, Puerto Varas",
         "volume": "30",
         "pages": "81-86",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.015",
-        "url": "http://dx.doi.org/10.1016/j.endm.2008.01.015"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.015"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3569,8 +3337,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2008, Puerto Varas",
         "volume": "30",
         "pages": "69-74",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.013",
-        "url": "http://dx.doi.org/10.1016/j.endm.2008.01.013"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.013"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3585,8 +3352,7 @@
         "venue": "Brazilian Symposium on Bioinformatics (BSB 2008), 2008, Santo André",
         "volume": "5167",
         "pages": "79-91",
-        "doi": "http://dx.doi.org/10.1007/978-3-540-85557-6_8",
-        "url": "http://dx.doi.org/10.1007/978-3-540-85557-6_8"
+        "doi": "http://dx.doi.org/10.1007/978-3-540-85557-6_8"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3637,8 +3403,7 @@
         "venue": "Latin-American Algorithms, Graphs and Optimization Symposium, 2008, Puerto Varas",
         "volume": "30",
         "pages": "147-152",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.026",
-        "url": "http://dx.doi.org/10.1016/j.endm.2008.01.026"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2008.01.026"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3666,8 +3431,7 @@
         "venue": "32nd International Workshop on Graph-Theoretic Concepts in Computer Science, 2006, Bergen",
         "volume": "4271",
         "pages": "269-277",
-        "doi": "http://dx.doi.org/10.1007/11917496_24",
-        "url": "http://dx.doi.org/10.1007/11917496_24"
+        "doi": "http://dx.doi.org/10.1007/11917496_24"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3683,8 +3447,7 @@
         "venue": "GRACO 2005 Brazilian Symposium on Graphs, Algorithms and Combinatorics, 2005, Angra dos Reis",
         "volume": "19",
         "pages": "289-295",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2005.05.039",
-        "url": "http://dx.doi.org/10.1016/j.endm.2005.05.039"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2005.05.039"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3700,8 +3463,7 @@
         "venue": "7th International Colloquium on Graph Theory, ICGT '05, 2005, Marseille",
         "volume": "22",
         "pages": "179-183",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2005.06.038",
-        "url": "http://dx.doi.org/10.1016/j.endm.2005.06.038"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2005.06.038"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3715,8 +3477,7 @@
         "venue": "CTW 2004, 2004, Milao",
         "volume": "17",
         "pages": "123-127",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2004.03.025",
-        "url": "http://dx.doi.org/10.1016/j.endm.2004.03.025"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2004.03.025"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3731,8 +3492,7 @@
         "venue": "WEA 2004, 2004, Angra dos Reis",
         "volume": "3059",
         "pages": "243-252",
-        "doi": "http://dx.doi.org/10.1007/b97914",
-        "url": "http://dx.doi.org/10.1007/b97914"
+        "doi": "http://dx.doi.org/10.1007/b97914"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3748,8 +3508,7 @@
         "venue": "WEA 2004, 2004, Angra dos Reis",
         "volume": "3059",
         "pages": "87-99",
-        "doi": "http://dx.doi.org/10.1007/b97914",
-        "url": "http://dx.doi.org/10.1007/b97914"
+        "doi": "http://dx.doi.org/10.1007/b97914"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3762,8 +3521,7 @@
         "venue": "LACGA 2004, 2004, Santiago",
         "volume": "18",
         "pages": "219-225",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.035",
-        "url": "http://dx.doi.org/10.1016/j.endm.2004.06.035"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.035"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3779,8 +3537,7 @@
         "venue": "LACGA 2004, 2004, Santiago",
         "volume": "18",
         "pages": "121-126",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.019",
-        "url": "http://dx.doi.org/10.1016/j.endm.2004.06.019"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.019"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3796,8 +3553,7 @@
         "venue": "LACGA 2004, 2004, Santiago",
         "volume": "18",
         "pages": "17-23",
-        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.003",
-        "url": "http://dx.doi.org/10.1016/j.endm.2004.06.003"
+        "doi": "http://dx.doi.org/10.1016/j.endm.2004.06.003"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3812,8 +3568,7 @@
         "venue": "29th International Workshop on Graph-Theoretic Concepts in Computer Science, 2003, Elspeet",
         "volume": "2880",
         "pages": "230-236",
-        "doi": "http://dx.doi.org/10.1007/b93953",
-        "url": "http://dx.doi.org/10.1007/b93953"
+        "doi": "http://dx.doi.org/10.1007/b93953"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3840,8 +3595,7 @@
         "venue": "GRACO - Brazilian Symposium on Graphs, Algorithms and Combinatorics, 2001, Fortaleza",
         "volume": "7",
         "pages": "1-4",
-        "doi": "http://dx.doi.org/10.1016/S1571-0653(04)00214-8",
-        "url": "http://dx.doi.org/10.1016/S1571-0653(04)00214-8"
+        "doi": "http://dx.doi.org/10.1016/S1571-0653(04)00214-8"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3856,8 +3610,7 @@
         "venue": "GRACO - Brazilian Symposium on Graphs, Algorithms and Combinatorics, 2001, Fortaleza",
         "volume": "7",
         "pages": "5-9",
-        "doi": "http://dx.doi.org/10.1016/S1571-0653(04)00213-6",
-        "url": "http://dx.doi.org/10.1016/S1571-0653(04)00213-6"
+        "doi": "http://dx.doi.org/10.1016/S1571-0653(04)00213-6"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3884,8 +3637,7 @@
         "venue": "LATIN'00, 2000, Punta del Este",
         "volume": "1776",
         "pages": "145-153",
-        "doi": "http://dx.doi.org/10.1007/10719839",
-        "url": "http://dx.doi.org/10.1007/10719839"
+        "doi": "http://dx.doi.org/10.1007/10719839"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3900,8 +3652,7 @@
         "venue": "LATIN'00, 2000, Punta del Este",
         "volume": "1776",
         "pages": "163-172",
-        "doi": "http://dx.doi.org/10.1007/10719839",
-        "url": "http://dx.doi.org/10.1007/10719839"
+        "doi": "http://dx.doi.org/10.1007/10719839"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3915,8 +3666,7 @@
         "venue": "6th International Conference on Graph Theory, 2000, Marseille",
         "volume": "5",
         "pages": "89-92",
-        "doi": "http://dx.doi.org/10.1016/S1571-0653(05)80133-7",
-        "url": "http://dx.doi.org/10.1016/S1571-0653(05)80133-7"
+        "doi": "http://dx.doi.org/10.1016/S1571-0653(05)80133-7"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3931,8 +3681,7 @@
         "venue": "6th Twente Workshop on Graphs and Combinatorial Optimization, 1999, Twente",
         "volume": "3",
         "pages": "230-234",
-        "doi": "http://dx.doi.org/10.1016/S1571-0653(05)80062-9",
-        "url": "http://dx.doi.org/10.1016/S1571-0653(05)80062-9"
+        "doi": "http://dx.doi.org/10.1016/S1571-0653(05)80062-9"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3959,8 +3708,7 @@
         "venue": "LATIN'98, 1998, Campinas",
         "volume": "1380",
         "pages": "141-150",
-        "doi": "http://dx.doi.org/10.1007/BFb0054304",
-        "url": "http://dx.doi.org/10.1007/BFb0054304"
+        "doi": "http://dx.doi.org/10.1007/BFb0054304"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3986,8 +3734,7 @@
         "venue": "LATIN'95, 1995, Valparaiso",
         "volume": "911",
         "pages": "286-299",
-        "doi": "http://dx.doi.org/10.1007/3-540-59175-3",
-        "url": "http://dx.doi.org/10.1007/3-540-59175-3"
+        "doi": "http://dx.doi.org/10.1007/3-540-59175-3"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -4104,16 +3851,9 @@
       }
     ]
   },
-  "technicalOutput": {
-    "items": []
-  },
-  "artisticOutput": {
-    "items": []
-  },
   "unmappedSections": {
     "EducacaoPopularizacaoCTA": [
       "Celina M. H. de Figueiredo; LAMB, L. C. . Teoria da Computação: uma introdução à complexidade e à lógica computacional. In: XXXV Congresso da Sociedade Brasileira de Computação. (Org.). Anais da XXXIV Jornada de Atualização em Informática. 1ed.: SBC, 2015, v. , p. 10-68."
     ]
-  },
-  "warnings": []
+  }
 }

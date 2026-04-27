@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-25T16:57:38.939Z",
+    "generatedAt": "2026-04-27T05:52:14.345Z",
     "lattesId": "5660469902738038",
     "lastUpdated": "2026-04-24T03:00:00.000Z",
     "sourceUrl": "https://lattes.cnpq.br/5660469902738038",
@@ -21,11 +21,7 @@
       "MENDONCA, NABOR DAS CHAGAS",
       "MENDONÇA, NABOR DAS CHAGAS",
       "MENDONCA, N. C.",
-      "MENDONC'A, NABOR C.",
-      "MENDONÇA, NABOR C."
-    ],
-    "extraFields": [
-      "Nome: Nabor das Chagas Mendonça"
+      "MENDONC'A, NABOR C."
     ],
     "addresses": [
       {
@@ -36,8 +32,6 @@
         "fax": [
           "(85) 34773061"
         ],
-        "emails": [],
-        "extra": [],
         "organization": "Universidade de Fortaleza",
         "unit": "Centro de Ciências Tecnológicas, Programa de Pós-Graduação em Informática Aplicada.",
         "street": "Av. Washington Soares, 1321, Bloco J, Sala 30",
@@ -143,9 +137,6 @@
         "degreeName": "Graduação em Processamento de Dados",
         "institution": "Universidade Federal do Amazonas, UFAM, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "academic"
       },
       {
@@ -157,11 +148,9 @@
         "degreeName": "Pós-Doutorado",
         "institution": "Carnegie Mellon University, CMU, Estados Unidos",
         "country": "Estados Unidos.",
-        "advisors": [],
         "funding": [
           "Conselho Nacional de Desenvolvimento Científico e Tecnológico, CNPq, Brasil."
         ],
-        "details": [],
         "kind": "postDoctoral"
       },
       {
@@ -173,9 +162,6 @@
         "degreeName": "Consultor de Implementação MPS-Br",
         "institution": "Sociedade para Promoção da Excelência do Software Brasileiro, SOFTEX, Brasil",
         "country": "Brasil.",
-        "advisors": [],
-        "funding": [],
-        "details": [],
         "kind": "complementary"
       }
     ]
@@ -482,8 +468,7 @@
           "raw": ""
         },
         "name": "Descrição: Metodologias, técnicas e ferramentas para facilitar o acesso a dados na Web. Situação: Concluído; Natureza: Pesquisa. Alunos envolvidos: Graduação: (0)  / Especialização: (0)  / Mestrado acadêmico: (2)  / Mestrado profissional: (0)  / Doutorado: (0) . Integrantes: Nabor das Chagas Mendonça - Integrante / Angelo Brayner - Integrante / Vânia Maria Pontes Vidal - Coordenador.Financiador(es): Conselho Nacional de Desenvolvimento Científico e Tecnológico - Auxílio\n\t\t\t\t\t\t\t\t\t\tfinanceiro.",
-        "description": "",
-        "details": []
+        "description": ""
       },
       {
         "kind": "development",
@@ -756,164 +741,103 @@
     ]
   },
   "supervisions": {
-    "completed": [
-      "Pedro Jaderlino Neto. Otimização de Desempenho de Aplicações Utilizando Grandes Modelos de Linguagem. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Thiago Serafim Rodrigues. Caracterização do Uso de Autoscaling em Aplicações Implantadas com Kubernetes. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Humberto Fraga Ribeiro Junior. Desenvolvimento de um Operador Python para Autoadaptação de Aplicações Nativas de Nuvem. Início: 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Camila Medeiros Rêgo. Avaliação do Impacto da Granularidade de Implantação em Aplicações de Microsserviços. Início: 2023. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Lucas de Moura Carvalho. Aplicação de Grandes Modelos de Linguagem para Avaliar a Qualidade de Questões de Exames de Graduação em Ciência da Computação. Início: 2024. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. (Orientador).",
-      "Michel Araújo Vasconcelos. Implementação e Avaliação de Estratégias de Implantação Progressiva em Ferramentas MLOps. Início: 2019. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Banco do Nordeste. (Orientador).",
-      "Pedro Fiuza Linhares. Desenvolvimento e Avaliação de um Sistema de Monitoramento Remoto de Pacientes Baseado em uma Arquitetura Orientada a Eventos. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Glauber Queiroz de Oliveira. Software Architecture Quality Assessment Using Large Language Models. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Mendes Aderaldo. Kubow: Um Serviço de Autoadaptação Baseada em Arquitetura para Aplicações Implantadas com Docker e Kubernetes. 2019. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Luis Heustákio Lima Carvalho. Uma Abordagem de Migração para Arquitetura Microservices a partir de Aplicações Monolíticas em Produção. 2017. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Nabor das Chagas Mendonça.",
-      "Tiago Rolim Pereira. Uma Abordagem para Avaliação de Topologias de Aplicações em Nuvem Baseada em TOSCA. 2016. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Nabor das Chagas Mendonça.",
-      "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Alessandro Chagas Câmara. Um Modelo de Custo para Comercialização de Software como Serviço na Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Ronaldo Pinheiro Gonçalves Junior. Uma Abordagem Multi-Critério para Avaliação de Opções de Arquitetura de Implantação na Nuvem Baseada em Requisitos Não-Funcionais. 2015. Dissertação (Mestrado em Mestrado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Coorientador: Nabor das Chagas Mendonça.",
-      "Marcelo Canário Gonçalves. Um Processo de Inferência de Desempenho para Apoiar o Planejamento da Capacidade de Aplicações na Nuvem. 2014. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Matheus Ciríaco Cerqueira Cunha. Cloud Crawler: Um Ambiente Programável para Avaliar o Desempenho de Aplicações em Nuvens de Infraestrutura. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Roberto Ribeiro Costa Lima Júnior. TREX Cloud Framework: Uma Abordagem para a Automação da Implantação de Sistemas Web JEE em Ambientes de Computação em Nuvem. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Wesley Evaristo Queiroz de Sousa. Implementação e Avaliação de Novas Políticas Paralelas de Seleção de Servidores Replicados. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Bruno Holanda de Miranda. Implementação de um Combinador de Aspectos para a Linguagem WSAL Utilizando o Padrão ESB. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Marcelo Bedê Barros. Uma Abordagem Genérica para Gridificação de Aplicações Concorrentes Utilizando Programação Orientada a Aspectos. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leandro Sales Holanda Pinto. Projeto, Implementação e Avaliação de Uma Camada Genérica de Comunicação em Grupo. 2009. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Solanage Alcântara Araújo. Uma Abordagem para Construção do Repositório de Medidas em Organizações de Software. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Felipe Cantal de Sousa. Um Processo para Detecção de Cenários Implícitos em Sistemas Concorrentes. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leopoldo Soares de Melo Junior. Uma Estratégia de Refatoração para AspectJ Utilizando Leis de Programação e XML. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Clayton Ferreira da Silva. Uma Linguagem de Especificação de Aspectos para o Desenvolvimento Orientado a Serviços. 2006. 111 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Fabrício Albuquerque Diógenes. LogMiddle: Um Middleware para o Compartilhamento de Dados em Redes Móveis Ad Hoc. 2006. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leonardo Abreu Fonseca. XCARE - Um Framework baseado em XML para o Desenvolvimento de Ferramentas de Análise de Código. 2005. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "José Airton Fernandes da Silva. Implementação e Avaliação Empírica de Políticas de Invocação para Serviços Web Replicados. 2004. 91 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Paulo Henrique Mendes Maia. RefaX: Um Arcabouço para Desenvolvimento de Ferramentas de Refatoração Baseado em XML. 2004. 95 f. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Mendes Aderaldo. A Declarative Approach and Benchmarking Tools for Systematic Evaluation of Resilience Patterns in Microservice Applications. 2025. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Augusto Flávio Albuquerque Arraes Freire. Uma Solução Orientada a Aspectos para Migração Reversível de Aplicações Monolíticas para Microsserviços. 2021. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Matheus Ciríaco Cerqueira Cunha. Novas Soluções para o Planejamento de Capacidade de Aplicações em Nuvens de Infraestrutura. 2017. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Rangel Viana. Marketing, Segurança e Logística no Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rosivânia Couras Del Vecchio. Segurança na Internet. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Wynstton Pinheiro da Silva. Segurança na Internet: Uma Prioridade em Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Honório Teixeira Melo Neto. Modelo de Gerenciamento de Projetos Web Fundamentado no PMBOK: Um Estudo de Caso. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Carvalho de Sena. Extensão do RUP para o Desenvolvimento de Aplicações Web: Um Estudo de Caso. 2005. 0 f. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuelle Noqueira Jucá. Um Estudo Comparativo de Ferramentas de Consulta a Dados XML baseadas na Linguagem XQuery. 2004. 74 f. Monografia. (Aperfeiçoamento/Especialização em Tecnologia de Banco de Dados) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Eduardo de Morais Tajra. Evolução da Ferramenta QLattes para Análise, Agrupamento e Exportação de Dados Acadêmicos. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "João Vanderilo Vieira Júnior. Avaliação de Modelos de Linguagem de Grande Porte no Suporte a Serviços da AWS: Uma Comparação com o Stack Overflow. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Luís Matheus Tavares de Sousa. Implementação e Avaliação de Padrões de Resiliência para Aplicações de Microsserviços da Plataforma Javascript/Node.js. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ricardo César Gonçalves de Mendonça Filho. Um Estudo sobre o Impacto de Desempenho da Granularidade de Implantação de Microsserviços Utilizando Service Weaver. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Fabrício Ferreira de Almeida. Avaliação de Duas Tecnologias de Contêineres: Docker vs Podman. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Francisco Wellington de Sousa. Migração de Uma Aplicação de Frontend Monolítico para Uma Arquitetura de Micro Frontends. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Mario Hercules da Silva Portela. Estudo Comparativo de Soluções de Autoescalabilidade para o Kubernetes. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Davi de Melo Vasconcelos. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma Java/Spring Boot. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Thiago Maia da Costa. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma .NET. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Fernando José Nogueira de Negreiros. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para uma Arquitetura de Microsserviços. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Felipe Augusto Moreira Frota. Análise de Desempenho de Aplicações Distribuídas Implantadas na Nuvem e Executadas em Contêineres Docker. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Larissa Ferreira Pessoa. Padrões Arquiteturais para Apoiar a Migração de Aplicações para a Nuvem. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rafael da Silva Ximenes. Desenvolvimento de Uma Ferramenta de Suporte à Migração de Aplicações Legadas para a Nuvem. 2012. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Tulio Gabriel Monte Azul. Implementação e Avaliação de Políticas de Seleção de Servidores Replicados em Dispositivos Móveis. 2011. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Henrique Tadeu Frota Teófilo. Uma Solução Genérica de Acesso a Plataformas de Computação em Nuvem Baseada na Especiﬁcação OCCI. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ramir Leite Mesquita. Um Estudo Comparativo de APIs para Web Services em Dispositivos Móveis Utilizando REST e SOAP. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Paula Franklin Chaves de Sousa. Experiência na Implantação do MPS.Br em uma Empresa de Pequeno Porte. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rafaela Figueredo de Oliveira. Gerenciamento e Monitoração de Serviços Utilizando a Tecnologia Java Management Extension (JMX). 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuel Araujo de Sousa. Detecção de Cenários Implícitos em Sistemas Concorrentes Distribuídos. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ismael Magalhães Pedrosa Rocha. Evolução e Avaliação de um Processo de Composição de Software Orientado a Aspectos. 2007. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Lucena Bezerra. Extração de Cenários de Casos de Uso a partir de Rastros de Execução. 2007. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Espíndola Freire Maia. GridAspecting: Um Processo Genérico Baseado em Aspectos para Separação de Interesses Referentes a Grades Computacionais em Aplicações Distribuídas. 2006. 41 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Victor Emannuel Barbosa Nogueira. Estudo da Tecnologia Enterprise Java Beans 3.0 com Ênfase nas Ferramentas JOnAS e EasyBeans. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ian Guedes Maia. Um Combinador de Aspectos para Aplicações Orientadas a Serviços. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Figueiredo Sampaio. Desenvolvimento de Plugins para Ambientes de Desenvolvimento de Software Extensíveis. 2003. 49 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Vando de Freitas Batista. O Modelo de Melhoria do Processo de Software baseado no CMMI. 2003. 84 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuelle Jucá. Linguagens de Consulta a Dados XML. 2002. 81 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Luciano Bandeira. Replicação de Objetos Distribuídos. 2002. 43 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Lúcio Flávio Nóbrega. Linhas de Produtos de Software. 2002. 74 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Elizabete Fujiwara. Desenvolvimento de Aplicações Móveis com a Plataforma J2ME. 2002. 40 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Gomes de Paula. Desenvolvimento de Uma Aplicação Comercial Utilizando J2ME. 2002. 54 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Eduardo Moreira Junior. Engenharia Reversa. 2001. 47 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Cibele Coelho Couto. Persistência de Dados em Java Utilizando XML. 2001. 67 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Sergiana Fátima de Freitas. Orientação a Aspectos: Uma Visão a Nível de Programação. 2001. 89 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Francisco Leite de Queiroga Junior. Mobilidade de Código: Conceitos, Tecnologias, Padrões de Arquitetura e Aplicações. 2001. 61 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Filipe Teófilo Albuquerque. Peer-to-peer. 2001. 65 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Denis Carvalho Rocha Freire. Software Livre. 2001. 59 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Christian Villa Real Lopes. Acesso de Dados em um Ambiente com Mobilidade. 2001. 50 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça."
-    ],
-    "ongoing": [
-      "Pedro Jaderlino Neto. Otimização de Desempenho de Aplicações Utilizando Grandes Modelos de Linguagem. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Thiago Serafim Rodrigues. Caracterização do Uso de Autoscaling em Aplicações Implantadas com Kubernetes. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Humberto Fraga Ribeiro Junior. Desenvolvimento de um Operador Python para Autoadaptação de Aplicações Nativas de Nuvem. Início: 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Camila Medeiros Rêgo. Avaliação do Impacto da Granularidade de Implantação em Aplicações de Microsserviços. Início: 2023. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
-      "Lucas de Moura Carvalho. Aplicação de Grandes Modelos de Linguagem para Avaliar a Qualidade de Questões de Exames de Graduação em Ciência da Computação. Início: 2024. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. (Orientador).",
-      "Michel Araújo Vasconcelos. Implementação e Avaliação de Estratégias de Implantação Progressiva em Ferramentas MLOps. Início: 2019. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Banco do Nordeste. (Orientador).",
-      "Pedro Fiuza Linhares. Desenvolvimento e Avaliação de um Sistema de Monitoramento Remoto de Pacientes Baseado em uma Arquitetura Orientada a Eventos. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Glauber Queiroz de Oliveira. Software Architecture Quality Assessment Using Large Language Models. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Mendes Aderaldo. Kubow: Um Serviço de Autoadaptação Baseada em Arquitetura para Aplicações Implantadas com Docker e Kubernetes. 2019. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Luis Heustákio Lima Carvalho. Uma Abordagem de Migração para Arquitetura Microservices a partir de Aplicações Monolíticas em Produção. 2017. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Nabor das Chagas Mendonça.",
-      "Tiago Rolim Pereira. Uma Abordagem para Avaliação de Topologias de Aplicações em Nuvem Baseada em TOSCA. 2016. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Nabor das Chagas Mendonça.",
-      "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Alessandro Chagas Câmara. Um Modelo de Custo para Comercialização de Software como Serviço na Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Ronaldo Pinheiro Gonçalves Junior. Uma Abordagem Multi-Critério para Avaliação de Opções de Arquitetura de Implantação na Nuvem Baseada em Requisitos Não-Funcionais. 2015. Dissertação (Mestrado em Mestrado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Coorientador: Nabor das Chagas Mendonça.",
-      "Marcelo Canário Gonçalves. Um Processo de Inferência de Desempenho para Apoiar o Planejamento da Capacidade de Aplicações na Nuvem. 2014. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Matheus Ciríaco Cerqueira Cunha. Cloud Crawler: Um Ambiente Programável para Avaliar o Desempenho de Aplicações em Nuvens de Infraestrutura. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Roberto Ribeiro Costa Lima Júnior. TREX Cloud Framework: Uma Abordagem para a Automação da Implantação de Sistemas Web JEE em Ambientes de Computação em Nuvem. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Wesley Evaristo Queiroz de Sousa. Implementação e Avaliação de Novas Políticas Paralelas de Seleção de Servidores Replicados. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Bruno Holanda de Miranda. Implementação de um Combinador de Aspectos para a Linguagem WSAL Utilizando o Padrão ESB. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Marcelo Bedê Barros. Uma Abordagem Genérica para Gridificação de Aplicações Concorrentes Utilizando Programação Orientada a Aspectos. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leandro Sales Holanda Pinto. Projeto, Implementação e Avaliação de Uma Camada Genérica de Comunicação em Grupo. 2009. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Solanage Alcântara Araújo. Uma Abordagem para Construção do Repositório de Medidas em Organizações de Software. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Felipe Cantal de Sousa. Um Processo para Detecção de Cenários Implícitos em Sistemas Concorrentes. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leopoldo Soares de Melo Junior. Uma Estratégia de Refatoração para AspectJ Utilizando Leis de Programação e XML. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Clayton Ferreira da Silva. Uma Linguagem de Especificação de Aspectos para o Desenvolvimento Orientado a Serviços. 2006. 111 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Fabrício Albuquerque Diógenes. LogMiddle: Um Middleware para o Compartilhamento de Dados em Redes Móveis Ad Hoc. 2006. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Leonardo Abreu Fonseca. XCARE - Um Framework baseado em XML para o Desenvolvimento de Ferramentas de Análise de Código. 2005. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "José Airton Fernandes da Silva. Implementação e Avaliação Empírica de Políticas de Invocação para Serviços Web Replicados. 2004. 91 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Paulo Henrique Mendes Maia. RefaX: Um Arcabouço para Desenvolvimento de Ferramentas de Refatoração Baseado em XML. 2004. 95 f. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Mendes Aderaldo. A Declarative Approach and Benchmarking Tools for Systematic Evaluation of Resilience Patterns in Microservice Applications. 2025. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Augusto Flávio Albuquerque Arraes Freire. Uma Solução Orientada a Aspectos para Migração Reversível de Aplicações Monolíticas para Microsserviços. 2021. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
-      "Matheus Ciríaco Cerqueira Cunha. Novas Soluções para o Planejamento de Capacidade de Aplicações em Nuvens de Infraestrutura. 2017. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Rangel Viana. Marketing, Segurança e Logística no Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rosivânia Couras Del Vecchio. Segurança na Internet. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Wynstton Pinheiro da Silva. Segurança na Internet: Uma Prioridade em Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Honório Teixeira Melo Neto. Modelo de Gerenciamento de Projetos Web Fundamentado no PMBOK: Um Estudo de Caso. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Carvalho de Sena. Extensão do RUP para o Desenvolvimento de Aplicações Web: Um Estudo de Caso. 2005. 0 f. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuelle Noqueira Jucá. Um Estudo Comparativo de Ferramentas de Consulta a Dados XML baseadas na Linguagem XQuery. 2004. 74 f. Monografia. (Aperfeiçoamento/Especialização em Tecnologia de Banco de Dados) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Eduardo de Morais Tajra. Evolução da Ferramenta QLattes para Análise, Agrupamento e Exportação de Dados Acadêmicos. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "João Vanderilo Vieira Júnior. Avaliação de Modelos de Linguagem de Grande Porte no Suporte a Serviços da AWS: Uma Comparação com o Stack Overflow. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Luís Matheus Tavares de Sousa. Implementação e Avaliação de Padrões de Resiliência para Aplicações de Microsserviços da Plataforma Javascript/Node.js. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ricardo César Gonçalves de Mendonça Filho. Um Estudo sobre o Impacto de Desempenho da Granularidade de Implantação de Microsserviços Utilizando Service Weaver. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Fabrício Ferreira de Almeida. Avaliação de Duas Tecnologias de Contêineres: Docker vs Podman. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Francisco Wellington de Sousa. Migração de Uma Aplicação de Frontend Monolítico para Uma Arquitetura de Micro Frontends. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Mario Hercules da Silva Portela. Estudo Comparativo de Soluções de Autoescalabilidade para o Kubernetes. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Davi de Melo Vasconcelos. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma Java/Spring Boot. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Thiago Maia da Costa. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma .NET. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Fernando José Nogueira de Negreiros. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para uma Arquitetura de Microsserviços. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Felipe Augusto Moreira Frota. Análise de Desempenho de Aplicações Distribuídas Implantadas na Nuvem e Executadas em Contêineres Docker. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Larissa Ferreira Pessoa. Padrões Arquiteturais para Apoiar a Migração de Aplicações para a Nuvem. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rafael da Silva Ximenes. Desenvolvimento de Uma Ferramenta de Suporte à Migração de Aplicações Legadas para a Nuvem. 2012. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Tulio Gabriel Monte Azul. Implementação e Avaliação de Políticas de Seleção de Servidores Replicados em Dispositivos Móveis. 2011. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Henrique Tadeu Frota Teófilo. Uma Solução Genérica de Acesso a Plataformas de Computação em Nuvem Baseada na Especiﬁcação OCCI. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ramir Leite Mesquita. Um Estudo Comparativo de APIs para Web Services em Dispositivos Móveis Utilizando REST e SOAP. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Paula Franklin Chaves de Sousa. Experiência na Implantação do MPS.Br em uma Empresa de Pequeno Porte. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Rafaela Figueredo de Oliveira. Gerenciamento e Monitoração de Serviços Utilizando a Tecnologia Java Management Extension (JMX). 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuel Araujo de Sousa. Detecção de Cenários Implícitos em Sistemas Concorrentes Distribuídos. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ismael Magalhães Pedrosa Rocha. Evolução e Avaliação de um Processo de Composição de Software Orientado a Aspectos. 2007. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Lucena Bezerra. Extração de Cenários de Casos de Uso a partir de Rastros de Execução. 2007. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Espíndola Freire Maia. GridAspecting: Um Processo Genérico Baseado em Aspectos para Separação de Interesses Referentes a Grades Computacionais em Aplicações Distribuídas. 2006. 41 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Victor Emannuel Barbosa Nogueira. Estudo da Tecnologia Enterprise Java Beans 3.0 com Ênfase nas Ferramentas JOnAS e EasyBeans. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Ian Guedes Maia. Um Combinador de Aspectos para Aplicações Orientadas a Serviços. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Márcio Figueiredo Sampaio. Desenvolvimento de Plugins para Ambientes de Desenvolvimento de Software Extensíveis. 2003. 49 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Vando de Freitas Batista. O Modelo de Melhoria do Processo de Software baseado no CMMI. 2003. 84 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Emanuelle Jucá. Linguagens de Consulta a Dados XML. 2002. 81 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Luciano Bandeira. Replicação de Objetos Distribuídos. 2002. 43 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Lúcio Flávio Nóbrega. Linhas de Produtos de Software. 2002. 74 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Elizabete Fujiwara. Desenvolvimento de Aplicações Móveis com a Plataforma J2ME. 2002. 40 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Alexandre Gomes de Paula. Desenvolvimento de Uma Aplicação Comercial Utilizando J2ME. 2002. 54 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Carlos Eduardo Moreira Junior. Engenharia Reversa. 2001. 47 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Cibele Coelho Couto. Persistência de Dados em Java Utilizando XML. 2001. 67 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Sergiana Fátima de Freitas. Orientação a Aspectos: Uma Visão a Nível de Programação. 2001. 89 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Francisco Leite de Queiroga Junior. Mobilidade de Código: Conceitos, Tecnologias, Padrões de Arquitetura e Aplicações. 2001. 61 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Filipe Teófilo Albuquerque. Peer-to-peer. 2001. 65 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Denis Carvalho Rocha Freire. Software Livre. 2001. 59 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
-      "Christian Villa Real Lopes. Acesso de Dados em um Ambiente com Mobilidade. 2001. 50 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça."
-    ]
+    "masters": {
+      "completed": [
+        "Pedro Fiuza Linhares. Desenvolvimento e Avaliação de um Sistema de Monitoramento Remoto de Pacientes Baseado em uma Arquitetura Orientada a Eventos. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Glauber Queiroz de Oliveira. Software Architecture Quality Assessment Using Large Language Models. 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Carlos Mendes Aderaldo. Kubow: Um Serviço de Autoadaptação Baseada em Arquitetura para Aplicações Implantadas com Docker e Kubernetes. 2019. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Luis Heustákio Lima Carvalho. Uma Abordagem de Migração para Arquitetura Microservices a partir de Aplicações Monolíticas em Produção. 2017. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
+        "Caio Holanda Costa. Scalability Patterns for Distributed NoSQL Databases. 2017. Dissertação (Mestrado em Ciência da Computação) - Universidade Estadual do Ceará, . Coorientador: Nabor das Chagas Mendonça.",
+        "Tiago Rolim Pereira. Uma Abordagem para Avaliação de Topologias de Aplicações em Nuvem Baseada em TOSCA. 2016. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, Coordenação de Aperfeiçoamento de Pessoal de Nível Superior. Coorientador: Nabor das Chagas Mendonça.",
+        "Michel Araújo Vasconcelos. Cloud Detours: Uma Abordagem para Adaptação Automática e Não Intrusiva de Aplicações para Ambientes de Computação em Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Alessandro Chagas Câmara. Um Modelo de Custo para Comercialização de Software como Serviço na Nuvem. 2015. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Ronaldo Pinheiro Gonçalves Junior. Uma Abordagem Multi-Critério para Avaliação de Opções de Arquitetura de Implantação na Nuvem Baseada em Requisitos Não-Funcionais. 2015. Dissertação (Mestrado em Mestrado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Coorientador: Nabor das Chagas Mendonça.",
+        "Marcelo Canário Gonçalves. Um Processo de Inferência de Desempenho para Apoiar o Planejamento da Capacidade de Aplicações na Nuvem. 2014. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
+        "Matheus Ciríaco Cerqueira Cunha. Cloud Crawler: Um Ambiente Programável para Avaliar o Desempenho de Aplicações em Nuvens de Infraestrutura. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Roberto Ribeiro Costa Lima Júnior. TREX Cloud Framework: Uma Abordagem para a Automação da Implantação de Sistemas Web JEE em Ambientes de Computação em Nuvem. 2012. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
+        "Wesley Evaristo Queiroz de Sousa. Implementação e Avaliação de Novas Políticas Paralelas de Seleção de Servidores Replicados. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Bruno Holanda de Miranda. Implementação de um Combinador de Aspectos para a Linguagem WSAL Utilizando o Padrão ESB. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Marcelo Bedê Barros. Uma Abordagem Genérica para Gridificação de Aplicações Concorrentes Utilizando Programação Orientada a Aspectos. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Leandro Sales Holanda Pinto. Projeto, Implementação e Avaliação de Uma Camada Genérica de Comunicação em Grupo. 2009. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Solanage Alcântara Araújo. Uma Abordagem para Construção do Repositório de Medidas em Organizações de Software. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
+        "Felipe Cantal de Sousa. Um Processo para Detecção de Cenários Implícitos em Sistemas Concorrentes. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Leopoldo Soares de Melo Junior. Uma Estratégia de Refatoração para AspectJ Utilizando Leis de Programação e XML. 2007. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Clayton Ferreira da Silva. Uma Linguagem de Especificação de Aspectos para o Desenvolvimento Orientado a Serviços. 2006. 111 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Fabrício Albuquerque Diógenes. LogMiddle: Um Middleware para o Compartilhamento de Dados em Redes Móveis Ad Hoc. 2006. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Leonardo Abreu Fonseca. XCARE - Um Framework baseado em XML para o Desenvolvimento de Ferramentas de Análise de Código. 2005. 0 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "José Airton Fernandes da Silva. Implementação e Avaliação Empírica de Políticas de Invocação para Serviços Web Replicados. 2004. 91 f. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça.",
+        "Paulo Henrique Mendes Maia. RefaX: Um Arcabouço para Desenvolvimento de Ferramentas de Refatoração Baseado em XML. 2004. 95 f. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal do Ceará, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. Orientador: Nabor das Chagas Mendonça."
+      ],
+      "ongoing": [
+        "Pedro Jaderlino Neto. Otimização de Desempenho de Aplicações Utilizando Grandes Modelos de Linguagem. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
+        "Thiago Serafim Rodrigues. Caracterização do Uso de Autoscaling em Aplicações Implantadas com Kubernetes. Início: 2026. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
+        "Humberto Fraga Ribeiro Junior. Desenvolvimento de um Operador Python para Autoadaptação de Aplicações Nativas de Nuvem. Início: 2024. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador).",
+        "Camila Medeiros Rêgo. Avaliação do Impacto da Granularidade de Implantação em Aplicações de Microsserviços. Início: 2023. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza. (Orientador)."
+      ]
+    },
+    "doctoral": {
+      "completed": [
+        "Carlos Mendes Aderaldo. A Declarative Approach and Benchmarking Tools for Systematic Evaluation of Resilience Patterns in Microservice Applications. 2025. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Augusto Flávio Albuquerque Arraes Freire. Uma Solução Orientada a Aspectos para Migração Reversível de Aplicações Monolíticas para Microsserviços. 2021. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Coorientador: Nabor das Chagas Mendonça.",
+        "Matheus Ciríaco Cerqueira Cunha. Novas Soluções para o Planejamento de Capacidade de Aplicações em Nuvens de Infraestrutura. 2017. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, . Orientador: Nabor das Chagas Mendonça."
+      ],
+      "ongoing": [
+        "Lucas de Moura Carvalho. Aplicação de Grandes Modelos de Linguagem para Avaliar a Qualidade de Questões de Exames de Graduação em Ciência da Computação. Início: 2024. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico. (Orientador).",
+        "Michel Araújo Vasconcelos. Implementação e Avaliação de Estratégias de Implantação Progressiva em Ferramentas MLOps. Início: 2019. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza, Banco do Nordeste. (Orientador)."
+      ]
+    },
+    "undergraduate": {
+      "completed": [
+        "Eduardo de Morais Tajra. Evolução da Ferramenta QLattes para Análise, Agrupamento e Exportação de Dados Acadêmicos. 2025. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "João Vanderilo Vieira Júnior. Avaliação de Modelos de Linguagem de Grande Porte no Suporte a Serviços da AWS: Uma Comparação com o Stack Overflow. 2024. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Luís Matheus Tavares de Sousa. Implementação e Avaliação de Padrões de Resiliência para Aplicações de Microsserviços da Plataforma Javascript/Node.js. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Ricardo César Gonçalves de Mendonça Filho. Um Estudo sobre o Impacto de Desempenho da Granularidade de Implantação de Microsserviços Utilizando Service Weaver. 2023. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Fabrício Ferreira de Almeida. Avaliação de Duas Tecnologias de Contêineres: Docker vs Podman. 2022. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Francisco Wellington de Sousa. Migração de Uma Aplicação de Frontend Monolítico para Uma Arquitetura de Micro Frontends. 2021. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Mario Hercules da Silva Portela. Estudo Comparativo de Soluções de Autoescalabilidade para o Kubernetes. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Davi de Melo Vasconcelos. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma Java/Spring Boot. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Thiago Maia da Costa. Avaliação de Padrões de Resiliência para Aplicações de Microsserviços na Plataforma .NET. 2020. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Fernando José Nogueira de Negreiros. Um Relato de Experiência sobre a Migração de uma Aplicação Monolítica para uma Arquitetura de Microsserviços. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Felipe Augusto Moreira Frota. Análise de Desempenho de Aplicações Distribuídas Implantadas na Nuvem e Executadas em Contêineres Docker. 2017. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Larissa Ferreira Pessoa. Padrões Arquiteturais para Apoiar a Migração de Aplicações para a Nuvem. 2014. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Rafael da Silva Ximenes. Desenvolvimento de Uma Ferramenta de Suporte à Migração de Aplicações Legadas para a Nuvem. 2012. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Tulio Gabriel Monte Azul. Implementação e Avaliação de Políticas de Seleção de Servidores Replicados em Dispositivos Móveis. 2011. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Henrique Tadeu Frota Teófilo. Uma Solução Genérica de Acesso a Plataformas de Computação em Nuvem Baseada na Especiﬁcação OCCI. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Ramir Leite Mesquita. Um Estudo Comparativo de APIs para Web Services em Dispositivos Móveis Utilizando REST e SOAP. 2010. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Paula Franklin Chaves de Sousa. Experiência na Implantação do MPS.Br em uma Empresa de Pequeno Porte. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Rafaela Figueredo de Oliveira. Gerenciamento e Monitoração de Serviços Utilizando a Tecnologia Java Management Extension (JMX). 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Emanuel Araujo de Sousa. Detecção de Cenários Implícitos em Sistemas Concorrentes Distribuídos. 2009. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Ismael Magalhães Pedrosa Rocha. Evolução e Avaliação de um Processo de Composição de Software Orientado a Aspectos. 2007. Trabalho de Conclusão de Curso. (Graduação em Ciência da Computação) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Alexandre Lucena Bezerra. Extração de Cenários de Casos de Uso a partir de Rastros de Execução. 2007. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Márcio Espíndola Freire Maia. GridAspecting: Um Processo Genérico Baseado em Aspectos para Separação de Interesses Referentes a Grades Computacionais em Aplicações Distribuídas. 2006. 41 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Victor Emannuel Barbosa Nogueira. Estudo da Tecnologia Enterprise Java Beans 3.0 com Ênfase nas Ferramentas JOnAS e EasyBeans. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Ian Guedes Maia. Um Combinador de Aspectos para Aplicações Orientadas a Serviços. 2006. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Márcio Figueiredo Sampaio. Desenvolvimento de Plugins para Ambientes de Desenvolvimento de Software Extensíveis. 2003. 49 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Vando de Freitas Batista. O Modelo de Melhoria do Processo de Software baseado no CMMI. 2003. 84 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Emanuelle Jucá. Linguagens de Consulta a Dados XML. 2002. 81 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Luciano Bandeira. Replicação de Objetos Distribuídos. 2002. 43 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Lúcio Flávio Nóbrega. Linhas de Produtos de Software. 2002. 74 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Elizabete Fujiwara. Desenvolvimento de Aplicações Móveis com a Plataforma J2ME. 2002. 40 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Alexandre Gomes de Paula. Desenvolvimento de Uma Aplicação Comercial Utilizando J2ME. 2002. 54 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Carlos Eduardo Moreira Junior. Engenharia Reversa. 2001. 47 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Cibele Coelho Couto. Persistência de Dados em Java Utilizando XML. 2001. 67 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Sergiana Fátima de Freitas. Orientação a Aspectos: Uma Visão a Nível de Programação. 2001. 89 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Francisco Leite de Queiroga Junior. Mobilidade de Código: Conceitos, Tecnologias, Padrões de Arquitetura e Aplicações. 2001. 61 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Filipe Teófilo Albuquerque. Peer-to-peer. 2001. 65 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Denis Carvalho Rocha Freire. Software Livre. 2001. 59 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Christian Villa Real Lopes. Acesso de Dados em um Ambiente com Mobilidade. 2001. 50 f. Trabalho de Conclusão de Curso. (Graduação em Informática) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça."
+      ]
+    },
+    "specialization": {
+      "completed": [
+        "Alexandre Rangel Viana. Marketing, Segurança e Logística no Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Rosivânia Couras Del Vecchio. Segurança na Internet. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Wynstton Pinheiro da Silva. Segurança na Internet: Uma Prioridade em Comércio Eletrônico. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Honório Teixeira Melo Neto. Modelo de Gerenciamento de Projetos Web Fundamentado no PMBOK: Um Estudo de Caso. 2006. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Márcio Carvalho de Sena. Extensão do RUP para o Desenvolvimento de Aplicações Web: Um Estudo de Caso. 2005. 0 f. Monografia. (Aperfeiçoamento/Especialização em Comércio Eletrônico) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça.",
+        "Emanuelle Noqueira Jucá. Um Estudo Comparativo de Ferramentas de Consulta a Dados XML baseadas na Linguagem XQuery. 2004. 74 f. Monografia. (Aperfeiçoamento/Especialização em Tecnologia de Banco de Dados) - Universidade de Fortaleza. Orientador: Nabor das Chagas Mendonça."
+      ]
+    }
   },
   "experience": {
     "items": [
@@ -923,21 +847,18 @@
         "details": [
           "2017 - 2018: Vínculo: Professor Visitante, Enquadramento Funcional: Visiting research scholar",
           "Professor visitante no Institute for Software Research (ISR), fazendo parte do grupo de pesquisa em arquitetura de software liderado pelo prof. David Garlan."
-        ],
-        "roles": []
+        ]
       },
       {
         "institution": "Universidade de Fortaleza, UNIFOR",
         "country": "Brasil",
-        "details": [],
         "roles": [
           {
             "interval": {
               "start": 2001,
               "raw": "2001 - Atual"
             },
-            "description": "Vínculo: Celetista, Enquadramento Funcional: Professor titular, Carga horária: 40",
-            "details": []
+            "description": "Vínculo: Celetista, Enquadramento Funcional: Professor titular, Carga horária: 40"
           },
           {
             "interval": {
@@ -1230,16 +1151,161 @@
           "start": 2022,
           "raw": "2022 - Atual"
         },
-        "venue": "Periódico: SOFTWARE: PRACTICE AND EXPERIENCE",
-        "details": []
+        "venue": "Periódico: SOFTWARE: PRACTICE AND EXPERIENCE"
       }
     ],
     "eventParticipations": [
-      "MENDONÇA, N. C.; JAMSHIDI, P. ; PAHL, C. . 2nd International Workshop on Cloud Adoption and Migration (CloudWays 2016). 2016. (Congresso).",
-      "PAHL, C. ; MENDONÇA, N. C. ; JAMSHIDI, P. . 1st International Workshop on Cloud Adoption and Migration (CloudWay 2015). 2015. (Congresso).",
-      "MENDONÇA, N. C.; NOVAIS, R. L. ; MENDONCA NETO, M. G. . I Workshop Brasileiro de Visualização, Evolução e Manutenção de Software (VEM 2013). 2013. (Congresso).",
-      "BRAYNER, A. ; MENDONÇA, N. C. ; MACHADO, Javam de Castro ; RODRIGUES, M. A. F. ; ANDRADE, R. M. C. . 23rd Annual ACM Symposium on Applied Computing (SAC'08). 2008. (Congresso).",
-      "BRAYNER, A. ; MENDONÇA, N. C. . VI Worshop de Comunicação Sem Fio e Computação Móvel (WCSF'04). 2004. (Congresso)."
+      "28th IEEE Symposium on Computers and Communications (ISCC 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "Concurso de Tese e Dissertações em Engenharia de Software (CTD-ES 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "XI Workshop on Software Visualization, Evolution and Maintenance (VEM 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "XLI Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "XXXVI Concurso de Tese e Dissertações da Sociedade Brasileira de Computação (CTD 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "XXXVIII Simpósio Brasileiro de Engenharia de Software (SBES 2023). Participação como membro do Comitê de Programa. 2023. (Congresso).",
+      "16th European Conference on Software Architecture (ECSA 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "19th IEEE International Conference on Software Architecture (ICSA 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "27th IEEE Symposium on Computers and Communications (ISCC 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "Concurso de Tese e Dissertações em Engenharia de Software (CTD-ES 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "XL Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "X Workshop on Software Visualization, Evolution and Maintenance (VEM 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "XXXV Concurso de Tese e Dissertações da Sociedade Brasileira de Computação (CTD 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "XXXVII Simpósio Brasileiro de Engenharia de Software (SBES 2022). Participação como membro do Comitê de Programa. 2022. (Congresso).",
+      "15th European Conference on Software Architecture (ECSA 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "26th IEEE Symposium on Computers and Communications (ISCC 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "Concurso de Tese e Dissertações em Engenharia de Software (CTD-ES 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "IXL Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "IX Workshop on Software Visualization, Evolution and Maintenance (VEM 2021). Título: Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "XXXIV Concurso de Tese e Dissertações da Sociedade Brasileira de Computação (CTD 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "XXXVI Simpósio Brasileiro de Engenharia de Software (SBES 2021). Participação como membro do Comitê de Programa. 2021. (Congresso).",
+      "17th ACS/IEEE International Conference on Computer Systems and Applications (AICCSA 2020). Participação como chefe de Trilha. 2020. (Congresso).",
+      "17th IEEE International Conference on Services Computing (SCC 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "25th IEEE Symposium on Computers and Communications (ISCC 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "VIII Workshop on Software Visualization, Evolution and Maintenance (VEM 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "XVIII Workshop em Clouds e Aplicações (WCGA 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "XXXIII Concurso de Tese e Dissertações da Sociedade Brasileira de Computação (CTD 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "XXXIV Simpósio Brasileiro de Engenharia de Software (SBES 2020).Participação como membro do Comitê de Programa. 2020. (Simpósio).",
+      "XXXIX Concurso de Trabalhos de Iniciação Científica da Sociedade Brasileira de Computação (CTIC 2020). Participação como membro do Comitê de Programa. 2020. (Congresso).",
+      "XXXVIII Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2020).Participação como membro do Comitê de Programa. 2020. (Simpósio).",
+      "24th IEEE Symposium on Computers and Communications (ISCC 2019). Participação como membro do Comitê de Programa. 2019. (Congresso).",
+      "VII Workshop on Software Visualization, Evolution and Maintenance (VEM 2019). Participação como membro do Comitê de Programa. 2019. (Congresso).",
+      "XVII Workshop em Clouds e Aplicações (WCGA 2019). Participação como membro do Comitê de Programa. 2019. (Congresso).",
+      "XXXIII Simpósio Brasileiro de Engenharia de Software (SBES 2019).Participação como membro do Comitê de Programa. 2019. (Simpósio).",
+      "XXXVII Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2019).Participação como membro do Comitê de Programa. 2019. (Simpósio).",
+      "23rd IEEE Symposium on Computers and Communications (ISCC 2018). Participação como membro do Comitê de Programa. 2018. (Congresso).",
+      "4th International Workshop on Cloud Migration and Architecture (CloudWays 2018). Participação como membro do Comitê de Programa. 2018. (Congresso).",
+      "IX Congresso Brasileiro de Software: Teoria e Prática (CBSoft 2018). Participação no painel \"50 Anos da Engenharia de Software\". 2018. (Congresso).",
+      "VI Workshop on Software Visualization, Evolution and Maintenance (VEM 2018). Participação como membro do Comitê de Programa. 2018. (Congresso).",
+      "XVI Workshop em Clouds e Aplicações (WCGA 2018). Participação como membro do Comitê de Programa. 2018. (Congresso).",
+      "XXXI Concurso de Teses e Dissertações da Sociedade Brasileira de Computação (CTD 2018). Participação como membro do Comitê de Seleção. 2018. (Congresso).",
+      "XXXII Simpósio Brasileiro de Engenharia de Software (SBES 2018).Participação como membro do Comitê de Programa. 2018. (Simpósio).",
+      "XXXVI Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2018).Participação como membro do Comitê de Programa. 2018. (Simpósio).",
+      "11th Brazilian Symposium on Software Components, Architectures, and Reuse (SBCARS 2017).Participação como membro do Comitê de Programa. 2017. (Simpósio).",
+      "IEEE/ACM 1st International Workshop on Establishing a Community-Wide Infrastructure for Architecture-Based Software Engineering (ECASE 2017). Participação como membro do Comitê de Programa. 2017. (Congresso).",
+      "XV Workshop em Clouds e Aplicações (WCGA 2017). Participação como membro do Comitê de Programa. 2017. (Congresso).",
+      "XXX Concurso de Teses e Dissertações da Sociedade Brasileira de Computação (CTD 2017). Participação como membro do Comitê de Seleção. 2017. (Congresso).",
+      "XXXI Simpósio Brasileiro de Engenharia de Software (SBES 2017).Participação como membro do Comitê de Programa. 2017. (Simpósio).",
+      "XXXV Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2017).Participação como membro do Comitê de Programa. 2017. (Simpósio).",
+      "10th Brazilian Symposium on Software Components, Architectures, and Reuse (SBCARS 2016).Participação como membro do Comitê de Programa. 2016. (Simpósio).",
+      "10th IEEE Symposium on the Maintenance and Evolution of Service-Oriented Systems and Cloud-Based Environments (MESOCA 2016).Participação como membro do Comitê de Programa. 2016. (Simpósio).",
+      "2nd International Workshop on Cloud Adoption and Migration (CloudWays 2016). Participação como co-chefe do Comitê de Programa. 2016. (Congresso).",
+      "IV Workshop on Software Visualization, Evolution and Maintenance (VEM 2016). Participação como membro do Comitê de Programa. 2016. (Congresso).",
+      "XIV Workshop em Clouds e Aplicações (WCGA 2016). Participação como membro do Comitê de Programa. 2016. (Congresso).",
+      "XXIX Concurso de Teses e Dissertações da Sociedade Brasileira de Computação (CTD 2016). Participação como membro do Comitê de Seleção. 2016. (Congresso).",
+      "XXXIV Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2016).Participação como membro do Comitê de Programa. 2016. (Simpósio).",
+      "XXX Simpósio Brasileiro de Engenharia de Software (SBES 2016).Participação como membro do Comitê de Programa. 2016. (Simpósio).",
+      "8th IEEE International Conference on Cloud Computing (CLOUD 2015). Participação como membro do Comitê de Programa. 2015. (Congresso).",
+      "9th IEEE Symposium on the Maintenance and Evolution of Service-Oriented Systems and Cloud-Based Environments (MESOCA 2015).Participação como membro do Comitê de Programa. 2015. (Simpósio).",
+      "IEEE Global Communications Conference (GLOBECOM 2015). Participação como membro do Comitê de Programa. 2015. (Congresso).",
+      "III Workshop on Software Visualization, Evolution and Maintenance (VEM 2015). Participação como membro do Comitê de Programa. 2015. (Congresso).",
+      "XIII Workshop em Clouds e Aplicações (WCGA 2015). Participação como membro do Comitê de Programa. 2015. (Congresso).",
+      "XIV Simpósio Brasileiro de Jogos e Entretenimento Digital (SBGames 2015).Participação como membro do Comitê de Programa. 2015. (Simpósio).",
+      "XXIX Simpósio Brasileiro de Engenharia de Software (SBES 2015).Participação como membro do Comitê de Programa. 2015. (Simpósio).",
+      "XXXIII Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2015).Participação como membro do Comitê de Programa. 2015. (Simpósio).",
+      "XXXIV Concurso de Trabalhos de Iniciação Científica da Sociedade Brasileira de Computação (CTIC 2015). Participação como membro do Comitê de Seleção. 2015. (Congresso).",
+      "8th IEEE Symposium on the Maintenance and Evolution of Service-Oriented Systems and Cloud-Based Environments (MESOCA 2014).Participação como membro do Comitê de Programa. 2014. (Simpósio).",
+      "II Workshop on Software Visualization, Evolution and Maintenance (VEM 2014). Participação como membro do Comitê de Programa. 2014. (Congresso).",
+      "XII Workshop em Clouds e Aplicações (WCGA 2014). Participação como membro do Comitê de Programa. 2014. (Congresso).",
+      "XXVIII Simpósio Brasileiro de Engenharia de Software (SBES 2014).Participação como membro do Comitê de Programa. 2014. (Simpósio).",
+      "XXXIII Concurso de Trabalhos de Iniciação Científica da Sociedade Brasileira de Computação (CTIC 2014). Participação como membro do Comitê de Seleção. 2014. (Congresso).",
+      "XXXII Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2014).Participação como membro do Comitê de Programa. 2014. (Simpósio).",
+      "20th Working Conference on Reverse Engineering (WCRE 2013). Participação como membro do Comitê de Programa. 2013. (Congresso).",
+      "2nd IEEE Latin American Conference on Cloud Computing and Communications (LatinCloud 2013). Participação como membro do Comitê de Programa. 2013. (Congresso).",
+      "IEEE 7th International Symposium on the Maintenance and Evolution of Service-Oriented and Cloud-Based Systems (MESOCA 2013).Participação como membro do Comitê de Programa. 2013. (Simpósio).",
+      "I Workshop on Software Visualization, Evolution and Maintenance (VEM 2013). Participação como co-chefe do Comitê de Programa. 2013. (Congresso).",
+      "XI Workshop em Clouds e Aplicações (WCGA 2013). Participação como membro do Comitê de Programa. 2013. (Congresso).",
+      "X Workshop de Manutenção de Software Moderna (WMSWM 2013). Participação como membro do Comitê de Programa. 2013. (Congresso).",
+      "XXVII Simpósio Brasileiro de Engenharia de Software (SBES 2013).Participação como membro do Comitê de Programa. 2013. (Simpósio).",
+      "XXXI Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC 2013).Participação como membro do Comitê de Programa. 2013. (Simpósio).",
+      "19th Working Conference on Reverse Engineering (WCRE2012). Participação como membro do Comitê de Programa. 2012. (Congresso).",
+      "1st IEEE Latin American Conference on Cloud Computing and Communications (LatinCloud2012). Participação como membro do Comitê de Programa. 2012. (Congresso).",
+      "Sessão de Ferramentas do III Congresso Brasileiro de Software: Teoria e Prática (CBSoft2012). Participação como membro do Comitê de Programa. 2012. (Congresso).",
+      "XI Simpósio Brasileiro de Qualidade de Software (SBQS2012).Participação como membro do Comitê de Programa da Trilha de Trabalhos Técnicos. 2012. (Simpósio).",
+      "X Workshop em Clouds e Aplicações (WCGA2012). Participação como membro do Comitê de Programa. 2012. (Congresso).",
+      "XXVI Simpósio Brasileiro de Engenharia de Software (SBES2012).Participação como Membro do Comitê de Programa. 2012. (Simpósio).",
+      "XXX Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC2012).Participação como membro do Comitê de Programa e do Comitê de Seleção de Minicursos. 2012. (Simpósio).",
+      "18th Working Conference on Reverse Engineering (WCRE2011). Participação como membro do Comitê de Programa. 2011. (Congresso).",
+      "27th IEEE International Conference on Software Maintenance (ICSM2011). Participação como membro do Comitê de Programa. 2011. (Congresso).",
+      "ICSE 2011 Software Engineering for Cloud Computing Workshop (SECLOUD). Participação como membro do Comitê de Programa. 2011. (Congresso).",
+      "Sessão de Ferramentas do II Congresso Brasileiro de Software: Teoria e Prática (CBSoft2011). Participação como membro do Comitê de Programa. 2011. (Congresso).",
+      "XXIX Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC2011).Participação como membro do Comitê de Programa. 2011. (Simpósio).",
+      "XXV Simpósio Brasileiro de Engenharia de Software (SBES2011).Participação como membro do Comitê de Programa. 2011. (Simpósio).",
+      "17th Working Conference on Reverse Engineering (WCRE2010). Participação como membro do Comitê de Programa. 2010. (Congresso).",
+      "26th IEEE International Conference on Software Maintenance (ICSM2010). Participação como membro do Comitê de Programa. 2010. (Congresso).",
+      "4th Workshop on Languages and Tools for Multithreaded, Parallel and Distributed Programming (LTPD2010). Participação como membro do Comitê de Programa. 2010. (Congresso).",
+      "IV Latin American Workshop on Aspect-Oriented Software Development (LA-WASP2010). Participação como membro do Comitê de Programa. 2010. (Congresso).",
+      "Salão de Ferramentas do 4th Brazilian Symposium on Software Components, Architectures and Reuse (SBCAR 2010).Participação como membro do Comitê de Programa. 2010. (Simpósio).",
+      "XXIV Simpósio Brasileiro de Engenharia de Software (SBES2010).Participação como membro do Comitê de Programa. 2010. (Simpósio).",
+      "XXVIII Simpósio Brasileiro de Redes de Computadores e de Sistemas Distribuídos (SBRC2010).Participação como membro do Comitê de Programa. 2010. (Simpósio).",
+      "3rd Latin-American Workshop on Aspect-Oriented Software Development (LA-WASP'09). Participação como membro do Comitê de Programa. 2009. (Congresso).",
+      "III Simpósio Brasileiro de Componentes, Arquiteturas e Reutilização de Software (SBCARS'09). Participação como membro do Comitê de Programa da Sessão de Ferramentas. 2009. (Congresso).",
+      "VIII Simpósio Brasileiro de Qualidade de Software (SBQS'09).Participação como membro do Comitê de Programa. 2009. (Simpósio).",
+      "VI Workshop de Manutenção de Software Moderna (WMSWM'09). Participação como membro do Comitê de Programa. 2009. (Congresso).",
+      "XII Concurso de Teses e Dissertações (CTD'09), evento integrante do XXIX Congresso da Sociedade Brasileiro de Computação (CSBC'09). Participação como membro do Comitê de Seleção. 2009. (Congresso).",
+      "XXIII Simpósio Brasileiro de Engenharia de Software (SBES'09).Participação como membro do Comitê de Programa. 2009. (Simpósio).",
+      "12th Brazilian Symposium on Programming Languages (SBLP'08).Participação como membro do Comitê de Programa. 2008. (Simpósio).",
+      "15th Working Conference on Reverse Engineering (WCRE'08). Participação como membro do Comitê de Programa. 2008. (Congresso).",
+      "23rd Annual ACM Symposium on Applied Computing (SAC'08).Participação como membro do Comitê de Seleção de Tutoriais. 2008. (Simpósio).",
+      "24th IEEE International Conference on Software Maintenance (ICSM'08). Participação como membro do Comitê de Programa. 2008. (Congresso).",
+      "2nd Latin-American Workshop on Aspect-Oriented Software Development (LA-WASP'08). Participação como Co-chefe do Comitê de Programa. 2008. (Congresso).",
+      "V Workshop de Manutenção de Software Moderna (WMSWM'08). Participação como membro do Comitê de Programa. 2008. (Congresso).",
+      "XXII Simpósio Brasileiro de Engenharia de Software (SBES'08).Participação como membro do Comitê de Seleção de Tutoriais. 2008. (Simpósio).",
+      "XXII Simpósio Brasileiro de Engenharia de Software (SBES).Participação como membro do Comitê de Programa. 2008. (Simpósio).",
+      "16th IEEE International Conference on Computer Communications and Networks (ICCCN'07). Participação como revisor externo. 2007. (Congresso).",
+      "1st Latin-American Workshop on Aspect-Oriented Software Development (LA-WASP'07). Participação como membro do Comitê de Programa. 2007. (Congresso).",
+      "23rd IEEE International Conference on Software Maintenance (ICSM'07). Participação como membro do Comitê de Programa. 2007. (Congresso).",
+      "IV Workshop de Manutenção de Software Moderna (WMSWM'07). Participação como membro do Comitê de Programa. 2007. (Congresso).",
+      "XXI Simpósio Brasileiro de Engenharia de Software (SBES'07).Participação como membro do Comitê de Seleção de Tutoriais. 2007. (Simpósio).",
+      "XXI Simpósio Brasileiro de Engenharia de Software (SBES'07).Participação como membro do Comitê de Programa. 2007. (Simpósio).",
+      "22nd IEEE International Conference on Software Maintenance (ICSM'06). Participação como membro do Comitê de Programa. 2006. (Congresso).",
+      "2nd International Workshop on Integration of Software Engineering and Agent Technology (ISEAT'06). Participação como revisor externo. 2006. (Congresso).",
+      "III Workshop Brasileiro de Desenvolvimento de Software Orientado a Aspectos (WASP'06). Participação como membro do Comitê de Programa. 2006. (Congresso).",
+      "III Workshop de Manutenção de Software Moderna (WMSWM'06). Participação como Co-chefe do Comitê de Programa. 2006. (Congresso).",
+      "XXI Simpósio Brasileiro de Banco de Dados (SBBD).Participação como membro do Comitê de Seleção da III Sessão de Demos. 2006. (Simpósio).",
+      "XX Simpósio Brasileiro de Engenharia de Software (SBES'06).Participação como membro do Comitê de Programa. 2006. (Simpósio).",
+      "18th Brazilian Symposium on Computer Graphics and Image Processing (SIBGRAPI'05).Participação como revisor externo. 2005. (Simpósio).",
+      "21st IEEE International Conference on Software Maintenance (ICSM'05). Participação como membro do Comitê de Programa. 2005. (Congresso).",
+      "II Workshop Brasileiro de Desenvolvimento de Software Orientado a Aspectos (WASP'05). Participação como membro do Comitê de Programa. 2005. (Congresso).",
+      "II Workshop de Manutenção de Software Moderna (WMSWM'05). Participação como membro do Comitê de Programa. 2005. (Congresso).",
+      "IV Workshop de Desenvolvimento Baseado em Componentes (WDBC'05). Participação como membro do Comitê de Programa. 2005. (Congresso).",
+      "VI Workshop de Software Livre (WSL'05). Participação como membro do Comitê de Programa. 2005. (Congresso).",
+      "XIX Simpósio Brasileiro de Engenharia de Software (SBES'05).Participação como membro do Comitê de Programa. 2005. (Simpósio).",
+      "XIX Simpósio Brasileiro de Engenharia de Software (SBES'05).Participação como membro do Comitê de Seleção da XII Sessão de Ferramentas. 2005. (Simpósio).",
+      "11th IEEE International Conference on Telecommunications (ICT'04). Participação como revisor externo. 2004. (Congresso).",
+      "IV Workshop de Desenvolvimento Baseado em Componentes (WDBC'04). Participação como membro do Comitê de Programa. 2004. (Congresso).",
+      "I Workshop Brasileiro de Desenvolvimento de Software Orientado a Aspectos (WASP'04). Participação como membro do Comitê de Programa. 2004. (Congresso).",
+      "I Workshop de Manutenção de Software Moderna (WMSWM'04). Participação como membro do Comitê de Programa. 2004. (Congresso).",
+      "IX Workshop de Teses em Engenharia de Software (WTES'04), evento integrante do XVIII Simpósio Brasileiro de Engenharia de Software (SBES'04).Participação como membro do Comitê de Programa. 2004. (Simpósio).",
+      "XVIII Simpósio Brasileiro de Engenharia de Software (SBES'04).Participação como membro do Comitê de Seleção da XI Sessão de Ferramentas. 2004. (Simpósio).",
+      "XVIII Simpósio Brasileiro de Engenharia de Software (SBES'04).Participação como membro do Comitê de Programa. 2004. (Simpósio).",
+      "V Workshop de Comunicação Sem Fio e Computação Móvel (WCSF'03). Participação como revisor externo. 2003. (Congresso).",
+      "XVII Simpósio Brasileiro de Engenharia de Sotware (SBES'03).Participação como membro do Comitê de Programa. 2003. (Simpósio).",
+      "XVI Simpósio Brasileiro de Engenharia de Software (SBES'02).Participação como membro do Comitê de Programa. 2002. (Simpósio).",
+      "XIV Concurso de Trabalhos de Iniciação Científica (CTIC'01), evento integrante do XXI Congresso da Sociedade Brasileira de Computação (CSBC'01). Participação como revisor externo. 2001. (Congresso).",
+      "XV Simpósio Brasileiro de Engenharia de Software (SBES'01).Participação como membro do Comitê de Seleção de Minicursos. 2001. (Simpósio).",
+      "IX Simpósio Brasileiro de Engenharia de Software (SBES'95).Participação como revisor externo. 1995. (Simpósio).",
+      "XIII Simpósio Brasileiro de Redes de Computadores (SBRC'95).Participação como revisor externo. 1995. (Simpósio).",
+      "14th IEEE International Conference on Distributed Computing Systems (ICDCS'94). Participação como revisor externo. 1994. (Congresso).",
+      "20th International Conference on Very Large Databases (VLDB'94). Participação como revisor externo. 1994. (Congresso).",
+      "27th Hawaian International Conference on System Sciences (HICSS'94). Participação como revisor externo. 1994. (Congresso)."
     ],
     "eventOrganizations": [
       "MENDONÇA, N. C.; JAMSHIDI, P. ; PAHL, C. . 2nd International Workshop on Cloud Adoption and Migration (CloudWays 2016). 2016. (Congresso).",
@@ -1317,84 +1383,9 @@
       "SIQUEIRA, F. A.; TODESCO, J. L.; SANTOS, E. R.; MELLO, R. S.; MENDONÇA, N. C.. Participação em banca de Ivan Luiz Salvador. Data Linking as a Service: uma Plataforma para Disponibilização de Dados Conectados através de Microservices. 2017. Exame de qualificação (Doutorando em Ciências da Computação) - Universidade Federal de Santa Catarina.",
       "CARVALHO JUNIOR, F. H.; CORREA, R. C.; GOMES, A. T. A.; MENDONÇA, N. C.. Participação em banca de Wagner Guimarães Al-Alam. Alocação de Recursos em uma Nuvem de Serviços de Computação de Alto Desempenho Baseada em Componentes através de Contratos Contextuais. 2014. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal do Ceará.",
       "BRASILEIRO, Francisco Vilar; CERQUEIRA, R.; BRITO, A.; MOURA, J. A. B.; MENDONÇA, N. C.. Participação em banca de Marcus Williams Aquino de Carvalho. Gerência de Nuvens Computacionais Considerando Diferentes Classes de Serviço. 2014. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal de Campina Grande.",
-      "ROSA, N. S.; GARCIA, V. C.; SILVEIRA, G. E.; MENDONÇA, N. C.. Participação em banca de Fernando Antonio Aires Lins. Towards a MDA-Based Approach to Model and Enforce Security Requirements in Business Processes. 2011. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "MACHADO, J. C.; CONCI, A.; THOMAZ, A. C. F.; MENDONÇA, N. C.. Concurso para Professor Titular. 2016. Universidade Federal do Ceará.",
-      "ROCHA, A. R. C.; BRASILEIRO, F. V.; MENDONÇA, N. C.. Concurso para Professor Adjunto. 2016. Universidade Federal do Ceará.",
-      "MACHADO, Javam de Castro; VIDAL, Vânia Maria Pontes; MENDONÇA, N. C.. Concurso para Professor Adjunto. 2009. Universidade Federal do Ceará.",
-      "VIEIRA, F. H. DE S.; FARIAS, Pedro Porfírio Muniz; MENDONÇA, N. C.. Concurso para Professor Adjunto. 2008. Universidade de Fortaleza.",
-      "MENDONÇA, N. C.. Concurso para Professor Auxiliar. 2001. Universidade Católica do Salvador.",
-      "MENDONÇA, N. C.. Concurso para Professor Substituto. 2000. Universidade Estadual Vale do Acaraú."
+      "ROSA, N. S.; GARCIA, V. C.; SILVEIRA, G. E.; MENDONÇA, N. C.. Participação em banca de Fernando Antonio Aires Lins. Towards a MDA-Based Approach to Model and Enforce Security Requirements in Business Processes. 2011. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal de Pernambuco."
     ],
     "otherBoards": [
-      "GOLDMAN, A.; GUERRA, E. M.; BAHSOON, R.; MENDONÇA, N. C.. Participação em banca de João Francisco Lino Daniel. Automatic Detection of Patterns in Microservices-based Architectures. 2022. Dissertação (Mestrado em Ciências da Computação) - Universidade de São Paulo.",
-      "FARIAS, P. P. M.; COUTINHO, E. F.; MENDONÇA, N. C.. Participação em banca de Aerton Wariss Maia. Transações como Serviço. 2019. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "CARVALHO, W. V.; SOUSA, F. R. C.; CASTRO FILHO, J. A.; MENDONÇA, N. C.. Participação em banca de Pedro Teixeira de Araujo. FCTOOL: Uma Ferramenta para a Geração de Roteiros Adaptativos de Aulas Invertidas de Sistemas Distribuídos. 2019. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "SILVA, C. E.; BARBOSA, E. A. M.; MENDONÇA, N. C.. Participação em banca de Yan de Lima Justino. Do Monolito Legado aos Microsserviços: Um Estudo de Caso Aplicado na Secretaria de Estado da Tributação do Rio Grande do Norte. 2018. Dissertação (Mestrado em Engenharia de Software) - Universidade Federal do Rio Grande do Norte.",
-      "SAMPAIO, A.; ROCHA, L. S.; MENDONÇA, N. C.. Participação em banca de Otávio Soares Cavalcante de Medeiros. Uma Abordagem para Migração de Aplicações Monolíticas para Microservices baseada em Programação Orientada a Aspectos. 2018. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "CAMARGO, V.; LUCREDIO, D.; MENDONÇA, N. C.. Participação em banca de Renato Silva Costa. Uma Abordagem para Identificação de Violações Arquiteturais em Processos de Migração de Plataformas de Nuvem. 2017. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal de São Carlos.",
-      "FARIAS, P. P. M.; MAIA, M. E. F.; MENDONÇA, N. C.. Participação em banca de Tadeu Matos Nunes. Modelagem do Fluxo de Estados de Aplicações Orientadas a Recursos Usando BPMN. 2017. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "RODRIGUES, G. N.; TEODORO, G. L. M.; MENDONÇA, N. C.. Participação em banca de Alexandre Vaz Roriz. Metodologia para Análise do Impacto de Cenários Implícitos na Confiabilidade de Sistemas Computacionais. 2015. Dissertação (Mestrado em Ciência da Computação) - Universidade de Brasília.",
-      "RODRIGUES, G. N.; TEODORO, G. L. M.; MENDONÇA, N. C.. Participação em banca de Thiago Peixoto dos Reis. Uma Abordagem Dirigida a Modelo para a Geração de Casos de Teste Baseada na Detecção de Cenários Implícitos. 2015. Dissertação (Mestrado em Ciência da Computação) - Universidade de Brasília.",
-      "FARIAS, Pedro Porfírio Muniz; MONTEIRO, J. M.; BRAYNER, A.; MENDONÇA, N. C.. Participação em banca de Hermano Albuquerque Lira. Semantic Data Services: Uma Abordagem para Acesso e Manipulação de Dados Interligados. 2014. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ANDRADE, R. M. C.; ROCHA, L. S.; CARVALHO JUNIOR, F. H.; SOUZA, J. N.; MENDONÇA, N. C.. Participação em banca de Rafael de Lima. CatchML - Uma Linguagem para Modelagem e Veriﬁcação do Tratamento de Exceção Sensível ao Contexto em Sistemas Ubíquos. 2013. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "TRINTA, F.; ANDRADE, R. M. C.; SAMPAIO, A.; MENDONÇA, N. C.. Participação em banca de Nayane Ponte Viana. Um Serviço para Flexibilização da Tarifação em Nuvens de Infraestrutura. 2013. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "CARVALHO JUNIOR, F. H.; SOUZA, C. T.; CORREA, R. C.; MENDONÇA, N. C.. Participação em banca de Juliano Efson Norberto Sales. Coordenação e Reconﬁguração Dinâmica de Componentes em uma Plataforma de Computação Paralela. 2012. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "HOLANDA FILHO, R.; LIMA, M. N.; MADEIRA, E. R. M.; RODRIGUES, M. A. F.; MENDONÇA, N. C.. Participação em banca de Helber Wagner da Silva. Um Esquema de Seleção de Rotas para o Balanceamento de Segurança e Desempenho em Redes em Malha Sem Fio. 2011. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FURTADO, M. E. S.; LUCENA JUNIOR, V. F.; MENDONÇA, N. C.. Participação em banca de Italo Matos Cavalcante Snatos. T-VILO TOOL: Ferramenta Orientada a Serviços para Interação e Produção de Conteúdos Educativos Baseada no Sistema Brasileiro de Televisão Digital. 2011. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ALBUQUERQUE, A. B.; CONTE, T. U.; MENDONÇA, N. C.. Participação em banca de Carlos Diego Andrade de Almeida. Continuidade da Execução dos Processos de Software em Empresas Avaliadas no MPS.BR. 2011. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "HOLANDA FILHO, R.; ZIVIANI, A.; MENDONÇA, N. C.. Participação em banca de Victor Pasknel de Alencar Ribeiro. Classificação de Tráfego Online Baseada em Sub-fluxos. 2011. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ALBUQUERQUE, A. B.; REIS, C. A. L.; MENDONÇA, N. C.. Participação em banca de Edgy Eduardo Enéas de Arruda Paiva. Uma Abordagem de Apoio à Avaliação e Melhoria da Produtividade de Desenvolvedores de Software. 2011. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ROSA, N. S.; ALVES, C. F.; MENDONÇA, N. C.. Participação em banca de Júlio César Damasceno. SecMosc-Engine: Um Ambiente de Suporte à Execução Segura de Composição de Serviços. 2010. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "TRINTA, F.; SOARES, S. C. B.; MENDONÇA, N. C.. Participação em banca de Diego Aguiar de Carvalho. CAS - Serviço de Adaptação de Conteúdo para Aplicação Web Multiplataforma. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BARRETO, R. S.; OLIVEIRA, H. A. B. F.; MENDONÇA, N. C.. Participação em banca de Fabiano Teixeira da Cruz. Uma Abordagem Ágil e Dirigida por Modelos para Desenvolvimento de Software Embarcado e de Tempo-Real. 2010. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Amazonas.",
-      "ALBUQUERQUE, A. B.; SANTOS NETO, P. A.; MENDONÇA, N. C.. Participação em banca de Marcelo de Almeida Barroso. Um Processo de Desenvolvimento para Sistemas Computacionais Aderente ao MPS.BR Nível G. 2010. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ANIDO, R. O.; BERGAMASCHI, R. A.; MENDONÇA, N. C.. Participação em banca de Urubatan Rocha Pacheco. Análise de Redes Sociais em Dados Bibliográficos. 2010. Dissertação (Mestrado em Ciência da Computação) - Universidade Estadual de Campinas.",
-      "ANDRADE, R. M. C.; CARVALHO JUNIOR, F. H.; SOUZA, W. L.; MENDONÇA, N. C.. Participação em banca de Marcio Espíndola Freire Maia. AESPmob - Modelo Autônomo e Evolutivo para Provisão de Serviços Essenciais em Redes Móveis. 2009. Dissertação (Mestrado em Ciência da Computação) - Universidade Federal do Ceará.",
-      "FURTADO, M. E. S.; QUEIROZ, J. E. R.; MENDONÇA, N. C.. Participação em banca de Albert Schilling Gomes. FAVIHC - Framework de Avaliação da Interação Humano Computador. 2009. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, P. P. M.; ALBUQUERQUE, A. B.; CAMPOS, F. B.; MENDONÇA, N. C.. Participação em banca de Fábio Pinheiro Abreu. Uma Abordagem Baseada em Definição de Requisitos e em Verificação e Validação para o Processo de Monitoração de Aquisição de Software. 2009. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "MENDONÇA, N. C.; ROCHA, A. R. C.; FARIAS, Pedro Porfírio Muniz. Participação em banca de Solanage Alcântara Araújo. Uma Abordagem para Construção do Repositório de Medidas em Organizações de Software. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FURTADO, Maria Elizabeth Sucupira; FILGUEIRAS, L. V. L.; MENDONÇA, N. C.. Participação em banca de David Falcão Barbosa. Uma Estratégia de Apoio à Institucionalização da Usabilidade em Ambientes de Desenvolvimento Ágil. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, Pedro Porfírio Muniz; MURTA, L. G. P.; MENDONÇA, N. C.. Participação em banca de Yara Maria Almeida Freire. TUCP-M: Pontos de Casos de Uso Técnicos para Manutenção de Software. 2008. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, Pedro Porfírio Muniz; ANDRADE, R. M. C.; MENDONÇA, N. C.. Participação em banca de Rafael Braga de Oliveira. Framework FuncTest: Aplicando Padrões de Software na Automação de Testes Funcionais. 2007. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BELCHIOR, A. D.; VASCONCELOS, A. M. L.; MENDONÇA, N. C.. Participação em banca de Jocelene Chagas de Oliveira. ProSiD: Processo Simplificado de Desenvolvimento de Software para Pequenas e Médias Empresas. 2006. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BELCHIOR, A. D.; ROCHA, A. R. C.; MENDONÇA, N. C.. Participação em banca de Josyleuda Melo Moreira. POMS: Processo Organizacional de Medição de Software. 2006. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BRAYNER, A.; MACHADO, Javam de Castro; MENDONÇA, N. C.. Participação em banca de Dorotea Karine Dias Pitombeira. Uma Arquitetura Eficiente para Armazenamento, Gerenciamento e Acesso a Dados em Dispositivos Móveis com Recursos Computacionais Limitados. 2006. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, Pedro Porfírio Muniz; LABIDI, S.; MENDONÇA, N. C.. Participação em banca de Wladimir Maia Furtado. Localização de Documentos em Redes P2P. 2006. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BRAYNER, A.; MATTOSO, Marta; MENDONÇA, N. C.. Participação em banca de Eveline Vasconcelos Campos. MobiJoin: Um Operador de Junção para Bancos de Dados Móveis. 2005. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BELCHIOR, A. D.; ANDRADE, R. M. C.; MENDONÇA, N. C.. Participação em banca de Gabriela Telles de Sousa. Um Catálogo de Metapadrões e Padrões para Sistemas de Informação e um Modelo para sua Aplicação no Desenvolvimento de Software. 2005. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, Pedro Porfírio Muniz; MACHADO, Javam de Castro; MENDONÇA, N. C.. Participação em banca de Antônio Augusto Ribeiro Pedroza. Interoperabilidade entre Padrões de Objetos Distribuídos Através de Bridges e Protocolos Baseados em XML. 2003. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BRAYNER, A.; LIFSCHITZ, Sérgio; MENDONÇA, N. C.. Participação em banca de José de Aguiar Moraes Filho. AMDB: An Approach for Sharing Mobile Databases. 2003. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FURTADO, Maria Elizabeth Sucupira; BRASILEIRO, Francisco Vilar; MENDONÇA, N. C.. Participação em banca de Francisco José Azevedo Alves. Um Ambiente Virtual de Aprendizagem, Baseado em Serviços Web, para Apoiar a Educação Corporativa com o Suporte das Instituições de Ensino. 2003. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "MENDONÇA, N. C.; LAUREANO, E. G. C.; BORBA, P. H. M.; SOUZA, F. F.. Participação em banca de Eduardo Galvão Cavalcanti Laureano. Persistence Implementation with AspectJ. 2002. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal de Pernambuco.",
-      "MENDONÇA, N. C.; FREITAS, L. S. DE; SAMPAIO, A. C. A.; BORBA, P. H. M.. Participação em banca de Leonardo Simões de Freitas. JACK: A Process Algebra Implementation in Java. 2002. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal de Pernambuco.",
-      "VIEIRA, F. H. DE S.; MENDONÇA, N. C.; FURTADO, Maria Elizabeth Sucupira; GOMES, A. S.. Participação em banca de Flávio Horácio de Sousa Vieira. Uma Metodologia de Aprendizagem a Distância de Recomendações Ergonômicas Contextualizadas em Casos de Uso. 2002. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "LIMA, L. C. B.; MENDONÇA, N. C.; BRAYNER, A.; VIDAL, V.. Participação em banca de Liane Carneiro Barbosa Lima. XMETA: Uma Metodologia de Desenvolvimento de Data Warehouse com Gerenciamento de Metadados. 2002. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FARIAS, Pedro Porfírio Muniz; BELCHIOR, A. D.; MALDONADO, José Carlos; MENDONÇA, N. C.. Participação em banca de Osias de Souza Lima Júnior. Análise de Pontos por Função Fuzzy. 2002. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "BELCHIOR, A. D.; WERNER, Cláudia Maria Lima; MENDONÇA, N. C.. Participação em banca de Regis Patrick Silva Simão. Qualidade de Componentes de Software. 2002. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "MENDONÇA, N. C.; MASSONI, T. L.; BORBA, P. H. M.; MOURA, H. P.. Participação em banca de Tiago Lima Massoni. Um Processo de Software com Suporte para Implementação Progressiva. 2001. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal de Pernambuco.",
-      "BRANCO JR., E. C.; MENDONÇA, N. C.; BELCHIOR, A. D.; ROCHA, A. R. C.. Participação em banca de Eliseu Castelo Branco Jr.. Um Modelo para Avaliação da Qualidade da Gerência de Projetos de Software. 2001. Dissertação (Mestrado em Informática Aplicada) - Universidade de Fortaleza.",
-      "SANTOS, E. M. DOS; MENDONÇA, N. C.; VIDAL, C. A.; GATAZ, M.. Participação em banca de Emanuele Marques dos Santos. Um Modelo de Integração de Aplicações Externas a Ambientes Virtuais através do Uso de Aplicações Mediadoras e de Simulóides. 2001. Dissertação (Mestrado em Ciências da Computação) - Universidade Federal do Ceará.",
-      "HOLANDA FILHO, R.; RODRIGUES, J. J. P. C.; RIGHI, R. R.; SOUZA, J. T.; MENDONÇA, N. C.; PINHEIRO, P. R.. Participação em banca de Victor Pasknel de Alencar Ribeiro. A Fault-Tolerant and Secure Architecture for Key Management in LoRaWAN Based on Permissioned Blockchain. 2022. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza.",
-      "FERRARI, F. C.; LUCREDIO, D.; VINCENZI, A. M. R.; BLANCO, J. Z.; MENDONÇA, N. C.. Participação em banca de Bento Rafael Siqueira. Microcontroladores: Definição e Implementação de Controladores Estruturalmente Flexíveis para Sistemas Adaptativos. 2022. Tese (Doutorado em Ciência da Computação) - Universidade Federal de São Carlos.",
-      "PRAZERES, C. V. S.; DELICATO, F. C.; BATISTA, T.; PIRES, P. F.; CHAVEZ, C. V. F. G.; MENDONÇA, N. C.. Participação em banca de Cleber Jorge Lira de Santana. An Architecture based on Reactive Microservices for developing Reliable IoT Applications. 2021. Tese (Doutorado em Ciência da Computação) - Universidade Federal da Bahia.",
-      "LOPES, R.; BRUNET, J. A.; BITTENCOURT, L.; BRASILEIRO, F. V.; CARVALHO, M.; MENDONÇA, N. C.. Participação em banca de Daniel Lacet de Faria Fireman. Improving Tail Latency of Interactive Cloud Microservices through Load Eviction and Management of Background Tasks. 2021. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Campina Grande.",
-      "ROSA, N. S.; AIRES, F.; GARCIA, V. C.; GAMA, K. S.; MACIEL, P. R. M.; MENDONÇA, N. C.. Participação em banca de Tércio de Morais Sampaio Silva. Multi-Cloud-Aware Middleware. 2021. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "SIQUEIRA, F. A.; MELLO, R. S.; TODESCO, J. L.; MENDONÇA, N. C.. Participação em banca de Ivan Luiz Salvadori. Data Linking as a Service: A Microservices Infrastructure for Publishing Linked Data. 2019. Tese (Doutorado em Ciências da Computação) - Universidade Federal de Santa Catarina.",
-      "ROSA, N. S.; LIMA, R. M. F.; GARCIA, V. C.; SOUZA, J. N.; MENDONÇA, N. C.. Participação em banca de Adalberto Ribeiro Sampaio Junior. Runtime Adaptation of Microservices. 2018. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "HOLANDA FILHO, R.; RODRIGUES, J. J. P. C.; ANDRADE, R. M. C.; RABELO, R. A. L.; SAMPAIO, A.; MENDONÇA, N. C.. Participação em banca de Alex Lacerda Ramos. Network Security Metrics for The Internet of Things. 2018. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza.",
-      "CASTRO, J.; SANTORO, F.; MENDONÇA, N. C.; MASSA, R.; MACIEL, P. R. M.. Participação em banca de Robson Wagner Albuquerque de Medeiros. Cost Management of Service Compositions. 2017. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "BRASILEIRO, F. V.; CERQUEIRA, R.; BRITO, A.; MOURA, A.; MENDONÇA, N. C.. Participação em banca de Marcus Williams Aquino de Carvalho. Gerência de Nuvens Computacionais Considerando Diferentes Classes de Serviço. 2016. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Campina Grande.",
-      "LIMA, A. S.; SOUZA, J. N.; KELNER, J.; MOURA, A.; BARROSO, G. C.; SOUSA, F. R. C.; MENDONÇA, N. C.. Participação em banca de Maristella Ribas. Um Modelo de Decisão para Adoção de Serviços de Nuvem Usando Redes de Petri. 2015. Tese (Doutorado em Engenharia de Teleinformática) - Universidade Federal do Ceará.",
-      "FURTADO, Maria Elizabeth Sucupira; PINHEIRO, P. R.; QUEIROZ, J. E. R.; BORGES NETO, H.; TAMANINI, I.; MENDONÇA, N. C.. Participação em banca de Patrícia Freitas Campos de Vasconcelos. MPS-USE: Uma Estratégia para Configurar Multicritérios de Preferências por Serviços com Foco nas Experiências dos Usuários. 2015. Tese (Doutorado em Informática Aplicada) - Universidade de Fortaleza.",
-      "ROSA, N. S.; RABELO, R.; MENDONÇA, N. C.; LANCASTRE, M.; GARCIA, V. C.; SADOK, D.. Participação em banca de Fernando Antonio Aires Lins. Towards Automation of Security-Aware SOA-Based Business Processes. 2012. Tese (Doutorado em Ciência da Computação) - Universidade Federal de Pernambuco.",
-      "ROCHA, A. R. C.; ARAÚJO, R. M.; XEXÉO, G. B.; WERNER, Cláudia Maria Lima; MENDONÇA, N. C.. Participação em banca de Adriano Bessa de Albuquerque. Avaliação e Melhoria de Ativos Organizacionais em Ambientes de Desenvolvimento de Software. 2008. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro.",
-      "ROCHA, A. R. C.; ARAÚJO, R. M.; XEXÉO, G. B.; WERNER, Cláudia Maria Lima; MENDONÇA, N. C.. Participação em banca de Fábio Bianchi Campos. Avaliação e Melhoria dos Ativos de Processos de Software de Instituições Implementadoras. 2008. Tese (Doutorado em Engenharia de Sistemas e Computação) - Universidade Federal do Rio de Janeiro.",
-      "DELICATO, F. C.; PRAZERES, C. V. S.; MENDONÇA, N. C.. Participação em banca de Cleber Jorge Lira de Santana. A Reliable Microservices Architecture for Internet of Things Applications. 2019. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal da Bahia.",
-      "TRINTA, F.; VIEIRA, D.; GARCIA, V. C.; ROCHA, L. S.; MENDONÇA, N. C.. Participação em banca de Juliana Oliveira de Carvalho. PacificClouds: An approach to manage the deployment and execution of an application in multi-cloud based on microservices. 2018. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal do Ceará.",
-      "SIQUEIRA, F. A.; TODESCO, J. L.; SANTOS, E. R.; MELLO, R. S.; MENDONÇA, N. C.. Participação em banca de Ivan Luiz Salvador. Data Linking as a Service: uma Plataforma para Disponibilização de Dados Conectados através de Microservices. 2017. Exame de qualificação (Doutorando em Ciências da Computação) - Universidade Federal de Santa Catarina.",
-      "CARVALHO JUNIOR, F. H.; CORREA, R. C.; GOMES, A. T. A.; MENDONÇA, N. C.. Participação em banca de Wagner Guimarães Al-Alam. Alocação de Recursos em uma Nuvem de Serviços de Computação de Alto Desempenho Baseada em Componentes através de Contratos Contextuais. 2014. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal do Ceará.",
-      "BRASILEIRO, Francisco Vilar; CERQUEIRA, R.; BRITO, A.; MOURA, J. A. B.; MENDONÇA, N. C.. Participação em banca de Marcus Williams Aquino de Carvalho. Gerência de Nuvens Computacionais Considerando Diferentes Classes de Serviço. 2014. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal de Campina Grande.",
-      "ROSA, N. S.; GARCIA, V. C.; SILVEIRA, G. E.; MENDONÇA, N. C.. Participação em banca de Fernando Antonio Aires Lins. Towards a MDA-Based Approach to Model and Enforce Security Requirements in Business Processes. 2011. Exame de qualificação (Doutorando em Ciência da Computação) - Universidade Federal de Pernambuco.",
       "MACHADO, J. C.; CONCI, A.; THOMAZ, A. C. F.; MENDONÇA, N. C.. Concurso para Professor Titular. 2016. Universidade Federal do Ceará.",
       "ROCHA, A. R. C.; BRASILEIRO, F. V.; MENDONÇA, N. C.. Concurso para Professor Adjunto. 2016. Universidade Federal do Ceará.",
       "MACHADO, Javam de Castro; VIDAL, Vânia Maria Pontes; MENDONÇA, N. C.. Concurso para Professor Adjunto. 2009. Universidade Federal do Ceará.",
@@ -1440,8 +1431,7 @@
         "volume": "32",
         "pages": "617-634",
         "doi": "http://dx.doi.org/10.5753/jbcs.2026.6243",
-        "issn": "16784804",
-        "url": "http://dx.doi.org/10.5753/jbcs.2026.6243"
+        "issn": "16784804"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1456,8 +1446,7 @@
         "volume": "35",
         "pages": "e70019",
         "doi": "http://dx.doi.org/10.1002/nem.70019",
-        "issn": "10991190",
-        "url": "http://dx.doi.org/10.1002/nem.70019"
+        "issn": "10991190"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1470,8 +1459,7 @@
         "volume": "24",
         "pages": "1-56",
         "doi": "http://dx.doi.org/10.1145/3674149",
-        "issn": "19466226",
-        "url": "http://dx.doi.org/10.1145/3674149"
+        "issn": "19466226"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1489,8 +1477,7 @@
         "volume": "54",
         "pages": "1-23",
         "doi": "http://dx.doi.org/10.1002/spe.3368",
-        "issn": "1097024X",
-        "url": "http://dx.doi.org/10.1002/spe.3368"
+        "issn": "1097024X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1507,8 +1494,7 @@
         "volume": "51",
         "pages": "1280-1307",
         "doi": "http://dx.doi.org/10.1002/spe.2956",
-        "issn": "1097024X",
-        "url": "http://dx.doi.org/10.1002/spe.2956"
+        "issn": "1097024X"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1524,8 +1510,7 @@
         "volume": "38",
         "pages": "17-22",
         "doi": "http://dx.doi.org/10.1109/MS.2021.3080335",
-        "issn": "07407459",
-        "url": "http://dx.doi.org/10.1109/MS.2021.3080335"
+        "issn": "07407459"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1541,8 +1526,7 @@
         "volume": "38",
         "pages": "70-79",
         "doi": "http://dx.doi.org/10.1109/ms.2019.2955937",
-        "issn": "07407459",
-        "url": "http://dx.doi.org/10.1109/ms.2019.2955937"
+        "issn": "07407459"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1558,8 +1542,7 @@
         "volume": "14",
         "pages": "243-268",
         "doi": "http://dx.doi.org/10.1007/s11761-020-00300-2",
-        "issn": "18632394",
-        "url": "http://dx.doi.org/10.1007/s11761-020-00300-2"
+        "issn": "18632394"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1576,8 +1559,7 @@
         "volume": "35",
         "pages": "24-35",
         "doi": "http://dx.doi.org/10.1109/MS.2018.2141039",
-        "issn": "07407459",
-        "url": "http://dx.doi.org/10.1109/MS.2018.2141039"
+        "issn": "07407459"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1593,8 +1575,7 @@
         "volume": "48",
         "pages": "2278-2301",
         "doi": "http://dx.doi.org/10.1002/spe.2644",
-        "issn": "00380644",
-        "url": "http://dx.doi.org/10.1002/spe.2644"
+        "issn": "00380644"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1609,8 +1590,7 @@
         "volume": "3",
         "pages": "50-60",
         "doi": "http://dx.doi.org/10.1109/MCC.2016.66",
-        "issn": "23256095",
-        "url": "http://dx.doi.org/10.1109/MCC.2016.66"
+        "issn": "23256095"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1625,8 +1605,7 @@
         "volume": "29",
         "pages": "n",
         "doi": "http://dx.doi.org/10.1002/cpe.3825",
-        "issn": "15320626",
-        "url": "http://dx.doi.org/10.1002/cpe.3825"
+        "issn": "15320626"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1641,8 +1620,7 @@
         "volume": "47",
         "pages": "1159-1184",
         "doi": "http://dx.doi.org/10.1002/spe.2442",
-        "issn": "00380644",
-        "url": "http://dx.doi.org/10.1002/spe.2442"
+        "issn": "00380644"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1655,8 +1633,7 @@
         "volume": "47",
         "pages": "62-66",
         "doi": "http://dx.doi.org/10.1109/mc.2014.203",
-        "issn": "00189162",
-        "url": "http://dx.doi.org/10.1109/mc.2014.203"
+        "issn": "00189162"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1689,8 +1666,7 @@
         "volume": "86",
         "pages": "905-933",
         "doi": "http://dx.doi.org/10.1016/j.jss.2012.08.031",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2012.08.031"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1720,8 +1696,7 @@
         "volume": "3",
         "pages": "67-86",
         "doi": "http://dx.doi.org/10.4018/jhcr.2012070105",
-        "issn": "19479158",
-        "url": "http://dx.doi.org/10.4018/jhcr.2012070105"
+        "issn": "19479158"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1738,8 +1713,7 @@
         "volume": "27",
         "pages": "82-89",
         "doi": "http://dx.doi.org/10.1109/MS.2009.117",
-        "issn": "07407459",
-        "url": "http://dx.doi.org/10.1109/MS.2009.117"
+        "issn": "07407459"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1757,8 +1731,7 @@
         "volume": "2",
         "pages": "90-98",
         "doi": "http://dx.doi.org/10.1504/IJHPSA.2009.032026",
-        "issn": "17516528",
-        "url": "http://dx.doi.org/10.1504/IJHPSA.2009.032026"
+        "issn": "17516528"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1773,8 +1746,7 @@
         "volume": "81",
         "pages": "1346-1363",
         "doi": "http://dx.doi.org/10.1016/j.jss.2007.11.002",
-        "issn": "01641212",
-        "url": "http://dx.doi.org/10.1016/j.jss.2007.11.002"
+        "issn": "01641212"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1791,8 +1763,7 @@
         "volume": "18",
         "pages": "243-262",
         "doi": "http://dx.doi.org/10.1142/s0218194008003623",
-        "issn": "02181940",
-        "url": "http://dx.doi.org/10.1142/s0218194008003623"
+        "issn": "02181940"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1808,8 +1779,7 @@
         "volume": "8",
         "pages": "1-10",
         "doi": "http://dx.doi.org/10.1109/mdso.2007.70",
-        "issn": "15414922",
-        "url": "http://dx.doi.org/10.1109/mdso.2007.70"
+        "issn": "15414922"
       },
       {
         "category": "Artigos completos publicados em periódicos",
@@ -1849,8 +1819,7 @@
         "volume": "8",
         "pages": "311-355",
         "doi": "http://dx.doi.org/10.1023/a:1011217720860",
-        "issn": "09288910",
-        "url": "http://dx.doi.org/10.1023/a:1011217720860"
+        "issn": "09288910"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1886,8 +1855,7 @@
         "title": "Design and Evaluation of an Event-Driven Cloud-Based Architecture for a Remote Patient Monitoring System.",
         "venue": "2025 IEEE 22nd International Conference on Software Architecture Companion (ICSAC), 2025, Odense",
         "pages": "77-8",
-        "doi": "http://dx.doi.org/10.1109/ICSA-C65153.2025.00019",
-        "url": "http://dx.doi.org/10.1109/ICSA-C65153.2025.00019"
+        "doi": "http://dx.doi.org/10.1109/ICSA-C65153.2025.00019"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1902,8 +1870,7 @@
         "title": "Assessing Frontier LLMs in Solving Game Development Problems: Preliminary Findings Across Three Game Engines.",
         "venue": "Workshop sobre Engenharia de Software para Desenvolvimento de Jogos, 2025, Brasil",
         "pages": "33",
-        "doi": "http://dx.doi.org/10.5753/se4games.2025.14869",
-        "url": "http://dx.doi.org/10.5753/se4games.2025.14869"
+        "doi": "http://dx.doi.org/10.5753/se4games.2025.14869"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1926,8 +1893,7 @@
         "title": "ResilienceBench-Operator: A Kubernetes Extension for Orchestrating Resilience Experiments on Microservice Applications.",
         "venue": "Simpósio Brasileiro de Engenharia de Software, 2025, Brasil",
         "pages": "983-989",
-        "doi": "http://dx.doi.org/10.5753/sbes.2025.11566",
-        "url": "http://dx.doi.org/10.5753/sbes.2025.11566"
+        "doi": "http://dx.doi.org/10.5753/sbes.2025.11566"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1951,8 +1917,7 @@
         "title": "Impacto de Desempenho da Granularidade de Microsserviços: Uma Avaliação com o Arcabouço Service Weaver.",
         "venue": "XLII Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC), 2024, Niterói, RJ",
         "pages": "644-657",
-        "doi": "http://dx.doi.org/10.5753/sbrc.2024.1453",
-        "url": "http://dx.doi.org/10.5753/sbrc.2024.1453"
+        "doi": "http://dx.doi.org/10.5753/sbrc.2024.1453"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1971,8 +1936,7 @@
         "title": "A Remote Cyber-Physical Patient Monitoring System Using Computer Vision Technologies.",
         "venue": "2024 IEEE 12th International Conference on Serious Games and Applications for Health (SeGAH), 2024, Funchal",
         "pages": "1-8",
-        "doi": "http://dx.doi.org/10.1109/SeGAH61285.2024.10639578",
-        "url": "http://dx.doi.org/10.1109/SeGAH61285.2024.10639578"
+        "doi": "http://dx.doi.org/10.1109/SeGAH61285.2024.10639578"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -1996,8 +1960,7 @@
         "title": "QLattes: An Open-Source Tool for Qualis Annotation and Visualization in the Lattes Platform.",
         "venue": "Seminário Integrado de Software e Hardware, 2023, Brasil",
         "pages": "83-94",
-        "doi": "http://dx.doi.org/10.5753/semish.2023.229845",
-        "url": "http://dx.doi.org/10.5753/semish.2023.229845"
+        "doi": "http://dx.doi.org/10.5753/semish.2023.229845"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2009,8 +1972,7 @@
         "title": "How The Retry Pattern Impacts Application Performance: A Controlled Experiment.",
         "venue": "SBES 2023: XXXVII Brazilian Symposium on Software Engineering, 2023, Campo Grande Brazil",
         "pages": "47-56",
-        "doi": "http://dx.doi.org/10.1145/3613372.3613409",
-        "url": "http://dx.doi.org/10.1145/3613372.3613409"
+        "doi": "http://dx.doi.org/10.1145/3613372.3613409"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2024,8 +1986,7 @@
         "title": "Avaliação de Desempenho de Dois Padrões de Resiliência para Microsserviços: Retry e Circuit Breaker.",
         "venue": "Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos, 2022, Brasil",
         "pages": "517",
-        "doi": "http://dx.doi.org/10.5753/sbrc.2022.222363",
-        "url": "http://dx.doi.org/10.5753/sbrc.2022.222363"
+        "doi": "http://dx.doi.org/10.5753/sbrc.2022.222363"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2044,8 +2005,7 @@
         "title": "A Decade of Internationalization of the Brazilian Symposium on Software Engineering: The Good, the Bad, and the Ugly.",
         "venue": "SBES 2022: XXXVI Brazilian Symposium on Software Engineering, 2022, Virtual Event Brazil",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1145/3555228.3555252",
-        "url": "http://dx.doi.org/10.1145/3555228.3555252"
+        "doi": "http://dx.doi.org/10.1145/3555228.3555252"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2057,8 +2017,7 @@
         "title": "ResilienceBench: Um Ambiente para Avaliação Experimental de Padrões de Resiliência para Microsservic¿os.",
         "venue": "Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos, 2022, Brasil",
         "pages": "65-72",
-        "doi": "http://dx.doi.org/10.5753/sbrc_estendido.2022.223442",
-        "url": "http://dx.doi.org/10.5753/sbrc_estendido.2022.223442"
+        "doi": "http://dx.doi.org/10.5753/sbrc_estendido.2022.223442"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2069,8 +2028,7 @@
         ],
         "title": "Towards First-Class Architectural Connectors: The Case for Self-Adaptive Service Meshes.",
         "venue": "XXXV Brazilian Symposium on Software Engineering (SBES), Insightful Ideas and Emerging Results Track, 2021, Joinville, SC",
-        "doi": "http://dx.doi.org/10.1145/3474624.3477072",
-        "url": "http://dx.doi.org/10.1145/3474624.3477072"
+        "doi": "http://dx.doi.org/10.1145/3474624.3477072"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2083,8 +2041,7 @@
         "title": "Lyzeli: a tool for identifying the clues in survey research data.",
         "venue": "SBES '21: Brazilian Symposium on Software Engineering, 2021, Joinville Brazil",
         "pages": "347",
-        "doi": "http://dx.doi.org/10.1145/3474624.3476018",
-        "url": "http://dx.doi.org/10.1145/3474624.3476018"
+        "doi": "http://dx.doi.org/10.1145/3474624.3476018"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2098,8 +2055,7 @@
         ],
         "title": "Quão Fechada é a Comunidade do SBES? TL;DR: Não Passarás!.",
         "venue": "1st Workshop on Open Science Practices for Software Engineering (OpenScienSE 2021), 2021",
-        "doi": "http://dx.doi.org/10.5281/zenodo.5373453",
-        "url": "http://dx.doi.org/10.5281/zenodo.5373453"
+        "doi": "http://dx.doi.org/10.5281/zenodo.5373453"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2112,8 +2068,7 @@
         ],
         "title": "Model-Based Analysis of Microservice Resiliency Patterns.",
         "venue": "IEEE International Conference on Software Architecture (ICSA 2020), 2020, Salvador, BA",
-        "doi": "http://dx.doi.org/10.1109/ICSA47634.2020.00019",
-        "url": "http://dx.doi.org/10.1109/ICSA47634.2020.00019"
+        "doi": "http://dx.doi.org/10.1109/ICSA47634.2020.00019"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2152,8 +2107,7 @@
         "title": "A Microservice Based Architecture to Support Offloading in Mobile Cloud Computing.",
         "venue": "the XIII Brazilian Symposium, 2019, Salvador",
         "pages": "93-10",
-        "doi": "http://dx.doi.org/10.1145/3357141.3357148",
-        "url": "http://dx.doi.org/10.1145/3357141.3357148"
+        "doi": "http://dx.doi.org/10.1145/3357141.3357148"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2195,8 +2149,7 @@
         "title": "Generality vs. reusability in architecture-based self-adaptation.",
         "venue": "the 12th European Conference, 2018, Madrid",
         "pages": "1",
-        "doi": "http://dx.doi.org/10.1145/3241403.3241423",
-        "url": "http://dx.doi.org/10.1145/3241403.3241423"
+        "doi": "http://dx.doi.org/10.1145/3241403.3241423"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2210,8 +2163,7 @@
         "title": "Benchmark Requirements for Microservices Architecture Research.",
         "venue": "2017 IEEE/ACM 1st International Workshop on Establishing the CommunityWide Infrastructure for ArchitectureBased Software Engineering (ECASE), 2017, Buenos Aires",
         "pages": "8-13",
-        "doi": "http://dx.doi.org/10.1109/ECASE.2017.4",
-        "url": "http://dx.doi.org/10.1109/ECASE.2017.4"
+        "doi": "http://dx.doi.org/10.1109/ECASE.2017.4"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2249,8 +2201,7 @@
         "title": "An Approach for Evaluating Cloud Application Topologies Based on TOSCA.",
         "venue": "2016 IEEE 9th International Conference on Cloud Computing (CLOUD), 2016, San Francisco",
         "pages": "407-414",
-        "doi": "http://dx.doi.org/10.1109/CLOUD.2016.0061",
-        "url": "http://dx.doi.org/10.1109/CLOUD.2016.0061"
+        "doi": "http://dx.doi.org/10.1109/CLOUD.2016.0061"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2264,8 +2215,7 @@
         "title": "A multi-criteria approach for assessing cloud deployment options based on non-functional requirements.",
         "venue": "the 30th Annual ACM Symposium, 2015, Salamanca",
         "pages": "1383-1389",
-        "doi": "http://dx.doi.org/10.1145/2695664.2695923",
-        "url": "http://dx.doi.org/10.1145/2695664.2695923"
+        "doi": "http://dx.doi.org/10.1145/2695664.2695923"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2294,8 +2244,7 @@
         "title": "Improving Business by Migrating Applications to the Cloud Using Cloudstep.",
         "venue": "2015 IEEE 29th International Conference on Advanced Information Networking and Applications Workshops (WAINA), 2015, Gwangiu",
         "pages": "77-82",
-        "doi": "http://dx.doi.org/10.1109/WAINA.2015.32",
-        "url": "http://dx.doi.org/10.1109/WAINA.2015.32"
+        "doi": "http://dx.doi.org/10.1109/WAINA.2015.32"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2309,8 +2258,7 @@
         "title": "Performance Inference: A Novel Approach for Planning the Capacity of IaaS Cloud Applications.",
         "venue": "2015 IEEE 8th International Conference on Cloud Computing (CLOUD), 2015, New York City",
         "pages": "813-820",
-        "doi": "http://dx.doi.org/10.1109/CLOUD.2015.112",
-        "url": "http://dx.doi.org/10.1109/CLOUD.2015.112"
+        "doi": "http://dx.doi.org/10.1109/CLOUD.2015.112"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2385,8 +2333,7 @@
         "title": "TREXCLOUD: Java EE IaaS Cloud Deployment Made Easy.",
         "venue": "2013 IEEE 6th International Conference on Cloud Computing (CLOUD), 2013, Santa Clara",
         "pages": "470-477",
-        "doi": "http://dx.doi.org/10.1109/CLOUD.2013.137",
-        "url": "http://dx.doi.org/10.1109/CLOUD.2013.137"
+        "doi": "http://dx.doi.org/10.1109/CLOUD.2013.137"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2399,8 +2346,7 @@
         "title": "A Declarative Environment for Automatic Performance Evaluation in IaaS Clouds.",
         "venue": "2013 IEEE 6th International Conference on Cloud Computing (CLOUD), 2013, Santa Clara",
         "pages": "285-292",
-        "doi": "http://dx.doi.org/10.1109/CLOUD.2013.12",
-        "url": "http://dx.doi.org/10.1109/CLOUD.2013.12"
+        "doi": "http://dx.doi.org/10.1109/CLOUD.2013.12"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2439,8 +2385,7 @@
         "title": "Cloudstep: A Step-by-Step Decision Process to Support Legacy Application Migration to the Cloud.",
         "venue": "IEEE 6th International Workshop on the Maintenance and Evolution of Service-Oriented and Cloud-Based Systems (MESOCA), 2012, Trento, Itália",
         "pages": "7-16",
-        "doi": "http://dx.doi.org/10.1109/MESOCA.2012.6392602",
-        "url": "http://dx.doi.org/10.1109/MESOCA.2012.6392602"
+        "doi": "http://dx.doi.org/10.1109/MESOCA.2012.6392602"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2452,8 +2397,7 @@
         "title": "Uni4Cloud: An Approach based on Open Standards for Deployment and Management of Multi-cloud Applications.",
         "venue": "ICSE 2011 Software Engineering for Cloud Computing Workshop (SECLOUD), 2011, Honolulu, Hawaii, EUA",
         "pages": "15-21",
-        "doi": "http://dx.doi.org/10.1145/1985500.1985504",
-        "url": "http://dx.doi.org/10.1145/1985500.1985504"
+        "doi": "http://dx.doi.org/10.1145/1985500.1985504"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2507,8 +2451,7 @@
         "title": "The AOSD Community in Brazil and its Crosscutting Impact.",
         "venue": "XXV Simpósio Brasileiro de Engenharia de Software (SBES 2011), Trilha Especial, 2011, São Paulo - SP",
         "pages": "72-81",
-        "doi": "http://dx.doi.org/10.1109/SBES.2011.10",
-        "url": "http://dx.doi.org/10.1109/SBES.2011.10"
+        "doi": "http://dx.doi.org/10.1109/SBES.2011.10"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2521,8 +2464,7 @@
         "title": "Investigating the Impact of Deployment Configuration and User Demand on a Social Network Application in the Amazon EC2 Cloud.",
         "venue": "3rd IEEE International Conference on Cloud Computing Technology and Science (IEEE CloudCom 2011), Workshop on Network Infrastructure Services as part of Cloud Computing (NetCloud), 2011, Atenas, Grécia",
         "pages": "746-751",
-        "doi": "http://dx.doi.org/10.1109/CloudCom.2011.115",
-        "url": "http://dx.doi.org/10.1109/CloudCom.2011.115"
+        "doi": "http://dx.doi.org/10.1109/CloudCom.2011.115"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2548,8 +2490,7 @@
         "venue": "10th IFIP International Conference on Distributed Applications and Interoperable Systems (DAIS2010), 2010, Amsterdam, Holanda",
         "volume": "6115",
         "pages": "169-182",
-        "doi": "http://dx.doi.org/10.1007/978-3-642-13645-0_13",
-        "url": "http://dx.doi.org/10.1007/978-3-642-13645-0_13"
+        "doi": "http://dx.doi.org/10.1007/978-3-642-13645-0_13"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2614,8 +2555,7 @@
         "title": "Performance Impact Analysis of Two Generic Group Communication APIs.",
         "venue": "1st IEEE International Workshop on Middleware Engineering (ME 2009), 2009, Seattle, Washington",
         "pages": "148-153",
-        "doi": "http://dx.doi.org/10.1109/COMPSAC.2009.128",
-        "url": "http://dx.doi.org/10.1109/COMPSAC.2009.128"
+        "doi": "http://dx.doi.org/10.1109/COMPSAC.2009.128"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2644,8 +2584,7 @@
         "title": "An Aspect-Oriented Programming Model for Bag-Of-Tasks Grid Applications.",
         "venue": "7th IEEE International Symposium on Cluster Computing and the Grid (CCGrid 2007), Workshop on Programming Models for Grid Computing, 2007, Rio de Janeiro, Brasil",
         "pages": "789-794",
-        "doi": "http://dx.doi.org/10.1109/ccgrid.2007.19",
-        "url": "http://dx.doi.org/10.1109/ccgrid.2007.19"
+        "doi": "http://dx.doi.org/10.1109/ccgrid.2007.19"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2694,8 +2633,7 @@
         "title": "Detecting Implied Scenarios from Execution Traces.",
         "venue": "14th Working Conference on Reverse Engineering (WCRE'07), 2007, Vancouver, BC, Canada",
         "pages": "50-59",
-        "doi": "http://dx.doi.org/10.1109/wcre.2007.19",
-        "url": "http://dx.doi.org/10.1109/wcre.2007.19"
+        "doi": "http://dx.doi.org/10.1109/wcre.2007.19"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2735,8 +2673,7 @@
         "title": "A Process for Separation of Crosscutting Grid Concerns.",
         "venue": "21st Annual ACM Symposium on Applied Computing (ACM SAC'06), Special Track on Programming for Separation of Concerns, 2006, Dijon, França",
         "pages": "1569-1574",
-        "doi": "http://dx.doi.org/10.1145/1141277.1141643",
-        "url": "http://dx.doi.org/10.1145/1141277.1141643"
+        "doi": "http://dx.doi.org/10.1145/1141277.1141643"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2749,8 +2686,7 @@
         "title": "Interactive Mobile 3D Graphics for On-the-go Visualization and Walkthroughs.",
         "venue": "21st Annual ACM Symposium on Applied Computing (ACM SAC'06), Special Track on Handheld Computing, 2006, Dijon, França",
         "pages": "1002-1007",
-        "doi": "http://dx.doi.org/10.1145/1141277.1141516",
-        "url": "http://dx.doi.org/10.1145/1141277.1141516"
+        "doi": "http://dx.doi.org/10.1145/1141277.1141516"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2792,8 +2728,7 @@
         "title": "An Empirical Evaluation of Client-side Server Selection Policies for Accessing Replicated Web Services.",
         "venue": "20th Annual ACM Symposium on Applied Computing (ACM SAC'05), Special Track on Web Technologies and Applications, 2005, Santa Fé, New Mexico, EUA",
         "pages": "1704-1708",
-        "doi": "http://dx.doi.org/10.1145/1066677.1067062",
-        "url": "http://dx.doi.org/10.1145/1066677.1067062"
+        "doi": "http://dx.doi.org/10.1145/1066677.1067062"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2818,8 +2753,7 @@
         "title": "Aspectual Services: Unifying Service- and Aspect-Oriented Software Development.",
         "venue": "International Conference on Next Generation Web Services Practices (NWeSP'05), 2005, Seul, Coréia do Sul",
         "pages": "351-356",
-        "doi": "http://dx.doi.org/10.1109/NWESP.2005.20",
-        "url": "http://dx.doi.org/10.1109/NWESP.2005.20"
+        "doi": "http://dx.doi.org/10.1109/NWESP.2005.20"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2876,8 +2810,7 @@
         "title": "RefaX: A Refactoring Framework Based on XML.",
         "venue": "IEEE International Conference on Software Maintenance (ICSM'04), 2004, Chicago, Illinois, EUA",
         "pages": "147-156",
-        "doi": "http://dx.doi.org/10.1109/icsm.2004.1357799",
-        "url": "http://dx.doi.org/10.1109/icsm.2004.1357799"
+        "doi": "http://dx.doi.org/10.1109/icsm.2004.1357799"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -2902,8 +2835,7 @@
         "title": "Dynamic Invocation of Replicated Web Services.",
         "venue": "2nd Latin American Web Congress and 10th Brazilian Symposium on Multimedia and the Web (WebMedia & LA-Web 2004 Joint Conference), 2004, Ribeirão Preto, SP",
         "pages": "22-29",
-        "doi": "http://dx.doi.org/10.1109/WEBMED.2004.1348141",
-        "url": "http://dx.doi.org/10.1109/WEBMED.2004.1348141"
+        "doi": "http://dx.doi.org/10.1109/WEBMED.2004.1348141"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3020,8 +2952,7 @@
         "title": "Component Module Classification for Distributed Software Understanding.",
         "venue": "IEEE International Conference on Software Maintenance (ICSM'99), 1999, Oxford, U.K",
         "pages": "119-127",
-        "doi": "http://dx.doi.org/10.1109/ICSM.1999.792595",
-        "url": "http://dx.doi.org/10.1109/ICSM.1999.792595"
+        "doi": "http://dx.doi.org/10.1109/ICSM.1999.792595"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3033,8 +2964,7 @@
         "title": "Developing an Approach for the Recovery of Distributed Software Architectures.",
         "venue": "IEEE International Workshop on Program Comprehension (IWPC'98), 1998, Ischia, Italy",
         "pages": "28-36",
-        "doi": "http://dx.doi.org/10.1109/WPC.1998.693279",
-        "url": "http://dx.doi.org/10.1109/WPC.1998.693279"
+        "doi": "http://dx.doi.org/10.1109/WPC.1998.693279"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3057,8 +2987,7 @@
         "title": "A Quality-Based Analysis of Architecture Recovery Environments.",
         "venue": "First European Working Conference on Software Maintenance and Reengineering (CSMR'97), 1997, Berlin, Germany",
         "pages": "54-59",
-        "doi": "http://dx.doi.org/10.1109/CSMR.1997.583006",
-        "url": "http://dx.doi.org/10.1109/CSMR.1997.583006"
+        "doi": "http://dx.doi.org/10.1109/CSMR.1997.583006"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3070,8 +2999,7 @@
         "title": "Requirements for an Effective Architecture Recovery Framework.",
         "venue": "4th ACM SIGSOFT Symposium on the Foundations of Software Engineering (FSE'96), 2nd International Software Architecture Workshop (ISAW'96), 1996, San Francisco, U.S.A",
         "pages": "101-105",
-        "doi": "http://dx.doi.org/10.1145/243327.243620",
-        "url": "http://dx.doi.org/10.1145/243327.243620"
+        "doi": "http://dx.doi.org/10.1145/243327.243620"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3093,8 +3021,7 @@
         "title": "Using Extended Hierarchical Quorum Consensus to Control Replicated Data: From Traditional Voting to Logical Structures.",
         "venue": "27th Hawaii International Conference on Systems Sciences (HICSS-27), Minitrack on Parallel and Distributed Databases, 1994, Maui, Hawaii, U.S.A",
         "pages": "303-312",
-        "doi": "http://dx.doi.org/10.1109/HICSS.1994.323253",
-        "url": "http://dx.doi.org/10.1109/HICSS.1994.323253"
+        "doi": "http://dx.doi.org/10.1109/HICSS.1994.323253"
       },
       {
         "category": "Trabalhos completos publicados em anais de congressos",
@@ -3148,8 +3075,7 @@
         ],
         "title": "C.. Abertura e Internacionalização do SBES: Um Oximoro Irreconciliável?.",
         "venue": "1st Workshop on Open Science Practices for Software Engineering (OpenScienSE 2021), 2021",
-        "doi": "http://dx.doi.org/10.5281/zenodo.5373522",
-        "url": "http://dx.doi.org/10.5281/zenodo.5373522"
+        "doi": "http://dx.doi.org/10.5281/zenodo.5373522"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -3187,8 +3113,7 @@
         "title": "AltoStratus: Uma Rede de Colaboração com Foco nos Novos Desafios e Oportunidades de Pesquisa em Computação em Nuvem.",
         "venue": "XXV Simpósio Brasileiro de Engenharia de Software (SBES 2011), Trilha Especial, 2011, São Paulo - SP",
         "pages": "138-143",
-        "doi": "http://dx.doi.org/10.1109/SBES.2011.32",
-        "url": "http://dx.doi.org/10.1109/SBES.2011.32"
+        "doi": "http://dx.doi.org/10.1109/SBES.2011.32"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -3202,8 +3127,7 @@
         "title": "Towards Accurate Probabilistic Models Using State Refinement.",
         "venue": "The 7th joint meeting of the European Software Engineering Conference and the ACM SIGSOFT Symposium on the Foundations of Software Engineering (ESEC/FSE 2009), 2009, Amsterdam, The Netherlands",
         "pages": "281-284",
-        "doi": "http://dx.doi.org/10.1145/1595696.1595742",
-        "url": "http://dx.doi.org/10.1145/1595696.1595742"
+        "doi": "http://dx.doi.org/10.1145/1595696.1595742"
       },
       {
         "category": "Resumos expandidos publicados em anais de congressos",
@@ -3386,10 +3310,6 @@
       },
       {
         "category": "Programas de computador sem registro",
-        "text": "ADERALDO, C. M. ; MENDONÇA, N. C. . Kubow. 2019."
-      },
-      {
-        "category": "Programas de computador sem registro",
         "text": "MAIA, P. H. M. ; MENDONÇA, N. C. ; ANDRADE, R. M. C. . RefaX. 2004."
       },
       {
@@ -3405,16 +3325,5 @@
         "text": "MURTA, L. ; TRAVASSOS, G. H. ; GIMENES, I. ; MENDONÇA, N. C. . XXXII Simpósio Brasileiro de Engenharia de Software (SBES 2018). 2018. (Programa de rádio ou TV/Mesa redonda)."
       }
     ]
-  },
-  "artisticOutput": {
-    "items": []
-  },
-  "unmappedSections": {
-    "PotencialInovacao": [
-      "MENDONÇA, N. C.; RODRIGUES, M. A. F. ; MENDONCA, L. R. . QLattes. 2023.",
-      "ADERALDO, C. M. ; MENDONÇA, N. C. . Kubow. 2019.",
-      "COSTA, T. M. ; VASCONCELOS, D. M. ; ADERALDO, C. M. ; MENDONÇA, N. C. . ReslienceBench. 2022."
-    ]
-  },
-  "warnings": []
+  }
 }

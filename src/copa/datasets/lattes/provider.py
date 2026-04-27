@@ -19,9 +19,17 @@ ACADEMIC_ACTIVITIES_EMPTY = {
     "otherBoards": [],
 }
 
+SUPERVISION_LEVELS = (
+    "masters",
+    "doctoral",
+    "undergraduate",
+    "specialization",
+    "others",
+)
+
 SUPERVISIONS_EMPTY = {
-    "completed": [],
-    "ongoing": [],
+    level: {"completed": [], "ongoing": []}
+    for level in SUPERVISION_LEVELS
 }
 
 
@@ -91,10 +99,17 @@ class LattesProvider:
             section_name="supervisions",
             default=SUPERVISIONS_EMPTY,
         )
-        return {
-            "completed": self._filter_sequence(section.get("completed"), start_year, end_year),
-            "ongoing": self._filter_sequence(section.get("ongoing"), start_year, end_year),
-        }
+        payload: dict[str, Any] = {}
+        for level in SUPERVISION_LEVELS:
+            level_section = section.get(level)
+            if not isinstance(level_section, dict):
+                payload[level] = {"completed": [], "ongoing": []}
+                continue
+            payload[level] = {
+                "completed": self._filter_sequence(level_section.get("completed"), start_year, end_year),
+                "ongoing": self._filter_sequence(level_section.get("ongoing"), start_year, end_year),
+            }
+        return payload
 
     def get_experience(
         self,

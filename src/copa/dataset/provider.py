@@ -14,9 +14,10 @@ from copa.util.fs import load_json
 
 
 FORMAT_ARTIFACTS = {
-    "html": "raw.html",
+    "html": "clean.html",
     "raw_html": "raw.html",
-    "cleaned_html": "cleaned.html",
+    "cleaned_html": "clean.html",
+    "clean_html": "clean.html",
     "json": "parsed.json",
     "parsed_json": "parsed.json",
     "blocks": "blocks.json",
@@ -87,8 +88,8 @@ class DatasetProvider:
 
     def get_context_blocks(self, instance_id: str) -> dict[str, object]:
         instance = self.get_instance(instance_id)
-        path = Path(self.dataset_paths.root) / instance.contextBlocks
-        if not path.exists():
+        path = Path(self.dataset_paths.root) / instance.contextBlocks if instance.contextBlocks else None
+        if path is None or not path.exists() or path.is_dir():
             path = self.get_instance_dir(instance_id) / "blocks.json"
         payload = load_json(path)
         if not isinstance(payload, dict):
