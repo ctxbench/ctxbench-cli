@@ -8,7 +8,6 @@ from typing import Any, Callable, Iterable
 from copa.ai.cache import build_judge_prompt_cache_key
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelInput
-from copa.benchmark.experiment_loader import load_experiment
 from copa.benchmark.models import (
     EvaluationBatchSummary,
     EvaluationItemResult,
@@ -17,12 +16,8 @@ from copa.benchmark.models import (
     EvaluationRunResult,
     EvaluationRunSummary,
     EvaluationTrace,
-    ExperimentDataset,
-    Experiment,
     RunResult,
 )
-from copa.benchmark.paths import resolve_eval_jsonl_path, resolve_eval_output_dir
-from copa.benchmark.runspec_generator import generate_runspecs
 from copa.dataset.provider import DatasetProvider
 
 EVALUATION_SYSTEM_INSTRUCTION = (
@@ -212,10 +207,10 @@ def _evaluate_judge(
     result: RunResult,
     question_text: str,
     context_payload: dict[str, Any],
-    experiment: Experiment,
+    judges: list[EvaluationModelConfig],
     engine: Engine,
 ) -> tuple[dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
-    if not experiment.evaluation.judges:
+    if not judges:
         return {
             "evaluationMethod": "judge",
             "error": "Experiment evaluation.judges is required for judge validation.",
@@ -230,7 +225,7 @@ def _evaluate_judge(
     judge_infos: list[EvaluationJudgeInfo] = []
     traces: list[EvaluationTrace] = []
     valid_votes: list[dict[str, Any]] = []
-    for config in experiment.evaluation.judges:
+    for config in judges:
         payload, judge_info, trace = _judge_request(
             config=config,
             prompt=prompt,
@@ -298,12 +293,16 @@ def _resolve_context_block_path(blocks: dict[str, Any], path: str) -> Any:
     return current
 
 
-def _collect_context_blocks(blocks: dict[str, Any], paths: list[str]) -> dict[str, Any]:
+def _collect_context_blocks(blocks: dict[str, Any], paths: list[str]) -> tuple[dict[str, Any], list[str]]:
     selected_paths = list(paths) if paths else [key for key in blocks.keys() if key != "_meta"]
-    return {
-        path: _resolve_context_block_path(blocks, path)
-        for path in selected_paths
-    }
+    collected: dict[str, Any] = {}
+    missing: list[str] = []
+    for path in selected_paths:
+        try:
+            collected[path] = _resolve_context_block_path(blocks, path)
+        except ValueError:
+            missing.append(path)
+    return collected, missing
 
 
 def _criterion_payload(value: Any) -> dict[str, str]:
@@ -379,8 +378,8 @@ def _merge_evaluation_traces(traces: list[EvaluationTrace]) -> EvaluationTrace:
 def evaluate_run_result(
     result: RunResult,
     provider: DatasetProvider,
-    experiment: Experiment,
     *,
+    judges: list[EvaluationModelConfig],
     only: str | None = None,
     mode: str | None = None,
     engine: Engine | None = None,
@@ -391,9 +390,8 @@ def evaluate_run_result(
     if only and result.questionId != only:
         return None
 
-    question = provider.get_question(result.questionId)
-    rendered_question = result.question or question.question
-    validation_type = question.validation.type
+    rendered_question = result.question
+    validation_type = result.validationType or result.metadata.validationType
     if mode and validation_type != mode:
         return None
     active_engine = engine or Engine()
@@ -409,12 +407,24 @@ def evaluate_run_result(
         )
     if validation_type == "judge":
         blocks = provider.get_context_blocks(result.instanceId)
-        context_payload = _collect_context_blocks(blocks, list(question.contextBlock))
+        context_payload, missing_context_blocks = _collect_context_blocks(blocks, list(result.contextBlock))
+        if event_logger is not None:
+            for path in missing_context_blocks:
+                event_logger(
+                    "WARN",
+                    "Context block path not found; ignoring",
+                    {
+                        "runId": result.runId,
+                        "questionId": result.questionId,
+                        "instanceId": result.instanceId,
+                        "contextBlock": path,
+                    },
+                )
         details, judge_info, trace = _evaluate_judge(
             result,
             rendered_question,
             context_payload,
-            experiment,
+            judges,
             active_engine,
         )
     else:
@@ -441,7 +451,7 @@ def evaluate_run_result(
         executionToolCalls=summary.get("tool_call_count", metrics.get("tool_call_count_semantic", metrics.get("tool_call_count"))),
         executionFunctionCalls=summary.get("function_call_count", metrics.get("function_call_count")),
         executionLlmCalls=summary.get("llm_call_count", metrics.get("llm_call_count", metrics.get("model_calls"))),
-        questionTags=list(question.tags),
+        questionTags=list(result.questionTags),
         evaluationJudgeUsed=judge_info.used,
         evaluationJudgeRole=judge_info.role,
         evaluationJudgeProvider=judge_info.provider,
@@ -478,14 +488,14 @@ def evaluate_run_result(
 def evaluate_run_results(
     results: Iterable[RunResult],
     *,
-    experiment: Experiment,
+    judges: list[EvaluationModelConfig],
     only: str | None = None,
     mode: str | None = None,
     continue_on_error: bool = False,
     event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
     on_result: Callable[[RunResult, EvaluationRunResult | None], None] | None = None,
 ) -> list[EvaluationRunResult]:
-    provider = DatasetProvider.from_dataset(experiment.dataset)
+    provider_cache: dict[str, DatasetProvider] = {}
     engine = Engine(event_logger=event_logger)
     evaluations: list[EvaluationRunResult] = []
     ordered_results = sorted(
@@ -503,8 +513,11 @@ def evaluate_run_results(
             try:
                 evaluated = evaluate_run_result(
                     result,
-                    provider,
-                    experiment,
+                    provider_cache.setdefault(
+                        result.dataset.root,
+                        DatasetProvider.from_dataset(result.dataset),
+                    ),
+                    judges=judges,
                     only=only,
                     mode=mode,
                     engine=engine,
@@ -520,37 +533,6 @@ def evaluate_run_results(
     finally:
         engine.close()
     return evaluations
-
-
-def load_experiment_for_evaluation(path: str | Path) -> tuple[Experiment, Path]:
-    resolved = Path(path).resolve()
-    experiment = load_experiment(resolved)
-    experiment.dataset = ExperimentDataset(root=str((resolved.parent / experiment.dataset.root).resolve()))
-    return experiment, resolved.parent
-
-
-def runspec_index_for_experiment(
-    experiment: Experiment,
-    base_dir: Path,
-    *,
-    experiment_path: str | Path | None = None,
-) -> dict[str, Any]:
-    return {
-        item.runId: item
-        for item in generate_runspecs(experiment, base_dir, experiment_path=experiment_path)
-    }
-
-
-def evaluation_output_paths(
-    experiment: Experiment,
-    base_dir: Path,
-    *,
-    output_dir: str | None = None,
-    output_jsonl: str | None = None,
-) -> tuple[Path, Path | None]:
-    target_dir = Path(output_dir).resolve() if output_dir else resolve_eval_output_dir(experiment, base_dir)
-    target_jsonl = Path(output_jsonl).resolve() if output_jsonl else resolve_eval_jsonl_path(experiment, base_dir)
-    return target_dir, target_jsonl
 
 
 def build_evaluation_summary_rows(rows: Iterable[dict[str, Any]]) -> EvaluationBatchSummary:

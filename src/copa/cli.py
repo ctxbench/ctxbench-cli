@@ -60,9 +60,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     eval_parser = subparsers.add_parser("eval", help="Evaluate one or many run results")
     eval_inputs = eval_parser.add_mutually_exclusive_group(required=True)
-    eval_inputs.add_argument("--run-results-dir", help="Directory containing run result JSON files")
-    eval_inputs.add_argument("--run-results-json", help="Run result JSON or JSONL file")
-    eval_parser.add_argument("--experiment", required=True, help="Experiment JSON file")
+    eval_inputs.add_argument("--run-dir", help="Directory containing run result JSON files")
+    eval_inputs.add_argument("--run-jsonl", help="Run result JSON or JSONL file")
     eval_parser.add_argument("--output-dir", help="Directory to write evaluation JSON files")
     eval_parser.add_argument("--output-jsonl", help="Optional JSONL file for flattened evaluation rows")
     eval_parser.add_argument("--output-csv", help="Optional CSV file for flattened evaluation rows")
@@ -78,9 +77,8 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("--progress", action="store_true", help="Show batch progress")
     eval_parser.set_defaults(
         func=lambda args: eval_command(
-            run_results_dir=args.run_results_dir,
-            run_results_json=args.run_results_json,
-            experiment_path=args.experiment,
+            run_dir=args.run_dir,
+            run_jsonl=args.run_jsonl,
             output_dir=args.output_dir,
             output_jsonl=args.output_jsonl,
             output_csv=args.output_csv,

@@ -257,6 +257,10 @@ class RunSpec(BaseModel):
     questionId: str
     question: str = ""
     questionTemplate: str | None = None
+    questionTags: list[str] = Field(default_factory=list)
+    validationType: str | None = None
+    contextBlock: list[str] = Field(default_factory=list)
+    parameters: dict[str, Any] = Field(default_factory=dict)
     instanceId: str
     provider: str
     modelName: str | None = None
@@ -296,6 +300,9 @@ class RunSpec(BaseModel):
                 "repeatIndex": payload.get("repeatIndex", 1),
                 "parameters": payload.get("parameters", {}),
             }
+        payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
+        payload.setdefault("validationType", payload["metadata"].get("validationType"))
+        payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self) -> dict[str, Any]:
@@ -305,15 +312,22 @@ class RunSpec(BaseModel):
             "questionId": self.questionId,
             "question": self.question,
             "questionTemplate": self.questionTemplate,
+            "dataset": self.dataset.model_dump(mode="json"),
             "instanceId": self.instanceId,
             "model": self.modelName,
             "provider": self.provider,
             "strategy": self.strategy,
             "format": self.format,
+            "params": self.params,
             "repeatIndex": self.repeatIndex,
-            "questionTags": list(self.metadata.questionTags),
-            "validationType": self.metadata.validationType,
-            "parameters": dict(self.metadata.parameters),
+            "outputRoot": self.outputRoot,
+            "evaluationEnabled": self.evaluationEnabled,
+            "trace": self.trace.model_dump(mode="json"),
+            "questionTags": list(self.questionTags),
+            "validationType": self.validationType,
+            "contextBlock": list(self.contextBlock),
+            "parameters": dict(self.parameters),
+            "metadata": self.metadata.model_dump(mode="json"),
         }
 
 
@@ -347,6 +361,10 @@ class RunResult(BaseModel):
     questionId: str
     question: str = ""
     questionTemplate: str | None = None
+    questionTags: list[str] = Field(default_factory=list)
+    validationType: str | None = None
+    contextBlock: list[str] = Field(default_factory=list)
+    parameters: dict[str, Any] = Field(default_factory=dict)
     instanceId: str
     provider: str
     modelName: str | None = None
@@ -391,6 +409,9 @@ class RunResult(BaseModel):
                 "repeatIndex": payload.get("repeatIndex", 1),
                 "parameters": payload.get("parameters", {}),
             }
+        payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
+        payload.setdefault("validationType", payload["metadata"].get("validationType"))
+        payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
@@ -400,12 +421,14 @@ class RunResult(BaseModel):
             "questionId": self.questionId,
             "question": self.question,
             "questionTemplate": self.questionTemplate,
+            "dataset": self.dataset.model_dump(mode="json"),
             "instanceId": self.instanceId,
             "provider": self.provider,
             "model": self.modelName,
             "strategy": self.strategy,
             "format": self.format,
             "repeatIndex": self.repeatIndex,
+            "outputRoot": self.outputRoot,
             "status": self.status,
             "answer": self.answer,
             "errorMessage": self.errorMessage,
@@ -413,7 +436,11 @@ class RunResult(BaseModel):
             "usage": self.usage,
             "metricsSummary": self.metricsSummary,
             "traceRef": trace_ref,
-            "parameters": dict(self.metadata.parameters),
+            "questionTags": list(self.questionTags),
+            "validationType": self.validationType,
+            "contextBlock": list(self.contextBlock),
+            "parameters": dict(self.parameters),
+            "metadata": self.metadata.model_dump(mode="json"),
         }
 
 

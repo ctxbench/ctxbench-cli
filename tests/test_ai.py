@@ -9,13 +9,16 @@ from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
 from copa.ai.models.openai import OpenAIModel
 from copa.ai.trace import TraceCollector
-from copa.benchmark.evaluation import _evaluate_judge
+from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
 from copa.benchmark.executor import execute_runspec
 from copa.benchmark.models import (
     EvaluationJudgeInfo,
     EvaluationTrace,
     Experiment,
     ExperimentDataset,
+    RunResult,
+    RunTiming,
+    RunTrace,
     RunMetadata,
     RunSpec,
 )
@@ -268,7 +271,7 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
         result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
         question_text="Question?",
         context_payload={"summary": "Ground truth answer."},
-        experiment=make_experiment(),
+        judges=make_experiment().evaluation.judges,
         engine=Engine(),
     )
 
@@ -329,7 +332,7 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
         result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
         question_text="Question?",
         context_payload={"summary": "Ground truth answer."},
-        experiment=experiment,
+        judges=experiment.evaluation.judges,
         engine=Engine(),
     )
 
@@ -473,6 +476,72 @@ def test_openai_model_build_payload_includes_prompt_cache_fields():
 
     assert payload["prompt_cache_key"] == "inl:html:abc123"
     assert payload["prompt_cache_retention"] == "24h"
+
+
+def test_evaluate_run_result_warns_and_ignores_missing_context_block(tmp_path, monkeypatch):
+    dataset = write_mock_dataset(tmp_path / "dataset")
+    provider = DatasetProvider.from_dataset(dataset)
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="judge"),
+            EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    events: list[tuple[str, str, dict[str, object]]] = []
+    result = RunResult(
+        runId="run-1",
+        experimentId="exp-1",
+        dataset=dataset,
+        questionId="q_year",
+        question="In which year did the researcher obtain their PhD?",
+        questionTemplate="In which year did the researcher obtain their PhD?",
+        questionTags=["objective", "simple"],
+        validationType="judge",
+        contextBlock=["summary", "missing.path"],
+        parameters={},
+        instanceId="cv-demo",
+        provider="mock",
+        modelName="mock",
+        strategy="inline",
+        format="json",
+        repeatIndex=1,
+        answer="2020",
+        status="success",
+        timing=RunTiming(startedAt="2026-01-01T00:00:00Z", finishedAt="2026-01-01T00:00:01Z", durationMs=1000),
+        usage={},
+        metricsSummary={},
+        trace=RunTrace(),
+        metadata=RunMetadata(
+            canonicalId="exp-1|q_year|cv-demo|mock|mock|inline|json|1",
+            questionId="q_year",
+            instanceId="cv-demo",
+            provider="mock",
+            modelName="mock",
+            strategy="inline",
+            format="json",
+            repeatIndex=1,
+        ),
+    )
+
+    evaluated = evaluate_run_result(
+        result,
+        provider,
+        judges=[make_experiment().evaluation.judges[0]],
+        engine=Engine(),
+        event_logger=lambda label, message, fields: events.append((label, message, fields)),
+    )
+
+    assert evaluated is not None
+    assert evaluated.items[0].details["contextBlock"] == ["summary"]
+    assert any(label == "WARN" and fields.get("contextBlock") == "missing.path" for label, _message, fields in events)
 
 
 def test_openai_model_extracts_cache_metadata():

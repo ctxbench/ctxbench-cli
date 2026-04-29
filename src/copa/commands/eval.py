@@ -6,12 +6,9 @@ from typing import Any
 from copa.benchmark.evaluation import (
     build_evaluation_summary_rows,
     evaluate_run_results,
-    evaluation_output_paths,
     export_evaluation_rows_csv,
-    load_experiment_for_evaluation,
-    runspec_index_for_experiment,
 )
-from copa.benchmark.models import RunResult
+from copa.benchmark.models import EvaluationModelConfig, RunResult
 from copa.benchmark.results import append_evaluation_jsonl, write_evaluation_file
 from copa.util.artifacts import evalresult_filename
 from copa.util.fs import load_json, write_json
@@ -21,84 +18,101 @@ from copa.util.logging import PhaseLogger, ProgressTracker
 
 def _read_result_payloads(
     *,
-    run_results_dir: str | None = None,
-    run_results_json: str | None = None,
+    run_dir: str | None = None,
+    run_jsonl: str | None = None,
 ) -> tuple[list[dict[str, Any]], Path]:
-    if bool(run_results_dir) == bool(run_results_json):
-        raise ValueError("Provide exactly one of --run-results-dir or --run-results-json.")
-    if run_results_dir:
-        source = Path(run_results_dir)
+    if bool(run_dir) == bool(run_jsonl):
+        raise ValueError("Provide exactly one of --run-dir or --run-jsonl.")
+    if run_dir:
+        source = Path(run_dir)
         payloads = [load_json(item) for item in sorted(source.glob("*.json"))]
         return payloads, source
-    source = Path(run_results_json or "")
+    source = Path(run_jsonl or "")
     if source.suffix == ".jsonl":
         return [dict(item) for item in read_jsonl(source)], source
     return [load_json(source)], source
 
 
-def _load_trace_payload(source_root: Path, trace_ref: str | None) -> dict[str, Any]:
-    if not trace_ref:
-        return {}
-    trace_path = source_root / trace_ref
-    if not trace_path.exists():
-        return {}
-    payload = load_json(trace_path)
-    trace = payload.get("trace", {})
-    return trace if isinstance(trace, dict) else {}
+def _artifact_root(source: Path) -> Path:
+    if source.is_dir():
+        return source.parent
+    if source.suffix == ".jsonl":
+        return source.parent
+    if source.parent.name == "results":
+        return source.parent.parent
+    return source.parent
+
+
+def _evaluation_manifest_path(source_root: Path) -> Path:
+    return source_root / "evaluation.manifest.json"
+
+
+def _load_evaluation_manifest(source_root: Path) -> dict[str, Any]:
+    manifest_path = _evaluation_manifest_path(source_root)
+    if not manifest_path.exists():
+        raise ValueError(
+            f"Missing evaluation manifest: {manifest_path}. Re-expand the experiment to generate self-contained evaluation metadata."
+        )
+    payload = load_json(manifest_path)
+    if not isinstance(payload, dict):
+        raise ValueError(f"Invalid evaluation manifest: {manifest_path}")
+    return payload
+
+
+def _load_judges_from_manifest(source_root: Path) -> list[EvaluationModelConfig]:
+    payload = _load_evaluation_manifest(source_root)
+    evaluation = payload.get("evaluation", {})
+    judges_payload = evaluation.get("judges", []) if isinstance(evaluation, dict) else []
+    return [
+        EvaluationModelConfig.model_validate(item)
+        for item in judges_payload
+        if isinstance(item, dict)
+    ]
+
+
+def _evaluation_output_paths(
+    source_root: Path,
+    *,
+    output_dir: str | None = None,
+    output_jsonl: str | None = None,
+) -> tuple[Path, Path | None]:
+    manifest = _load_evaluation_manifest(source_root)
+    evaluation = manifest.get("evaluation", {}) if isinstance(manifest, dict) else {}
+    configured_dir = evaluation.get("output") if isinstance(evaluation, dict) else None
+    configured_jsonl = evaluation.get("jsonl") if isinstance(evaluation, dict) else None
+    target_dir = Path(output_dir).resolve() if output_dir else (source_root / str(configured_dir or "evaluation")).resolve()
+    target_jsonl = (
+        Path(output_jsonl).resolve()
+        if output_jsonl
+        else (source_root / str(configured_jsonl or "evaluation.jsonl")).resolve()
+    )
+    return target_dir, target_jsonl
 
 
 def load_results_from_input(
     *,
-    run_results_dir: str | None = None,
-    run_results_json: str | None = None,
-    experiment_path: str,
+    run_dir: str | None = None,
+    run_jsonl: str | None = None,
 ) -> list[RunResult]:
-    payloads, source = _read_result_payloads(
-        run_results_dir=run_results_dir,
-        run_results_json=run_results_json,
+    payloads, _source = _read_result_payloads(
+        run_dir=run_dir,
+        run_jsonl=run_jsonl,
     )
     if not payloads:
         return []
-    if "dataset" in payloads[0]:
-        return [RunResult.model_validate(item) for item in payloads]
-
-    experiment, base_dir = load_experiment_for_evaluation(experiment_path)
-    runspecs_by_id = runspec_index_for_experiment(experiment, base_dir, experiment_path=experiment_path)
-    source_root = source if source.is_dir() else source.parent
-    results: list[RunResult] = []
-    for payload in payloads:
-        run_id = str(payload.get("runId") or "")
-        runspec = runspecs_by_id.get(run_id)
-        if runspec is None:
-            raise ValueError(f"Run '{run_id}' not found when regenerating execution context from experiment.")
-        trace_payload = _load_trace_payload(source_root, payload.get("traceRef"))
-        results.append(
-            RunResult(
-                runId=runspec.runId,
-                experimentId=runspec.experimentId,
-                dataset=runspec.dataset,
-                questionId=runspec.questionId,
-                question=str(payload.get("question") or runspec.question),
-                questionTemplate=str(payload.get("questionTemplate") or runspec.questionTemplate or ""),
-                instanceId=runspec.instanceId,
-                provider=runspec.provider,
-                modelName=runspec.modelName,
-                strategy=runspec.strategy,
-                format=runspec.format,
-                repeatIndex=runspec.repeatIndex,
-                outputRoot=runspec.outputRoot,
-                answer=str(payload.get("answer", "")),
-                status=str(payload.get("status", "")),
-                errorMessage=payload.get("errorMessage"),
-                timing=payload.get("timing", {}),
-                usage=payload.get("usage", {}),
-                metricsSummary=payload.get("metricsSummary", {}),
-                trace=trace_payload,
-                traceRef=payload.get("traceRef"),
-                metadata=runspec.metadata,
-            )
+    if "dataset" not in payloads[0]:
+        raise ValueError(
+            "Run result artifacts are incomplete. Re-run execution with self-contained run results before evaluating."
         )
-    return results
+    required_result_fields = {"answer", "status", "timing"}
+    missing = sorted(field for field in required_result_fields if field not in payloads[0])
+    if missing:
+        raise ValueError(
+            "Input artifacts look like run specifications, not run results. "
+            f"Missing result fields: {', '.join(missing)}. "
+            "Use --run-jsonl with results.jsonl or --run-dir with the results directory."
+        )
+    return [RunResult.model_validate(item) for item in payloads]
 
 
 def _evaluation_path(target_dir: Path, result: RunResult) -> Path:
@@ -171,9 +185,8 @@ def _rewrite_jsonl_with_run_payload(
 
 def eval_command(
     *,
-    run_results_dir: str | None,
-    run_results_json: str | None,
-    experiment_path: str,
+    run_dir: str | None,
+    run_jsonl: str | None,
     output_dir: str | None = None,
     output_jsonl: str | None = None,
     output_csv: str | None = None,
@@ -186,21 +199,20 @@ def eval_command(
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
-    logger.phase("LOAD", "Loading experiment", path=experiment_path)
-    experiment, base_dir = load_experiment_for_evaluation(experiment_path)
-    input_path = run_results_dir or run_results_json or ""
+    input_path = run_dir or run_jsonl or ""
+    source = Path(input_path).resolve()
+    source_root = _artifact_root(source)
     logger.phase("LOAD", "Loading run results", path=input_path)
     results = load_results_from_input(
-        run_results_dir=run_results_dir,
-        run_results_json=run_results_json,
-        experiment_path=experiment_path,
+        run_dir=run_dir,
+        run_jsonl=run_jsonl,
     )
+    judges = _load_judges_from_manifest(source_root)
     progress_tracker = ProgressTracker(total=len(results), enabled=progress)
     logger.progress = progress_tracker
     logger.phase("PLAN", "Starting evaluation batch", input=input_path, discoveredRuns=len(results))
-    target_dir, target_jsonl = evaluation_output_paths(
-        experiment,
-        base_dir,
+    target_dir, target_jsonl = _evaluation_output_paths(
+        source_root,
         output_dir=output_dir,
         output_jsonl=output_jsonl,
     )
@@ -247,7 +259,7 @@ def eval_command(
 
     evaluations = evaluate_run_results(
         pending_results,
-        experiment=experiment,
+        judges=judges,
         only=only,
         mode=mode,
         continue_on_error=continue_on_error,

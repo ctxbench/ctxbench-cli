@@ -144,10 +144,13 @@ def test_experiment_expand_respects_scope_and_writes_runspecs(tmp_path):
     assert first["questionId"] in {"q_year", "q_summary"}
     assert first["instanceId"] == "cv_demo"
     assert first["validationType"] == "judge"
+    assert first["contextBlock"] in (["summary"], ["summary", "research"])
+    assert "dataset" in first
     summary = next(row for row in rows if row["questionId"] == "q_summary")
     assert summary["question"] == "Summarize the main research areas for CV Demo."
     assert summary["parameters"] == {"researcher_name": "CV Demo"}
     assert (out_dir / "runs.manifest.json").exists()
+    assert (tmp_path / "evaluation.manifest.json").exists()
     assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 2
 
 
@@ -293,6 +296,32 @@ def test_run_force_reexecutes_and_overwrites_results(tmp_path):
     assert second_payload["answer"] == "2020"
 
 
+def test_run_from_runs_jsonl_writes_results_inside_expanded_root(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    expanded_root = tmp_path / "expanded"
+    runspec_dir = expanded_root / "runs"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(
+        [
+            "experiment",
+            "expand",
+            str(experiment_path),
+            "--out",
+            str(runspec_dir),
+            "--jsonl",
+            str(runspec_jsonl),
+        ]
+    ) == 0
+
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    assert (expanded_root / "results").exists()
+    assert (expanded_root / "results.jsonl").exists()
+    assert list((expanded_root / "results").glob("rr_*.json"))
+    assert list((expanded_root / "traces" / "runs").glob("*.json"))
+
+
 def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
     runspec_dir = tmp_path / "runspecs"
@@ -321,10 +350,8 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     assert main(
         [
             "eval",
-            "--run-results-dir",
+            "--run-dir",
             str(results_dir),
-            "--experiment",
-            str(experiment_path),
             "--output-dir",
             str(eval_dir),
             "--output-csv",
@@ -387,10 +414,8 @@ def test_eval_allows_questions_without_instance_override(tmp_path, monkeypatch):
     assert main(
         [
             "eval",
-            "--run-results-dir",
+            "--run-dir",
             str(results_dir),
-            "--experiment",
-            str(experiment_path),
             "--output-dir",
             str(eval_dir),
         ]
@@ -430,10 +455,8 @@ def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
     assert main(
         [
             "eval",
-            "--run-results-dir",
+            "--run-dir",
             str(results_dir),
-            "--experiment",
-            str(experiment_path),
             "--output-dir",
             str(eval_dir),
             "--output-jsonl",
@@ -449,10 +472,8 @@ def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
     assert main(
         [
             "eval",
-            "--run-results-dir",
+            "--run-dir",
             str(results_dir),
-            "--experiment",
-            str(experiment_path),
             "--output-dir",
             str(eval_dir),
             "--output-jsonl",
@@ -465,3 +486,28 @@ def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
     assert second_payload["details"]["judges"][0]["correctness"]["justification"] == "judge-v10"
     rows = [json.loads(line) for line in eval_jsonl.read_text(encoding="utf-8").splitlines()]
     assert len(rows) == 2
+
+
+def test_eval_rejects_runs_jsonl_with_clear_error(tmp_path, capsys):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    runspec_dir = tmp_path / "runspecs"
+    runspec_jsonl = tmp_path / "runspecs.jsonl"
+
+    assert main(
+        [
+            "experiment",
+            "expand",
+            str(experiment_path),
+            "--out",
+            str(runspec_dir),
+            "--jsonl",
+            str(runspec_jsonl),
+        ]
+    ) == 0
+
+    exit_code = main(["eval", "--run-jsonl", str(runspec_jsonl)])
+    err = capsys.readouterr().err
+
+    assert exit_code == 1
+    assert "run specifications, not run results" in err
+    assert "results.jsonl" in err

@@ -113,6 +113,7 @@ def generate_runspecs(
                                     "trace": experiment.trace,
                                     "questionTags": list(question.tags),
                                     "validationType": question.validation.type,
+                                    "contextBlock": list(question.contextBlock),
                                     "parameters": parameters,
                                 }
                             )
@@ -130,6 +131,10 @@ def generate_runspecs(
                 questionId=item["questionId"],
                 question=item["question"],
                 questionTemplate=item["questionTemplate"],
+                questionTags=item["questionTags"],
+                validationType=item["validationType"],
+                contextBlock=item["contextBlock"],
+                parameters=item["parameters"],
                 instanceId=item["instanceId"],
                 provider=item["provider"],
                 modelName=item["modelName"],

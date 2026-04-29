@@ -12,10 +12,17 @@ from copa.util.jsonl import write_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
 
 
-def _manifest_targets(target_dir: Path, target_jsonl: Path | None) -> list[Path]:
+def _runs_manifest_targets(target_dir: Path, target_jsonl: Path | None) -> list[Path]:
     candidates = {target_dir / "runs.manifest.json"}
     if target_jsonl is not None:
         candidates.add(target_jsonl.parent / "runs.manifest.json")
+    return sorted(candidates)
+
+
+def _evaluation_manifest_targets(target_dir: Path, target_jsonl: Path | None) -> list[Path]:
+    candidates = {target_dir.parent / "evaluation.manifest.json"}
+    if target_jsonl is not None:
+        candidates.add(target_jsonl.parent / "evaluation.manifest.json")
     return sorted(candidates)
 
 
@@ -71,9 +78,27 @@ def expand_experiment(
 
     if target_jsonl is not None:
         write_jsonl(target_jsonl, payloads)
-    manifest_payload = {"experimentPath": str(Path(path).resolve())}
-    for manifest_path in _manifest_targets(target_dir, target_jsonl):
-        write_json(manifest_path, manifest_payload)
+    runs_manifest_payload = {
+        "experimentId": experiment.id,
+        "experimentPath": str(Path(path).resolve()),
+    }
+    evaluation_manifest_payload = {
+        "experimentId": experiment.id,
+        "evaluation": {
+            "enabled": experiment.evaluation.enabled,
+            "output": experiment.evaluation.output or "evaluation",
+            "jsonl": experiment.evaluation.jsonl or "evaluation.jsonl",
+            "judges": [
+                item.model_dump(mode="json")
+                for item in experiment.evaluation.judges
+            ],
+        },
+    }
+    for manifest_path in _runs_manifest_targets(target_dir, target_jsonl):
+        write_json(manifest_path, runs_manifest_payload)
+        logger.phase("WRITE", "Artifact written", path=manifest_path)
+    for manifest_path in _evaluation_manifest_targets(target_dir, target_jsonl):
+        write_json(manifest_path, evaluation_manifest_payload)
         logger.phase("WRITE", "Artifact written", path=manifest_path)
 
     if target_jsonl is not None:

@@ -16,8 +16,6 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     from copa.dataset.provider import DatasetProvider
 
     provider = DatasetProvider.from_dataset(runspec.dataset)
-    question = provider.get_question(runspec.questionId)
-    question_instance = provider.get_question_instance(runspec.questionId, runspec.instanceId)
     context = provider.get_context(runspec.instanceId, runspec.format)
     context_path = provider.get_context_artifact_path(runspec.instanceId, runspec.format)
     instance_dir = provider.get_instance_dir(runspec.instanceId)
@@ -35,7 +33,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         )
 
     request = AIRequest(
-        question=runspec.question or question.question,
+        question=runspec.question,
         context=context,
         provider_name=runspec.provider,
         model_name=str(runspec.params.get("model_name", "")),
@@ -54,8 +52,8 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
             "provider": runspec.provider,
             "lattes_id": lattes_id,
             "instance_dir": str(instance_dir.resolve()),
-            "question_tags": list(question.tags),
-            "validation_type": question.validation.type,
+            "question_tags": list(runspec.questionTags),
+            "validation_type": runspec.validationType,
             "context_path": str(context_path.resolve()),
         },
     )
@@ -112,8 +110,12 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         experimentId=runspec.experimentId,
         dataset=runspec.dataset,
         questionId=runspec.questionId,
-        question=runspec.question or question.question,
-        questionTemplate=runspec.questionTemplate or question.question,
+        question=runspec.question,
+        questionTemplate=runspec.questionTemplate,
+        questionTags=list(runspec.questionTags),
+        validationType=runspec.validationType,
+        contextBlock=list(runspec.contextBlock),
+        parameters=dict(runspec.parameters),
         instanceId=runspec.instanceId,
         provider=runspec.provider,
         modelName=runspec.modelName,
