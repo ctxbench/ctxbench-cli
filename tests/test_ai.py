@@ -7,6 +7,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
+from copa.ai.models.claude import ClaudeModel
+from copa.ai.models.gemini import GeminiModel
 from copa.ai.models.openai import OpenAIModel
 from copa.ai.trace import TraceCollector
 from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
@@ -145,6 +147,8 @@ class RecordingModel(ModelAdapter):
             input_tokens=11,
             output_tokens=1,
             total_tokens=12,
+            cached_input_tokens=4,
+            cache_read_input_tokens=4,
             duration_ms=7,
             metadata={"provider": "recording"},
         )
@@ -209,15 +213,23 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
     result = engine.execute(make_request(provider_name="recording"))
 
     assert result.answer == "3"
-    assert result.usage == {"inputTokens": 11, "outputTokens": 1, "totalTokens": 12}
+    assert result.usage == {
+        "inputTokens": 11,
+        "outputTokens": 1,
+        "totalTokens": 12,
+        "cachedInputTokens": 4,
+        "cacheReadInputTokens": 4,
+    }
     assert model.last_input is not None
     assert "# Context:" in model.last_input.prompt
     assert "# Question:" in model.last_input.prompt
     assert model.last_input.prompt.index("# Context:") < model.last_input.prompt.index("# Question:")
     metrics = result.trace["metrics"]
-    assert metrics["question_tokens"] == len("How many publications are listed?".split())
-    assert metrics["llm_call_count"] == 1
-    assert metrics["total_llm_tokens"] == 12
+    assert metrics["questionTokensEstimated"] == len("How many publications are listed?".split())
+    assert metrics["modelCalls"] == 1
+    assert metrics["totalTokens"] == 12
+    assert metrics["cachedInputTokens"] == 4
+    assert metrics["cacheReadInputTokens"] == 4
 
 
 def test_engine_local_function_uses_resource_tools_and_records_calls():
@@ -248,7 +260,7 @@ def test_engine_local_function_uses_resource_tools_and_records_calls():
     assert result.answer == "Software engineering"
     assert runtime.calls == [("get_publications", {"lattes_id": "cv-demo", "start_year": 2020})]
     assert "Researcher Lattes ID:" in model.inputs[0].prompt
-    assert result.trace["metrics"]["tool_call_count_semantic"] == 1
+    assert result.trace["metrics"]["mcpToolCalls"] == 1
 
 
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
@@ -410,9 +422,9 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
     result = execute_runspec(runspec, Engine())
 
     assert isinstance(result.answer, str)
-    assert result.metricsSummary["tool_call_count"] is None
-    assert result.metricsSummary["function_call_count"] is None
-    assert result.metricsSummary["prompt_tokens"] is None
+    assert result.metricsSummary["toolCalls"] is None
+    assert result.metricsSummary["functionCalls"] is None
+    assert result.metricsSummary["inputTokens"] is None
 
 
 def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):
@@ -576,3 +588,44 @@ def test_openai_model_extracts_cache_metadata():
             "cached_content_token_count": 64,
         }
     }
+
+
+def test_openai_model_extracts_cached_input_tokens():
+    class UsageDetails:
+        def __init__(self, cached_tokens: int) -> None:
+            self.cached_tokens = cached_tokens
+
+    class Usage:
+        def __init__(self) -> None:
+            self.input_tokens_details = UsageDetails(cached_tokens=64)
+
+    class Response:
+        def __init__(self) -> None:
+            self.usage = Usage()
+
+    assert OpenAIModel()._extract_cached_input_tokens(Response()) == 64
+
+
+def test_claude_model_extracts_cache_usage():
+    class Usage:
+        def __init__(self) -> None:
+            self.cache_read_input_tokens = 100
+            self.cache_creation_input_tokens = 25
+
+    class Response:
+        def __init__(self) -> None:
+            self.usage = Usage()
+
+    assert ClaudeModel()._extract_cache_usage(Response()) == (100, 25)
+
+
+def test_gemini_model_extracts_cached_input_tokens():
+    class UsageMetadata:
+        def __init__(self) -> None:
+            self.cached_content_token_count = 42
+
+    class Response:
+        def __init__(self) -> None:
+            self.usage_metadata = UsageMetadata()
+
+    assert GeminiModel()._extract_cached_input_tokens(Response()) == 42

@@ -37,10 +37,10 @@ class Engine:
 
     def execute(self, request: AIRequest) -> AIResult:
         trace = TraceCollector()
-        trace.metrics.context_size_chars = len(request.context)
-        trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
-        trace.metrics.question_size_chars = len(request.question)
-        trace.metrics.question_tokens = len(request.question.split()) or None
+        trace.metrics.contextChars = len(request.context)
+        trace.metrics.contextBytes = len(request.context.encode("utf-8"))
+        trace.metrics.questionChars = len(request.question)
+        trace.metrics.questionTokensEstimated = len(request.question.split()) or None
         owned_runtime: ToolRuntime | None = None
         try:
             with trace.span("engine.execute", "engine.execute"):
@@ -65,11 +65,11 @@ class Engine:
 
     def execute_model_input(self, request: AIRequest, model_input: ModelInput) -> AIResult:
         trace = TraceCollector()
-        trace.metrics.context_size_chars = len(request.context)
-        trace.metrics.context_size_bytes = len(request.context.encode("utf-8"))
-        trace.metrics.question_size_chars = len(request.question)
-        trace.metrics.question_tokens = len(request.question.split()) or None
-        trace.metrics.prompt_size_chars = len(model_input.prompt)
+        trace.metrics.contextChars = len(request.context)
+        trace.metrics.contextBytes = len(request.context.encode("utf-8"))
+        trace.metrics.questionChars = len(request.question)
+        trace.metrics.questionTokensEstimated = len(request.question.split()) or None
+        trace.metrics.promptChars = len(model_input.prompt)
         try:
             with trace.span("engine.execute_model_input", "engine.execute_model_input"):
                 model = self._resolve_model(request.provider_name, request.model_name, request.params)
@@ -79,12 +79,18 @@ class Engine:
                     input_tokens=model_response.input_tokens,
                     output_tokens=model_response.output_tokens,
                     total_tokens=model_response.total_tokens,
+                    cached_input_tokens=model_response.cached_input_tokens,
+                    cache_read_input_tokens=model_response.cache_read_input_tokens,
+                    cache_creation_input_tokens=model_response.cache_creation_input_tokens,
                     metadata=model_response.metadata,
                 )
                 usage = {
                     "inputTokens": model_response.input_tokens,
                     "outputTokens": model_response.output_tokens,
                     "totalTokens": model_response.total_tokens,
+                    "cachedInputTokens": model_response.cached_input_tokens,
+                    "cacheReadInputTokens": model_response.cache_read_input_tokens,
+                    "cacheCreationInputTokens": model_response.cache_creation_input_tokens,
                 }
                 usage = {key: value for key, value in usage.items() if value is not None}
                 result = AIResult(

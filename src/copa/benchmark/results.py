@@ -76,8 +76,13 @@ def write_evaluation_trace_file(result: EvaluationRunResult, artifact_root: str 
     )
 
 
-def serialize_run_result(result: RunResult, *, artifact_root: str | Path) -> dict[str, Any]:
-    trace_ref = write_trace_file(result, artifact_root)
+def serialize_run_result(
+    result: RunResult,
+    *,
+    artifact_root: str | Path,
+    write_trace: bool = True,
+) -> dict[str, Any]:
+    trace_ref = write_trace_file(result, artifact_root) if write_trace else None
     result.traceRef = trace_ref
     return result.to_persisted_artifact(trace_ref=trace_ref)
 
@@ -86,9 +91,10 @@ def serialize_evaluation_result(
     result: EvaluationRunResult,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> dict[str, Any]:
     item = result.items[0] if result.items else None
-    trace_ref = write_evaluation_trace_file(result, artifact_root) if artifact_root is not None else None
+    trace_ref = write_evaluation_trace_file(result, artifact_root) if artifact_root is not None and write_trace else None
     if item is None:
         return {
             "experimentId": result.experimentId,
@@ -111,12 +117,13 @@ def write_result_file(
     out_dir: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     target = Path(out_dir)
     target.mkdir(parents=True, exist_ok=True)
     root = Path(artifact_root) if artifact_root is not None else target.parent
     path = target / runresult_filename(result.experimentId, result.runId)
-    write_json(path, serialize_run_result(result, artifact_root=root))
+    write_json(path, serialize_run_result(result, artifact_root=root, write_trace=write_trace))
     return path
 
 
@@ -142,10 +149,11 @@ def append_result_jsonl(
     path: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
-    append_jsonl(target_path, [serialize_run_result(result, artifact_root=root)])
+    append_jsonl(target_path, [serialize_run_result(result, artifact_root=root, write_trace=write_trace)])
     return target_path
 
 
@@ -154,11 +162,12 @@ def write_results_jsonl(
     path: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
     result_list = list(results)
-    write_jsonl(target_path, [serialize_run_result(result, artifact_root=root) for result in result_list])
+    write_jsonl(target_path, [serialize_run_result(result, artifact_root=root, write_trace=write_trace) for result in result_list])
     return target_path
 
 
@@ -184,12 +193,13 @@ def write_evaluation_file(
     out_dir: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     target = Path(out_dir)
     target.mkdir(parents=True, exist_ok=True)
     root = Path(artifact_root) if artifact_root is not None else target.parent
     path = target / evalresult_filename(evaluation.experimentId, evaluation.runId)
-    write_json(path, serialize_evaluation_result(evaluation, artifact_root=root))
+    write_json(path, serialize_evaluation_result(evaluation, artifact_root=root, write_trace=write_trace))
     return path
 
 
@@ -198,10 +208,11 @@ def append_evaluation_jsonl(
     path: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
-    append_jsonl(target_path, [serialize_evaluation_result(evaluation, artifact_root=root)])
+    append_jsonl(target_path, [serialize_evaluation_result(evaluation, artifact_root=root, write_trace=write_trace)])
     return target_path
 
 
@@ -210,9 +221,10 @@ def write_evaluation_jsonl(
     path: str | Path,
     *,
     artifact_root: str | Path | None = None,
+    write_trace: bool = True,
 ) -> Path:
     evaluation_list = list(evaluations)
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
-    write_jsonl(target_path, [serialize_evaluation_result(item, artifact_root=root) for item in evaluation_list])
+    write_jsonl(target_path, [serialize_evaluation_result(item, artifact_root=root, write_trace=write_trace) for item in evaluation_list])
     return Path(path)

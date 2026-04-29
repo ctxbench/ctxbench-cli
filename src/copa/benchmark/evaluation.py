@@ -193,7 +193,7 @@ def _judge_request(
         model=config.model,
         inputTokens=result.usage.get("inputTokens"),
         outputTokens=result.usage.get("outputTokens"),
-        durationMs=metrics.get("total_duration_ms"),
+        durationMs=metrics.get("totalDurationMs"),
     )
     if result.error:
         return None, info, trace
@@ -448,9 +448,9 @@ def evaluate_run_result(
         executionInputTokens=result.usage.get("inputTokens"),
         executionOutputTokens=result.usage.get("outputTokens"),
         executionDurationMs=result.timing.durationMs,
-        executionToolCalls=summary.get("tool_call_count", metrics.get("tool_call_count_semantic", metrics.get("tool_call_count"))),
-        executionFunctionCalls=summary.get("function_call_count", metrics.get("function_call_count")),
-        executionLlmCalls=summary.get("llm_call_count", metrics.get("llm_call_count", metrics.get("model_calls"))),
+        executionToolCalls=summary.get("toolCalls", metrics.get("toolCalls")),
+        executionFunctionCalls=summary.get("functionCalls", metrics.get("functionCalls")),
+        executionLlmCalls=summary.get("modelCalls", metrics.get("modelCalls")),
         questionTags=list(result.questionTags),
         evaluationJudgeUsed=judge_info.used,
         evaluationJudgeRole=judge_info.role,
@@ -557,7 +557,9 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
         "status": row.get("status"),
         "evaluationMethod": row.get("evaluationMethod"),
     }
-    if "outcome" in details:
+    if row.get("outcome") is not None:
+        summary["outcome"] = row.get("outcome")
+    elif "outcome" in details:
         summary["outcome"] = details.get("outcome")
     judges = details.get("judges")
     if isinstance(judges, list):
@@ -577,12 +579,18 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
             if isinstance(item, dict)
         ]
     summary["aggregate"] = {
-        "correctness": details.get("correctness", {}).get("rating")
-        if isinstance(details.get("correctness"), dict)
-        else None,
-        "completeness": details.get("completeness", {}).get("rating")
-        if isinstance(details.get("completeness"), dict)
-        else None,
+        "correctness": row.get("correctness")
+        or (
+            details.get("correctness", {}).get("rating")
+            if isinstance(details.get("correctness"), dict)
+            else None
+        ),
+        "completeness": row.get("completeness")
+        or (
+            details.get("completeness", {}).get("rating")
+            if isinstance(details.get("completeness"), dict)
+            else None
+        ),
     }
     return summary
 
@@ -598,6 +606,14 @@ def export_evaluation_rows_csv(rows: Iterable[dict[str, Any]], path: str | Path)
         "instanceId",
         "status",
         "evaluationMethod",
+        "outcome",
+        "correctness",
+        "completeness",
+        "judgeProvider",
+        "judgeModel",
+        "evaluationInputTokens",
+        "evaluationOutputTokens",
+        "evaluationDurationMs",
         "details",
         "traceRef",
     ]

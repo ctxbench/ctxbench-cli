@@ -54,6 +54,9 @@ class ModelResponse(BaseModel):
     input_tokens: int | None = None
     output_tokens: int | None = None
     total_tokens: int | None = None
+    cached_input_tokens: int | None = None
+    cache_read_input_tokens: int | None = None
+    cache_creation_input_tokens: int | None = None
     duration_ms: int | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
     continuation_state: dict[str, Any] = Field(default_factory=dict)

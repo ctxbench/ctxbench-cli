@@ -301,9 +301,30 @@ The benchmark persists:
 - optional CSV export for evaluation rows
 - trace artifacts
 
+JSONL artifacts are the default canonical source for analysis:
+
+- `runs.jsonl`
+- `results.jsonl`
+- `evaluation.jsonl`
+
+Per-item JSON files (`runs/rs_*.json`, `results/rr_*.json`, `evaluation/re_*.json`) are optional debug artifacts. Enable them explicitly:
+
+```json
+{
+  "artifacts": {
+    "writeJsonl": true,
+    "writeIndividualJson": true
+  },
+  "trace": {
+    "enabled": true,
+    "writeFiles": true
+  }
+}
+```
+
 Run results include a compact `metricsSummary` separate from the raw trace. When a strategy does not expose a metric reliably, the field is stored as `null`.
 
-Evaluation rows persist qualitative details instead of numeric scores.
+Evaluation rows persist qualitative details and expose common fields directly (`outcome`, `correctness`, `completeness`, judge metadata and evaluation token/duration fields) for easier CSV export.
 
 ## Repository Layout
 

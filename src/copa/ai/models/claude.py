@@ -15,6 +15,7 @@ class ClaudeModel(ModelAdapter):
         response = client.beta.messages.create(**payload)
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
+        cache_read_input_tokens, cache_creation_input_tokens = self._extract_cache_usage(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -22,6 +23,9 @@ class ClaudeModel(ModelAdapter):
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             total_tokens=total_tokens,
+            cached_input_tokens=cache_read_input_tokens,
+            cache_read_input_tokens=cache_read_input_tokens,
+            cache_creation_input_tokens=cache_creation_input_tokens,
             duration_ms=duration_ms,
             metadata={
                 "provider": "claude",
@@ -155,6 +159,14 @@ class ClaudeModel(ModelAdapter):
         if total_tokens is None and input_tokens is not None and output_tokens is not None:
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
+
+    def _extract_cache_usage(self, response: Any) -> tuple[int | None, int | None]:
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            return None, None
+        cache_read_input_tokens = getattr(usage, "cache_read_input_tokens", None)
+        cache_creation_input_tokens = getattr(usage, "cache_creation_input_tokens", None)
+        return cache_read_input_tokens, cache_creation_input_tokens
 
     def _normalize_raw_response(self, response: Any) -> Any:
         if hasattr(response, "model_dump"):

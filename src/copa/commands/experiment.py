@@ -62,25 +62,38 @@ def expand_experiment(
     payloads = [runspec.to_persisted_artifact() for runspec in runspecs]
     default_dir = resolve_expand_output_dir(experiment, base_dir)
     target_dir = Path(out_dir).resolve() if out_dir else default_dir
-    target_jsonl = Path(jsonl_path).resolve() if jsonl_path else resolve_expand_jsonl_path(experiment, base_dir)
+    target_jsonl = (
+        Path(jsonl_path).resolve()
+        if jsonl_path
+        else resolve_expand_jsonl_path(experiment, base_dir)
+        if experiment.artifacts.writeJsonl
+        else None
+    )
     ensure_dir(target_dir)
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
     logger.progress = progress_tracker
     progress_tracker.start()
 
-    for runspec in runspecs:
-        artifact_path = target_dir / runspec_filename(runspec.experimentId, runspec.runId)
-        logger.phase("WRITE", "Writing artifact", run=runspec.runId, path=artifact_path)
-        write_json(artifact_path, runspec.to_persisted_artifact())
-        logger.phase("WRITE", "Artifact written", run=runspec.runId, path=artifact_path)
-        logger.phase("DONE", "Completed successfully", run=runspec.runId)
-        progress_tracker.advance()
+    if experiment.artifacts.writeIndividualJson:
+        for runspec in runspecs:
+            artifact_path = target_dir / runspec_filename(runspec.experimentId, runspec.runId)
+            logger.phase("WRITE", "Writing artifact", run=runspec.runId, path=artifact_path)
+            write_json(artifact_path, runspec.to_persisted_artifact())
+            logger.phase("WRITE", "Artifact written", run=runspec.runId, path=artifact_path)
+            logger.phase("DONE", "Completed successfully", run=runspec.runId)
+            progress_tracker.advance()
+    else:
+        for runspec in runspecs:
+            logger.phase("DONE", "RunSpec prepared", run=runspec.runId)
+            progress_tracker.advance()
 
     if target_jsonl is not None:
         write_jsonl(target_jsonl, payloads)
     runs_manifest_payload = {
         "experimentId": experiment.id,
         "experimentPath": str(Path(path).resolve()),
+        "artifacts": experiment.artifacts.model_dump(mode="json"),
+        "trace": experiment.trace.model_dump(mode="json"),
     }
     evaluation_manifest_payload = {
         "experimentId": experiment.id,
@@ -88,6 +101,8 @@ def expand_experiment(
             "enabled": experiment.evaluation.enabled,
             "output": experiment.evaluation.output or "evaluation",
             "jsonl": experiment.evaluation.jsonl or "evaluation.jsonl",
+            "artifacts": experiment.artifacts.model_dump(mode="json"),
+            "trace": experiment.trace.model_dump(mode="json"),
             "judges": [
                 item.model_dump(mode="json")
                 for item in experiment.evaluation.judges

@@ -39,7 +39,7 @@ class LocalMCPStrategy(StrategyAdapter):
                 f"# Question:\n{request.question}\n\n"
                 f"# Researcher Lattes ID:\n{lattes_id}\n\n"
             )
-            trace.metrics.prompt_size_chars = len(prompt)
+            trace.metrics.promptChars = len(prompt)
 
             for step in range(max_steps):
                 model_input = ModelInput(
@@ -58,14 +58,20 @@ class LocalMCPStrategy(StrategyAdapter):
                     input_tokens=model_response.input_tokens,
                     output_tokens=model_response.output_tokens,
                     total_tokens=model_response.total_tokens,
+                    cached_input_tokens=model_response.cached_input_tokens,
+                    cache_read_input_tokens=model_response.cache_read_input_tokens,
+                    cache_creation_input_tokens=model_response.cache_creation_input_tokens,
                     metadata=model_response.metadata,
                 )
                 if not model_response.requested_tool_calls:
                     trace.record_steps(step + 1)
                     usage = {
-                        "inputTokens": trace.metrics.input_tokens,
-                        "outputTokens": trace.metrics.output_tokens,
-                        "totalTokens": trace.metrics.total_tokens,
+                        "inputTokens": trace.metrics.inputTokens,
+                        "outputTokens": trace.metrics.outputTokens,
+                        "totalTokens": trace.metrics.totalTokens,
+                        "cachedInputTokens": trace.metrics.cachedInputTokens,
+                        "cacheReadInputTokens": trace.metrics.cacheReadInputTokens,
+                        "cacheCreationInputTokens": trace.metrics.cacheCreationInputTokens,
                     }
                     usage = {key: value for key, value in usage.items() if value is not None}
                     return AIResult(

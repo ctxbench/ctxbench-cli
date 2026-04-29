@@ -145,37 +145,41 @@ def _build_metrics_summary(*, ai_trace: dict[str, object], strategy: str) -> dic
     if not isinstance(metrics, dict):
         metrics = {}
     summary: dict[str, int | None] = {
-        "experiment_duration": _as_int(metrics.get("experiment_duration") or metrics.get("total_duration_ms")),
-        "strategy_duration": _as_int(metrics.get("strategy_duration") or metrics.get("strategy_duration_ms")),
-        "function_exec_duration": None,
-        "tool_exec_duration": None,
-        "llm_exec_duration": _as_int(metrics.get("llm_exec_duration") or metrics.get("model_duration_ms")),
-        "function_call_count": None,
-        "tool_call_count": None,
-        "llm_call_count": _as_int(metrics.get("llm_call_count") or metrics.get("model_calls")),
-        "prompt_tokens": _as_int(metrics.get("prompt_tokens") or metrics.get("input_tokens")),
-        "question_tokens": _as_int(metrics.get("question_tokens")),
-        "function_tokens": None,
-        "tool_tokens": None,
-        "total_llm_tokens": _as_int(metrics.get("total_llm_tokens") or metrics.get("total_tokens")),
+        "totalDurationMs": _as_int(metrics.get("totalDurationMs")),
+        "strategyDurationMs": _as_int(metrics.get("strategyDurationMs")),
+        "modelDurationMs": _as_int(metrics.get("modelDurationMs")),
+        "toolDurationMs": _as_int(metrics.get("toolDurationMs")),
+        "benchmarkDurationMsEstimated": _as_int(metrics.get("benchmarkDurationMsEstimated")),
+        "loopControlDurationMsEstimated": _as_int(metrics.get("loopControlDurationMsEstimated")),
+        "modelCalls": _as_int(metrics.get("modelCalls")),
+        "mcpToolCalls": _as_int(metrics.get("mcpToolCalls")),
+        "toolCalls": _as_int(metrics.get("toolCalls")),
+        "functionCalls": _as_int(metrics.get("functionCalls")),
+        "steps": _as_int(metrics.get("steps")),
+        "retryCount": _as_int(metrics.get("retryCount")),
+        "inputTokens": _as_int(metrics.get("inputTokens")),
+        "outputTokens": _as_int(metrics.get("outputTokens")),
+        "totalTokens": _as_int(metrics.get("totalTokens")),
+        "totalTokensEstimated": _as_int(metrics.get("totalTokensEstimated")),
+        "cachedInputTokens": _as_int(metrics.get("cachedInputTokens")),
+        "cacheReadInputTokens": _as_int(metrics.get("cacheReadInputTokens")),
+        "cacheCreationInputTokens": _as_int(metrics.get("cacheCreationInputTokens")),
+        "questionTokensEstimated": _as_int(metrics.get("questionTokensEstimated")),
+        "estimatedInputTokens": _as_int(metrics.get("estimatedInputTokens")),
+        "estimatedOutputTokens": _as_int(metrics.get("estimatedOutputTokens")),
+        "reservedTokens": _as_int(metrics.get("reservedTokens")),
+        "contextChars": _as_int(metrics.get("contextChars")),
+        "contextBytes": _as_int(metrics.get("contextBytes")),
+        "questionChars": _as_int(metrics.get("questionChars")),
+        "promptChars": _as_int(metrics.get("promptChars")),
+        "rateLimitWaitMs": _as_int(metrics.get("rateLimitWaitMs")),
+        "retrySleepMs": _as_int(metrics.get("retrySleepMs")),
     }
-    if strategy in {"local_function", "local_mcp"}:
-        summary["function_exec_duration"] = _as_int(metrics.get("function_exec_duration") or metrics.get("function_execution_duration_ms"))
-        summary["tool_exec_duration"] = summary["function_exec_duration"]
-        summary["function_call_count"] = _as_int(metrics.get("function_call_count") or metrics.get("tool_call_count"))
-        summary["tool_call_count"] = _as_int(metrics.get("tool_call_count_semantic") or metrics.get("mcp_tool_calls") or metrics.get("tool_call_count"))
-    elif strategy == "inline":
-        summary["function_exec_duration"] = 0
-        summary["tool_exec_duration"] = 0
-        summary["function_call_count"] = 0
-        summary["tool_call_count"] = 0
-    elif strategy == "mcp":
-        summary["function_exec_duration"] = None
-        summary["tool_exec_duration"] = None
-        summary["function_call_count"] = None
-        summary["tool_call_count"] = None
-        summary["prompt_tokens"] = None
-        summary["total_llm_tokens"] = None
+    if strategy == "inline":
+        summary["toolDurationMs"] = 0
+        summary["toolCalls"] = 0
+        summary["functionCalls"] = 0
+        summary["mcpToolCalls"] = 0
     return summary
 
 

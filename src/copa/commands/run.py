@@ -130,13 +130,18 @@ def run_command(
         return 0
 
     output_root = _artifact_root(source)
+    artifacts = runspecs[0].artifacts
     default_dir = output_root / "results"
     target_dir = Path(out_dir).resolve() if out_dir else default_dir
     target_jsonl = (
         Path(jsonl_path).resolve()
         if jsonl_path
         else output_root / "results.jsonl"
+        if artifacts.writeJsonl
+        else None
     )
+    write_individual_json = artifacts.writeIndividualJson
+    write_traces = runspecs[0].trace.writeFiles
     file_artifact_root = target_dir.parent
     jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     logger.phase("LOAD", "Run specification loading completed", runs=len(runspecs))
@@ -151,9 +156,15 @@ def run_command(
     try:
         for runspec in runspecs:
             result_path = _result_path(target_dir, runspec)
-            if result_path.exists() and not force:
+            if write_individual_json and result_path.exists() and not force:
                 skipped_runs += 1
                 logger.phase("SKIP", "Run already persisted; skipping execution", run=runspec.runId, path=result_path)
+                progress_tracker.advance()
+                completed_runs += 1
+                continue
+            if not write_individual_json and target_jsonl is not None and runspec.runId in existing_jsonl_run_ids and not force:
+                skipped_runs += 1
+                logger.phase("SKIP", "Run already persisted in JSONL; skipping execution", run=runspec.runId, path=target_jsonl)
                 progress_tracker.advance()
                 completed_runs += 1
                 continue
@@ -173,20 +184,26 @@ def run_command(
                 model=model_name,
                 question=runspec.questionId,
             )
-            if force and result_path.exists():
-                logger.phase("WRITE", "Overwriting existing run artifact", run=result.runId, path=result_path)
-            logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
-            written_path = write_result_file(result, target_dir, artifact_root=file_artifact_root)
-            logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
+            if write_individual_json:
+                if force and result_path.exists():
+                    logger.phase("WRITE", "Overwriting existing run artifact", run=result.runId, path=result_path)
+                logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
+                written_path = write_result_file(
+                    result,
+                    target_dir,
+                    artifact_root=file_artifact_root,
+                    write_trace=write_traces,
+                )
+                logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
             if target_jsonl is not None:
                 if force:
                     _rewrite_jsonl_with_run_payload(
                         path=target_jsonl,
                         run_id=result.runId,
-                        payload=serialize_run_result(result, artifact_root=jsonl_artifact_root),
+                        payload=serialize_run_result(result, artifact_root=jsonl_artifact_root, write_trace=write_traces),
                     )
                 else:
-                    append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root)
+                    append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root, write_trace=write_traces)
                 existing_jsonl_run_ids.add(result.runId)
                 logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
             logger.phase("DONE", "Completed successfully", run=result.runId)
@@ -195,7 +212,7 @@ def run_command(
     finally:
         engine.close()
 
-    if skipped_runs:
+    if skipped_runs and write_individual_json:
         _backfill_result_jsonl(
             runspecs,
             target_dir=target_dir,

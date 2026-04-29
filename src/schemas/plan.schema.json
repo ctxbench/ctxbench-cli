@@ -118,10 +118,10 @@
     "recording": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["outputDir", "writeTraces"],
+      "required": ["outputDir", "writeTraceFiles"],
       "properties": {
         "outputDir": { "type": "string", "minLength": 1 },
-        "writeTraces": { "type": "boolean", "default": true },
+        "writeTraceFiles": { "type": "boolean", "default": true },
         "traceFormat": {
           "type": "string",
           "enum": ["jsonl", "json"],

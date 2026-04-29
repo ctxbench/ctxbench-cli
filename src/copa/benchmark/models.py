@@ -163,10 +163,16 @@ class ExperimentEvaluation(BaseModel):
 
 class ExperimentTrace(BaseModel):
     enabled: bool = False
+    writeFiles: bool = True
     save_raw_response: bool = False
     save_tool_calls: bool = False
     save_usage: bool = False
     save_errors: bool = False
+
+
+class ExperimentArtifacts(BaseModel):
+    writeJsonl: bool = True
+    writeIndividualJson: bool = False
 
 
 class Experiment(BaseModel):
@@ -181,6 +187,7 @@ class Experiment(BaseModel):
     evaluation: ExperimentEvaluation = Field(default_factory=ExperimentEvaluation)
     trace: ExperimentTrace = Field(default_factory=ExperimentTrace)
     execution: ExperimentExecution = Field(default_factory=ExperimentExecution)
+    artifacts: ExperimentArtifacts = Field(default_factory=ExperimentArtifacts)
 
     @classmethod
     def model_validate(cls, data: Any) -> "Experiment":
@@ -203,6 +210,8 @@ class Experiment(BaseModel):
             payload["trace"] = ExperimentTrace.model_validate(payload["trace"])
         if "execution" in payload and isinstance(payload["execution"], dict):
             payload["execution"] = ExperimentExecution.model_validate(payload["execution"])
+        if "artifacts" in payload and isinstance(payload["artifacts"], dict):
+            payload["artifacts"] = ExperimentArtifacts.model_validate(payload["artifacts"])
         execution = payload.get("execution")
         execution_output = execution.output if isinstance(execution, ExperimentExecution) else execution.get("output") if isinstance(execution, dict) else None
         if not payload.get("output") and execution_output:
@@ -271,6 +280,7 @@ class RunSpec(BaseModel):
     outputRoot: str | None = None
     evaluationEnabled: bool = False
     trace: ExperimentTrace = Field(default_factory=ExperimentTrace)
+    artifacts: ExperimentArtifacts = Field(default_factory=ExperimentArtifacts)
     metadata: RunMetadata
 
     @classmethod
@@ -323,6 +333,7 @@ class RunSpec(BaseModel):
             "outputRoot": self.outputRoot,
             "evaluationEnabled": self.evaluationEnabled,
             "trace": self.trace.model_dump(mode="json"),
+            "artifacts": self.artifacts.model_dump(mode="json"),
             "questionTags": list(self.questionTags),
             "validationType": self.validationType,
             "contextBlock": list(self.contextBlock),
@@ -491,6 +502,8 @@ class EvaluationItemResult(BaseModel):
     evaluationTrace: EvaluationTrace = Field(default_factory=EvaluationTrace)
 
     def to_persisted_artifact(self) -> dict[str, Any]:
+        correctness = self.details.get("correctness") if isinstance(self.details, dict) else None
+        completeness = self.details.get("completeness") if isinstance(self.details, dict) else None
         return {
             "experimentId": self.experimentId,
             "runId": self.runId,
@@ -498,6 +511,14 @@ class EvaluationItemResult(BaseModel):
             "instanceId": self.instanceId,
             "status": self.status,
             "evaluationMethod": self.evaluationMethod,
+            "outcome": self.details.get("outcome") if isinstance(self.details, dict) else None,
+            "correctness": correctness.get("rating") if isinstance(correctness, dict) else None,
+            "completeness": completeness.get("rating") if isinstance(completeness, dict) else None,
+            "judgeProvider": self.evaluationJudgeProvider,
+            "judgeModel": self.evaluationJudgeModel,
+            "evaluationInputTokens": self.evaluationInputTokens,
+            "evaluationOutputTokens": self.evaluationOutputTokens,
+            "evaluationDurationMs": self.evaluationDurationMs,
             "details": self.details,
         }
 

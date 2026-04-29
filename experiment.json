@@ -1,20 +1,24 @@
 {
   "id": "exp_baseline_001",
   "name": "Baseline run including only inline executions",
-  "output": "final_tests",
+  "output": "sbes2026",
   "dataset": "datasets/lattes",
   "scope": {
-    "instances": ["5521922960404236"],
-    "questions": ["q_phd", "q_sup", "q_projfit_1"]
+    "instances": ["5521922960404236", "5123602572479168", "4093653182381054"],
+    "questions": []
   },
   "factors": {
     "model": [
       {
         "provider": "openai",
         "name": "gpt-5.4-mini-2026-03-17"
+      },
+      {
+        "provider": "google",
+        "name": "gemini-2.5-flash"
       }
     ],
-    "strategy": ["inline", "local_function", "local_mcp"],
+    "strategy": ["inline", "local_function", "local_mcp", "mcp"],
     "format": ["html", "json"]
   },
   "params": {
@@ -33,6 +37,17 @@
       }
     },
     "gpt-5.4-2026-03-05": {
+      "max_output_tokens": 8000,
+      "rate_limit": {
+        "tpm": 400000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 6000
+      }
+    },
+    "gemini-2.5-flash": {
       "max_output_tokens": 8000,
       "rate_limit": {
         "tpm": 400000,
@@ -69,11 +84,17 @@
   "evaluation": {
     "enabled": true,
     "judges": [
-      { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 }
+      { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 },
+      { "provider": "anthropic", "model": "claude-haiku-4-5", "temperature": 0 }
     ]
+  },
+  "artifacts": {
+    "writeJsonl": true,
+    "writeIndividualJson": true
   },
   "trace": {
     "enabled": true,
+    "writeFiles": true,
     "save_raw_response": true,
     "save_tool_calls": true,
     "save_usage": true,

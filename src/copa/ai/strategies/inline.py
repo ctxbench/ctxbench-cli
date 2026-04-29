@@ -23,7 +23,7 @@ class InlineStrategy(StrategyAdapter):
                 f"# Context:\n{request.context}\n\n"
                 f"# Question:\n{request.question}\n"
             )
-            trace.metrics.prompt_size_chars = len(prompt)
+            trace.metrics.promptChars = len(prompt)
             model_input = ModelInput(
                 system_instruction=request.system_instruction or DEFAULT_SYSTEM_INSTRUCTION,
                 prompt=prompt,
@@ -34,12 +34,18 @@ class InlineStrategy(StrategyAdapter):
                 input_tokens=model_response.input_tokens,
                 output_tokens=model_response.output_tokens,
                 total_tokens=model_response.total_tokens,
+                cached_input_tokens=model_response.cached_input_tokens,
+                cache_read_input_tokens=model_response.cache_read_input_tokens,
+                cache_creation_input_tokens=model_response.cache_creation_input_tokens,
                 metadata=model_response.metadata,
             )
             usage = {
                 "inputTokens": model_response.input_tokens,
                 "outputTokens": model_response.output_tokens,
                 "totalTokens": model_response.total_tokens,
+                "cachedInputTokens": model_response.cached_input_tokens,
+                "cacheReadInputTokens": model_response.cache_read_input_tokens,
+                "cacheCreationInputTokens": model_response.cache_creation_input_tokens,
             }
             usage = {key: value for key, value in usage.items() if value is not None}
             return AIResult(

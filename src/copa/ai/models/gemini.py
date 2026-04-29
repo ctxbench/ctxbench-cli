@@ -22,6 +22,7 @@ class GeminiModel(ModelAdapter):
         )
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
+        cached_input_tokens = self._extract_cached_input_tokens(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -29,6 +30,7 @@ class GeminiModel(ModelAdapter):
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             total_tokens=total_tokens,
+            cached_input_tokens=cached_input_tokens,
             duration_ms=duration_ms,
             metadata={"provider": "gemini", "model": request.model_name},
             continuation_state=self._build_continuation_state(response),
@@ -54,6 +56,7 @@ class GeminiModel(ModelAdapter):
         finally:
             runtime.close()
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
+        cached_input_tokens = self._extract_cached_input_tokens(response)
         metadata = {
             "provider": "gemini",
             "model": request.model_name,
@@ -69,6 +72,7 @@ class GeminiModel(ModelAdapter):
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             total_tokens=total_tokens,
+            cached_input_tokens=cached_input_tokens,
             duration_ms=duration_ms,
             metadata=metadata,
             continuation_state=self._build_continuation_state(response),
@@ -283,6 +287,13 @@ class GeminiModel(ModelAdapter):
         if total_tokens is None and input_tokens is not None and output_tokens is not None:
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
+
+    def _extract_cached_input_tokens(self, response: Any) -> int | None:
+        usage = getattr(response, "usage_metadata", None)
+        if usage is None:
+            return None
+        cached_input_tokens = getattr(usage, "cached_content_token_count", None)
+        return cached_input_tokens if isinstance(cached_input_tokens, int) and not isinstance(cached_input_tokens, bool) else None
 
     def _normalize_raw_response(self, response: Any) -> Any:
         if hasattr(response, "model_dump"):

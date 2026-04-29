@@ -111,6 +111,7 @@ def generate_runspecs(
                                     "outputRoot": output_root,
                                     "evaluationEnabled": experiment.evaluation.enabled,
                                     "trace": experiment.trace,
+                                    "artifacts": experiment.artifacts,
                                     "questionTags": list(question.tags),
                                     "validationType": question.validation.type,
                                     "contextBlock": list(question.contextBlock),
@@ -145,6 +146,7 @@ def generate_runspecs(
                 outputRoot=item["outputRoot"],
                 evaluationEnabled=item["evaluationEnabled"],
                 trace=item["trace"],
+                artifacts=item["artifacts"],
                 metadata=RunMetadata(
                     canonicalId=item["canonical_id"],
                     questionId=item["questionId"],

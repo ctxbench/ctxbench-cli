@@ -98,12 +98,17 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
                 },
                 "trace": {
                     "enabled": True,
+                    "writeFiles": True,
                     "save_raw_response": True,
                     "save_tool_calls": True,
                     "save_usage": True,
                     "save_errors": True,
                 },
                 "execution": {"repeats": 1},
+                "artifacts": {
+                    "writeJsonl": True,
+                    "writeIndividualJson": True,
+                },
             }
         ),
         encoding="utf-8",
@@ -232,6 +237,11 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
                     "format": ["json"],
                 },
                 "evaluation": {"enabled": False},
+                "trace": {"enabled": False, "writeFiles": True},
+                "artifacts": {
+                    "writeJsonl": True,
+                    "writeIndividualJson": True,
+                },
             }
         ),
         encoding="utf-8",
@@ -320,6 +330,60 @@ def test_run_from_runs_jsonl_writes_results_inside_expanded_root(tmp_path):
     assert (expanded_root / "results.jsonl").exists()
     assert list((expanded_root / "results").glob("rr_*.json"))
     assert list((expanded_root / "traces" / "runs").glob("*.json"))
+
+
+def test_default_artifacts_use_jsonl_as_canonical_source(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload.pop("artifacts", None)
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_dir = expanded_root / "runs"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(
+        [
+            "experiment",
+            "expand",
+            str(experiment_path),
+            "--out",
+            str(runspec_dir),
+            "--jsonl",
+            str(runspec_jsonl),
+        ]
+    ) == 0
+    assert not list(runspec_dir.glob("rs_*.json"))
+
+    assert main(["run", str(runspec_jsonl)]) == 0
+    results_jsonl = expanded_root / "results.jsonl"
+    assert results_jsonl.exists()
+    assert not list((expanded_root / "results").glob("rr_*.json"))
+    assert list((expanded_root / "traces" / "runs").glob("*.json"))
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(["eval", "--run-jsonl", str(results_jsonl)]) == 0
+    evaluation_jsonl = expanded_root / "evaluation.jsonl"
+    assert evaluation_jsonl.exists()
+    assert not list((expanded_root / "evaluation").glob("re_*.json"))
+    rows = [json.loads(line) for line in evaluation_jsonl.read_text(encoding="utf-8").splitlines()]
+    assert rows
+    assert rows[0]["outcome"] == "meets"
+    assert rows[0]["correctness"] == "meets"
+    assert rows[0]["completeness"] == "meets"
+    assert rows[0]["judgeProvider"] == "mock"
 
 
 def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):

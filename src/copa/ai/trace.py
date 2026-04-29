@@ -15,42 +15,35 @@ class TraceEvent(BaseModel):
 
 
 class AIMetrics(BaseModel):
-    total_duration_ms: int | None = None
-    strategy_duration_ms: int | None = None
-    model_duration_ms: int | None = None
-    benchmark_duration_ms: int | None = None
-    function_execution_duration_ms: int | None = None
-    loop_control_duration_ms: int | None = None
-    model_calls: int = 0
-    tool_call_count: int = 0
-    mcp_tool_calls: int = 0
+    totalDurationMs: int | None = None
+    strategyDurationMs: int | None = None
+    modelDurationMs: int | None = None
+    toolDurationMs: int | None = None
+    benchmarkDurationMsEstimated: int | None = None
+    loopControlDurationMsEstimated: int | None = None
+    modelCalls: int = 0
+    toolCalls: int = 0
+    mcpToolCalls: int = 0
+    functionCalls: int = 0
     steps: int = 0
-    input_tokens: int | None = None
-    output_tokens: int | None = None
-    total_tokens: int | None = None
-    context_size_chars: int | None = None
-    context_size_bytes: int | None = None
-    question_size_chars: int | None = None
-    prompt_size_chars: int | None = None
-    estimated_input_tokens: int | None = None
-    estimated_output_tokens: int | None = None
-    reserved_tokens: int | None = None
-    rate_limit_wait_ms: int | None = None
-    retry_count: int = 0
-    retry_sleep_ms: int | None = None
-    experiment_duration: int | None = None
-    strategy_duration: int | None = None
-    function_exec_duration: int | None = None
-    tool_exec_duration: int | None = None
-    llm_exec_duration: int | None = None
-    function_call_count: int | None = None
-    tool_call_count_semantic: int | None = None
-    llm_call_count: int | None = None
-    prompt_tokens: int | None = None
-    question_tokens: int | None = None
-    function_tokens: int | None = None
-    tool_tokens: int | None = None
-    total_llm_tokens: int | None = None
+    retryCount: int = 0
+    inputTokens: int | None = None
+    outputTokens: int | None = None
+    totalTokens: int | None = None
+    totalTokensEstimated: int | None = None
+    cachedInputTokens: int | None = None
+    cacheReadInputTokens: int | None = None
+    cacheCreationInputTokens: int | None = None
+    questionTokensEstimated: int | None = None
+    estimatedInputTokens: int | None = None
+    estimatedOutputTokens: int | None = None
+    reservedTokens: int | None = None
+    contextChars: int | None = None
+    contextBytes: int | None = None
+    questionChars: int | None = None
+    promptChars: int | None = None
+    rateLimitWaitMs: int | None = None
+    retrySleepMs: int | None = None
 
 
 class AITrace(BaseModel):
@@ -91,6 +84,9 @@ class TraceCollector:
         input_tokens: int | None,
         output_tokens: int | None,
         total_tokens: int | None,
+        cached_input_tokens: int | None = None,
+        cache_read_input_tokens: int | None = None,
+        cache_creation_input_tokens: int | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
         self.events.append(
@@ -101,14 +97,23 @@ class TraceCollector:
                 metadata=metadata or {},
             )
         )
-        self.metrics.model_calls += 1
-        self.metrics.model_duration_ms = self._sum_optional(self.metrics.model_duration_ms, duration_ms)
-        self.metrics.input_tokens = self._sum_optional(self.metrics.input_tokens, input_tokens)
-        self.metrics.output_tokens = self._sum_optional(self.metrics.output_tokens, output_tokens)
-        derived_total = total_tokens
-        if derived_total is None and input_tokens is not None and output_tokens is not None:
-            derived_total = input_tokens + output_tokens
-        self.metrics.total_tokens = self._sum_optional(self.metrics.total_tokens, derived_total)
+        self.metrics.modelCalls += 1
+        self.metrics.modelDurationMs = self._sum_optional(self.metrics.modelDurationMs, duration_ms)
+        self.metrics.inputTokens = self._sum_optional(self.metrics.inputTokens, input_tokens)
+        self.metrics.outputTokens = self._sum_optional(self.metrics.outputTokens, output_tokens)
+        self.metrics.cachedInputTokens = self._sum_optional(self.metrics.cachedInputTokens, cached_input_tokens)
+        self.metrics.cacheReadInputTokens = self._sum_optional(self.metrics.cacheReadInputTokens, cache_read_input_tokens)
+        self.metrics.cacheCreationInputTokens = self._sum_optional(
+            self.metrics.cacheCreationInputTokens,
+            cache_creation_input_tokens,
+        )
+        if total_tokens is not None:
+            self.metrics.totalTokens = self._sum_optional(self.metrics.totalTokens, total_tokens)
+        elif input_tokens is not None and output_tokens is not None:
+            self.metrics.totalTokensEstimated = self._sum_optional(
+                self.metrics.totalTokensEstimated,
+                input_tokens + output_tokens,
+            )
 
     def record_tool_call(self, *, name: str, arguments: dict[str, Any] | None = None) -> None:
         self.events.append(
@@ -118,8 +123,9 @@ class TraceCollector:
                 metadata={"tool_name": name, "arguments": arguments or {}},
             )
         )
-        self.metrics.tool_call_count += 1
-        self.metrics.mcp_tool_calls += 1
+        self.metrics.toolCalls += 1
+        self.metrics.mcpToolCalls += 1
+        self.metrics.functionCalls += 1
 
     def record_tool_result(
         self,
@@ -145,8 +151,8 @@ class TraceCollector:
                 metadata=event_metadata,
             )
         )
-        self.metrics.function_execution_duration_ms = self._sum_optional(
-            self.metrics.function_execution_duration_ms,
+        self.metrics.toolDurationMs = self._sum_optional(
+            self.metrics.toolDurationMs,
             duration_ms,
         )
 
@@ -168,9 +174,9 @@ class TraceCollector:
         estimated_output_tokens: int,
         reserved_tokens: int,
     ) -> None:
-        self.metrics.estimated_input_tokens = estimated_input_tokens
-        self.metrics.estimated_output_tokens = estimated_output_tokens
-        self.metrics.reserved_tokens = reserved_tokens
+        self.metrics.estimatedInputTokens = estimated_input_tokens
+        self.metrics.estimatedOutputTokens = estimated_output_tokens
+        self.metrics.reservedTokens = reserved_tokens
         self.events.append(
             TraceEvent(
                 type="rate_limit.reserve",
@@ -193,7 +199,7 @@ class TraceCollector:
         wait_ms: int,
         reason: str,
     ) -> None:
-        self.metrics.rate_limit_wait_ms = self._sum_optional(self.metrics.rate_limit_wait_ms, wait_ms)
+        self.metrics.rateLimitWaitMs = self._sum_optional(self.metrics.rateLimitWaitMs, wait_ms)
         self.events.append(
             TraceEvent(
                 type="rate_limit.wait",
@@ -237,7 +243,7 @@ class TraceCollector:
         error_kind: str,
         error: str,
     ) -> None:
-        self.metrics.retry_count += 1
+        self.metrics.retryCount += 1
         self.events.append(
             TraceEvent(
                 type="retry.attempt",
@@ -260,7 +266,7 @@ class TraceCollector:
         attempt: int,
         sleep_ms: int,
     ) -> None:
-        self.metrics.retry_sleep_ms = self._sum_optional(self.metrics.retry_sleep_ms, sleep_ms)
+        self.metrics.retrySleepMs = self._sum_optional(self.metrics.retrySleepMs, sleep_ms)
         self.events.append(
             TraceEvent(
                 type="retry.sleep",
@@ -303,14 +309,16 @@ class TraceCollector:
 
     def _apply_span_metrics(self, event: TraceEvent) -> None:
         if event.name == "engine.execute":
-            self.metrics.total_duration_ms = event.duration_ms
+            self.metrics.totalDurationMs = event.duration_ms
+        elif event.name == "engine.execute_model_input":
+            self.metrics.totalDurationMs = event.duration_ms
         elif event.name in {
             "strategy.inline.execute",
             "strategy.local_function.execute",
             "strategy.local_mcp.execute",
             "strategy.mcp.execute",
         }:
-            self.metrics.strategy_duration_ms = event.duration_ms
+            self.metrics.strategyDurationMs = event.duration_ms
 
     def _sum_optional(self, current: int | None, value: int | None) -> int | None:
         if value is None:
@@ -320,22 +328,12 @@ class TraceCollector:
         return current + value
 
     def _finalize_derived_metrics(self) -> None:
-        strategy = self.metrics.strategy_duration_ms
-        model = self.metrics.model_duration_ms or 0
-        function = self.metrics.function_execution_duration_ms or 0
+        strategy = self.metrics.strategyDurationMs
+        model = self.metrics.modelDurationMs or 0
+        function = self.metrics.toolDurationMs or 0
         if strategy is None:
-            self.metrics.benchmark_duration_ms = None
-            self.metrics.loop_control_duration_ms = None
+            self.metrics.benchmarkDurationMsEstimated = None
+            self.metrics.loopControlDurationMsEstimated = None
         else:
-            self.metrics.benchmark_duration_ms = max(0, strategy - model)
-            self.metrics.loop_control_duration_ms = max(0, strategy - model - function)
-        self.metrics.experiment_duration = self.metrics.total_duration_ms
-        self.metrics.strategy_duration = self.metrics.strategy_duration_ms
-        self.metrics.function_exec_duration = self.metrics.function_execution_duration_ms
-        self.metrics.tool_exec_duration = self.metrics.function_execution_duration_ms
-        self.metrics.llm_exec_duration = self.metrics.model_duration_ms
-        self.metrics.function_call_count = self.metrics.tool_call_count
-        self.metrics.tool_call_count_semantic = self.metrics.mcp_tool_calls
-        self.metrics.llm_call_count = self.metrics.model_calls
-        self.metrics.prompt_tokens = self.metrics.input_tokens
-        self.metrics.total_llm_tokens = self.metrics.total_tokens
+            self.metrics.benchmarkDurationMsEstimated = max(0, strategy - model)
+            self.metrics.loopControlDurationMsEstimated = max(0, strategy - model - function)

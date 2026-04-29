@@ -8,7 +8,7 @@ from copa.benchmark.evaluation import (
     evaluate_run_results,
     export_evaluation_rows_csv,
 )
-from copa.benchmark.models import EvaluationModelConfig, RunResult
+from copa.benchmark.models import EvaluationModelConfig, ExperimentArtifacts, ExperimentTrace, RunResult
 from copa.benchmark.results import append_evaluation_jsonl, write_evaluation_file
 from copa.util.artifacts import evalresult_filename
 from copa.util.fs import load_json, write_json
@@ -70,6 +70,24 @@ def _load_judges_from_manifest(source_root: Path) -> list[EvaluationModelConfig]
     ]
 
 
+def _load_artifacts_from_manifest(source_root: Path) -> ExperimentArtifacts:
+    payload = _load_evaluation_manifest(source_root)
+    evaluation = payload.get("evaluation", {}) if isinstance(payload, dict) else {}
+    artifacts = payload.get("artifacts")
+    if isinstance(evaluation, dict) and isinstance(evaluation.get("artifacts"), dict):
+        artifacts = evaluation.get("artifacts")
+    return ExperimentArtifacts.model_validate(artifacts) if isinstance(artifacts, dict) else ExperimentArtifacts()
+
+
+def _load_trace_from_manifest(source_root: Path) -> ExperimentTrace:
+    payload = _load_evaluation_manifest(source_root)
+    evaluation = payload.get("evaluation", {}) if isinstance(payload, dict) else {}
+    trace = payload.get("trace")
+    if isinstance(evaluation, dict) and isinstance(evaluation.get("trace"), dict):
+        trace = evaluation.get("trace")
+    return ExperimentTrace.model_validate(trace) if isinstance(trace, dict) else ExperimentTrace()
+
+
 def _evaluation_output_paths(
     source_root: Path,
     *,
@@ -81,10 +99,13 @@ def _evaluation_output_paths(
     configured_dir = evaluation.get("output") if isinstance(evaluation, dict) else None
     configured_jsonl = evaluation.get("jsonl") if isinstance(evaluation, dict) else None
     target_dir = Path(output_dir).resolve() if output_dir else (source_root / str(configured_dir or "evaluation")).resolve()
+    artifacts = _load_artifacts_from_manifest(source_root)
     target_jsonl = (
         Path(output_jsonl).resolve()
         if output_jsonl
         else (source_root / str(configured_jsonl or "evaluation.jsonl")).resolve()
+        if artifacts.writeJsonl
+        else None
     )
     return target_dir, target_jsonl
 
@@ -129,7 +150,9 @@ def _existing_run_ids_in_jsonl(path: Path | None) -> set[str]:
     }
 
 
-def _load_persisted_evaluation_rows(target_dir: Path) -> list[dict[str, Any]]:
+def _load_persisted_evaluation_rows(target_dir: Path, target_jsonl: Path | None) -> list[dict[str, Any]]:
+    if target_jsonl is not None and target_jsonl.exists():
+        return [dict(row) for row in read_jsonl(target_jsonl)]
     return [
         load_json(path_item)
         for path_item in sorted(target_dir.glob("re_*.json"))
@@ -208,6 +231,10 @@ def eval_command(
         run_jsonl=run_jsonl,
     )
     judges = _load_judges_from_manifest(source_root)
+    artifacts = _load_artifacts_from_manifest(source_root)
+    trace_config = _load_trace_from_manifest(source_root)
+    write_individual_json = artifacts.writeIndividualJson
+    write_traces = trace_config.writeFiles
     progress_tracker = ProgressTracker(total=len(results), enabled=progress)
     logger.progress = progress_tracker
     logger.phase("PLAN", "Starting evaluation batch", input=input_path, discoveredRuns=len(results))
@@ -220,7 +247,12 @@ def eval_command(
     jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     progress_tracker.start()
     existing_jsonl_run_ids = _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
-    pending_results = results if force else [result for result in results if not _evaluation_path(target_dir, result).exists()]
+    if force:
+        pending_results = results
+    elif write_individual_json:
+        pending_results = [result for result in results if not _evaluation_path(target_dir, result).exists()]
+    else:
+        pending_results = [result for result in results if result.runId not in existing_jsonl_run_ids]
 
     progress_tracker.total = len(pending_results)
     progress_tracker.current = 0
@@ -231,14 +263,24 @@ def eval_command(
             progress_tracker.advance()
             return
         evaluation_path = _evaluation_path(target_dir, evaluated)
-        write_evaluation_file(evaluated, target_dir, artifact_root=file_artifact_root)
-        logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=evaluation_path)
+        if write_individual_json:
+            write_evaluation_file(
+                evaluated,
+                target_dir,
+                artifact_root=file_artifact_root,
+                write_trace=write_traces,
+            )
+            logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=evaluation_path)
         if target_jsonl is not None:
             serialized = evaluated.model_dump(mode="json")
             if jsonl_artifact_root is not None:
                 from copa.benchmark.results import serialize_evaluation_result
 
-                serialized = serialize_evaluation_result(evaluated, artifact_root=jsonl_artifact_root)
+                serialized = serialize_evaluation_result(
+                    evaluated,
+                    artifact_root=jsonl_artifact_root,
+                    write_trace=write_traces,
+                )
             if force:
                 _rewrite_jsonl_with_run_payload(
                     path=target_jsonl,
@@ -246,13 +288,18 @@ def eval_command(
                     payload=serialized,
                 )
             else:
-                append_evaluation_jsonl(evaluated, target_jsonl, artifact_root=jsonl_artifact_root)
+                append_evaluation_jsonl(
+                    evaluated,
+                    target_jsonl,
+                    artifact_root=jsonl_artifact_root,
+                    write_trace=write_traces,
+                )
             existing_jsonl_run_ids.add(evaluated.runId)
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=target_jsonl)
         summary_path = target_dir / "evaluation-summary.json"
         write_json(
             summary_path,
-            build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir)).model_dump(mode="json"),
+            build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir, target_jsonl)).model_dump(mode="json"),
         )
         logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=summary_path)
         progress_tracker.advance()
@@ -270,11 +317,11 @@ def eval_command(
     summary_path = target_dir / "evaluation-summary.json"
     write_json(
         summary_path,
-        build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir)).model_dump(mode="json"),
+        build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir, target_jsonl)).model_dump(mode="json"),
     )
     logger.phase("WRITE", "Artifact written", path=summary_path)
     if output_csv:
-        csv_path = export_evaluation_rows_csv(_load_persisted_evaluation_rows(target_dir), output_csv)
+        csv_path = export_evaluation_rows_csv(_load_persisted_evaluation_rows(target_dir, target_jsonl), output_csv)
         logger.phase("WRITE", "Artifact written", path=csv_path)
 
     if target_jsonl is not None:

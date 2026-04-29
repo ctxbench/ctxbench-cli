@@ -15,6 +15,7 @@ class OpenAIModel(ModelAdapter):
         response = client.responses.create(**payload)
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
+        cached_input_tokens = self._extract_cached_input_tokens(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -22,6 +23,8 @@ class OpenAIModel(ModelAdapter):
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             total_tokens=total_tokens,
+            cached_input_tokens=cached_input_tokens,
+            cache_read_input_tokens=cached_input_tokens,
             duration_ms=duration_ms,
             metadata={
                 "provider": "openai",
@@ -156,6 +159,34 @@ class OpenAIModel(ModelAdapter):
         if total_tokens is None and input_tokens is not None and output_tokens is not None:
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
+
+    def _extract_cached_input_tokens(self, response: Any) -> int | None:
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            return None
+        input_token_details = getattr(usage, "input_tokens_details", None)
+        value = self._extract_cached_tokens_from_details(input_token_details)
+        if value is not None:
+            return value
+        prompt_token_details = getattr(usage, "prompt_tokens_details", None)
+        return self._extract_cached_tokens_from_details(prompt_token_details)
+
+    def _extract_cached_tokens_from_details(self, details: Any) -> int | None:
+        if details is None:
+            return None
+        cached_tokens = getattr(details, "cached_tokens", None)
+        if isinstance(cached_tokens, int) and not isinstance(cached_tokens, bool):
+            return cached_tokens
+        if isinstance(details, dict):
+            value = details.get("cached_tokens")
+            return value if isinstance(value, int) and not isinstance(value, bool) else None
+        if isinstance(details, list):
+            for item in details:
+                if isinstance(item, dict) and item.get("type") == "cached_tokens":
+                    value = item.get("token_count")
+                    if isinstance(value, int) and not isinstance(value, bool):
+                        return value
+        return None
 
     def _extract_cache_metadata(self, response: Any) -> dict[str, Any]:
         usage = getattr(response, "usage", None)
