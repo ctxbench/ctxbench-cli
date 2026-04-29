@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -31,6 +32,120 @@ SUPERVISIONS_EMPTY = {
     level: {"completed": [], "ongoing": []}
     for level in SUPERVISION_LEVELS
 }
+
+PUBLICATION_TYPE_ALIASES = {
+    "journal_article": (
+        "journal_article",
+        "journal",
+        "journals",
+        "article",
+        "articles",
+        "periodico",
+        "periodicos",
+        "artigos completos publicados em periodicos",
+    ),
+    "journal": (
+        "journal_article",
+        "journal",
+        "journals",
+        "article",
+        "articles",
+        "periodico",
+        "periodicos",
+        "artigos completos publicados em periodicos",
+    ),
+    "conference_paper": (
+        "conference_paper",
+        "conference",
+        "conferences",
+        "proceedings",
+        "anais de congressos",
+        "trabalhos completos publicados em anais de congressos",
+    ),
+    "conference": (
+        "conference_paper",
+        "conference",
+        "conferences",
+        "proceedings",
+        "anais de congressos",
+        "trabalhos completos publicados em anais de congressos",
+    ),
+    "presentation": (
+        "presentation",
+        "presentations",
+        "apresentacao",
+        "apresentacoes de trabalho",
+    ),
+    "book_chapter": (
+        "book_chapter",
+        "chapter",
+        "chapters",
+        "capitulo",
+        "capitulos",
+        "capitulos de livros publicados",
+    ),
+    "chapter": (
+        "book_chapter",
+        "chapter",
+        "chapters",
+        "capitulo",
+        "capitulos",
+        "capitulos de livros publicados",
+    ),
+    "expanded_abstract": (
+        "expanded_abstract",
+        "expanded abstracts",
+        "resumos expandidos publicados em anais de congressos",
+    ),
+    "conference_abstract": (
+        "conference_abstract",
+        "abstract",
+        "abstracts",
+        "resumos publicados em anais de congressos",
+    ),
+    "other_work": (
+        "other_work",
+        "other works",
+        "demais trabalhos",
+    ),
+    "press_article": (
+        "press_article",
+        "news",
+        "magazine",
+        "magazines",
+        "textos em jornais de noticias revistas",
+    ),
+    "news": (
+        "press_article",
+        "news",
+        "magazine",
+        "magazines",
+        "textos em jornais de noticias revistas",
+    ),
+    "edited_book": (
+        "edited_book",
+        "book",
+        "books",
+        "livro",
+        "livros",
+        "livros publicados organizados ou edicoes",
+    ),
+    "book_and_chapters": (
+        "book_and_chapters",
+        "livros e capitulos",
+    ),
+    "technical_process": (
+        "technical_process",
+        "processos tecnicas",
+        "processostecnicas",
+    ),
+    "technical_other": (
+        "technical_other",
+        "demais tipos de producao tecnica",
+    ),
+}
+
+SUPERVISION_ENTRY_PATTERN = re.compile(r"^(?P<kind>[^:]+):\s*(?P<student>[^.]+)\.\s*(?P<body>.*)$")
 
 
 class LattesProvider:
@@ -111,6 +226,33 @@ class LattesProvider:
             }
         return payload
 
+    def get_advisees(
+        self,
+        *,
+        contexts_dir: str,
+        lattes_id: str,
+    ) -> dict[str, Any]:
+        section = self._get_section_object(
+            contexts_dir=contexts_dir,
+            lattes_id=lattes_id,
+            section_name="supervisions",
+            default=SUPERVISIONS_EMPTY,
+        )
+        items: list[dict[str, Any]] = []
+        for level in SUPERVISION_LEVELS:
+            level_section = section.get(level)
+            if not isinstance(level_section, dict):
+                continue
+            for status in ("completed", "ongoing"):
+                entries = level_section.get(status)
+                if not isinstance(entries, list):
+                    continue
+                for entry in entries:
+                    parsed = self._parse_supervision_entry(entry, level=level, status=status)
+                    if parsed is not None:
+                        items.append(parsed)
+        return {"items": items}
+
     def get_experience(
         self,
         *,
@@ -153,6 +295,8 @@ class LattesProvider:
         lattes_id: str,
         start_year: int | None = None,
         end_year: int | None = None,
+        coauthors: list[str] | None = None,
+        publication_type: str | None = None,
     ) -> dict[str, Any]:
         section = self._get_section_object(
             contexts_dir=contexts_dir,
@@ -161,9 +305,11 @@ class LattesProvider:
             default={"metadata": {}, "items": []},
         )
         metadata = section.get("metadata")
+        items = self._filter_sequence(section.get("items"), start_year, end_year)
+        items = self._filter_publications(items, coauthors=coauthors, publication_type=publication_type)
         return {
             "metadata": metadata if isinstance(metadata, dict) else {},
-            "items": self._filter_sequence(section.get("items"), start_year, end_year),
+            "items": items,
         }
 
     def get_technical_output(
@@ -313,3 +459,111 @@ class LattesProvider:
         if isinstance(value, str) and value.strip().isdigit():
             return int(value.strip())
         return None
+
+    def _filter_publications(
+        self,
+        items: list[Any],
+        *,
+        coauthors: list[str] | None,
+        publication_type: str | None,
+    ) -> list[Any]:
+        filtered = list(items)
+        if coauthors:
+            filtered = [
+                item
+                for item in filtered
+                if self._publication_matches_coauthors(item, coauthors)
+            ]
+        if publication_type:
+            filtered = [
+                item
+                for item in filtered
+                if self._publication_matches_type(item, publication_type)
+            ]
+        return filtered
+
+    def _publication_matches_coauthors(self, item: Any, coauthors: list[str]) -> bool:
+        if not isinstance(item, dict):
+            return False
+        authors = item.get("authors")
+        if not isinstance(authors, list) or not authors:
+            return False
+        for requested in coauthors:
+            if not isinstance(requested, str) or not requested.strip():
+                continue
+            for author in authors:
+                if isinstance(author, str) and self._text_contains_name(author, requested):
+                    return True
+        return False
+
+    def _publication_matches_type(self, item: Any, publication_type: str) -> bool:
+        if not isinstance(item, dict):
+            return False
+        category = item.get("category") or item.get("type") or ""
+        if not isinstance(category, str):
+            return False
+        normalized_category = self._normalize_text(category)
+        normalized_type = self._normalize_text(publication_type)
+        if not normalized_category or not normalized_type:
+            return False
+        if normalized_type in normalized_category or normalized_category in normalized_type:
+            return True
+        aliases = PUBLICATION_TYPE_ALIASES.get(normalized_type, ())
+        for alias in aliases:
+            normalized_alias = self._normalize_text(alias)
+            if normalized_alias in normalized_category or normalized_category in normalized_alias:
+                return True
+        return False
+
+    def _text_contains_name(self, text: str, name: str) -> bool:
+        normalized_text = self._normalize_text(text)
+        normalized_name = self._normalize_text(name)
+        if not normalized_text or not normalized_name:
+            return False
+        if normalized_name == normalized_text or normalized_name in normalized_text or normalized_text in normalized_name:
+            return True
+        text_tokens = [token for token in normalized_text.split() if len(token) > 1]
+        name_tokens = [token for token in normalized_name.split() if len(token) > 1]
+        if not text_tokens or not name_tokens:
+            return False
+        text_set = set(text_tokens)
+        name_set = set(name_tokens)
+        if text_set <= name_set or name_set <= text_set:
+            return True
+        overlap = text_set & name_set
+        threshold = max(1, min(len(text_set), len(name_set)) - 1)
+        return len(overlap) >= threshold
+
+    def _normalize_text(self, value: str) -> str:
+        normalized = unicodedata.normalize("NFKD", value)
+        normalized = normalized.encode("ascii", "ignore").decode("ascii")
+        normalized = re.sub(r"[^a-z0-9]+", " ", normalized.lower())
+        return " ".join(normalized.split())
+
+    def _parse_supervision_entry(self, value: Any, *, level: str, status: str) -> dict[str, Any] | None:
+        if not isinstance(value, str) or not value.strip():
+            return None
+        text = value.strip()
+        match = SUPERVISION_ENTRY_PATTERN.match(text)
+        if match:
+            kind = match.group("kind").strip()
+            student = match.group("student").strip()
+            body = match.group("body").strip()
+        else:
+            kind = ""
+            student = text.split(".", 1)[0].strip()
+            body = text
+        years = self._extract_years(body or text)
+        year = years[0] if years else None
+        role = "coadvisor" if "coorientador" in self._normalize_text(text) else "advisor"
+        parsed: dict[str, Any] = {
+            "level": level,
+            "status": status,
+            "student": student,
+            "role": role,
+        }
+        if kind:
+            parsed["degree"] = kind
+        if year is not None:
+            parsed["year"] = year
+        return parsed

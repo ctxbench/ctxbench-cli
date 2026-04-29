@@ -1,0 +1,83 @@
+{
+  "id": "tool_refactor_01",
+  "name": "Tool refactor experiment with nano models",
+  "output": "exp_refactor",
+  "dataset": "datasets/lattes",
+  "scope": {
+    "instances": ["3457219624656691", "3957046121364560", "5521922960404236"],
+    "questions": ["q_advpub", "q_coauth", "q_indexed", "q_pubyear", "q_sup"]
+  },
+  "factors": {
+    "model": [
+      {
+        "id": "gpt-menor",
+        "provider": "openai",
+        "name": "gpt-5.4-nano"
+      },
+      {
+        "id": "gem-menor",
+        "provider": "google",
+        "name": "gemini-2.5-flash"
+      }
+    ],
+    "strategy": ["inline", "local_function", "local_mcp"],
+    "format": ["json"]
+  },
+  "params": {
+    "common": {
+      "temperature": 0,
+      "max_steps": 8,
+      "mcp_server": {
+        "server_url": "https://secure-harlequin-mollusk.fastmcp.app/mcp"
+      }
+    },
+    "gpt-5.4-nano": {
+      "max_output_tokens": 8000,
+      "rate_limit": {
+        "tpm": 200000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 6000
+      }
+    },
+    "gemini-2.5-flash": {
+      "max_output_tokens": 8000,
+      "rate_limit": {
+        "tpm": 400000,
+        "max_concurrency": 1,
+        "max_attempts": 5,
+        "base_delay_ms": 1000,
+        "max_delay_ms": 20000,
+        "estimated_output_tokens": 6000
+      }
+    }
+  },
+  "evaluation": {
+    "enabled": true,
+    "judges": [
+      {
+        "id": "juiz-gpt",
+        "provider": "openai",
+        "model": "gpt-5.4-mini-2026-03-17",
+        "temperature": 0
+      }
+    ]
+  },
+  "artifacts": {
+    "writeJsonl": true,
+    "writeIndividualJson": true
+  },
+  "trace": {
+    "enabled": true,
+    "writeFiles": true,
+    "save_raw_response": true,
+    "save_tool_calls": true,
+    "save_usage": true,
+    "save_errors": true
+  },
+  "execution": {
+    "repeats": 1
+  }
+}

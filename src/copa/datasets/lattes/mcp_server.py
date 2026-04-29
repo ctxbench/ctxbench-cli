@@ -6,7 +6,7 @@ from pathlib import Path
 from fastmcp import FastMCP
 
 from copa.ai.models.base import ToolResult, ToolSpec
-from copa.datasets.lattes.tools import LattesToolService
+from copa.datasets.lattes.tools import LattesToolService, PUBLICATIONS_DESCRIPTION
 
 
 class LattesMCPServer:
@@ -60,6 +60,13 @@ class LattesMCPServer:
                 {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
             ).content
 
+        @self.app.tool(name="get_advisees", description="Return a compact list of advisees and co-advisees.")
+        async def get_advisees(lattes_id: str) -> object:
+            return self.call_tool(
+                "get_advisees",
+                {"lattes_id": lattes_id},
+            ).content
+
         @self.app.tool(name="get_experience", description="Return the researcher's professional experience.")
         async def get_experience(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
             return self.call_tool(
@@ -74,11 +81,26 @@ class LattesMCPServer:
                 {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
             ).content
 
-        @self.app.tool(name="get_publications", description="Return the researcher's bibliographic production.")
-        async def get_publications(lattes_id: str, start_year: int | None = None, end_year: int | None = None) -> object:
+        @self.app.tool(
+            name="get_publications",
+            description=PUBLICATIONS_DESCRIPTION,
+        )
+        async def get_publications(
+            lattes_id: str,
+            start_year: int | None = None,
+            end_year: int | None = None,
+            coauthors: list[str] | None = None,
+            publication_type: str | None = None,
+        ) -> object:
             return self.call_tool(
                 "get_publications",
-                {"lattes_id": lattes_id, "start_year": start_year, "end_year": end_year},
+                {
+                    "lattes_id": lattes_id,
+                    "start_year": start_year,
+                    "end_year": end_year,
+                    "coauthors": coauthors,
+                    "publication_type": publication_type,
+                },
             ).content
 
         @self.app.tool(name="get_technical_output", description="Return the researcher's technical output.")
