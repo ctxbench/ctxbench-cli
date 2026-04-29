@@ -346,7 +346,17 @@ copa run runs.jsonl --model gpt-mini --question q_sup
 copa eval --run-jsonl results.jsonl --model gpt-mini --instance 5521922960404236
 ```
 
-`--model` matches either the short `modelId` or the full model name. Selectors are available for provider, model, instance, question, strategy, format, and repeat; evaluation also supports status. Each of those fields also has an `--exclude-*` variant.
+`--model` matches either the short `modelId` or the full model name. Selectors are available for provider, model, instance, question, strategy, format, and repeat; evaluation also supports status and judge selection via `--judge` / `--exclude-judge`. Each of those fields also has an `--exclude-*` variant.
+
+Evaluation can also use provider batch mode for supported judges. This keeps the input contract unchanged: pass the same `results.jsonl` or `results/rr_*.json` inputs used by synchronous evaluation.
+
+```bash
+copa eval --run-jsonl results.jsonl --judge juiz-claude --batch
+copa eval --run-jsonl results.jsonl --judge juiz-gpt --batch --wait --poll-interval 60
+copa eval --run-jsonl results.jsonl --judge juiz-gemini --batch --batch-id batches/...
+```
+
+Batch evaluation currently supports one selected judge per invocation across Anthropic/Claude, OpenAI, and Google/Gemini judges, so use `--judge` when the experiment has more than one judge. The command writes `evaluation.batch.json` beside the experiment artifacts with the provider batch id and request manifest. Without `--wait`, the first command only submits the provider batch; run again with `--batch --wait` or `--batch --batch-id ... --wait` to collect and persist `evaluation.jsonl`, `evaluation-summary.json`, and optional CSV artifacts.
 
 ## Repository Layout
 

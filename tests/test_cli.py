@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 import sys
 
@@ -793,6 +794,448 @@ def test_eval_selector_filters_by_model_id(tmp_path, monkeypatch):
     result_rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
     selected_run_ids = {row["runId"] for row in result_rows if row["modelId"] == "m1"}
     assert {row["runId"] for row in rows} == selected_run_ids
+
+
+def test_eval_selector_filters_by_judge_id(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "mock",
+            "model": "judge-a",
+            "temperature": 0,
+            "params": {"id": "juiz-gpt"},
+        },
+        {
+            "provider": "mock",
+            "model": "judge-b",
+            "temperature": 0,
+            "params": {"id": "juiz-claude"},
+        },
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    seen: list[tuple[str, str, dict[str, object]]] = []
+
+    def fake_judge_request(**kwargs):
+        config = kwargs["config"]
+        seen.append((config.provider, config.model, dict(config.params)))
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider=config.provider, model=config.model),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl"), "--judge", "juiz-claude"]) == 0
+    rows = [json.loads(line) for line in (expanded_root / "evaluation.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert seen == [("mock", "judge-b", {"id": "juiz-claude"})] * 2
+    assert {row["judgeModel"] for row in rows} == {"judge-b"}
+    assert all(len(row["details"]["judges"]) == 1 for row in rows)
+
+
+def test_eval_wait_requires_batch(tmp_path, capsys):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl"), "--wait"]) == 1
+    assert "--wait can only be used with --batch" in capsys.readouterr().err
+
+
+def test_eval_batch_custom_id_matches_anthropic_constraints(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "temperature": 0,
+            "params": {"id": "juiz:claude/test"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.commands import eval as eval_module
+
+    custom_ids: list[str] = []
+
+    def fake_submit_evaluation_batch(**kwargs):
+        custom_ids.extend(job.custom_id for job in kwargs["jobs"])
+        return {
+            "kind": "evaluation_batch",
+            "batchId": "msgbatch_test",
+            "processingStatus": "in_progress",
+            "requestCount": len(kwargs["jobs"]),
+        }
+
+    monkeypatch.setattr(eval_module, "submit_evaluation_batch", fake_submit_evaluation_batch)
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl"), "--judge", "juiz:claude/test", "--batch"]) == 0
+    assert custom_ids
+    assert all(len(value) <= 64 for value in custom_ids)
+    assert all(re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", value) for value in custom_ids)
+
+
+def test_eval_batch_wait_persists_results(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "temperature": 0,
+            "params": {"id": "juiz-claude"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark.evaluation import evaluation_from_judge_payload
+    from copa.benchmark.models import EvaluationJudgeInfo, EvaluationTrace
+    from copa.commands import eval as eval_module
+
+    def fake_submit_evaluation_batch(**kwargs):
+        return {
+            "kind": "evaluation_batch",
+            "batchId": "msgbatch_test",
+            "processingStatus": "in_progress",
+            "requestCount": len(kwargs["jobs"]),
+        }
+
+    def fake_retrieve_evaluation_batch(**kwargs):
+        evaluations = [
+            evaluation_from_judge_payload(
+                job,
+                payload={
+                    "correctness": {"rating": "meets", "justification": "ok"},
+                    "completeness": {"rating": "meets", "justification": "ok"},
+                },
+                judge_info=EvaluationJudgeInfo(
+                    used=True,
+                    role="judge",
+                    provider=job.judge.provider,
+                    model=job.judge.model,
+                    inputTokens=10,
+                    outputTokens=2,
+                ),
+                trace=EvaluationTrace(aiTrace={"batch": {"customId": job.custom_id}}),
+            )
+            for job in kwargs["jobs"]
+        ]
+        return {
+            "kind": "evaluation_batch",
+            "batchId": kwargs["batch_id"],
+            "processingStatus": "ended",
+        }, evaluations
+
+    monkeypatch.setattr(eval_module, "submit_evaluation_batch", fake_submit_evaluation_batch)
+    monkeypatch.setattr(eval_module, "retrieve_evaluation_batch", fake_retrieve_evaluation_batch)
+
+    assert main(
+        [
+            "eval",
+            "--run-jsonl",
+            str(expanded_root / "results.jsonl"),
+            "--judge",
+            "juiz-claude",
+            "--batch",
+            "--wait",
+        ]
+    ) == 0
+    rows = [json.loads(line) for line in (expanded_root / "evaluation.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert {row["judgeModel"] for row in rows} == {"claude-sonnet-4-6"}
+    assert {row["outcome"] for row in rows} == {"meets"}
+
+
+def test_eval_batch_retrieves_openai_results(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "openai",
+            "model": "gpt-5.5",
+            "temperature": 0,
+            "params": {"id": "juiz-gpt"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark.evaluation import build_evaluation_jobs
+    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+
+    jobs = build_evaluation_jobs(
+        load_results_from_input(run_dir=None, run_jsonl=str(expanded_root / "results.jsonl")),
+        judges=_load_judges_from_manifest(expanded_root),
+    )
+
+    class FakeOpenAIClient:
+        def retrieve(self, batch_id):
+            return {"id": batch_id, "status": "completed", "output_file_id": "file_test"}
+
+        def results(self, batch_id, batch=None):
+            return [
+                {
+                    "custom_id": job.custom_id,
+                    "response": {
+                        "status_code": 200,
+                        "body": {
+                            "output": [
+                                {
+                                    "content": [
+                                        {
+                                            "text": json.dumps(
+                                                {
+                                                    "correctness": {"rating": "meets", "justification": "ok"},
+                                                    "completeness": {"rating": "meets", "justification": "ok"},
+                                                }
+                                            )
+                                        }
+                                    ]
+                                }
+                            ],
+                            "usage": {"input_tokens": 11, "output_tokens": 3},
+                        },
+                    },
+                    "error": None,
+                }
+                for job in jobs
+            ]
+
+    manifest, evaluations = retrieve_evaluation_batch(
+        batch_id="batch_test",
+        jobs=jobs,
+        source_root=expanded_root,
+        client=FakeOpenAIClient(),
+    )
+
+    assert manifest["status"] == "completed"
+    assert len(evaluations) == 2
+    assert {item.items[0].evaluationJudgeProvider for item in evaluations} == {"openai"}
+    assert {item.items[0].details["outcome"] for item in evaluations} == {"meets"}
+    assert {item.items[0].evaluationInputTokens for item in evaluations} == {11}
+
+
+def test_eval_batch_retrieves_openai_error_results(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "openai",
+            "model": "gpt-5.5",
+            "temperature": 0,
+            "params": {"id": "juiz-gpt"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark.evaluation import build_evaluation_jobs
+    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+
+    jobs = build_evaluation_jobs(
+        load_results_from_input(run_dir=None, run_jsonl=str(expanded_root / "results.jsonl")),
+        judges=_load_judges_from_manifest(expanded_root),
+    )
+
+    class FakeOpenAIClient:
+        def retrieve(self, batch_id):
+            return {
+                "id": batch_id,
+                "status": "completed",
+                "output_file_id": None,
+                "error_file_id": "file_errors",
+            }
+
+        def results(self, batch_id, batch=None):
+            return [
+                {
+                    "custom_id": job.custom_id,
+                    "response": None,
+                    "error": {
+                        "code": "invalid_request_error",
+                        "message": "The request body was invalid.",
+                    },
+                }
+                for job in jobs
+            ]
+
+    manifest, evaluations = retrieve_evaluation_batch(
+        batch_id="batch_test",
+        jobs=jobs,
+        source_root=expanded_root,
+        client=FakeOpenAIClient(),
+    )
+
+    assert manifest["status"] == "completed"
+    assert manifest["errorFileId"] == "file_errors"
+    assert len(evaluations) == 2
+    assert {item.items[0].evaluationJudgeProvider for item in evaluations} == {"openai"}
+    assert {item.items[0].details["error"] for item in evaluations} == {"Judge did not return valid JSON."}
+    assert {item.items[0].evaluationTrace.error for item in evaluations} == {"Batch request errored."}
+
+
+def test_eval_batch_openai_submit_uploads_pathlike_jsonl(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "openai",
+            "model": "gpt-5.5",
+            "temperature": 0,
+            "params": {"id": "juiz-gpt"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark.evaluation import build_evaluation_jobs
+    from copa.benchmark.evaluation_batch import OpenAIEvaluationBatchClient
+    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+
+    jobs = build_evaluation_jobs(
+        load_results_from_input(run_dir=None, run_jsonl=str(expanded_root / "results.jsonl")),
+        judges=_load_judges_from_manifest(expanded_root),
+    )
+
+    class FakeFiles:
+        uploaded_payloads: list[dict[str, object]] = []
+
+        def create(self, *, file, purpose):
+            assert isinstance(file, Path)
+            assert purpose == "batch"
+            rows = [json.loads(line) for line in file.read_text(encoding="utf-8").splitlines()]
+            assert rows
+            assert {row["url"] for row in rows} == {"/v1/responses"}
+            assert {row["method"] for row in rows} == {"POST"}
+            self.uploaded_payloads = rows
+            return type("Uploaded", (), {"id": "file_test"})()
+
+    class FakeBatches:
+        def create(self, **kwargs):
+            assert kwargs["input_file_id"] == "file_test"
+            assert kwargs["endpoint"] == "/v1/responses"
+            assert "temperature" not in kwargs
+            return {"id": "batch_test", "status": "validating"}
+
+    client = OpenAIEvaluationBatchClient.__new__(OpenAIEvaluationBatchClient)
+    client._client = type("FakeOpenAI", (), {"files": FakeFiles(), "batches": FakeBatches()})()
+
+    batch = client.submit(jobs)
+
+    assert batch["id"] == "batch_test"
+
+
+def test_eval_batch_retrieves_gemini_results(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "google",
+            "model": "gemini-3.1-flash-lite-preview",
+            "temperature": 0,
+            "params": {"id": "juiz-gemini"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark.evaluation import build_evaluation_jobs
+    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+
+    jobs = build_evaluation_jobs(
+        load_results_from_input(run_dir=None, run_jsonl=str(expanded_root / "results.jsonl")),
+        judges=_load_judges_from_manifest(expanded_root),
+    )
+
+    class FakeGeminiClient:
+        def retrieve(self, batch_id):
+            return {"name": batch_id, "state": "JOB_STATE_SUCCEEDED"}
+
+        def results(self, batch_id, batch=None):
+            return [
+                {
+                    "metadata": {"custom_id": job.custom_id},
+                    "response": {
+                        "candidates": [
+                            {
+                                "content": {
+                                    "parts": [
+                                        {
+                                            "text": json.dumps(
+                                                {
+                                                    "correctness": {"rating": "partially meets", "justification": "ok"},
+                                                    "completeness": {"rating": "meets", "justification": "ok"},
+                                                }
+                                            )
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "usageMetadata": {"promptTokenCount": 13, "candidatesTokenCount": 5},
+                    },
+                }
+                for job in jobs
+            ]
+
+    manifest, evaluations = retrieve_evaluation_batch(
+        batch_id="batches/test",
+        jobs=jobs,
+        source_root=expanded_root,
+        client=FakeGeminiClient(),
+    )
+
+    assert manifest["status"] == "completed"
+    assert len(evaluations) == 2
+    assert {item.items[0].evaluationJudgeProvider for item in evaluations} == {"google"}
+    assert {item.items[0].details["outcome"] for item in evaluations} == {"partially_meets"}
+    assert {item.items[0].evaluationInputTokens for item in evaluations} == {13}
 
 
 def test_eval_allows_questions_without_instance_override(tmp_path, monkeypatch):

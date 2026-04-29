@@ -6,271 +6,434 @@
     {
       "id": "q_phd",
       "question": "Where and how long ago did the researcher complete their PhD?",
-      "tags": ["factual", "temporal"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["academic", "profile"]
-    },
-    {
-      "id": "q_field",
-      "question": "What is the main field of knowledge in which this researcher works?",
-      "tags": ["inferential", "ranking"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["academic", "profile", "projects", "publications"]
-    },
-    {
-      "id": "q_venue",
-      "question": "Where does this researcher publish most frequently?",
-      "tags": ["inferential", "quantitative", "ranking"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications"]
-    },
-    {
-      "id": "q_coauth",
-      "question": "Who are the most frequent co-authors of this researcher?",
-      "tags": ["inferential", "quantitative", "ranking", "matching"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications", "profile"]
-    },
-    {
-      "id": "q_advpub",
-      "question": "Does this researcher usually publish with their advisees?",
-      "tags": ["inferential", "cross-block", "quantitative", "matching"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications", "supervision", "profile"]
-    },
-    {
-      "id": "q_advareas",
-      "question": "What are the research areas of this researcher’s advisees?",
-      "tags": ["inferential"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["supervision", "projects", "publications"]
-    },
-    {
-      "id": "q_pubyear",
-      "question": "What is the most relevant bibliographic production of this researcher in {pub_year}?",
-      "tags": ["weak-data", "temporal", "ranking"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications", "profile", "publications"]
-    },
-    {
-      "id": "q_en",
-      "question": "Does this researcher speak English?",
-      "tags": ["factual"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["profile"]
-    },
-    {
-      "id": "q_projfit_1",
-      "question": "How does the candidate’s academic and professional background align with the project “{project}”?",
-      "tags": ["inferential", "cross-block"],
+      "tags": [
+        "factual",
+        "temporal"
+      ],
       "validation": {
         "type": "judge"
       },
       "contextBlock": [
-        "profile",
-        "academic",
-        "projects",
-        "publications",
-        "professional"
+        "academic.sections.FormacaoAcademicaTitulacao"
+      ]
+    },
+    {
+      "id": "q_field",
+      "question": "What is the main field of knowledge in which this researcher works?",
+      "tags": [
+        "inferential",
+        "ranking"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "profile.sections.summary",
+        "academic.sections.AreasAtuacao",
+        "academic.sections.LinhaPesquisa"
+      ]
+    },
+    {
+      "id": "q_venue",
+      "question": "Where does this researcher publish most frequently?",
+      "tags": [
+        "inferential",
+        "quantitative",
+        "ranking"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_coauth",
+      "question": "Who are the most frequent co-authors of this researcher?",
+      "tags": [
+        "inferential",
+        "quantitative",
+        "ranking",
+        "matching"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "profile.sections.Identificacao",
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_advpub",
+      "question": "Does this researcher usually publish with their advisees?",
+      "tags": [
+        "inferential",
+        "cross-block",
+        "quantitative",
+        "matching"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "profile.sections.Identificacao",
+        "supervision.sections.Orientacoes",
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_advareas",
+      "question": "What are the research areas of this researcher’s advisees?",
+      "tags": [
+        "inferential"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "supervision.sections.Orientacoes"
+      ]
+    },
+    {
+      "id": "q_pubyear",
+      "question": "What is the most relevant bibliographic production of this researcher in {pub_year}?",
+      "tags": [
+        "weak-data",
+        "temporal",
+        "ranking"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.ProducaoBibliografica",
+        "profile.sections.PremiosTitulos"
+      ]
+    },
+    {
+      "id": "q_en",
+      "question": "Does this researcher speak English?",
+      "tags": [
+        "factual"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "profile.sections.Idiomas"
+      ]
+    },
+    {
+      "id": "q_projfit_1",
+      "question": "How does the candidate’s academic and professional background align with the project “{project}”?",
+      "tags": [
+        "inferential",
+        "cross-block"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "profile.sections.summary",
+        "academic.sections.AreasAtuacao",
+        "academic.sections.LinhaPesquisa",
+        "projects.sections.ProjetosPesquisa",
+        "professional.sections.AtuacaoProfissional"
       ]
     },
     {
       "id": "q_projfit_2",
       "question": "How does the candidate’s academic and professional background align with the project “{project}”?",
-      "tags": ["inferential", "cross-block"],
+      "tags": [
+        "inferential",
+        "cross-block"
+      ],
       "validation": {
         "type": "judge"
       },
       "contextBlock": [
-        "profile",
-        "academic",
-        "projects",
-        "publications",
-        "professional"
+        "profile.sections.summary",
+        "academic.sections.AreasAtuacao",
+        "academic.sections.LinhaPesquisa",
+        "projects.sections.ProjetosPesquisa",
+        "professional.sections.AtuacaoProfissional"
       ]
     },
     {
       "id": "q_qualis",
       "question": "How many articles has the researcher published in indexed journals, and how many of them are in journals classified as A1 or A2 in the field by the Qualis platform?",
-      "tags": ["weak-data", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications"]
-    },
-    {
-      "id": "q_indexed",
-      "question": "Are the researcher’s publications concentrated in journals or conferences indexed in databases such as Scopus or Web of Science, or classified as A1/A2 in the field by Qualis?",
-      "tags": ["weak-data", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications"]
-    },
-    {
-      "id": "q_cites",
-      "question": "How many citations have the researcher’s articles received in databases such as Scopus, Web of Science, or Google Scholar, also considering the average number of citations per article?",
-      "tags": ["out-of-context", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications"]
-    },
-    {
-      "id": "q_hidx",
-      "question": "What is the researcher’s h-index in databases such as Scopus or Google Scholar, and how does it compare with the average in their field of activity?",
-      "tags": ["out-of-context", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications"]
-    },
-    {
-      "id": "q_funded",
-      "question": "How many approved funded research projects has the researcher coordinated or participated in as a proponent, and what were the respective funding agencies, such as CNPq, FAPESP, or CAPES?",
-      "tags": ["factual", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["projects", "profile"]
-    },
-    {
-      "id": "q_fundamt",
-      "question": "What was the total amount of research funding obtained by the researcher in the last five years through calls from public or private funding agencies?",
-      "tags": ["out-of-context", "quantitative", "temporal"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["projects"]
-    },
-    {
-      "id": "q_sup",
-      "question": "How many master’s, doctoral, and undergraduate research students has the researcher supervised, and how many of them have completed their respective programs?",
-      "tags": ["factual", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["supervision", "profile"]
-    },
-    {
-      "id": "q_stupubs",
-      "question": "How many publications or presentations at scientific events were produced by students supervised by the researcher, and how many of these took place in indexed events or journals?",
-      "tags": ["weak-data", "cross-block", "quantitative", "matching"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["supervision", "publications", "profile"]
-    },
-    {
-      "id": "q_tcc5y",
-      "question": "How many undergraduate thesis projects or undergraduate research projects has the researcher supervised in the last five years?",
-      "tags": ["factual", "quantitative", "temporal"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["supervision"]
-    },
-    {
-      "id": "q_careers",
-      "question": "How many of the researcher’s advisees pursued an academic career, such as entering graduate programs, or were employed in areas related to their training?",
-      "tags": ["weak-data", "cross-block"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["supervision", "profile"]
-    },
-    {
-      "id": "q_networks",
-      "question": "In how many national or international scientific collaboration networks does the researcher formally participate, such as interinstitutional projects or research consortia?",
-      "tags": ["inferential", "cross-block", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["projects", "profile", "professional"]
-    },
-    {
-      "id": "q_extcoauth",
-      "question": "How many articles or projects has the researcher developed in co-authorship with faculty members or researchers from other institutions, and how many of these co-authors have recognized research productivity, such as a CNPq PQ fellowship or qualified scientific production?",
-      "tags": ["weak-data", "cross-block", "quantitative", "matching"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["publications", "projects", "profile"]
-    },
-    {
-      "id": "q_admin",
-      "question": "What administrative positions has the researcher held, such as course coordinator, department chair, academic unit director, or coordinator of a stricto sensu graduate program?",
-      "tags": ["factual"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["profile", "professional"]
-    },
-    {
-      "id": "q_group",
-      "question": "Does the researcher lead CNPq-certified research groups, and how many active members does the group currently have?",
-      "tags": ["out-of-context", "quantitative"],
-      "validation": {
-        "type": "judge"
-      },
-      "contextBlock": ["profile", "projects"]
-    },
-    {
-      "id": "q_impact",
-      "question": "Are there documented records, such as reports, news articles, or institutional partnerships, showing that the results of the researcher’s research were used in public policies, technological development, or social actions?",
-      "tags": ["weak-data", "cross-block"],
+      "tags": [
+        "weak-data",
+        "quantitative"
+      ],
       "validation": {
         "type": "judge"
       },
       "contextBlock": [
-        "projects",
-        "technicalProduction",
-        "publications",
-        "profile"
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_indexed",
+      "question": "Are the researcher’s publications concentrated in journals or conferences indexed in databases such as Scopus or Web of Science, or classified as A1/A2 in the field by Qualis?",
+      "tags": [
+        "weak-data",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_cites",
+      "question": "How many citations have the researcher’s articles received in databases such as Scopus, Web of Science, or Google Scholar, also considering the average number of citations per article?",
+      "tags": [
+        "out-of-context",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.Citacoes",
+        "profile.sections.OutrasInformacoesRelevantes"
+      ]
+    },
+    {
+      "id": "q_hidx",
+      "question": "What is the researcher’s h-index in databases such as Scopus or Google Scholar, and how does it compare with the average in their field of activity?",
+      "tags": [
+        "out-of-context",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.Citacoes",
+        "profile.sections.OutrasInformacoesRelevantes"
+      ]
+    },
+    {
+      "id": "q_funded",
+      "question": "How many approved funded research projects has the researcher coordinated or participated in as a proponent, and what were the respective funding agencies, such as CNPq, FAPESP, or CAPES?",
+      "tags": [
+        "factual",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "projects.sections.ProjetosPesquisa"
+      ]
+    },
+    {
+      "id": "q_fundamt",
+      "question": "What was the total amount of research funding obtained by the researcher in the last five years through calls from public or private funding agencies?",
+      "tags": [
+        "out-of-context",
+        "quantitative",
+        "temporal"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "projects.sections.ProjetosPesquisa"
+      ]
+    },
+    {
+      "id": "q_sup",
+      "question": "How many master’s, doctoral, and undergraduate research students has the researcher supervised, and how many of them have completed their respective programs?",
+      "tags": [
+        "factual",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "supervision.sections.Orientacoes"
+      ]
+    },
+    {
+      "id": "q_stupubs",
+      "question": "How many publications or presentations at scientific events were produced by students supervised by the researcher, and how many of these took place in indexed events or journals?",
+      "tags": [
+        "weak-data",
+        "cross-block",
+        "quantitative",
+        "matching"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "supervision.sections.Orientacoes",
+        "publications.sections.ProducaoBibliografica"
+      ]
+    },
+    {
+      "id": "q_tcc5y",
+      "question": "How many undergraduate thesis projects or undergraduate research projects has the researcher supervised in the last five years?",
+      "tags": [
+        "factual",
+        "quantitative",
+        "temporal"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "supervision.sections.Orientacoes"
+      ]
+    },
+    {
+      "id": "q_careers",
+      "question": "How many of the researcher’s advisees pursued an academic career, such as entering graduate programs, or were employed in areas related to their training?",
+      "tags": [
+        "weak-data",
+        "cross-block"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "supervision.sections.Orientacoes",
+        "profile.sections.OutrasInformacoesRelevantes"
+      ]
+    },
+    {
+      "id": "q_networks",
+      "question": "In how many national or international scientific collaboration networks does the researcher formally participate, such as interinstitutional projects or research consortia?",
+      "tags": [
+        "inferential",
+        "cross-block",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "projects.sections.ProjetosPesquisa",
+        "professional.sections.AtuacaoProfissional",
+        "profile.sections.summary"
+      ]
+    },
+    {
+      "id": "q_extcoauth",
+      "question": "How many articles or projects has the researcher developed in co-authorship with faculty members or researchers from other institutions, and how many of these co-authors have recognized research productivity, such as a CNPq PQ fellowship or qualified scientific production?",
+      "tags": [
+        "weak-data",
+        "cross-block",
+        "quantitative",
+        "matching"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "publications.sections.ProducaoBibliografica",
+        "projects.sections.ProjetosPesquisa"
+      ]
+    },
+    {
+      "id": "q_admin",
+      "question": "What administrative positions has the researcher held, such as course coordinator, department chair, academic unit director, or coordinator of a stricto sensu graduate program?",
+      "tags": [
+        "factual"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "professional.sections.AtuacaoProfissional",
+        "profile.sections.summary"
+      ]
+    },
+    {
+      "id": "q_group",
+      "question": "Does the researcher lead CNPq-certified research groups, and how many active members does the group currently have?",
+      "tags": [
+        "out-of-context",
+        "quantitative"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "projects.sections.ProjetosPesquisa",
+        "profile.sections.summary"
+      ]
+    },
+    {
+      "id": "q_impact",
+      "question": "Are there documented records, such as reports, news articles, or institutional partnerships, showing that the results of the researcher’s research were used in public policies, technological development, or social actions?",
+      "tags": [
+        "weak-data",
+        "cross-block"
+      ],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": [
+        "projects.sections.ProjetosPesquisa",
+        "technicalProduction.sections.ProducaoTecnica",
+        "technicalProduction.sections.PotencialInovacao",
+        "publications.sections.EducacaoPopularizacaoCTA"
       ]
     },
     {
       "id": "q_techprod",
       "question": "How many patents, software registrations, prototypes, cultivars, or other technological products does the researcher have registered with INPI or other official institutions?",
-      "tags": ["weak-data", "quantitative"],
+      "tags": [
+        "weak-data",
+        "quantitative"
+      ],
       "validation": {
         "type": "judge"
       },
-      "contextBlock": ["technicalProduction", "profile"]
+      "contextBlock": [
+        "technicalProduction.sections.PatentesRegistros",
+        "technicalProduction.sections.ProducaoTecnica"
+      ]
     },
     {
       "id": "q_talks",
       "question": "How many times has the researcher been invited as a speaker or keynote speaker at national or international scientific events with a selection process or institutional curation?",
-      "tags": ["weak-data", "cross-block", "quantitative"],
+      "tags": [
+        "weak-data",
+        "cross-block",
+        "quantitative"
+      ],
       "validation": {
         "type": "judge"
       },
-      "contextBlock": ["profile", "publications"]
+      "contextBlock": [
+        "academic.sections.Eventos",
+        "technicalProduction.sections.EducacaoPopularizacaoCTA",
+        "publications.sections.EducacaoPopularizacaoCTA"
+      ]
     },
     {
       "id": "q_awards",
       "question": "How many awards, honorable mentions, or titles has the researcher received for their scientific, technical, or academic work, and which institutions granted these recognitions?",
-      "tags": ["factual", "quantitative"],
+      "tags": [
+        "factual",
+        "quantitative"
+      ],
       "validation": {
         "type": "judge"
       },
-      "contextBlock": ["profile"]
+      "contextBlock": [
+        "profile.sections.PremiosTitulos"
+      ]
     }
   ],
   "tagDefinitions": {

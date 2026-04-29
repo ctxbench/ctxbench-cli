@@ -177,6 +177,8 @@ def classify_provider_error(provider_name: str, exc: Exception) -> ProviderError
         return ProviderErrorInfo(kind="transient", message=message, retry_after_ms=retry_after)
     if any(token in lowered for token in ("temporar", "timeout", "timed out", "connection reset", "connection aborted")):
         return ProviderErrorInfo(kind="transient", message=message, retry_after_ms=retry_after)
+    if "taskgroup" in lowered or "sub-exception" in lowered:
+        return ProviderErrorInfo(kind="transient", message=message, retry_after_ms=retry_after)
     return ProviderErrorInfo(kind="fatal", message=message, retry_after_ms=retry_after)
 
 

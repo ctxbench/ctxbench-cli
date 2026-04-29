@@ -120,11 +120,14 @@ class EvaluationModelConfig(BaseModel):
             return data
         if not isinstance(data, dict):
             raise ValidationError("Evaluation model config requires an object input.")
-        params = {
-            key: value
-            for key, value in data.items()
-            if key not in {"provider", "model", "temperature"}
-        }
+        params: dict[str, Any] = {}
+        raw_params = data.get("params")
+        if isinstance(raw_params, dict):
+            params.update(raw_params)
+        for key, value in data.items():
+            if key in {"provider", "model", "temperature", "params"}:
+                continue
+            params[key] = value
         return cls(
             provider=str(data.get("provider", "")),
             model=str(data.get("model", "")),

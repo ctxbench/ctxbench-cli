@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import csv
 import json
+import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -122,6 +124,123 @@ JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
     "required": ["correctness", "completeness"],
     "additionalProperties": False,
 }
+
+
+@dataclass(frozen=True)
+class EvaluationJob:
+    custom_id: str
+    result: RunResult
+    judge: EvaluationModelConfig
+    prompt: str
+    question_text: str
+    context_payload: dict[str, Any]
+    curriculum_context: str
+
+
+def judge_identifier(config: EvaluationModelConfig) -> str:
+    for key in ("id", "judgeId", "judge_id", "name"):
+        value = config.params.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return f"{config.provider}:{config.model}"
+
+
+def batch_custom_id(result: RunResult, judge: EvaluationModelConfig) -> str:
+    judge_slug = re.sub(r"[^a-zA-Z0-9_-]+", "-", judge_identifier(judge)).strip("-_")
+    if not judge_slug:
+        judge_slug = "judge"
+    return f"{result.runId}-{judge_slug}"[:64]
+
+
+def build_evaluation_job(
+    result: RunResult,
+    provider: DatasetProvider,
+    *,
+    judge: EvaluationModelConfig,
+    only: str | None = None,
+    mode: str | None = None,
+    event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
+) -> EvaluationJob | None:
+    if result.status != "success":
+        return None
+    if only and result.questionId != only:
+        return None
+
+    rendered_question = result.question
+    validation_type = result.validationType or result.metadata.validationType
+    if mode and validation_type != mode:
+        return None
+    if validation_type != "judge":
+        raise ValueError(f"Unsupported validation type: {validation_type}")
+
+    blocks = provider.get_context_blocks(result.instanceId)
+    context_payload, missing_context_blocks = _collect_context_blocks(blocks, list(result.contextBlock))
+    if event_logger is not None:
+        for path in missing_context_blocks:
+            event_logger(
+                "WARN",
+                "Context block path not found; ignoring",
+                {
+                    "runId": result.runId,
+                    "questionId": result.questionId,
+                    "instanceId": result.instanceId,
+                    "contextBlock": path,
+                },
+            )
+    curriculum_context = json.dumps(context_payload, ensure_ascii=False, sort_keys=True, indent=2)
+    prompt = JUDGE_PROMPT.format(
+        question=rendered_question,
+        answer=result.answer,
+        curriculum_context=curriculum_context,
+    )
+    return EvaluationJob(
+        custom_id=batch_custom_id(result, judge),
+        result=result,
+        judge=judge,
+        prompt=prompt,
+        question_text=rendered_question,
+        context_payload=context_payload,
+        curriculum_context=curriculum_context,
+    )
+
+
+def build_evaluation_jobs(
+    results: Iterable[RunResult],
+    *,
+    judges: list[EvaluationModelConfig],
+    only: str | None = None,
+    mode: str | None = None,
+    event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
+) -> list[EvaluationJob]:
+    provider_cache: dict[str, DatasetProvider] = {}
+    jobs: list[EvaluationJob] = []
+    ordered_results = sorted(
+        list(results),
+        key=lambda item: (
+            str(item.provider),
+            str(item.modelName or ""),
+            str(item.instanceId),
+            str(item.questionId),
+            str(item.runId),
+        ),
+    )
+    for result in ordered_results:
+        provider = provider_cache.setdefault(
+            result.dataset.root,
+            DatasetProvider.from_dataset(result.dataset),
+        )
+        for judge in judges:
+            job = build_evaluation_job(
+                result,
+                provider,
+                judge=judge,
+                only=only,
+                mode=mode,
+                event_logger=event_logger,
+            )
+            if job is not None:
+                jobs.append(job)
+    return jobs
 
 
 def _judge_request(
@@ -284,6 +403,108 @@ def _evaluate_judge(
     }, merged_info, merged_trace
 
 
+def evaluation_from_judge_payload(
+    job: EvaluationJob,
+    *,
+    payload: dict[str, Any] | None,
+    judge_info: EvaluationJudgeInfo,
+    trace: EvaluationTrace,
+) -> EvaluationRunResult:
+    if payload is None:
+        details = {
+            "evaluationMethod": "judge",
+            "contextBlock": list(job.context_payload.keys()),
+            "judges": [
+                {
+                    "provider": job.judge.provider,
+                    "model": job.judge.model,
+                    "error": "Judge did not return valid JSON.",
+                }
+            ],
+            "error": "Judge did not return valid JSON.",
+        }
+    else:
+        correctness = _criterion_payload(payload.get("correctness"))
+        completeness = _criterion_payload(payload.get("completeness"))
+        vote = {
+            "provider": job.judge.provider,
+            "model": job.judge.model,
+            "correctness": correctness,
+            "completeness": completeness,
+        }
+        aggregate_correctness = _aggregate_votes([vote], "correctness")
+        aggregate_completeness = _aggregate_votes([vote], "completeness")
+        details = {
+            "evaluationMethod": "judge",
+            "contextBlock": list(job.context_payload.keys()),
+            "judges": [vote],
+            "correctness": aggregate_correctness,
+            "completeness": aggregate_completeness,
+            "outcome": _outcome_from_ratings(
+                aggregate_correctness["rating"],
+                aggregate_completeness["rating"],
+            ),
+        }
+    return _build_evaluation_result(
+        job.result,
+        question_text=job.question_text,
+        validation_type="judge",
+        details=details,
+        judge_info=judge_info,
+        trace=trace,
+    )
+
+
+def _build_evaluation_result(
+    result: RunResult,
+    *,
+    question_text: str,
+    validation_type: str,
+    details: dict[str, Any],
+    judge_info: EvaluationJudgeInfo,
+    trace: EvaluationTrace,
+) -> EvaluationRunResult:
+    metrics = result.trace.aiTrace.get("metrics", {}) if result.trace.aiTrace else {}
+    summary = result.metricsSummary
+    item = EvaluationItemResult(
+        experimentId=result.experimentId,
+        runId=result.runId,
+        questionId=result.questionId,
+        instanceId=result.instanceId,
+        question=question_text,
+        evaluationMode=validation_type,
+        status="evaluated",
+        evaluationMethod=details.get("evaluationMethod"),
+        details=details,
+        executionModel=result.modelName,
+        executionStrategy=result.strategy,
+        executionFormat=result.format,
+        executionInputTokens=result.usage.get("inputTokens"),
+        executionOutputTokens=result.usage.get("outputTokens"),
+        executionDurationMs=result.timing.durationMs,
+        executionToolCalls=summary.get("toolCalls", metrics.get("toolCalls")),
+        executionFunctionCalls=summary.get("functionCalls", metrics.get("functionCalls")),
+        executionLlmCalls=summary.get("modelCalls", metrics.get("modelCalls")),
+        questionTags=list(result.questionTags),
+        evaluationJudgeUsed=judge_info.used,
+        evaluationJudgeRole=judge_info.role,
+        evaluationJudgeProvider=judge_info.provider,
+        evaluationJudgeModel=judge_info.model,
+        evaluationInputTokens=judge_info.inputTokens,
+        evaluationOutputTokens=judge_info.outputTokens,
+        evaluationDurationMs=judge_info.durationMs,
+        evaluationTrace=trace,
+    )
+    return EvaluationRunResult(
+        experimentId=result.experimentId,
+        runId=result.runId,
+        questionId=result.questionId,
+        items=[item],
+        summary=EvaluationRunSummary(itemCount=1),
+        metadata=result.metadata,
+    )
+
+
 def _resolve_context_block_path(blocks: dict[str, Any], path: str) -> Any:
     current: Any = blocks
     for segment in path.split("."):
@@ -430,40 +651,6 @@ def evaluate_run_result(
     else:
         raise ValueError(f"Unsupported validation type: {validation_type}")
 
-    metrics = result.trace.aiTrace.get("metrics", {}) if result.trace.aiTrace else {}
-    summary = result.metricsSummary
-    item = EvaluationItemResult(
-        experimentId=result.experimentId,
-        runId=result.runId,
-        questionId=result.questionId,
-        instanceId=result.instanceId,
-        question=rendered_question,
-        evaluationMode=validation_type,
-        status="evaluated",
-        evaluationMethod=details.get("evaluationMethod"),
-        details=details,
-        executionModel=result.modelName,
-        executionStrategy=result.strategy,
-        executionFormat=result.format,
-        executionInputTokens=result.usage.get("inputTokens"),
-        executionOutputTokens=result.usage.get("outputTokens"),
-        executionDurationMs=result.timing.durationMs,
-        executionToolCalls=summary.get("toolCalls", metrics.get("toolCalls")),
-        executionFunctionCalls=summary.get("functionCalls", metrics.get("functionCalls")),
-        executionLlmCalls=summary.get("modelCalls", metrics.get("modelCalls")),
-        questionTags=list(result.questionTags),
-        evaluationJudgeUsed=judge_info.used,
-        evaluationJudgeRole=judge_info.role,
-        evaluationJudgeProvider=judge_info.provider,
-        evaluationJudgeModel=judge_info.model,
-        evaluationInputTokens=judge_info.inputTokens,
-        evaluationOutputTokens=judge_info.outputTokens,
-        evaluationDurationMs=judge_info.durationMs,
-        evaluationTrace=trace,
-    )
-    summary = EvaluationRunSummary(
-        itemCount=1,
-    )
     if event_logger is not None:
         event_logger(
             "EVALUATE",
@@ -475,13 +662,13 @@ def evaluate_run_result(
                 "outcome": details.get("outcome"),
             },
         )
-    return EvaluationRunResult(
-        experimentId=result.experimentId,
-        runId=result.runId,
-        questionId=result.questionId,
-        items=[item],
-        summary=summary,
-        metadata=result.metadata,
+    return _build_evaluation_result(
+        result,
+        question_text=rendered_question,
+        validation_type=validation_type,
+        details=details,
+        judge_info=judge_info,
+        trace=trace,
     )
 
 

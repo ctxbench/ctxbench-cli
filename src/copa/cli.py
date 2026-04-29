@@ -70,6 +70,31 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("--output-csv", help="Optional CSV file for flattened evaluation rows")
     eval_parser.add_argument("--force", action="store_true", help="Re-evaluate runs even when evaluation artifacts already exist")
     eval_parser.add_argument("--only", help="Evaluate only one question id")
+    eval_parser.add_argument(
+        "--judge",
+        action="append",
+        default=[],
+        help="Filter evaluation to judges matching judge id, model, or provider",
+    )
+    eval_parser.add_argument(
+        "--exclude-judge",
+        action="append",
+        default=[],
+        help="Exclude evaluation judges matching judge id, model, or provider",
+    )
+    eval_parser.add_argument(
+        "--batch",
+        action="store_true",
+        help="Submit evaluation requests using provider batch mode (Anthropic, OpenAI, or Gemini)",
+    )
+    eval_parser.add_argument("--batch-id", help="Resume or collect an existing provider batch id")
+    eval_parser.add_argument("--wait", action="store_true", help="Wait for a submitted batch to finish")
+    eval_parser.add_argument(
+        "--poll-interval",
+        type=int,
+        default=60,
+        help="Seconds between batch status checks when used with --batch --wait",
+    )
     _add_selector_arguments(eval_parser, include_status=True)
     eval_parser.add_argument(
         "--mode",
@@ -89,6 +114,12 @@ def build_parser() -> argparse.ArgumentParser:
             force=args.force,
             only=args.only,
             mode=args.mode,
+            judge=tuple(getattr(args, "judge", []) or ()),
+            exclude_judge=tuple(getattr(args, "exclude_judge", []) or ()),
+            batch=args.batch,
+            batch_id=args.batch_id,
+            wait=args.wait,
+            poll_interval=args.poll_interval,
             selector=_selector_from_args(args),
             continue_on_error=args.continue_on_error,
             verbose=args.verbose,

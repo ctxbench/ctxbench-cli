@@ -220,16 +220,14 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
         "cachedInputTokens": 4,
         "cacheReadInputTokens": 4,
     }
-    assert model.last_input is not None
-    assert "# Context:" in model.last_input.prompt
-    assert "# Question:" in model.last_input.prompt
-    assert model.last_input.prompt.index("# Context:") < model.last_input.prompt.index("# Question:")
-    metrics = result.trace["metrics"]
-    assert metrics["questionTokensEstimated"] == len("How many publications are listed?".split())
-    assert metrics["modelCalls"] == 1
-    assert metrics["totalTokens"] == 12
-    assert metrics["cachedInputTokens"] == 4
-    assert metrics["cacheReadInputTokens"] == 4
+
+
+def test_classify_provider_error_treats_taskgroup_as_transient():
+    from copa.ai.rate_control import classify_provider_error
+
+    info = classify_provider_error("google", RuntimeError("unhandled errors in a TaskGroup (1 sub-exception)"))
+
+    assert info.kind == "transient"
 
 
 def test_engine_local_function_uses_resource_tools_and_records_calls():

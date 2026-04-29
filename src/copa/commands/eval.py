@@ -10,9 +10,16 @@ from copa.benchmark.checkpoints import (
     write_completed_run_ids,
 )
 from copa.benchmark.evaluation import (
+    build_evaluation_jobs,
     build_evaluation_summary_rows,
     evaluate_run_results,
     export_evaluation_rows_csv,
+)
+from copa.benchmark.evaluation_batch import (
+    DEFAULT_BATCH_POLL_INTERVAL_SECONDS,
+    load_batch_id_from_manifest,
+    retrieve_evaluation_batch,
+    submit_evaluation_batch,
 )
 from copa.benchmark.models import EvaluationModelConfig, ExperimentArtifacts, ExperimentTrace, RunResult
 from copa.benchmark.selectors import RunSelector, matches_run_result
@@ -75,6 +82,56 @@ def _load_judges_from_manifest(source_root: Path) -> list[EvaluationModelConfig]
         for item in judges_payload
         if isinstance(item, dict)
     ]
+
+
+def _filter_judges(
+    judges: list[EvaluationModelConfig],
+    *,
+    judge: tuple[str, ...] = (),
+    exclude_judge: tuple[str, ...] = (),
+) -> list[EvaluationModelConfig]:
+    include = _normalize_selector_values(judge)
+    exclude = _normalize_selector_values(exclude_judge)
+    filtered = list(judges)
+    if include:
+        filtered = [item for item in filtered if _judge_matches(item, include)]
+    if exclude:
+        filtered = [item for item in filtered if not _judge_matches(item, exclude)]
+    return filtered
+
+
+def _normalize_selector_values(values: tuple[str, ...]) -> set[str]:
+    return {str(value).strip() for value in values if isinstance(value, str) and str(value).strip()}
+
+
+def _judge_matches(config: EvaluationModelConfig, selectors: set[str]) -> bool:
+    if not selectors:
+        return True
+    identifiers = _judge_identifiers(config)
+    return bool(identifiers & selectors)
+
+
+def _judge_identifiers(config: EvaluationModelConfig) -> set[str]:
+    identifiers: set[str] = set()
+    for value in (config.provider, config.model):
+        if isinstance(value, str) and value.strip():
+            identifiers.add(value.strip())
+    identifiers.update(_collect_identifier_strings(config.params))
+    return identifiers
+
+
+def _collect_identifier_strings(value: Any) -> set[str]:
+    identifiers: set[str] = set()
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if key in {"id", "judgeId", "judge_id", "name", "model", "provider"} and isinstance(nested, str) and nested.strip():
+                identifiers.add(nested.strip())
+            identifiers.update(_collect_identifier_strings(nested))
+        return identifiers
+    if isinstance(value, list):
+        for item in value:
+            identifiers.update(_collect_identifier_strings(item))
+    return identifiers
 
 
 def _load_artifacts_from_manifest(source_root: Path) -> ExperimentArtifacts:
@@ -240,11 +297,26 @@ def eval_command(
     force: bool = False,
     only: str | None = None,
     mode: str | None = None,
+    judge: tuple[str, ...] = (),
+    exclude_judge: tuple[str, ...] = (),
+    batch: bool = False,
+    batch_id: str | None = None,
+    wait: bool = False,
+    poll_interval: int = DEFAULT_BATCH_POLL_INTERVAL_SECONDS,
     continue_on_error: bool = False,
     verbose: bool = False,
     progress: bool = False,
     selector: RunSelector | None = None,
 ) -> int:
+    if not batch and wait:
+        raise ValueError("--wait can only be used with --batch.")
+    if not batch and batch_id:
+        raise ValueError("--batch-id can only be used with --batch.")
+    if not batch and poll_interval != DEFAULT_BATCH_POLL_INTERVAL_SECONDS:
+        raise ValueError("--poll-interval can only be used with --batch.")
+    if poll_interval < 1:
+        raise ValueError("--poll-interval must be >= 1.")
+
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
     input_path = run_dir or run_jsonl or ""
@@ -260,7 +332,14 @@ def eval_command(
         active_selector = replace(active_selector, question=only)
     results = [result for result in results if matches_run_result(result, active_selector)]
     question_filter = only or (active_selector.question if active_selector else None)
-    judges = _load_judges_from_manifest(source_root)
+    judges = _filter_judges(
+        _load_judges_from_manifest(source_root),
+        judge=judge,
+        exclude_judge=exclude_judge,
+    )
+    if not judges:
+        selected = ", ".join(list(judge) or ["<all>"])
+        raise ValueError(f"No judges matched the requested selector(s): {selected}.")
     artifacts = _load_artifacts_from_manifest(source_root)
     trace_config = _load_trace_from_manifest(source_root)
     write_individual_json = artifacts.writeIndividualJson
@@ -368,6 +447,61 @@ def eval_command(
         )
         logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=summary_path)
         progress_tracker.advance()
+
+    if batch:
+        if len(judges) != 1:
+            raise ValueError("--batch currently requires exactly one selected judge. Use --judge to choose one.")
+        jobs = build_evaluation_jobs(
+            pending_results,
+            judges=judges,
+            only=question_filter,
+            mode=mode,
+            event_logger=event_logger,
+        )
+        if not jobs:
+            print(f"No pending evaluation job(s) for {input_path}.")
+            return 0
+        resolved_batch_id = batch_id or (None if force else load_batch_id_from_manifest(source_root))
+        if resolved_batch_id is None:
+            manifest = submit_evaluation_batch(jobs=jobs, source_root=source_root)
+            resolved_batch_id = str(manifest.get("batchId") or "")
+            print(f"Submitted evaluation batch {resolved_batch_id} with {len(jobs)} request(s).")
+            if not wait:
+                return 0
+
+        manifest, batch_evaluations = retrieve_evaluation_batch(
+            batch_id=resolved_batch_id,
+            jobs=jobs,
+            source_root=source_root,
+            wait=wait,
+            poll_interval=poll_interval,
+        )
+        if not batch_evaluations:
+            print(
+                f"Evaluation batch {resolved_batch_id} status: "
+                f"{manifest.get('processingStatus') or manifest.get('status') or 'unknown'}"
+            )
+            return 0
+        progress_tracker.total = len(batch_evaluations)
+        progress_tracker.current = 0
+        progress_tracker.start()
+        results_by_run_id = {result.runId: result for result in pending_results}
+        for evaluated in batch_evaluations:
+            source_result = results_by_run_id.get(evaluated.runId)
+            if source_result is None:
+                continue
+            _persist_evaluation(source_result, evaluated)
+        summary_path = target_dir / "evaluation-summary.json"
+        write_json(
+            summary_path,
+            build_evaluation_summary_rows(_load_persisted_evaluation_rows(target_dir, target_jsonl)).model_dump(mode="json"),
+        )
+        logger.phase("WRITE", "Artifact written", path=summary_path)
+        if output_csv:
+            csv_path = export_evaluation_rows_csv(_load_persisted_evaluation_rows(target_dir, target_jsonl), output_csv)
+            logger.phase("WRITE", "Artifact written", path=csv_path)
+        print(f"Collected evaluation batch {resolved_batch_id} with {len(batch_evaluations)} result(s).")
+        return 0
 
     evaluations = evaluate_run_results(
         pending_results,
