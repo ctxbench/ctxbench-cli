@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from typing import Any
 
 from copa._compat import BaseModel, Field, ValidationError
+
+MODEL_ID_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 
 def _model_dump_value(value: Any, mode: str) -> Any:
@@ -228,6 +231,7 @@ class Experiment(BaseModel):
             raise ValueError(f"Experiment factors must not be empty: {', '.join(sorted(empty))}")
         if self.execution.repeats < 1:
             raise ValueError("Experiment execution.repeats must be >= 1.")
+        model_ids: set[str] = set()
         for model in self.factors.get("model", []):
             if not isinstance(model, dict):
                 raise ValueError("Experiment factors.model entries must be objects.")
@@ -237,6 +241,15 @@ class Experiment(BaseModel):
                 raise ValueError("Experiment factors.model[].provider must be a non-empty string.")
             if not isinstance(name, str) or not name.strip():
                 raise ValueError("Experiment factors.model[].name must be a non-empty string.")
+            raw_model_id = model.get("id")
+            model_id = raw_model_id if raw_model_id is not None else name
+            if not isinstance(model_id, str) or not model_id.strip():
+                raise ValueError("Experiment factors.model[].id must be a non-empty string when provided.")
+            if raw_model_id is not None and not MODEL_ID_PATTERN.match(model_id):
+                raise ValueError("Experiment factors.model[].id must contain only letters, numbers, underscore, dot, or hyphen.")
+            if model_id in model_ids:
+                raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
+            model_ids.add(model_id)
         for factor_name in ("strategy", "format"):
             invalid = [value for value in self.factors.get(factor_name, []) if not isinstance(value, str) or not value.strip()]
             if invalid:
@@ -248,6 +261,7 @@ class RunMetadata(BaseModel):
     questionId: str
     instanceId: str
     provider: str
+    modelId: str | None = None
     modelName: str | None = None
     strategy: str
     format: str
@@ -272,6 +286,7 @@ class RunSpec(BaseModel):
     parameters: dict[str, Any] = Field(default_factory=dict)
     instanceId: str
     provider: str
+    modelId: str | None = None
     modelName: str | None = None
     strategy: str
     format: str
@@ -304,6 +319,7 @@ class RunSpec(BaseModel):
                 "questionId": payload.get("questionId", ""),
                 "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
+                "modelId": payload.get("modelId"),
                 "modelName": payload.get("modelName"),
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
@@ -313,6 +329,7 @@ class RunSpec(BaseModel):
         payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
         payload.setdefault("validationType", payload["metadata"].get("validationType"))
         payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
+        payload.setdefault("modelId", payload["metadata"].get("modelId", payload.get("modelName")))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self) -> dict[str, Any]:
@@ -325,6 +342,7 @@ class RunSpec(BaseModel):
             "dataset": self.dataset.model_dump(mode="json"),
             "instanceId": self.instanceId,
             "model": self.modelName,
+            "modelId": self.modelId,
             "provider": self.provider,
             "strategy": self.strategy,
             "format": self.format,
@@ -378,6 +396,7 @@ class RunResult(BaseModel):
     parameters: dict[str, Any] = Field(default_factory=dict)
     instanceId: str
     provider: str
+    modelId: str | None = None
     modelName: str | None = None
     strategy: str
     format: str
@@ -414,6 +433,7 @@ class RunResult(BaseModel):
                 "questionId": payload.get("questionId", ""),
                 "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
+                "modelId": payload.get("modelId"),
                 "modelName": payload.get("modelName"),
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
@@ -423,6 +443,7 @@ class RunResult(BaseModel):
         payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
         payload.setdefault("validationType", payload["metadata"].get("validationType"))
         payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
+        payload.setdefault("modelId", payload["metadata"].get("modelId", payload.get("modelName")))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
@@ -435,6 +456,7 @@ class RunResult(BaseModel):
             "dataset": self.dataset.model_dump(mode="json"),
             "instanceId": self.instanceId,
             "provider": self.provider,
+            "modelId": self.modelId,
             "model": self.modelName,
             "strategy": self.strategy,
             "format": self.format,
@@ -548,6 +570,7 @@ class EvaluationRunResult(BaseModel):
                 "questionId": payload.get("questionId", ""),
                 "instanceId": "",
                 "provider": "",
+                "modelId": None,
                 "modelName": None,
                 "strategy": "",
                 "format": "",

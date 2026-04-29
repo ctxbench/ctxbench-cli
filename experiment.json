@@ -1,19 +1,21 @@
 {
-  "id": "exp_baseline_001",
+  "id": "exp_baseline_003",
   "name": "Baseline run including only inline executions",
   "output": "sbes2026",
   "dataset": "datasets/lattes",
   "scope": {
-    "instances": ["5521922960404236", "5123602572479168", "4093653182381054"],
+    "instances": ["5521922960404236", "5123602572479168", "9674541381385819"],
     "questions": []
   },
   "factors": {
     "model": [
       {
+        "id": "gpt-menor",
         "provider": "openai",
         "name": "gpt-5.4-mini-2026-03-17"
       },
       {
+        "id": "gem-menor",
         "provider": "google",
         "name": "gemini-2.5-flash"
       }
@@ -23,7 +25,10 @@
   },
   "params": {
     "common": {
-      "temperature": 0
+      "temperature": 0,
+      "mcp_server": {
+        "server_url": "https://secure-harlequin-mollusk.fastmcp.app/mcp"
+      }
     },
     "gpt-5.4-mini-2026-03-17": {
       "max_output_tokens": 8000,
@@ -84,8 +89,18 @@
   "evaluation": {
     "enabled": true,
     "judges": [
-      { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 },
-      { "provider": "anthropic", "model": "claude-haiku-4-5", "temperature": 0 }
+      {
+        "id": "juiz-gpt",
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "temperature": 0
+      },
+      {
+        "id": "juiz-claude",
+        "provider": "anthropic",
+        "model": "claude-haiku-4-5",
+        "temperature": 0
+      }
     ]
   },
   "artifacts": {

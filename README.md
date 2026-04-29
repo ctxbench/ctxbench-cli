@@ -262,6 +262,8 @@ To force re-execution even when artifacts already exist:
 copa run runspecs --out results --jsonl results.jsonl --force
 ```
 
+`Ctrl-C` stops after the current item and leaves a checkpoint behind. Rerunning the same command resumes from the last completed `runId`.
+
 ### Evaluate Run Results
 
 From a directory:
@@ -300,6 +302,7 @@ The benchmark persists:
 - optional JSONL aggregations
 - optional CSV export for evaluation rows
 - trace artifacts
+- checkpoint files for interrupted batches (`runs.checkpoint.json`, `evaluation.checkpoint.json`)
 
 JSONL artifacts are the default canonical source for analysis:
 
@@ -325,6 +328,25 @@ Per-item JSON files (`runs/rs_*.json`, `results/rr_*.json`, `evaluation/re_*.jso
 Run results include a compact `metricsSummary` separate from the raw trace. When a strategy does not expose a metric reliably, the field is stored as `null`.
 
 Evaluation rows persist qualitative details and expose common fields directly (`outcome`, `correctness`, `completeness`, judge metadata and evaluation token/duration fields) for easier CSV export.
+
+Model factors can include a short `id` for filtering and reporting:
+
+```json
+{
+  "provider": "openai",
+  "id": "gpt-mini",
+  "name": "gpt-5.4-mini-2026-03-17"
+}
+```
+
+Run and evaluation commands accept selectors:
+
+```bash
+copa run runs.jsonl --model gpt-mini --question q_sup
+copa eval --run-jsonl results.jsonl --model gpt-mini --instance 5521922960404236
+```
+
+`--model` matches either the short `modelId` or the full model name. Selectors are available for provider, model, instance, question, strategy, format, and repeat; evaluation also supports status. Each of those fields also has an `--exclude-*` variant.
 
 ## Repository Layout
 

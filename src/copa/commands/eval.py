@@ -1,14 +1,21 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
+from copa.benchmark.checkpoints import (
+    checkpoint_path,
+    load_completed_run_ids,
+    write_completed_run_ids,
+)
 from copa.benchmark.evaluation import (
     build_evaluation_summary_rows,
     evaluate_run_results,
     export_evaluation_rows_csv,
 )
 from copa.benchmark.models import EvaluationModelConfig, ExperimentArtifacts, ExperimentTrace, RunResult
+from copa.benchmark.selectors import RunSelector, matches_run_result
 from copa.benchmark.results import append_evaluation_jsonl, write_evaluation_file
 from copa.util.artifacts import evalresult_filename
 from copa.util.fs import load_json, write_json
@@ -150,6 +157,23 @@ def _existing_run_ids_in_jsonl(path: Path | None) -> set[str]:
     }
 
 
+def _existing_run_ids_in_evaluation_dir(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    run_ids: set[str] = set()
+    for item in sorted(path.glob("re_*.json")):
+        if item.name == "evaluation-summary.json":
+            continue
+        try:
+            payload = load_json(item)
+        except Exception:
+            continue
+        run_id = payload.get("runId")
+        if isinstance(run_id, str) and run_id:
+            run_ids.add(run_id)
+    return run_ids
+
+
 def _load_persisted_evaluation_rows(target_dir: Path, target_jsonl: Path | None) -> list[dict[str, Any]]:
     if target_jsonl is not None and target_jsonl.exists():
         return [dict(row) for row in read_jsonl(target_jsonl)]
@@ -219,6 +243,7 @@ def eval_command(
     continue_on_error: bool = False,
     verbose: bool = False,
     progress: bool = False,
+    selector: RunSelector | None = None,
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
@@ -230,6 +255,11 @@ def eval_command(
         run_dir=run_dir,
         run_jsonl=run_jsonl,
     )
+    active_selector = selector or RunSelector()
+    if only:
+        active_selector = replace(active_selector, question=only)
+    results = [result for result in results if matches_run_result(result, active_selector)]
+    question_filter = only or (active_selector.question if active_selector else None)
     judges = _load_judges_from_manifest(source_root)
     artifacts = _load_artifacts_from_manifest(source_root)
     trace_config = _load_trace_from_manifest(source_root)
@@ -246,13 +276,34 @@ def eval_command(
     file_artifact_root = target_dir.parent
     jsonl_artifact_root = target_jsonl.parent if target_jsonl is not None else None
     progress_tracker.start()
-    existing_jsonl_run_ids = _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
+    checkpoint_file = checkpoint_path(target_jsonl.parent if target_jsonl is not None else target_dir.parent, "evaluation")
+    experiment_id = results[0].experimentId
     if force:
-        pending_results = results
-    elif write_individual_json:
-        pending_results = [result for result in results if not _evaluation_path(target_dir, result).exists()]
+        completed_run_ids: set[str] = set()
+        write_completed_run_ids(
+            checkpoint_file,
+            experiment_id=experiment_id,
+            kind="evaluation",
+            completed_run_ids=completed_run_ids,
+        )
     else:
-        pending_results = [result for result in results if result.runId not in existing_jsonl_run_ids]
+        completed_run_ids = load_completed_run_ids(
+            checkpoint_file,
+            experiment_id=experiment_id,
+            kind="evaluation",
+        )
+        completed_run_ids.update(_existing_run_ids_in_jsonl(target_jsonl))
+        if write_individual_json:
+            completed_run_ids.update(_existing_run_ids_in_evaluation_dir(target_dir))
+        if completed_run_ids:
+            write_completed_run_ids(
+                checkpoint_file,
+                experiment_id=experiment_id,
+                kind="evaluation",
+                completed_run_ids=completed_run_ids,
+            )
+    _backfill_evaluation_jsonl(results, target_dir=target_dir, target_jsonl=target_jsonl)
+    pending_results = results if force else [result for result in results if result.runId not in completed_run_ids]
 
     progress_tracker.total = len(pending_results)
     progress_tracker.current = 0
@@ -294,8 +345,22 @@ def eval_command(
                     artifact_root=jsonl_artifact_root,
                     write_trace=write_traces,
                 )
-            existing_jsonl_run_ids.add(evaluated.runId)
+            completed_run_ids.add(evaluated.runId)
+            write_completed_run_ids(
+                checkpoint_file,
+                experiment_id=experiment_id,
+                kind="evaluation",
+                completed_run_ids=completed_run_ids,
+            )
             logger.phase("WRITE", "Artifact written", run=evaluated.runId, path=target_jsonl)
+        else:
+            completed_run_ids.add(evaluated.runId)
+            write_completed_run_ids(
+                checkpoint_file,
+                experiment_id=experiment_id,
+                kind="evaluation",
+                completed_run_ids=completed_run_ids,
+            )
         summary_path = target_dir / "evaluation-summary.json"
         write_json(
             summary_path,
@@ -307,7 +372,7 @@ def eval_command(
     evaluations = evaluate_run_results(
         pending_results,
         judges=judges,
-        only=only,
+        only=question_filter,
         mode=mode,
         continue_on_error=continue_on_error,
         event_logger=event_logger,

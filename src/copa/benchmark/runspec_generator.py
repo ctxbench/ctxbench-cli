@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 from typing import Any, Callable
 
-from copa.benchmark.models import Experiment, RunMetadata, RunSpec
+from copa.benchmark.models import Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
 from copa.dataset.provider import DatasetProvider
 from copa.util.artifacts import build_short_ids, canonical_run_identity
 from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
@@ -21,13 +21,23 @@ def resolve_params(experiment: Experiment, model_name: str) -> dict[str, Any]:
 
 def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
     models: list[dict[str, str]] = []
+    seen_ids: set[str] = set()
     for item in experiment.factors.get("model", []):
         if not isinstance(item, dict):
             continue
         provider = item.get("provider")
         name = item.get("name")
         if isinstance(provider, str) and isinstance(name, str):
-            models.append({"provider": provider, "name": name})
+            raw_model_id = item.get("id")
+            model_id = raw_model_id if raw_model_id is not None else name
+            if not isinstance(model_id, str) or not model_id.strip():
+                raise ValueError("Experiment factors.model[].id must be a non-empty string when provided.")
+            if raw_model_id is not None and not MODEL_ID_PATTERN.match(model_id):
+                raise ValueError("Experiment factors.model[].id must contain only letters, numbers, underscore, dot, or hyphen.")
+            if model_id in seen_ids:
+                raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
+            seen_ids.add(model_id)
+            models.append({"id": model_id, "provider": provider, "name": name})
     return models
 
 
@@ -75,6 +85,7 @@ def generate_runspecs(
             )
             for model in models:
                 provider_name = model["provider"]
+                model_id = model["id"]
                 model_name = model["name"]
                 for strategy_name in strategies:
                     for format_name in effective_formats_for_strategy(strategy_name, formats):
@@ -103,6 +114,7 @@ def generate_runspecs(
                                     "questionTemplate": question.question,
                                     "instanceId": instance_id,
                                     "provider": provider_name,
+                                    "modelId": model_id,
                                     "modelName": model_name,
                                     "strategy": strategy_name,
                                     "format": format_name,
@@ -138,6 +150,7 @@ def generate_runspecs(
                 parameters=item["parameters"],
                 instanceId=item["instanceId"],
                 provider=item["provider"],
+                modelId=item["modelId"],
                 modelName=item["modelName"],
                 strategy=item["strategy"],
                 format=item["format"],
@@ -152,6 +165,7 @@ def generate_runspecs(
                     questionId=item["questionId"],
                     instanceId=item["instanceId"],
                     provider=item["provider"],
+                    modelId=item["modelId"],
                     modelName=item["modelName"],
                     strategy=item["strategy"],
                     format=item["format"],

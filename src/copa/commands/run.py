@@ -4,8 +4,14 @@ from pathlib import Path
 from typing import Any
 
 from copa.ai.engine import Engine
+from copa.benchmark.checkpoints import (
+    checkpoint_path,
+    load_completed_run_ids,
+    write_completed_run_ids,
+)
 from copa.benchmark.executor import execute_runspec
 from copa.benchmark.models import RunSpec
+from copa.benchmark.selectors import RunSelector, matches_runspec
 from copa.benchmark.results import (
     append_result_jsonl,
     serialize_run_result,
@@ -57,6 +63,21 @@ def _existing_run_ids_in_jsonl(path: Path | None) -> set[str]:
         for item in read_jsonl(path)
         if isinstance(item.get("runId"), str) and str(item.get("runId"))
     }
+
+
+def _existing_run_ids_in_result_dir(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    run_ids: set[str] = set()
+    for item in sorted(path.glob("rr_*.json")):
+        try:
+            payload = load_json(item)
+        except Exception:
+            continue
+        run_id = payload.get("runId")
+        if isinstance(run_id, str) and run_id:
+            run_ids.add(run_id)
+    return run_ids
 
 
 def _result_path(target_dir: Path, runspec: RunSpec) -> Path:
@@ -119,12 +140,15 @@ def run_command(
     force: bool = False,
     verbose: bool = False,
     progress: bool = False,
+    selector: RunSelector | None = None,
 ) -> int:
     source = Path(path).resolve()
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
     logger.phase("LOAD", "Loading run specification", path=path)
     runspecs, _experiment_path = load_runspecs(path)
+    active_selector = selector or RunSelector()
+    runspecs = [runspec for runspec in runspecs if matches_runspec(runspec, active_selector)]
     if not runspecs:
         print("No runspecs found.")
         return 0
@@ -149,22 +173,42 @@ def run_command(
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
     logger.progress = progress_tracker
     progress_tracker.start()
+    checkpoint_file = checkpoint_path(target_dir.parent if target_jsonl is None else target_jsonl.parent, "runs")
+    experiment_id = runspecs[0].experimentId
     existing_jsonl_run_ids = _existing_run_ids_in_jsonl(target_jsonl)
+    if force:
+        completed_run_ids: set[str] = set()
+        write_completed_run_ids(
+            checkpoint_file,
+            experiment_id=experiment_id,
+            kind="runs",
+            completed_run_ids=completed_run_ids,
+        )
+    else:
+        completed_run_ids = load_completed_run_ids(
+            checkpoint_file,
+            experiment_id=experiment_id,
+            kind="runs",
+        )
+        completed_run_ids.update(existing_jsonl_run_ids)
+        if write_individual_json:
+            completed_run_ids.update(_existing_run_ids_in_result_dir(target_dir))
+        if completed_run_ids:
+            write_completed_run_ids(
+                checkpoint_file,
+                experiment_id=experiment_id,
+                kind="runs",
+                completed_run_ids=completed_run_ids,
+            )
     completed_runs = 0
     skipped_runs = 0
     engine = Engine(event_logger=event_logger)
     try:
         for runspec in runspecs:
             result_path = _result_path(target_dir, runspec)
-            if write_individual_json and result_path.exists() and not force:
+            if runspec.runId in completed_run_ids and not force:
                 skipped_runs += 1
                 logger.phase("SKIP", "Run already persisted; skipping execution", run=runspec.runId, path=result_path)
-                progress_tracker.advance()
-                completed_runs += 1
-                continue
-            if not write_individual_json and target_jsonl is not None and runspec.runId in existing_jsonl_run_ids and not force:
-                skipped_runs += 1
-                logger.phase("SKIP", "Run already persisted in JSONL; skipping execution", run=runspec.runId, path=target_jsonl)
                 progress_tracker.advance()
                 completed_runs += 1
                 continue
@@ -204,8 +248,22 @@ def run_command(
                     )
                 else:
                     append_result_jsonl(result, target_jsonl, artifact_root=jsonl_artifact_root, write_trace=write_traces)
-                existing_jsonl_run_ids.add(result.runId)
+                completed_run_ids.add(result.runId)
+                write_completed_run_ids(
+                    checkpoint_file,
+                    experiment_id=experiment_id,
+                    kind="runs",
+                    completed_run_ids=completed_run_ids,
+                )
                 logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
+            else:
+                completed_run_ids.add(result.runId)
+                write_completed_run_ids(
+                    checkpoint_file,
+                    experiment_id=experiment_id,
+                    kind="runs",
+                    completed_run_ids=completed_run_ids,
+                )
             logger.phase("DONE", "Completed successfully", run=result.runId)
             progress_tracker.advance()
             completed_runs += 1

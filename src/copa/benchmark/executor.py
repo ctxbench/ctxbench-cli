@@ -118,6 +118,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         parameters=dict(runspec.parameters),
         instanceId=runspec.instanceId,
         provider=runspec.provider,
+        modelId=runspec.modelId,
         modelName=runspec.modelName,
         strategy=runspec.strategy,
         format=runspec.format,

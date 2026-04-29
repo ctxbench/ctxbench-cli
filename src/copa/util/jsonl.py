@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
+from copa.util.fs import write_text_atomic
+
 
 def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -17,16 +19,15 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
 def write_jsonl(path: str | Path, rows: Iterable[dict[str, Any]]) -> None:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("w", encoding="utf-8") as handle:
-        for row in rows:
-            handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False))
-            handle.write("\n")
+    text = "".join(
+        f"{json.dumps(row, sort_keys=True, ensure_ascii=False)}\n"
+        for row in rows
+    )
+    write_text_atomic(target, text)
 
 
 def append_jsonl(path: str | Path, rows: Iterable[dict[str, Any]]) -> None:
     target = Path(path)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("a", encoding="utf-8") as handle:
-        for row in rows:
-            handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False))
-            handle.write("\n")
+    existing = read_jsonl(target) if target.exists() else []
+    existing.extend(dict(row) for row in rows)
+    write_jsonl(target, existing)

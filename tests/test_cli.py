@@ -116,6 +116,58 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
     return path
 
 
+def add_mock_instance(dataset_root: Path, instance_id: str, *, researcher_name: str) -> None:
+    source_instance_dir = dataset_root / "context" / "cv_demo"
+    instance_dir = dataset_root / "context" / instance_id
+    instance_dir.mkdir(parents=True, exist_ok=True)
+
+    parsed_payload = json.loads((source_instance_dir / "parsed.json").read_text(encoding="utf-8"))
+    (instance_dir / "parsed.json").write_text(json.dumps(parsed_payload), encoding="utf-8")
+    (instance_dir / "raw.html").write_text((source_instance_dir / "raw.html").read_text(encoding="utf-8"), encoding="utf-8")
+    (instance_dir / "clean.html").write_text((source_instance_dir / "clean.html").read_text(encoding="utf-8"), encoding="utf-8")
+    (instance_dir / "blocks.json").write_text((source_instance_dir / "blocks.json").read_text(encoding="utf-8"), encoding="utf-8")
+
+    questions_instance_path = dataset_root / "questions.instance.json"
+    questions_instance_payload = json.loads(questions_instance_path.read_text(encoding="utf-8"))
+    questions_instance_payload["instances"].append(
+        {
+            "instanceId": instance_id,
+            "contextBlocks": f"context/{instance_id}/blocks.json",
+            "questions": [
+                {"id": "q_year"},
+                {
+                    "id": "q_summary",
+                    "parameters": {"researcher_name": researcher_name},
+                },
+            ],
+        }
+    )
+    questions_instance_path.write_text(json.dumps(questions_instance_payload), encoding="utf-8")
+
+
+def rewrite_runspec_artifacts(runspec_jsonl: Path, *, write_jsonl: bool, write_individual_json: bool) -> None:
+    rows = [json.loads(line) for line in runspec_jsonl.read_text(encoding="utf-8").splitlines() if line.strip()]
+    for row in rows:
+        row["artifacts"] = {
+            "writeJsonl": write_jsonl,
+            "writeIndividualJson": write_individual_json,
+        }
+    runspec_jsonl.write_text(
+        "\n".join(json.dumps(row) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+
+
+def rewrite_evaluation_manifest(expanded_root: Path, *, write_jsonl: bool, write_individual_json: bool) -> None:
+    manifest_path = expanded_root / "evaluation.manifest.json"
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["artifacts"] = {
+        "writeJsonl": write_jsonl,
+        "writeIndividualJson": write_individual_json,
+    }
+    manifest_path.write_text(json.dumps(payload), encoding="utf-8")
+
+
 def test_experiment_validate_example(tmp_path, capsys):
     experiment_path = write_mock_experiment(tmp_path / "experiment.json")
     exit_code = main(["experiment", "validate", str(experiment_path)])
@@ -148,6 +200,7 @@ def test_experiment_expand_respects_scope_and_writes_runspecs(tmp_path):
     first = rows[0]
     assert first["questionId"] in {"q_year", "q_summary"}
     assert first["instanceId"] == "cv_demo"
+    assert first["modelId"] == "mock"
     assert first["validationType"] == "judge"
     assert first["contextBlock"] in (["summary"], ["summary", "research"])
     assert "dataset" in first
@@ -157,6 +210,18 @@ def test_experiment_expand_respects_scope_and_writes_runspecs(tmp_path):
     assert (out_dir / "runs.manifest.json").exists()
     assert (tmp_path / "evaluation.manifest.json").exists()
     assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 2
+
+
+def test_experiment_validate_rejects_duplicate_model_ids(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["factors"]["model"] = [
+        {"id": "same", "provider": "mock", "name": "mock-a"},
+        {"id": "same", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    assert main(["experiment", "validate", str(experiment_path)]) == 1
 
 
 def test_experiment_expand_includes_questions_without_instance_override(tmp_path):
@@ -332,6 +397,255 @@ def test_run_from_runs_jsonl_writes_results_inside_expanded_root(tmp_path):
     assert list((expanded_root / "traces" / "runs").glob("*.json"))
 
 
+def test_run_selector_filters_by_model_id(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl), "--model", "m1"]) == 0
+
+    rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert {row["modelId"] for row in rows} == {"m1"}
+    assert {row["model"] for row in rows} == {"mock-a"}
+
+
+def test_run_selector_filters_by_model_name(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl), "--model", "mock-b"]) == 0
+
+    rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert {row["modelId"] for row in rows} == {"m2"}
+    assert {row["model"] for row in rows} == {"mock-b"}
+
+
+def test_run_selector_excludes_instance_for_selected_model(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    dataset_root = Path(payload["dataset"])
+    add_mock_instance(dataset_root, "cv_alt", researcher_name="CV Alt")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl), "--model", "m1", "--exclude-instance", "cv_demo"]) == 0
+
+    rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert {row["modelId"] for row in rows} == {"m1"}
+    assert {row["instanceId"] for row in rows} == {"cv_alt"}
+    assert {row["model"] for row in rows} == {"mock-a"}
+
+
+def test_run_force_selector_reexecutes_only_selected_model(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    parsed_path = tmp_path / "dataset" / "context" / "cv_demo" / "parsed.json"
+    parsed_payload = json.loads(parsed_path.read_text(encoding="utf-8"))
+    parsed_payload["answers"]["q_year"] = 2020
+    parsed_path.write_text(json.dumps(parsed_payload), encoding="utf-8")
+
+    assert main(["run", str(runspec_jsonl), "--model", "m1", "--force"]) == 0
+    rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    year_rows = [row for row in rows if row["questionId"] == "q_year"]
+    assert next(row for row in year_rows if row["modelId"] == "m1")["answer"] == "2020"
+    assert next(row for row in year_rows if row["modelId"] == "m2")["answer"] == "2018"
+
+
+def test_run_resume_after_keyboard_interrupt_uses_checkpoint(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["scope"]["questions"] = ["q_year"]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    add_mock_instance(Path(payload["dataset"]), "cv_alt", researcher_name="CV Alt")
+
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    rewrite_runspec_artifacts(runspec_jsonl, write_jsonl=False, write_individual_json=False)
+
+    runspec_rows = [json.loads(line) for line in runspec_jsonl.read_text(encoding="utf-8").splitlines()]
+    expected_run_ids = [row["runId"] for row in runspec_rows]
+
+    from copa.commands import run as run_module
+
+    original_execute_runspec = run_module.execute_runspec
+    state = {"calls": 0}
+
+    def interrupting_execute_runspec(*args, **kwargs):
+        state["calls"] += 1
+        if state["calls"] == 2:
+            raise KeyboardInterrupt()
+        return original_execute_runspec(*args, **kwargs)
+
+    monkeypatch.setattr(run_module, "execute_runspec", interrupting_execute_runspec)
+
+    assert main(["run", str(runspec_jsonl)]) == 130
+    checkpoint_path = expanded_root / "runs.checkpoint.json"
+    checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    assert checkpoint["kind"] == "runs"
+    assert set(checkpoint["completedRunIds"]) == {expected_run_ids[0]}
+
+    monkeypatch.setattr(run_module, "execute_runspec", original_execute_runspec)
+    assert main(["run", str(runspec_jsonl)]) == 0
+    checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    assert set(checkpoint["completedRunIds"]) == set(expected_run_ids)
+
+
+def test_eval_selector_excludes_instance_for_selected_model(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    dataset_root = Path(payload["dataset"])
+    add_mock_instance(dataset_root, "cv_alt", researcher_name="CV Alt")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl"), "--model", "m1", "--exclude-instance", "cv_demo"]) == 0
+    rows = [json.loads(line) for line in (expanded_root / "evaluation.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    assert {row["instanceId"] for row in rows} == {"cv_alt"}
+    result_rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    expected_run_ids = {
+        row["runId"]
+        for row in result_rows
+        if row["modelId"] == "m1" and row["instanceId"] == "cv_alt"
+    }
+    assert {row["runId"] for row in rows} == expected_run_ids
+
+
+def test_eval_resume_after_keyboard_interrupt_uses_checkpoint(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["scope"]["instances"] = ["cv_demo", "cv_alt"]
+    payload["scope"]["questions"] = ["q_year"]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    add_mock_instance(Path(payload["dataset"]), "cv_alt", researcher_name="CV Alt")
+
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+    rewrite_evaluation_manifest(expanded_root, write_jsonl=False, write_individual_json=False)
+
+    result_rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    ordered_rows = sorted(
+        result_rows,
+        key=lambda row: (
+            str(row["provider"]),
+            str(row.get("model") or ""),
+            str(row["instanceId"]),
+            str(row["questionId"]),
+            str(row["runId"]),
+        ),
+    )
+    expected_run_ids = [row["runId"] for row in ordered_rows]
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    state = {"calls": 0}
+
+    def interrupting_judge_request(**kwargs):
+        state["calls"] += 1
+        if state["calls"] == 2:
+            raise KeyboardInterrupt()
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", interrupting_judge_request)
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl")]) == 130
+    checkpoint_path = expanded_root / "evaluation.checkpoint.json"
+    checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    assert checkpoint["kind"] == "evaluation"
+    assert set(checkpoint["completedRunIds"]) == {expected_run_ids[0]}
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", lambda **kwargs: (
+        {
+            "correctness": {"rating": "meets", "justification": "ok"},
+            "completeness": {"rating": "meets", "justification": "ok"},
+        },
+        evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+        evaluation_module.EvaluationTrace(),
+    ))
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl")]) == 0
+    checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    assert set(checkpoint["completedRunIds"]) == set(expected_run_ids)
+
+
 def test_default_artifacts_use_jsonl_as_canonical_source(tmp_path, monkeypatch):
     experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
     payload = json.loads(experiment_path.read_text(encoding="utf-8"))
@@ -442,6 +756,43 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     assert judge_summary["aggregate"]["correctness"] == "meets"
     assert judge_summary["aggregate"]["completeness"] == "partially meets"
     assert len(judge_summary["judgeRatings"]) == 1
+
+
+def test_eval_selector_filters_by_model_id(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["artifacts"]["writeIndividualJson"] = False
+    payload["factors"]["model"] = [
+        {"id": "m1", "provider": "mock", "name": "mock-a"},
+        {"id": "m2", "provider": "mock", "name": "mock-b"},
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    expanded_root = tmp_path / "expanded"
+    runspec_jsonl = expanded_root / "runs.jsonl"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(expanded_root / "runs"), "--jsonl", str(runspec_jsonl)]) == 0
+    assert main(["run", str(runspec_jsonl)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(["eval", "--run-jsonl", str(expanded_root / "results.jsonl"), "--model", "m1"]) == 0
+    rows = [json.loads(line) for line in (expanded_root / "evaluation.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 2
+    result_rows = [json.loads(line) for line in (expanded_root / "results.jsonl").read_text(encoding="utf-8").splitlines()]
+    selected_run_ids = {row["runId"] for row in result_rows if row["modelId"] == "m1"}
+    assert {row["runId"] for row in rows} == selected_run_ids
 
 
 def test_eval_allows_questions_without_instance_override(tmp_path, monkeypatch):
