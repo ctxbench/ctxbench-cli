@@ -62,16 +62,13 @@ def generate_runspecs(
     output_root = str((Path(base_dir) / experiment.output).resolve())
     draft_specs: list[dict[str, Any]] = []
     for instance_id in instance_ids:
-        available_questions = set(provider.list_question_ids_for_instance(instance_id))
         for question_id in questions:
-            if question_id not in available_questions:
-                continue
             question = provider.get_question(question_id)
             question_instance = provider.get_question_instance(question_id, instance_id)
-            template_parameters = dict(question_instance.templateParameters) if question_instance is not None else {}
+            parameters = dict(question_instance.parameters) if question_instance is not None else {}
             rendered_question = render_question_template(
                 question.question,
-                template_parameters,
+                parameters,
                 on_warning=on_warning,
                 question_id=question_id,
                 instance_id=instance_id,
@@ -116,7 +113,7 @@ def generate_runspecs(
                                     "trace": experiment.trace,
                                     "questionTags": list(question.tags),
                                     "validationType": question.validation.type,
-                                    "templateParameters": template_parameters,
+                                    "parameters": parameters,
                                 }
                             )
 
@@ -154,7 +151,7 @@ def generate_runspecs(
                     repeatIndex=item["repeatIndex"],
                     questionTags=item["questionTags"],
                     validationType=item["validationType"],
-                    templateParameters=item["templateParameters"],
+                    parameters=item["parameters"],
                 ),
             )
         )
@@ -163,7 +160,7 @@ def generate_runspecs(
 
 def render_question_template(
     question_template: str,
-    template_parameters: dict[str, str],
+    parameters: dict[str, Any],
     *,
     on_warning: Callable[..., None] | None = None,
     question_id: str,
@@ -171,10 +168,10 @@ def render_question_template(
 ) -> str:
     placeholders = QUESTION_TEMPLATE_PATTERN.findall(question_template)
     if not placeholders:
-        if template_parameters and on_warning is not None:
-            for key in sorted(template_parameters):
+        if parameters and on_warning is not None:
+            for key in sorted(parameters):
                 on_warning(
-                    "Unused template parameter; ignoring",
+                    "Unused question parameter; ignoring",
                     questionId=question_id,
                     instanceId=instance_id,
                     parameter=key,
@@ -183,20 +180,20 @@ def render_question_template(
 
     rendered = question_template
     for placeholder in placeholders:
-        if placeholder not in template_parameters and on_warning is not None:
+        if placeholder not in parameters and on_warning is not None:
             on_warning(
-                "Missing template parameter; substituting empty string",
+                "Missing question parameter; substituting empty string",
                 questionId=question_id,
                 instanceId=instance_id,
                 parameter=placeholder,
             )
-        rendered = rendered.replace("{" + placeholder + "}", template_parameters.get(placeholder, ""))
+        rendered = rendered.replace("{" + placeholder + "}", str(parameters.get(placeholder, "")))
 
     if on_warning is not None:
-        for key in sorted(template_parameters):
+        for key in sorted(parameters):
             if key not in placeholders:
                 on_warning(
-                    "Unused template parameter; ignoring",
+                    "Unused question parameter; ignoring",
                     questionId=question_id,
                     instanceId=instance_id,
                     parameter=key,

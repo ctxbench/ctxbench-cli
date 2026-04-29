@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import csv
 import json
-import re
-import unicodedata
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
+from copa.ai.cache import build_judge_prompt_cache_key
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelInput
 from copa.benchmark.experiment_loader import load_experiment
@@ -28,25 +27,23 @@ from copa.dataset.provider import DatasetProvider
 
 EVALUATION_SYSTEM_INSTRUCTION = (
     "You are evaluating benchmark answers.\n"
-    "Use only the provided question, answer and ground truth.\n"
+    "Use only the provided question, answer and curriculum context.\n"
     "Do not use external knowledge.\n"
     "Return only the requested JSON."
 )
 
-JUDGE_PROMPT = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided context and criteria.
+JUDGE_PROMPT = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided curriculum context and criteria.
 You must be objective, consistent, and conservative in your evaluation.
-Do NOT use external knowledge. Only use the provided ground truth.
+Do NOT use external knowledge. Only use the provided curriculum context.
 Your output must strictly follow the requested JSON format.
-Evaluate the answer to the question based on the provided ground truth.
+Evaluate the answer to the question based on the provided curriculum context.
 
-# Question
-{question}
-
-# Answer
-{answer}
-
-# Ground Truth
-{ground_truth}
+# Evaluation Instructions
+- Use only the provided curriculum context.
+- If the curriculum context is silent about something, treat that as missing support.
+- Be strict: if unsure, prefer "partially meets" or "does not meet".
+- Each criterion MUST include a short justification grounded in the provided curriculum context.
+- Do NOT include chain-of-thought or hidden reasoning. Provide only concise criterion justifications.
 
 # Evaluation Scale
 
@@ -59,22 +56,14 @@ Use the following scale for ALL criteria:
 # Evaluation Criteria
 
 ## Correctness
-The answer must be factually correct according to the ground truth.
+The answer must be factually correct according to the curriculum context.
 - Check whether the information provided is accurate.
-- Use the ground truth as the source of truth.
+- Use the curriculum context as the source of truth.
 
 ## Completeness
 The answer must fully address the question.
 - Check whether all parts of the question are answered.
-- Penalize important omissions relative to the ground truth.
-
-# Important Rules
-- Base your evaluation ONLY on the provided ground truth.
-- Ground truth is the source of truth.
-- Do NOT assume missing information.
-- Be strict: if unsure, prefer "partially meets" or "does not meet".
-- Each criterion MUST include a short justification grounded in the provided ground truth.
-- Do NOT include chain-of-thought or hidden reasoning. Provide only concise criterion justifications.
+- Penalize important omissions relative to the curriculum context.
 
 # Output Format (STRICT JSON)
 Return ONLY a JSON object in the following format:
@@ -89,6 +78,16 @@ Return ONLY a JSON object in the following format:
     "justification": "short justification"
   }}
 }}
+
+# Curriculum Context
+{curriculum_context}
+
+# Question
+{question}
+
+# Candidate Answer
+{answer}
+
 """
 
 RATING_SEVERITY = {
@@ -130,99 +129,16 @@ JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
 }
 
 
-def _normalize_text(value: Any) -> str:
-    text = str(value).strip().lower()
-    text = unicodedata.normalize("NFKD", text)
-    text = "".join(char for char in text if not unicodedata.combining(char))
-    text = re.sub(r"[^a-z0-9]+", " ", text)
-    return " ".join(text.split())
-
-
-def _coerce_number(value: Any) -> float | None:
-    if isinstance(value, bool) or value is None:
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    raw = str(value).strip().replace(",", "")
-    try:
-        return float(raw)
-    except ValueError:
-        return None
-
-
-def _normalize_structured(value: Any) -> Any:
-    if isinstance(value, dict):
-        return {str(key): _normalize_structured(item) for key, item in sorted(value.items())}
-    if isinstance(value, list):
-        return [_normalize_structured(item) for item in value]
-    number = _coerce_number(value)
-    if number is not None:
-        return int(number) if number.is_integer() else number
-    return _normalize_text(value)
-
-
-def _parse_candidate_answer(answer: str, schema: dict[str, Any] | None) -> Any:
-    stripped = answer.strip()
-    if schema is None:
-        return stripped
-    schema_type = schema.get("type")
-    if schema_type == "object":
-        try:
-            return json.loads(stripped)
-        except json.JSONDecodeError:
-            return stripped
-    if schema_type == "number":
-        return _coerce_number(stripped)
-    if schema_type == "string":
-        return stripped
-    return stripped
-
-
-def _heuristic_compare(answer: str, accepted_answers: list[Any], schema: dict[str, Any] | None) -> dict[str, Any]:
-    parsed_answer = _parse_candidate_answer(answer, schema)
-    normalized_answer = _normalize_structured(parsed_answer)
-    normalized_candidates = [_normalize_structured(item) for item in accepted_answers]
-    matched = any(_matches_expected(parsed_answer, candidate) for candidate in accepted_answers)
-    return {
-        "acceptedAnswers": accepted_answers,
-        "schema": schema,
-        "evaluationMethod": "heuristic",
-        "matched": matched,
-        "outcome": "accepted" if matched else "rejected",
-        "parsedAnswer": parsed_answer,
-        "normalizedAnswer": normalized_answer,
-    }
-
-
-def _matches_expected(actual: Any, expected: Any) -> bool:
-    if isinstance(expected, dict):
-        if "aliases" in expected and isinstance(expected["aliases"], list):
-            normalized_actual = _normalize_structured(actual)
-            return any(
-                normalized_actual == _normalize_structured(alias)
-                for alias in expected["aliases"]
-            )
-        if not isinstance(actual, dict):
-            return False
-        for key, expected_value in expected.items():
-            if key not in actual:
-                return False
-            if not _matches_expected(actual[key], expected_value):
-                return False
-        return True
-    if isinstance(expected, list):
-        if not isinstance(actual, list) or len(actual) != len(expected):
-            return False
-        return all(_matches_expected(actual_item, expected_item) for actual_item, expected_item in zip(actual, expected))
-    return _normalize_structured(actual) == _normalize_structured(expected)
-
-
 def _judge_request(
     *,
     config: EvaluationModelConfig,
     prompt: str,
     run_id: str,
     exp_id: str,
+    instance_id: str,
+    question_id: str,
+    question_text: str,
+    curriculum_context: str,
     engine: Engine,
 ) -> tuple[dict[str, Any] | None, EvaluationJudgeInfo, EvaluationTrace]:
     request_params = {
@@ -237,6 +153,17 @@ def _judge_request(
             "schema": JUDGE_STRUCTURED_OUTPUT_SCHEMA,
         },
     )
+    if config.provider.lower().startswith("openai"):
+        request_params.setdefault(
+            "prompt_cache_key",
+            build_judge_prompt_cache_key(
+                model_name=config.model,
+                instance_id=instance_id,
+                question_id=question_id,
+                context=curriculum_context,
+                question=question_text,
+            ),
+        )
     request = AIRequest(
         question=prompt,
         context="{}",
@@ -284,7 +211,7 @@ def _judge_request(
 def _evaluate_judge(
     result: RunResult,
     question_text: str,
-    ground_truth: str,
+    context_payload: dict[str, Any],
     experiment: Experiment,
     engine: Engine,
 ) -> tuple[dict[str, Any], EvaluationJudgeInfo, EvaluationTrace]:
@@ -293,10 +220,11 @@ def _evaluate_judge(
             "evaluationMethod": "judge",
             "error": "Experiment evaluation.judges is required for judge validation.",
         }, EvaluationJudgeInfo(), EvaluationTrace()
+    curriculum_context = json.dumps(context_payload, ensure_ascii=False, sort_keys=True, indent=2)
     prompt = JUDGE_PROMPT.format(
         question=question_text,
         answer=result.answer,
-        ground_truth=ground_truth,
+        curriculum_context=curriculum_context,
     )
     judge_votes: list[dict[str, Any]] = []
     judge_infos: list[EvaluationJudgeInfo] = []
@@ -308,6 +236,10 @@ def _evaluate_judge(
             prompt=prompt,
             run_id=result.runId,
             exp_id=result.experimentId,
+            instance_id=result.instanceId,
+            question_id=result.questionId,
+            question_text=question_text,
+            curriculum_context=curriculum_context,
             engine=engine,
         )
         judge_infos.append(judge_info)
@@ -337,7 +269,7 @@ def _evaluate_judge(
     if not valid_votes:
         return {
             "evaluationMethod": "judge",
-            "groundTruth": ground_truth,
+            "contextBlock": list(context_payload.keys()),
             "judges": judge_votes,
             "error": "Judge did not return valid JSON.",
         }, merged_info, merged_trace
@@ -349,12 +281,29 @@ def _evaluate_judge(
     )
     return {
         "evaluationMethod": "judge",
-        "groundTruth": ground_truth,
+        "contextBlock": list(context_payload.keys()),
         "judges": judge_votes,
         "correctness": correctness,
         "completeness": completeness,
         "outcome": summary,
     }, merged_info, merged_trace
+
+
+def _resolve_context_block_path(blocks: dict[str, Any], path: str) -> Any:
+    current: Any = blocks
+    for segment in path.split("."):
+        if not isinstance(current, dict) or segment not in current:
+            raise ValueError(f"Context block path '{path}' not found in blocks.json.")
+        current = current[segment]
+    return current
+
+
+def _collect_context_blocks(blocks: dict[str, Any], paths: list[str]) -> dict[str, Any]:
+    selected_paths = list(paths) if paths else [key for key in blocks.keys() if key != "_meta"]
+    return {
+        path: _resolve_context_block_path(blocks, path)
+        for path in selected_paths
+    }
 
 
 def _criterion_payload(value: Any) -> dict[str, str]:
@@ -434,11 +383,9 @@ def evaluate_run_result(
     *,
     only: str | None = None,
     mode: str | None = None,
-    fail_on_missing_gold: bool = False,
     engine: Engine | None = None,
     event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
 ) -> EvaluationRunResult | None:
-    del fail_on_missing_gold
     if result.status != "success":
         return None
     if only and result.questionId != only:
@@ -449,9 +396,6 @@ def evaluate_run_result(
     validation_type = question.validation.type
     if mode and validation_type != mode:
         return None
-    instance_question = provider.get_question_instance(result.questionId, result.instanceId)
-    if instance_question is None:
-        raise ValueError(f"Missing question instance mapping for question '{result.questionId}' and instance '{result.instanceId}'.")
     active_engine = engine or Engine()
     if event_logger is not None:
         event_logger(
@@ -463,24 +407,13 @@ def evaluate_run_result(
                 "validationType": validation_type,
             },
         )
-    if validation_type == "heuristic":
-        details = _heuristic_compare(
-            result.answer,
-            list(instance_question.acceptedAnswers),
-            question.validation.schema,
-        )
-        judge_info = EvaluationJudgeInfo()
-        trace = EvaluationTrace()
-    elif validation_type == "judge":
-        ground_truth = instance_question.groundTruth or ""
-        if not ground_truth:
-            raise ValueError(
-                f"Missing ground truth for judge evaluation on question '{result.questionId}' and instance '{result.instanceId}'."
-            )
+    if validation_type == "judge":
+        blocks = provider.get_context_blocks(result.instanceId)
+        context_payload = _collect_context_blocks(blocks, list(question.contextBlock))
         details, judge_info, trace = _evaluate_judge(
             result,
             rendered_question,
-            ground_truth,
+            context_payload,
             experiment,
             active_engine,
         )
@@ -549,15 +482,24 @@ def evaluate_run_results(
     only: str | None = None,
     mode: str | None = None,
     continue_on_error: bool = False,
-    fail_on_missing_gold: bool = False,
     event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
     on_result: Callable[[RunResult, EvaluationRunResult | None], None] | None = None,
 ) -> list[EvaluationRunResult]:
     provider = DatasetProvider.from_dataset(experiment.dataset)
     engine = Engine(event_logger=event_logger)
     evaluations: list[EvaluationRunResult] = []
+    ordered_results = sorted(
+        list(results),
+        key=lambda item: (
+            str(item.provider),
+            str(item.modelName or ""),
+            str(item.instanceId),
+            str(item.questionId),
+            str(item.runId),
+        ),
+    )
     try:
-        for result in results:
+        for result in ordered_results:
             try:
                 evaluated = evaluate_run_result(
                     result,
@@ -565,7 +507,6 @@ def evaluate_run_results(
                     experiment,
                     only=only,
                     mode=mode,
-                    fail_on_missing_gold=fail_on_missing_gold,
                     engine=engine,
                     event_logger=event_logger,
                 )
@@ -636,11 +577,6 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
     }
     if "outcome" in details:
         summary["outcome"] = details.get("outcome")
-    if summary["evaluationMethod"] == "heuristic":
-        if "matched" in details:
-            summary["matched"] = details.get("matched")
-        return summary
-
     judges = details.get("judges")
     if isinstance(judges, list):
         summary["judgeRatings"] = [

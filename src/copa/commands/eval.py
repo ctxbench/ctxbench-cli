@@ -181,7 +181,6 @@ def eval_command(
     only: str | None = None,
     mode: str | None = None,
     continue_on_error: bool = False,
-    fail_on_missing_gold: bool = False,
     verbose: bool = False,
     progress: bool = False,
 ) -> int:
@@ -252,7 +251,6 @@ def eval_command(
         only=only,
         mode=mode,
         continue_on_error=continue_on_error,
-        fail_on_missing_gold=fail_on_missing_gold,
         event_logger=event_logger,
         on_result=_persist_evaluation,
     )

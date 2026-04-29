@@ -9,7 +9,7 @@ from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
 from copa.ai.models.openai import OpenAIModel
 from copa.ai.trace import TraceCollector
-from copa.benchmark.evaluation import _evaluate_judge, _heuristic_compare
+from copa.benchmark.evaluation import _evaluate_judge
 from copa.benchmark.executor import execute_runspec
 from copa.benchmark.models import (
     EvaluationJudgeInfo,
@@ -70,8 +70,16 @@ def write_mock_dataset(root: Path) -> ExperimentDataset:
                         "id": "q_year",
                         "question": "In which year did the researcher obtain their PhD?",
                         "tags": ["objective", "simple"],
-                        "validation": {"type": "heuristic", "schema": {"type": "number"}},
-                    }
+                        "validation": {"type": "judge"},
+                        "contextBlock": ["summary"],
+                    },
+                    {
+                        "id": "q_summary",
+                        "question": "Summarize the main research areas for {researcher_name}.",
+                        "tags": ["subjective", "simple"],
+                        "validation": {"type": "judge"},
+                        "contextBlock": ["summary", "research"],
+                    },
                 ],
             }
         ),
@@ -85,7 +93,10 @@ def write_mock_dataset(root: Path) -> ExperimentDataset:
                     {
                         "instanceId": "cv-demo",
                         "contextBlocks": "context/cv-demo/blocks.json",
-                        "questions": [{"id": "q_year", "acceptedAnswers": [2020]}],
+                        "questions": [
+                            {"id": "q_year"},
+                            {"id": "q_summary", "parameters": {"researcher_name": "CV Demo"}},
+                        ],
                     }
                 ],
             }
@@ -95,7 +106,10 @@ def write_mock_dataset(root: Path) -> ExperimentDataset:
     (instance_dir / "parsed.json").write_text(json.dumps({"answers": {"q_year": 2020}}), encoding="utf-8")
     (instance_dir / "raw.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
     (instance_dir / "clean.html").write_text("ANSWER[q_year]: 2020\n", encoding="utf-8")
-    (instance_dir / "blocks.json").write_text(json.dumps({"summary": "PhD in 2020"}), encoding="utf-8")
+    (instance_dir / "blocks.json").write_text(
+        json.dumps({"summary": "Researcher in software engineering.", "research": "Works with distributed systems."}),
+        encoding="utf-8",
+    )
     return ExperimentDataset(root=str(root.resolve()))
 
 
@@ -107,7 +121,10 @@ def test_dataset_provider_context_blocks_falls_back_to_instance_blocks_file(tmp_
 
     provider = DatasetProvider.from_dataset(dataset)
 
-    assert provider.get_context_blocks("cv-demo") == {"summary": "PhD in 2020"}
+    assert provider.get_context_blocks("cv-demo") == {
+        "summary": "Researcher in software engineering.",
+        "research": "Works with distributed systems.",
+    }
 
 
 class RecordingModel(ModelAdapter):
@@ -231,39 +248,6 @@ def test_engine_local_function_uses_resource_tools_and_records_calls():
     assert result.trace["metrics"]["tool_call_count_semantic"] == 1
 
 
-def test_heuristic_compare_supports_structured_answers():
-    details = _heuristic_compare(
-        '{"where": "UIUC", "yearsAgo": 26}',
-        [{"where": "UIUC", "yearsAgo": 26}],
-        {"type": "object"},
-    )
-
-    assert details["matched"] is True
-    assert details["outcome"] == "accepted"
-
-
-def test_heuristic_compare_supports_aliases_and_text_normalization():
-    details = _heuristic_compare(
-        '{"where": "PUC Rio", "yearsAgo": 26}',
-        [
-            {
-                "where": {
-                    "aliases": [
-                        "PUC-Rio",
-                        "Pontifícia Universidade Católica do Rio de Janeiro",
-                        "Pontifical Catholic University of Rio de Janeiro",
-                    ]
-                },
-                "yearsAgo": 26,
-            }
-        ],
-        {"type": "object"},
-    )
-
-    assert details["matched"] is True
-    assert details["outcome"] == "accepted"
-
-
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     from copa.benchmark import evaluation as evaluation_module
 
@@ -281,9 +265,9 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
 
     details, judge_info, _ = _evaluate_judge(
-        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1"})(),
+        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
         question_text="Question?",
-        ground_truth="Ground truth answer.",
+        context_payload={"summary": "Ground truth answer."},
         experiment=make_experiment(),
         engine=Engine(),
     )
@@ -342,9 +326,9 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
     monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
 
     details, judge_info, _ = _evaluate_judge(
-        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1"})(),
+        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
         question_text="Question?",
-        ground_truth="Ground truth answer.",
+        context_payload={"summary": "Ground truth answer."},
         experiment=experiment,
         engine=Engine(),
     )
@@ -362,14 +346,14 @@ def test_judge_request_injects_structured_output_schema():
 
     engine = Engine()
     model = RecordingJudgeModel()
-    engine._models["recording_judge"] = model
+    engine._models["openai"] = model
 
     payload, judge_info, _ = _judge_request(
         config=type(
             "Cfg",
             (),
             {
-                "provider": "recording_judge",
+                "provider": "openai",
                 "model": "recording_judge",
                 "temperature": 0,
                 "params": {},
@@ -378,6 +362,10 @@ def test_judge_request_injects_structured_output_schema():
         prompt="Judge this answer.",
         run_id="run-1",
         exp_id="exp-1",
+        instance_id="cv-demo",
+        question_id="q_summary",
+        question_text="Question?",
+        curriculum_context='{"summary":"Research summary"}',
         engine=engine,
     )
 
@@ -386,6 +374,7 @@ def test_judge_request_injects_structured_output_schema():
     assert model.last_request is not None
     assert model.last_request.params["structured_output"]["schema"]["type"] == "object"
     assert model.last_request.params["structured_output"]["schema"]["required"] == ["correctness", "completeness"]
+    assert model.last_request.params["prompt_cache_key"].startswith("jud:q_summar")
 
 
 def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
@@ -421,48 +410,6 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
     assert result.metricsSummary["tool_call_count"] is None
     assert result.metricsSummary["function_call_count"] is None
     assert result.metricsSummary["prompt_tokens"] is None
-
-
-def test_execute_runspec_injects_structured_output_for_heuristic_questions(tmp_path):
-    dataset = write_mock_dataset(tmp_path / "dataset")
-    runspec = RunSpec(
-        id="run-1",
-        runId="run-1",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_year",
-        question="In which year did the researcher obtain their PhD?",
-        questionTemplate="In which year did the researcher obtain their PhD?",
-        instanceId="cv-demo",
-        provider="recording",
-        modelName="recording",
-        strategy="inline",
-        format="json",
-        repeatIndex=1,
-        params={},
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|recording|recording|inline|json|1",
-            questionId="q_year",
-            instanceId="cv-demo",
-            provider="recording",
-            modelName="recording",
-            strategy="inline",
-            format="json",
-            repeatIndex=1,
-        ),
-    )
-    engine = Engine()
-    model = RecordingModel()
-    engine._models["recording"] = model
-
-    execute_runspec(runspec, engine)
-
-    assert model.last_request is not None
-    assert model.last_request.params["structured_output"] == {
-        "name": "q_year_response",
-        "strict": True,
-        "schema": {"type": "number"},
-    }
 
 
 def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):

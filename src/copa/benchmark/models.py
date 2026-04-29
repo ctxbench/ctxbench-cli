@@ -245,7 +245,7 @@ class RunMetadata(BaseModel):
     repeatIndex: int
     questionTags: list[str] = Field(default_factory=list)
     validationType: str | None = None
-    templateParameters: dict[str, str] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
 
 
 class RunSpec(BaseModel):
@@ -294,7 +294,7 @@ class RunSpec(BaseModel):
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
                 "repeatIndex": payload.get("repeatIndex", 1),
-                "templateParameters": payload.get("templateParameters", {}),
+                "parameters": payload.get("parameters", {}),
             }
         return super().model_validate(payload)
 
@@ -313,7 +313,7 @@ class RunSpec(BaseModel):
             "repeatIndex": self.repeatIndex,
             "questionTags": list(self.metadata.questionTags),
             "validationType": self.metadata.validationType,
-            "templateParameters": dict(self.metadata.templateParameters),
+            "parameters": dict(self.metadata.parameters),
         }
 
 
@@ -336,7 +336,6 @@ class EvaluationResult(BaseModel):
     status: str = "not_evaluated"
     passed: bool | None = None
     expected: Any | None = None
-    acceptedAnswers: list[Any] = Field(default_factory=list)
     reason: str | None = None
     evaluator: str | None = None
 
@@ -390,7 +389,7 @@ class RunResult(BaseModel):
                 "strategy": payload.get("strategy", ""),
                 "format": payload.get("format", ""),
                 "repeatIndex": payload.get("repeatIndex", 1),
-                "templateParameters": payload.get("templateParameters", {}),
+                "parameters": payload.get("parameters", {}),
             }
         return super().model_validate(payload)
 
@@ -414,7 +413,7 @@ class RunResult(BaseModel):
             "usage": self.usage,
             "metricsSummary": self.metricsSummary,
             "traceRef": trace_ref,
-            "templateParameters": dict(self.metadata.templateParameters),
+            "parameters": dict(self.metadata.parameters),
         }
 
 

@@ -23,12 +23,6 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     instance_dir = provider.get_instance_dir(runspec.instanceId)
     lattes_id = runspec.instanceId
     request_params = dict(runspec.params)
-    if question.validation.type == "heuristic" and question.validation.schema:
-        request_params["structured_output"] = {
-            "name": f"{runspec.questionId}_response",
-            "strict": True,
-            "schema": question.validation.schema,
-        }
     if runspec.strategy == "inline" and runspec.provider.lower().startswith("openai"):
         request_params.setdefault(
             "prompt_cache_key",

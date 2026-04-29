@@ -1,7 +1,7 @@
 {
-  "id": "exp_cache_004",
+  "id": "exp_baseline_001",
   "name": "Baseline run including only inline executions",
-  "output": "outputs",
+  "output": "final_tests",
   "dataset": "datasets/lattes",
   "scope": {
     "instances": ["5521922960404236"],
@@ -14,12 +14,12 @@
         "name": "gpt-5.4-mini-2026-03-17"
       }
     ],
-    "strategy": ["inline"],
-    "format": ["html"]
+    "strategy": ["inline", "local_function", "local_mcp"],
+    "format": ["html", "json"]
   },
   "params": {
     "common": {
-      "temperature": 0.3
+      "temperature": 0
     },
     "gpt-5.4-mini-2026-03-17": {
       "max_output_tokens": 8000,
@@ -67,7 +67,7 @@
     }
   },
   "evaluation": {
-    "enabled": false,
+    "enabled": true,
     "judges": [
       { "provider": "openai", "model": "gpt-5.4-mini", "temperature": 0 }
     ]

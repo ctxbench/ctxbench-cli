@@ -7,7 +7,6 @@ from copa._compat import BaseModel, Field, ValidationError
 
 class QuestionValidation(BaseModel):
     type: str
-    schemaDefinition: dict[str, Any] | None = None
 
     @classmethod
     def model_validate(cls, data: Any) -> "QuestionValidation":
@@ -16,16 +15,9 @@ class QuestionValidation(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("Question validation requires an object input.")
         validation_type = str(data.get("type", "")).strip()
-        if validation_type not in {"heuristic", "judge"}:
-            raise ValidationError("Question validation.type must be 'heuristic' or 'judge'.")
-        schema = data.get("schema")
-        if schema is not None and not isinstance(schema, dict):
-            raise ValidationError("Question validation.schema must be an object when provided.")
-        return cls(type=validation_type, schemaDefinition=schema)
-
-    @property
-    def schema(self) -> dict[str, Any] | None:
-        return self.schemaDefinition
+        if validation_type != "judge":
+            raise ValidationError("Question validation.type must be 'judge'.")
+        return cls(type=validation_type)
 
 
 class Question(BaseModel):
@@ -33,6 +25,7 @@ class Question(BaseModel):
     question: str
     tags: list[str] = Field(default_factory=list)
     validation: QuestionValidation
+    contextBlock: list[str] = Field(default_factory=list)
 
     @classmethod
     def model_validate(cls, data: Any) -> "Question":
@@ -45,6 +38,7 @@ class Question(BaseModel):
             question=str(data.get("question", "")),
             tags=[str(item) for item in data.get("tags", []) if isinstance(item, str)],
             validation=QuestionValidation.model_validate(data.get("validation", {})),
+            contextBlock=[str(item) for item in data.get("contextBlock", []) if isinstance(item, str)],
         )
 
 
@@ -78,11 +72,7 @@ class QuestionDataset(BaseModel):
 
 class QuestionInstanceEntry(BaseModel):
     id: str
-    acceptedAnswers: list[Any] = Field(default_factory=list)
-    groundTruth: str | None = None
-    contextRefs: list[str] = Field(default_factory=list)
-    themes: list[str] = Field(default_factory=list)
-    templateParameters: dict[str, str] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
     def model_validate(cls, data: Any) -> "QuestionInstanceEntry":
@@ -92,25 +82,19 @@ class QuestionInstanceEntry(BaseModel):
             raise ValidationError("Question instance question entry must be an object.")
         return cls(
             id=str(data.get("id", "")).strip(),
-            acceptedAnswers=list(data.get("acceptedAnswers", []))
-            if isinstance(data.get("acceptedAnswers", []), list)
-            else [],
-            groundTruth=str(data.get("ground_truth", "")).strip() or None,
-            contextRefs=[str(item) for item in data.get("contextRefs", []) if isinstance(item, str)],
-            themes=[str(item) for item in data.get("themes", []) if isinstance(item, str)],
-            templateParameters={
-                str(key): str(value)
-                for key, value in data.get("template_parameters", {}).items()
+            parameters={
+                str(key): value
+                for key, value in data.get("parameters", {}).items()
                 if isinstance(key, str)
             }
-            if isinstance(data.get("template_parameters"), dict)
+            if isinstance(data.get("parameters"), dict)
             else {},
         )
 
 
 class QuestionInstance(BaseModel):
     instanceId: str
-    contextBlocks: str
+    contextBlocks: str = ""
     questions: list[QuestionInstanceEntry] = Field(default_factory=list)
 
     @classmethod

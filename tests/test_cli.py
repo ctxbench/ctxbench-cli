@@ -21,13 +21,15 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
                         "id": "q_year",
                         "question": "In which year did the researcher obtain their PhD?",
                         "tags": ["objective", "simple"],
-                        "validation": {"type": "heuristic", "schema": {"type": "number"}},
+                        "validation": {"type": "judge"},
+                        "contextBlock": ["summary"],
                     },
                     {
                         "id": "q_summary",
                         "question": "Summarize the main research areas for {researcher_name}.",
                         "tags": ["subjective", "simple"],
                         "validation": {"type": "judge"},
+                        "contextBlock": ["summary", "research"],
                     },
                 ],
             }
@@ -43,13 +45,10 @@ def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Pat
                         "instanceId": "cv_demo",
                         "contextBlocks": "context/cv_demo/blocks.json",
                         "questions": [
-                            {"id": "q_year", "acceptedAnswers": [2018]},
+                            {"id": "q_year"},
                             {
                                 "id": "q_summary",
-                                "template_parameters": {"researcher_name": "CV Demo"},
-                                "ground_truth": "CV Demo works mainly in software engineering and distributed systems.",
-                                "contextRefs": ["summary", "research"],
-                                "themes": ["software engineering", "distributed systems"],
+                                "parameters": {"researcher_name": "CV Demo"},
                             },
                         ],
                     }
@@ -144,12 +143,36 @@ def test_experiment_expand_respects_scope_and_writes_runspecs(tmp_path):
     first = rows[0]
     assert first["questionId"] in {"q_year", "q_summary"}
     assert first["instanceId"] == "cv_demo"
-    assert first["validationType"] in {"heuristic", "judge"}
+    assert first["validationType"] == "judge"
     summary = next(row for row in rows if row["questionId"] == "q_summary")
     assert summary["question"] == "Summarize the main research areas for CV Demo."
-    assert summary["templateParameters"] == {"researcher_name": "CV Demo"}
+    assert summary["parameters"] == {"researcher_name": "CV Demo"}
     assert (out_dir / "runs.manifest.json").exists()
     assert len(jsonl_path.read_text(encoding="utf-8").splitlines()) == 2
+
+
+def test_experiment_expand_includes_questions_without_instance_override(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json")
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    questions_instance_path = Path(payload["dataset"]) / "questions.instance.json"
+    question_instances = json.loads(questions_instance_path.read_text(encoding="utf-8"))
+    question_instances["instances"][0]["questions"] = [
+        {
+            "id": "q_summary",
+            "parameters": {"researcher_name": "CV Demo"},
+        }
+    ]
+    questions_instance_path.write_text(json.dumps(question_instances), encoding="utf-8")
+
+    out_dir = tmp_path / "runspecs"
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(out_dir)]) == 0
+
+    rows = [json.loads(path.read_text(encoding="utf-8")) for path in sorted(out_dir.glob("rs_*.json"))]
+    assert len(rows) == 2
+    assert {row["questionId"] for row in rows} == {"q_year", "q_summary"}
+    year = next(row for row in rows if row["questionId"] == "q_year")
+    assert year["question"] == "In which year did the researcher obtain their PhD?"
+    assert year["parameters"] == {}
 
 
 def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_parameter(tmp_path, capsys):
@@ -166,6 +189,7 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
                         "question": "Summarize the work of {researcher_name}.",
                         "tags": ["subjective"],
                         "validation": {"type": "judge"},
+                        "contextBlock": ["summary"],
                     }
                 ],
             }
@@ -180,7 +204,7 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
                     {
                         "instanceId": "cv_demo",
                         "contextBlocks": "context/cv_demo/blocks.json",
-                        "questions": [{"id": "q_missing", "ground_truth": "Research summary", "contextRefs": ["summary"], "themes": ["summary"]}],
+                        "questions": [{"id": "q_missing"}],
                     }
                 ],
             }
@@ -215,9 +239,9 @@ def test_experiment_expand_warns_and_uses_empty_string_for_missing_template_para
 
     payload = json.loads(next(out_dir.glob("rs_*.json")).read_text(encoding="utf-8"))
     captured = capsys.readouterr()
-    assert "Missing template parameter" in captured.err
+    assert "Missing question parameter" in captured.err
     assert payload["question"] == "Summarize the work of ."
-    assert payload["templateParameters"] == {}
+    assert payload["parameters"] == {}
 
 
 def test_experiment_expand_ignores_format_for_tool_based_strategies(tmp_path):
@@ -313,13 +337,13 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
         for path in sorted(eval_dir.glob("re_*.json"))
     ]
     assert len(rows) == 2
-    heuristic = next(row for row in rows if row["questionId"] == "q_year")
+    year = next(row for row in rows if row["questionId"] == "q_year")
     judge = next(row for row in rows if row["questionId"] == "q_summary")
-    assert heuristic["details"]["outcome"] == "accepted"
+    assert year["details"]["correctness"]["rating"] == "meets"
+    assert year["details"]["completeness"]["rating"] == "partially meets"
     assert judge["details"]["correctness"]["rating"] == "meets"
     assert judge["details"]["completeness"]["rating"] == "partially meets"
     assert len(judge["details"]["judges"]) == 1
-    assert "score" not in heuristic
     assert eval_csv.exists()
     summary = json.loads((eval_dir / "evaluation-summary.json").read_text(encoding="utf-8"))
     assert len(summary["questions"]) == 2
@@ -327,6 +351,53 @@ def test_eval_writes_qualitative_outputs_and_csv(tmp_path, monkeypatch):
     assert judge_summary["aggregate"]["correctness"] == "meets"
     assert judge_summary["aggregate"]["completeness"] == "partially meets"
     assert len(judge_summary["judgeRatings"]) == 1
+
+
+def test_eval_allows_questions_without_instance_override(tmp_path, monkeypatch):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    dataset_root = Path(json.loads(experiment_path.read_text(encoding="utf-8"))["dataset"])
+    questions_instance_path = dataset_root / "questions.instance.json"
+    payload = json.loads(questions_instance_path.read_text(encoding="utf-8"))
+    payload["instances"][0]["questions"] = [
+        {"id": "q_summary", "parameters": {"researcher_name": "CV Demo"}}
+    ]
+    questions_instance_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    runspec_dir = tmp_path / "runspecs"
+    results_dir = tmp_path / "results"
+    eval_dir = tmp_path / "eval"
+
+    assert main(["experiment", "expand", str(experiment_path), "--out", str(runspec_dir)]) == 0
+    assert main(["run", str(runspec_dir), "--out", str(results_dir)]) == 0
+
+    from copa.benchmark import evaluation as evaluation_module
+
+    def fake_judge_request(**kwargs):
+        return (
+            {
+                "correctness": {"rating": "meets", "justification": "ok"},
+                "completeness": {"rating": "meets", "justification": "ok"},
+            },
+            evaluation_module.EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="mock"),
+            evaluation_module.EvaluationTrace(),
+        )
+
+    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
+
+    assert main(
+        [
+            "eval",
+            "--run-results-dir",
+            str(results_dir),
+            "--experiment",
+            str(experiment_path),
+            "--output-dir",
+            str(eval_dir),
+        ]
+    ) == 0
+
+    rows = [json.loads(path.read_text(encoding="utf-8")) for path in sorted(eval_dir.glob("re_*.json"))]
+    assert len(rows) == 2
 
 
 def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
