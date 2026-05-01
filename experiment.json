@@ -29,7 +29,8 @@
       "mcp_server": {
         "server_url": "https://secure-harlequin-mollusk.fastmcp.app/mcp",
         "server_label": "copa-lattes",
-        "server_description": "COPA Lattes MCP server"
+        "server_description": "COPA Lattes MCP server",
+        "auth_token": "${LATTES_MCP_TOKEN}"
       }
     },
     "gpt-5.4-mini-2026-03-17": {

@@ -174,20 +174,18 @@ def build_evaluation_job(
         raise ValueError(f"Unsupported validation type: {validation_type}")
 
     blocks = provider.get_context_blocks(result.instanceId)
-    context_payload, missing_context_blocks = _collect_context_blocks(blocks, list(result.contextBlock))
-    if event_logger is not None:
-        for path in missing_context_blocks:
-            event_logger(
-                "WARN",
-                "Context block path not found; ignoring",
-                {
-                    "runId": result.runId,
-                    "questionId": result.questionId,
-                    "instanceId": result.instanceId,
-                    "contextBlock": path,
-                },
-            )
-    curriculum_context = json.dumps(context_payload, ensure_ascii=False, sort_keys=True, indent=2)
+    context_payload, found = _get_question_block(blocks, result.questionId)
+    if not found and event_logger is not None:
+        event_logger(
+            "WARN",
+            "Context block not found for question; evaluation may be inaccurate",
+            {
+                "runId": result.runId,
+                "questionId": result.questionId,
+                "instanceId": result.instanceId,
+            },
+        )
+    curriculum_context = _format_curriculum_context(context_payload)
     prompt = JUDGE_PROMPT.format(
         question=rendered_question,
         answer=result.answer,
@@ -334,7 +332,7 @@ def _evaluate_judge(
             "evaluationMethod": "judge",
             "error": "Experiment evaluation.judges is required for judge validation.",
         }, EvaluationJudgeInfo(), EvaluationTrace()
-    curriculum_context = json.dumps(context_payload, ensure_ascii=False, sort_keys=True, indent=2)
+    curriculum_context = _format_curriculum_context(context_payload)
     prompt = JUDGE_PROMPT.format(
         question=question_text,
         answer=result.answer,
@@ -466,6 +464,7 @@ def _build_evaluation_result(
 ) -> EvaluationRunResult:
     metrics = result.trace.aiTrace.get("metrics", {}) if result.trace.aiTrace else {}
     summary = result.metricsSummary
+    context_block = details.get("contextBlock") if isinstance(details, dict) else None
     item = EvaluationItemResult(
         experimentId=result.experimentId,
         runId=result.runId,
@@ -476,6 +475,7 @@ def _build_evaluation_result(
         status="evaluated",
         evaluationMethod=details.get("evaluationMethod"),
         details=details,
+        contextBlock=context_block if isinstance(context_block, list) and context_block else None,
         executionModel=result.modelName,
         executionStrategy=result.strategy,
         executionFormat=result.format,
@@ -505,25 +505,28 @@ def _build_evaluation_result(
     )
 
 
-def _resolve_context_block_path(blocks: dict[str, Any], path: str) -> Any:
-    current: Any = blocks
-    for segment in path.split("."):
-        if not isinstance(current, dict) or segment not in current:
-            raise ValueError(f"Context block path '{path}' not found in blocks.json.")
-        current = current[segment]
-    return current
+def _get_question_block(blocks: dict[str, Any], question_id: str) -> tuple[dict[str, Any], bool]:
+    inner = blocks.get("blocks", {})
+    if not isinstance(inner, dict):
+        return {}, False
+    block = inner.get(question_id)
+    if block is None:
+        return {}, False
+    return {question_id: block}, True
 
 
-def _collect_context_blocks(blocks: dict[str, Any], paths: list[str]) -> tuple[dict[str, Any], list[str]]:
-    selected_paths = list(paths) if paths else [key for key in blocks.keys() if key != "_meta"]
-    collected: dict[str, Any] = {}
-    missing: list[str] = []
-    for path in selected_paths:
-        try:
-            collected[path] = _resolve_context_block_path(blocks, path)
-        except ValueError:
-            missing.append(path)
-    return collected, missing
+def _format_curriculum_context(context_payload: dict[str, Any]) -> str:
+    if not context_payload:
+        return ""
+    parts: list[str] = []
+    for block_id, block in context_payload.items():
+        if isinstance(block, dict):
+            title = block.get("title", block_id)
+            summary = block.get("summary", "")
+            parts.append(f"## {title}\n{summary}")
+        else:
+            parts.append(str(block))
+    return "\n\n".join(parts)
 
 
 def _criterion_payload(value: Any) -> dict[str, str]:
@@ -628,19 +631,17 @@ def evaluate_run_result(
         )
     if validation_type == "judge":
         blocks = provider.get_context_blocks(result.instanceId)
-        context_payload, missing_context_blocks = _collect_context_blocks(blocks, list(result.contextBlock))
-        if event_logger is not None:
-            for path in missing_context_blocks:
-                event_logger(
-                    "WARN",
-                    "Context block path not found; ignoring",
-                    {
-                        "runId": result.runId,
-                        "questionId": result.questionId,
-                        "instanceId": result.instanceId,
-                        "contextBlock": path,
-                    },
-                )
+        context_payload, found = _get_question_block(blocks, result.questionId)
+        if not found and event_logger is not None:
+            event_logger(
+                "WARN",
+                "Context block not found for question; evaluation may be inaccurate",
+                {
+                    "runId": result.runId,
+                    "questionId": result.questionId,
+                    "instanceId": result.instanceId,
+                },
+            )
         details, judge_info, trace = _evaluate_judge(
             result,
             rendered_question,

@@ -104,6 +104,9 @@ def _judge_identifiers(config: EvaluationModelConfig) -> set[str]:
     for value in (config.provider, config.model):
         if isinstance(value, str) and value.strip():
             ids.add(value.strip())
+    judge_id = config.params.get("id") if isinstance(config.params, dict) else None
+    if isinstance(judge_id, str) and judge_id.strip():
+        ids.add(judge_id.strip())
     return ids
 
 

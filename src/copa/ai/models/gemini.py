@@ -10,7 +10,7 @@ from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelRespon
 class GeminiModel(ModelAdapter):
     def generate(self, model_input: ModelInput, request: AIRequest, trace: Any | None = None) -> ModelResponse:
         if request.strategy_name == "mcp":
-            return asyncio.run(self._generate_with_native_mcp(model_input, request))
+            return self._run_async(self._generate_with_native_mcp(model_input, request))
         client = self._create_client()
         generation_config = self._build_generation_config(request, model_input)
         started_at = perf_counter()
@@ -34,6 +34,20 @@ class GeminiModel(ModelAdapter):
             metadata={"provider": "gemini", "model": request.model_name},
             continuation_state=self._build_continuation_state(response),
         )
+
+    def _run_async(self, coro: Any) -> Any:
+        loop = asyncio.new_event_loop()
+        try:
+            return loop.run_until_complete(coro)
+        finally:
+            try:
+                pending = asyncio.all_tasks(loop)
+                if pending:
+                    for task in pending:
+                        task.cancel()
+                    loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            finally:
+                loop.close()
 
     async def _generate_with_native_mcp(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
         client = self._create_client()
@@ -384,28 +398,23 @@ class GeminiModel(ModelAdapter):
         headers = self._build_mcp_headers(config)
 
         sdk_types = self._sdk_types()
+        # Build the McpServer as a plain dict with correct camelCase field names.
+        # The SDK (google-genai 1.70.0) has a bug in _Tool_to_mldev: McpServer
+        # objects are serialized via model_dump() which produces snake_case keys
+        # (streamable_http_transport, url) instead of what the API expects
+        # (streamableHttpTransport, uri). Using model_construct bypasses Pydantic
+        # validation so the dict survives intact through convert_to_dict.
+        mcp_server_dict: dict[str, Any] = {
+            "name": server_label,
+            "streamableHttpTransport": {
+                "uri": server_url,
+                **({"headers": headers} if headers else {}),
+            },
+        }
         if sdk_types is None:
-            return {
-                "mcp_servers": [
-                    {
-                        "name": server_label,
-                        "streamable_http_transport": {
-                            "url": server_url,
-                            **({"headers": headers} if headers else {}),
-                        },
-                    }
-                ]
-            }
+            return {"mcp_servers": [mcp_server_dict]}
 
-        transport = sdk_types.StreamableHttpTransport(url=server_url, headers=headers or None)
-        return sdk_types.Tool(
-            mcp_servers=[
-                sdk_types.McpServer(
-                    name=server_label,
-                    streamable_http_transport=transport,
-                )
-            ]
-        )
+        return sdk_types.Tool.model_construct(mcp_servers=[mcp_server_dict])
 
     def _build_mcp_headers(self, config: dict[str, Any]) -> dict[str, str]:
         headers = dict(config.get("headers") or {}) if isinstance(config.get("headers"), dict) else {}

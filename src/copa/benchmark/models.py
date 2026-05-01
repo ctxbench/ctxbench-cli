@@ -525,6 +525,7 @@ class EvaluationItemResult(BaseModel):
     evaluationOutputTokens: int | None = None
     evaluationDurationMs: int | None = None
     evaluationTrace: EvaluationTrace = Field(default_factory=EvaluationTrace)
+    contextBlock: list[str] | None = None
 
     def to_persisted_artifact(self) -> dict[str, Any]:
         correctness = self.details.get("correctness") if isinstance(self.details, dict) else None
@@ -536,6 +537,7 @@ class EvaluationItemResult(BaseModel):
             "instanceId": self.instanceId,
             "status": self.status,
             "evaluationMethod": self.evaluationMethod,
+            "contextBlock": self.contextBlock if self.contextBlock else None,
             "outcome": self.details.get("outcome") if isinstance(self.details, dict) else None,
             "correctness": correctness.get("rating") if isinstance(correctness, dict) else None,
             "completeness": completeness.get("rating") if isinstance(completeness, dict) else None,
