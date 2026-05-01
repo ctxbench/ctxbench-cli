@@ -3,172 +3,305 @@ from __future__ import annotations
 import argparse
 import sys
 
+from copa.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
 from copa.commands.eval import eval_command
-from copa.commands.experiment import expand_experiment, validate_experiment
-from copa.commands.run import run_command
-from copa.benchmark.selectors import RunSelector
+from copa.commands.export import export_command
+from copa.commands.plan import plan_command
+from copa.commands.query import query_command
+from copa.commands.status import status_command
 from copa.util.logging import PhaseLogger
 
+
+# ---------------------------------------------------------------------------
+# Selector argument helpers
+# ---------------------------------------------------------------------------
+
+def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool = False) -> None:
+    parser.add_argument(
+        "--model", action="append", default=[], metavar="ID[,ID...]",
+        help="Filter by model id or name (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--provider", action="append", default=[], metavar="NAME[,NAME...]",
+        help="Filter by provider (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--instance", action="append", default=[], metavar="ID[,ID...]",
+        help="Filter by instance id (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--question", action="append", default=[], metavar="ID[,ID...]",
+        help="Filter by question id (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--strategy", action="append", default=[], metavar="NAME[,NAME...]",
+        help="Filter by strategy (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--format", action="append", default=[], metavar="NAME[,NAME...]",
+        help="Filter by context format (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--repeat", action="append", default=[], metavar="N[,N...]",
+        help="Filter by repeat index (repeatable, comma-separated)",
+    )
+    parser.add_argument(
+        "--not-model", action="append", default=[], metavar="ID[,ID...]",
+        help="Exclude by model id or name",
+    )
+    parser.add_argument(
+        "--not-provider", action="append", default=[], metavar="NAME",
+        help="Exclude by provider",
+    )
+    parser.add_argument(
+        "--not-instance", action="append", default=[], metavar="ID",
+        help="Exclude by instance id",
+    )
+    parser.add_argument(
+        "--not-question", action="append", default=[], metavar="ID",
+        help="Exclude by question id",
+    )
+    parser.add_argument(
+        "--not-strategy", action="append", default=[], metavar="NAME",
+        help="Exclude by strategy",
+    )
+    parser.add_argument(
+        "--not-format", action="append", default=[], metavar="NAME",
+        help="Exclude by context format",
+    )
+    parser.add_argument(
+        "--not-repeat", action="append", default=[], metavar="N",
+        help="Exclude by repeat index",
+    )
+    parser.add_argument(
+        "--ids", metavar="ID[,ID...]|-",
+        help="Filter by explicit run IDs (comma-separated, or '-' to read from stdin)",
+    )
+    parser.add_argument(
+        "--ids-file", metavar="PATH",
+        help="Filter by run IDs listed in a file (one per line)",
+    )
+    if include_status:
+        parser.add_argument(
+            "--status", action="append", default=[], metavar="STATUS[,STATUS...]",
+            help="Filter by run status (repeatable, comma-separated)",
+        )
+        parser.add_argument(
+            "--not-status", action="append", default=[], metavar="STATUS",
+            help="Exclude by run status",
+        )
+
+
+def _parse_multi_str(values: list[str]) -> tuple[str, ...]:
+    result: list[str] = []
+    for v in values:
+        result.extend(s.strip() for s in v.split(",") if s.strip())
+    return tuple(result)
+
+
+def _parse_multi_int(values: list[str]) -> tuple[int, ...]:
+    result: list[int] = []
+    for v in values:
+        for s in v.split(","):
+            s = s.strip()
+            if s:
+                result.append(int(s))
+    return tuple(result)
+
+
+def _resolve_ids(args: argparse.Namespace) -> tuple[str, ...]:
+    ids_arg: str | None = getattr(args, "ids", None)
+    ids_file_arg: str | None = getattr(args, "ids_file", None)
+    ids: list[str] = []
+    if ids_arg == "-":
+        ids.extend(load_ids_from_stdin())
+    elif ids_arg:
+        ids.extend(s.strip() for s in ids_arg.split(",") if s.strip())
+    if ids_file_arg:
+        ids.extend(load_ids_from_file(ids_file_arg))
+    return tuple(ids)
+
+
+def _selector_from_args(args: argparse.Namespace, *, include_status: bool = False) -> RunSelector:
+    return RunSelector(
+        model=_parse_multi_str(getattr(args, "model", []) or []),
+        provider=_parse_multi_str(getattr(args, "provider", []) or []),
+        instance=_parse_multi_str(getattr(args, "instance", []) or []),
+        question=_parse_multi_str(getattr(args, "question", []) or []),
+        strategy=_parse_multi_str(getattr(args, "strategy", []) or []),
+        format=_parse_multi_str(getattr(args, "format", []) or []),
+        repeat=_parse_multi_int(getattr(args, "repeat", []) or []),
+        status=_parse_multi_str(getattr(args, "status", []) or []) if include_status else (),
+        ids=_resolve_ids(args),
+        not_model=_parse_multi_str(getattr(args, "not_model", []) or []),
+        not_provider=_parse_multi_str(getattr(args, "not_provider", []) or []),
+        not_instance=_parse_multi_str(getattr(args, "not_instance", []) or []),
+        not_question=_parse_multi_str(getattr(args, "not_question", []) or []),
+        not_strategy=_parse_multi_str(getattr(args, "not_strategy", []) or []),
+        not_format=_parse_multi_str(getattr(args, "not_format", []) or []),
+        not_repeat=_parse_multi_int(getattr(args, "not_repeat", []) or []),
+        not_status=_parse_multi_str(getattr(args, "not_status", []) or []) if include_status else (),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Parser
+# ---------------------------------------------------------------------------
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="copa", description="COPA benchmark CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    experiment_parser = subparsers.add_parser("experiment", help="Experiment commands")
-    experiment_subparsers = experiment_parser.add_subparsers(dest="experiment_command", required=True)
-
-    validate_parser = experiment_subparsers.add_parser(
-        "validate", help="Validate an experiment file"
+    # ── copa plan ──────────────────────────────────────────────────────────
+    plan_parser = subparsers.add_parser(
+        "plan", help="Expand an experiment into queries.jsonl"
     )
-    validate_parser.add_argument("path", help="Path to the experiment JSON file")
-    validate_parser.set_defaults(func=lambda args: validate_experiment(args.path))
-
-    expand_parser = experiment_subparsers.add_parser(
-        "expand", help="Expand an experiment into runspec files"
+    plan_parser.add_argument("path", help="Path to the experiment JSON file")
+    plan_parser.add_argument(
+        "--output", metavar="DIR",
+        help="Override output directory (default: experiment.output/<id>/)",
     )
-    expand_parser.add_argument("path", help="Path to the experiment JSON file")
-    expand_parser.add_argument("--out", help="Directory to write runspec JSON files")
-    expand_parser.add_argument("--jsonl", help="Optional JSONL file for all runspecs")
-    expand_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    expand_parser.add_argument("--progress", action="store_true", help="Show batch progress")
-    expand_parser.set_defaults(
-        func=lambda args: expand_experiment(
+    plan_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    plan_parser.add_argument("--progress", action="store_true", help="Show progress bar")
+    plan_parser.set_defaults(
+        func=lambda args: plan_command(
             args.path,
-            out_dir=args.out,
-            jsonl_path=args.jsonl,
+            output=args.output,
             verbose=args.verbose,
             progress=args.progress,
         )
     )
 
-    run_parser = subparsers.add_parser("run", help="Run one or many runspecs")
-    run_parser.add_argument("path", help="RunSpec JSON file, directory, or JSONL file")
-    run_parser.add_argument("--out", help="Directory to write result JSON files")
-    run_parser.add_argument("--jsonl", help="Optional JSONL file for run results")
-    run_parser.add_argument("--force", action="store_true", help="Re-execute runs even when result artifacts already exist")
-    _add_selector_arguments(run_parser, include_status=False)
-    run_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    run_parser.add_argument("--progress", action="store_true", help="Show batch progress")
-    run_parser.set_defaults(
-        func=lambda args: run_command(
-            args.path,
-            out_dir=args.out,
-            jsonl_path=args.jsonl,
+    # ── copa query ─────────────────────────────────────────────────────────
+    query_parser = subparsers.add_parser(
+        "query", help="Submit queries to models and collect answers"
+    )
+    query_parser.add_argument(
+        "queries", nargs="?", default=None,
+        help="Path to queries.jsonl (default: ./queries.jsonl)",
+    )
+    query_parser.add_argument(
+        "--force", action="store_true",
+        help="Re-execute even when answers already exist",
+    )
+    _add_selector_args(query_parser)
+    query_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    query_parser.add_argument("--progress", action="store_true", help="Show progress bar")
+    query_parser.set_defaults(
+        func=lambda args: query_command(
+            args.queries,
             force=args.force,
-            selector=_selector_from_args(args),
             verbose=args.verbose,
             progress=args.progress,
+            selector=_selector_from_args(args),
         )
     )
 
-    eval_parser = subparsers.add_parser("eval", help="Evaluate one or many run results")
-    eval_inputs = eval_parser.add_mutually_exclusive_group(required=True)
-    eval_inputs.add_argument("--run-dir", help="Directory containing run result JSON files")
-    eval_inputs.add_argument("--run-jsonl", help="Run result JSON or JSONL file")
-    eval_parser.add_argument("--output-dir", help="Directory to write evaluation JSON files")
-    eval_parser.add_argument("--output-jsonl", help="Optional JSONL file for flattened evaluation rows")
-    eval_parser.add_argument("--output-csv", help="Optional CSV file for flattened evaluation rows")
-    eval_parser.add_argument("--force", action="store_true", help="Re-evaluate runs even when evaluation artifacts already exist")
-    eval_parser.add_argument("--only", help="Evaluate only one question id")
-    eval_parser.add_argument(
-        "--judge",
-        action="append",
-        default=[],
-        help="Filter evaluation to judges matching judge id, model, or provider",
+    # ── copa eval ──────────────────────────────────────────────────────────
+    eval_parser = subparsers.add_parser(
+        "eval", help="Evaluate answers using a judge model"
     )
     eval_parser.add_argument(
-        "--exclude-judge",
-        action="append",
-        default=[],
-        help="Exclude evaluation judges matching judge id, model, or provider",
+        "answers", nargs="?", default=None,
+        help="Path to answers.jsonl (default: ./answers.jsonl)",
     )
     eval_parser.add_argument(
-        "--batch",
-        action="store_true",
-        help="Submit evaluation requests using provider batch mode (Anthropic, OpenAI, or Gemini)",
+        "--force", action="store_true",
+        help="Re-evaluate even when evaluations already exist",
     )
-    eval_parser.add_argument("--batch-id", help="Resume or collect an existing provider batch id")
-    eval_parser.add_argument("--wait", action="store_true", help="Wait for a submitted batch to finish")
     eval_parser.add_argument(
-        "--poll-interval",
-        type=int,
-        default=60,
-        help="Seconds between batch status checks when used with --batch --wait",
+        "--judge", action="append", default=[], metavar="ID",
+        help="Select judges by id, model, or provider (repeatable)",
     )
-    _add_selector_arguments(eval_parser, include_status=True)
     eval_parser.add_argument(
-        "--mode",
-        choices=["judge"],
-        help="Evaluate only one evaluation mode",
+        "--not-judge", action="append", default=[], metavar="ID",
+        help="Exclude judges by id, model, or provider (repeatable)",
     )
-    eval_parser.add_argument("--continue-on-error", action="store_true", help="Keep evaluating after an item error")
+    eval_parser.add_argument(
+        "--batch", action="store_true",
+        help="Submit evaluation using provider batch API",
+    )
+    eval_parser.add_argument(
+        "--batch-id", metavar="ID",
+        help="Resume or collect an existing provider batch (implies --batch)",
+    )
+    eval_parser.add_argument(
+        "--wait", action="store_true",
+        help="Wait for batch to complete (requires --batch)",
+    )
+    eval_parser.add_argument(
+        "--poll-interval", type=int, default=60, metavar="SECONDS",
+        help="Polling interval when using --batch --wait (default: 60)",
+    )
+    eval_parser.add_argument(
+        "--continue-on-error", action="store_true",
+        help="Continue evaluating after an item error",
+    )
+    _add_selector_args(eval_parser, include_status=True)
     eval_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    eval_parser.add_argument("--progress", action="store_true", help="Show batch progress")
+    eval_parser.add_argument("--progress", action="store_true", help="Show progress bar")
     eval_parser.set_defaults(
         func=lambda args: eval_command(
-            run_dir=args.run_dir,
-            run_jsonl=args.run_jsonl,
-            output_dir=args.output_dir,
-            output_jsonl=args.output_jsonl,
-            output_csv=args.output_csv,
+            args.answers,
             force=args.force,
-            only=args.only,
-            mode=args.mode,
-            judge=tuple(getattr(args, "judge", []) or ()),
-            exclude_judge=tuple(getattr(args, "exclude_judge", []) or ()),
+            judge=tuple(args.judge),
+            not_judge=tuple(getattr(args, "not_judge", []) or []),
             batch=args.batch,
             batch_id=args.batch_id,
             wait=args.wait,
             poll_interval=args.poll_interval,
-            selector=_selector_from_args(args),
             continue_on_error=args.continue_on_error,
             verbose=args.verbose,
             progress=args.progress,
+            selector=_selector_from_args(args, include_status=True),
         )
     )
 
-    return parser
-
-
-def _add_selector_arguments(parser: argparse.ArgumentParser, *, include_status: bool) -> None:
-    parser.add_argument("--provider", help="Filter by provider")
-    parser.add_argument("--model", help="Filter by model id or model name")
-    parser.add_argument("--instance", help="Filter by instance id")
-    parser.add_argument("--question", help="Filter by question id")
-    parser.add_argument("--strategy", help="Filter by strategy")
-    parser.add_argument("--format", help="Filter by context format")
-    parser.add_argument("--repeat", type=int, help="Filter by repeat index")
-    parser.add_argument("--exclude-provider", action="append", default=[], help="Exclude by provider")
-    parser.add_argument("--exclude-model", action="append", default=[], help="Exclude by model id or model name")
-    parser.add_argument("--exclude-instance", action="append", default=[], help="Exclude by instance id")
-    parser.add_argument("--exclude-question", action="append", default=[], help="Exclude by question id")
-    parser.add_argument("--exclude-strategy", action="append", default=[], help="Exclude by strategy")
-    parser.add_argument("--exclude-format", action="append", default=[], help="Exclude by context format")
-    parser.add_argument("--exclude-repeat", action="append", type=int, default=[], help="Exclude by repeat index")
-    if include_status:
-        parser.add_argument("--status", help="Filter by run status")
-        parser.add_argument("--exclude-status", action="append", default=[], help="Exclude by run status")
-
-
-def _selector_from_args(args: argparse.Namespace) -> RunSelector:
-    return RunSelector(
-        provider=getattr(args, "provider", None),
-        model=getattr(args, "model", None),
-        instance=getattr(args, "instance", None),
-        question=getattr(args, "question", None),
-        strategy=getattr(args, "strategy", None),
-        format=getattr(args, "format", None),
-        repeat=getattr(args, "repeat", None),
-        status=getattr(args, "status", None),
-        exclude_provider=tuple(getattr(args, "exclude_provider", []) or ()),
-        exclude_model=tuple(getattr(args, "exclude_model", []) or ()),
-        exclude_instance=tuple(getattr(args, "exclude_instance", []) or ()),
-        exclude_question=tuple(getattr(args, "exclude_question", []) or ()),
-        exclude_strategy=tuple(getattr(args, "exclude_strategy", []) or ()),
-        exclude_format=tuple(getattr(args, "exclude_format", []) or ()),
-        exclude_repeat=tuple(getattr(args, "exclude_repeat", []) or ()),
-        exclude_status=tuple(getattr(args, "exclude_status", []) or ()),
+    # ── copa export ────────────────────────────────────────────────────────
+    export_parser = subparsers.add_parser(
+        "export", help="Export evaluations to a derived format"
     )
+    export_parser.add_argument(
+        "evals", nargs="?", default=None,
+        help="Path to evals.jsonl (default: ./evals.jsonl)",
+    )
+    export_parser.add_argument(
+        "--to", default="csv", choices=["csv"], dest="export_format",
+        help="Output format (default: csv)",
+    )
+    export_parser.add_argument(
+        "--output", metavar="PATH",
+        help="Output file path (default: evals.csv next to evals.jsonl)",
+    )
+    _add_selector_args(export_parser, include_status=True)
+    export_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    export_parser.set_defaults(
+        func=lambda args: export_command(
+            args.evals,
+            format=args.export_format,
+            output=args.output,
+            verbose=args.verbose,
+            selector=_selector_from_args(args, include_status=True),
+        )
+    )
+
+    # ── copa status ────────────────────────────────────────────────────────
+    status_parser = subparsers.add_parser(
+        "status", help="Show experiment progress summary"
+    )
+    status_parser.add_argument(
+        "output_dir", nargs="?", default=None,
+        help="Experiment output directory (default: current directory)",
+    )
+    status_parser.add_argument(
+        "--by", metavar="FIELD", choices=["model", "strategy", "instance", "question"],
+        help="Break down counts by field",
+    )
+    status_parser.set_defaults(
+        func=lambda args: status_command(args.output_dir, by=getattr(args, "by", None))
+    )
+
+    return parser
 
 
 def main(argv: list[str] | None = None) -> int:

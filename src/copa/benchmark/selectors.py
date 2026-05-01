@@ -1,27 +1,30 @@
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 
 @dataclass(frozen=True)
 class RunSelector:
-    provider: str | None = None
-    model: str | None = None
-    instance: str | None = None
-    question: str | None = None
-    strategy: str | None = None
-    format: str | None = None
-    repeat: int | None = None
-    status: str | None = None
-    exclude_provider: tuple[str, ...] = ()
-    exclude_model: tuple[str, ...] = ()
-    exclude_instance: tuple[str, ...] = ()
-    exclude_question: tuple[str, ...] = ()
-    exclude_strategy: tuple[str, ...] = ()
-    exclude_format: tuple[str, ...] = ()
-    exclude_repeat: tuple[int, ...] = ()
-    exclude_status: tuple[str, ...] = ()
+    provider: tuple[str, ...] = ()
+    model: tuple[str, ...] = ()
+    instance: tuple[str, ...] = ()
+    question: tuple[str, ...] = ()
+    strategy: tuple[str, ...] = ()
+    format: tuple[str, ...] = ()
+    repeat: tuple[int, ...] = ()
+    status: tuple[str, ...] = ()
+    ids: tuple[str, ...] = ()
+    not_provider: tuple[str, ...] = ()
+    not_model: tuple[str, ...] = ()
+    not_instance: tuple[str, ...] = ()
+    not_question: tuple[str, ...] = ()
+    not_strategy: tuple[str, ...] = ()
+    not_format: tuple[str, ...] = ()
+    not_repeat: tuple[int, ...] = ()
+    not_status: tuple[str, ...] = ()
 
 
 def matches_runspec(item: Any, selector: RunSelector) -> bool:
@@ -29,43 +32,49 @@ def matches_runspec(item: Any, selector: RunSelector) -> bool:
 
 
 def matches_run_result(item: Any, selector: RunSelector) -> bool:
-    if selector.status is not None and _field(item, "status") != selector.status:
+    if selector.status and _field(item, "status") not in selector.status:
+        return False
+    if selector.not_status and _field(item, "status") in selector.not_status:
         return False
     return _matches_common(item, selector)
 
 
 def _matches_common(item: Any, selector: RunSelector) -> bool:
-    if selector.provider is not None and _field(item, "provider") != selector.provider:
+    if selector.ids and _field(item, "runId") not in selector.ids:
         return False
-    if selector.model is not None and selector.model not in {_field(item, "modelId"), _field(item, "modelName")}:
+    if selector.provider and _field(item, "provider") not in selector.provider:
         return False
-    if selector.instance is not None and _field(item, "instanceId") != selector.instance:
+    if selector.model:
+        model_id = _field(item, "modelId")
+        model_name = _field(item, "modelName")
+        if model_id not in selector.model and model_name not in selector.model:
+            return False
+    if selector.instance and _field(item, "instanceId") not in selector.instance:
         return False
-    if selector.question is not None and _field(item, "questionId") != selector.question:
+    if selector.question and _field(item, "questionId") not in selector.question:
         return False
-    if selector.strategy is not None and _field(item, "strategy") != selector.strategy:
+    if selector.strategy and _field(item, "strategy") not in selector.strategy:
         return False
-    if selector.format is not None and _field(item, "format") != selector.format:
+    if selector.format and _field(item, "format") not in selector.format:
         return False
-    if selector.repeat is not None and _field(item, "repeatIndex") != selector.repeat:
+    if selector.repeat and _field(item, "repeatIndex") not in selector.repeat:
         return False
-    if selector.exclude_provider and _field(item, "provider") in selector.exclude_provider:
+    if selector.not_provider and _field(item, "provider") in selector.not_provider:
         return False
-    if selector.exclude_model and _field(item, "modelId") in selector.exclude_model:
+    if selector.not_model:
+        model_id = _field(item, "modelId")
+        model_name = _field(item, "modelName")
+        if model_id in selector.not_model or model_name in selector.not_model:
+            return False
+    if selector.not_instance and _field(item, "instanceId") in selector.not_instance:
         return False
-    if selector.exclude_model and _field(item, "modelName") in selector.exclude_model:
+    if selector.not_question and _field(item, "questionId") in selector.not_question:
         return False
-    if selector.exclude_instance and _field(item, "instanceId") in selector.exclude_instance:
+    if selector.not_strategy and _field(item, "strategy") in selector.not_strategy:
         return False
-    if selector.exclude_question and _field(item, "questionId") in selector.exclude_question:
+    if selector.not_format and _field(item, "format") in selector.not_format:
         return False
-    if selector.exclude_strategy and _field(item, "strategy") in selector.exclude_strategy:
-        return False
-    if selector.exclude_format and _field(item, "format") in selector.exclude_format:
-        return False
-    if selector.exclude_repeat and _field(item, "repeatIndex") in selector.exclude_repeat:
-        return False
-    if selector.exclude_status and _field(item, "status") in selector.exclude_status:
+    if selector.not_repeat and _field(item, "repeatIndex") in selector.not_repeat:
         return False
     return True
 
@@ -76,3 +85,13 @@ def _field(item: Any, name: str) -> Any:
             return item.get("model")
         return item.get(name)
     return getattr(item, name, None)
+
+
+def load_ids_from_stdin() -> tuple[str, ...]:
+    lines = sys.stdin.read().splitlines()
+    return tuple(line.strip() for line in lines if line.strip())
+
+
+def load_ids_from_file(path: str) -> tuple[str, ...]:
+    text = Path(path).read_text(encoding="utf-8")
+    return tuple(line.strip() for line in text.splitlines() if line.strip())

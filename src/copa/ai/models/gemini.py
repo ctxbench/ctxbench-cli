@@ -5,7 +5,6 @@ from time import perf_counter
 from typing import Any
 
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
-from copa.ai.runtime import MCPRuntime
 
 
 class GeminiModel(ModelAdapter):
@@ -38,32 +37,24 @@ class GeminiModel(ModelAdapter):
 
     async def _generate_with_native_mcp(self, model_input: ModelInput, request: AIRequest) -> ModelResponse:
         client = self._create_client()
-        runtime = self._create_mcp_runtime(request)
-        try:
-            async with runtime.session() as (session, session_metadata):
-                generation_config = self._build_generation_config(
-                    request,
-                    model_input,
-                    additional_tools=[session],
-                )
-                started_at = perf_counter()
-                response = await client.aio.models.generate_content(
-                    model=request.model_name,
-                    contents=self._build_contents(model_input),
-                    config=generation_config or None,
-                )
-                duration_ms = max(0, int((perf_counter() - started_at) * 1000))
-        finally:
-            runtime.close()
+        generation_config = self._build_generation_config(
+            request,
+            model_input,
+            additional_tools=[self._build_native_mcp_tool(request)],
+        )
+        started_at = perf_counter()
+        response = await client.aio.models.generate_content(
+            model=request.model_name,
+            contents=self._build_contents(model_input),
+            config=generation_config or None,
+        )
+        duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         cached_input_tokens = self._extract_cached_input_tokens(response)
         metadata = {
             "provider": "gemini",
             "model": request.model_name,
-            "native_mcp": {
-                **session_metadata,
-                **self._extract_native_mcp_metadata(response),
-            },
+            "native_mcp": self._extract_native_mcp_metadata(response),
         }
         return ModelResponse(
             text=self._extract_text(response),
@@ -136,7 +127,7 @@ class GeminiModel(ModelAdapter):
             if isinstance(schema, dict):
                 config["response_mime_type"] = "application/json"
                 config["response_json_schema"] = schema
-        if sdk_types is None or extra_tools:
+        if sdk_types is None:
             return config
         return sdk_types.GenerateContentConfig(**config)
 
@@ -371,12 +362,6 @@ class GeminiModel(ModelAdapter):
         params.update(request.params)
         return params
 
-    def _create_mcp_runtime(self, request: AIRequest) -> MCPRuntime:
-        config = request.params.get("mcp_server")
-        if not isinstance(config, dict):
-            raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Gemini models.")
-        return MCPRuntime.from_config(config)
-
     def _extract_native_mcp_metadata(self, response: Any) -> dict[str, Any]:
         tool_calls = self._extract_tool_calls(response)
         if not tool_calls:
@@ -385,3 +370,48 @@ class GeminiModel(ModelAdapter):
             "visibleToolCallCount": len(tool_calls),
             "visibleToolCalls": [tool_call.model_dump(mode="json") for tool_call in tool_calls],
         }
+
+    def _build_native_mcp_tool(self, request: AIRequest) -> Any:
+        config = request.params.get("mcp_server")
+        if not isinstance(config, dict):
+            raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Gemini models.")
+
+        server_url = config.get("server_url") or config.get("url")
+        if not isinstance(server_url, str) or not server_url:
+            raise RuntimeError("Gemini MCP config requires a non-empty 'server_url' or 'url'.")
+
+        server_label = str(config.get("server_label") or config.get("label") or "copa-lattes")
+        headers = self._build_mcp_headers(config)
+
+        sdk_types = self._sdk_types()
+        if sdk_types is None:
+            return {
+                "mcp_servers": [
+                    {
+                        "name": server_label,
+                        "streamable_http_transport": {
+                            "url": server_url,
+                            **({"headers": headers} if headers else {}),
+                        },
+                    }
+                ]
+            }
+
+        transport = sdk_types.StreamableHttpTransport(url=server_url, headers=headers or None)
+        return sdk_types.Tool(
+            mcp_servers=[
+                sdk_types.McpServer(
+                    name=server_label,
+                    streamable_http_transport=transport,
+                )
+            ]
+        )
+
+    def _build_mcp_headers(self, config: dict[str, Any]) -> dict[str, str]:
+        headers = dict(config.get("headers") or {}) if isinstance(config.get("headers"), dict) else {}
+        auth_token = config.get("auth_token")
+        if isinstance(auth_token, str) and auth_token:
+            headers.pop("Authorization", None)
+            headers.pop("authorization", None)
+            headers["Authorization"] = auth_token
+        return headers

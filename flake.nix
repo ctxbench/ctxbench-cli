@@ -32,7 +32,13 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            allowUnfree = true;
+
+          };
+        };
         lib = pkgs.lib;
         python = pkgs.python312;
 
@@ -88,6 +94,7 @@
             pkgs.uv
             pkgs.git
             pkgs.codex
+            pkgs.claude-code
           ];
 
           shellHook = ''

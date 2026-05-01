@@ -269,7 +269,7 @@ class OpenAIModel(ModelAdapter):
         if not isinstance(config, dict):
             raise RuntimeError("Native MCP strategy requires params['mcp_server'] for OpenAI models.")
         server_url = config.get("server_url") or config.get("url")
-        server_label = config.get("server_label") or config.get("label") or "lattes"
+        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
         if not isinstance(server_url, str) or not server_url:
             raise RuntimeError("OpenAI MCP config requires a non-empty 'server_url' or 'url'.")
         tool: dict[str, Any] = {
@@ -278,6 +278,12 @@ class OpenAIModel(ModelAdapter):
             "server_url": server_url,
             "require_approval": "never"
         }
+        server_description = config.get("server_description") or config.get("description")
+        if isinstance(server_description, str) and server_description:
+            tool["server_description"] = server_description
+        require_approval = config.get("require_approval")
+        if require_approval in {"always", "never"} or isinstance(require_approval, dict):
+            tool["require_approval"] = require_approval
         if isinstance(config.get("auth_token"), str) and config["auth_token"]:
             tool["authorization"] = config["auth_token"]
         headers = dict(config.get("headers") or {}) if isinstance(config.get("headers"), dict) else {}

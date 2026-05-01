@@ -1,7 +1,7 @@
 {
-  "id": "exp_baseline_003",
-  "name": "Baseline run including only inline executions",
-  "output": "sbes2026",
+  "id": "baseline_001",
+  "name": "Baseline run",
+  "output": "exoutputs",
   "dataset": "datasets/lattes",
   "scope": {
     "instances": ["5521922960404236", "5123602572479168", "9674541381385819"],
@@ -12,7 +12,7 @@
       {
         "id": "gpt-menor",
         "provider": "openai",
-        "name": "gpt-5.4-mini-2026-03-17"
+        "name": "gpt-5.4-nano"
       },
       {
         "id": "gem-menor",
@@ -21,13 +21,15 @@
       }
     ],
     "strategy": ["inline", "local_function", "local_mcp", "mcp"],
-    "format": ["html", "json"]
+    "format": ["json"]
   },
   "params": {
     "common": {
       "temperature": 0,
       "mcp_server": {
-        "server_url": "https://secure-harlequin-mollusk.fastmcp.app/mcp"
+        "server_url": "https://secure-harlequin-mollusk.fastmcp.app/mcp",
+        "server_label": "copa-lattes",
+        "server_description": "COPA Lattes MCP server"
       }
     },
     "gpt-5.4-mini-2026-03-17": {

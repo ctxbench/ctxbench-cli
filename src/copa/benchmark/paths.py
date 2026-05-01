@@ -19,43 +19,51 @@ def _resolve_artifact_path(output_root: Path, value: str) -> Path:
     return path.resolve() if path.is_absolute() else (output_root / path).resolve()
 
 
-def resolve_expand_output_dir(experiment: Experiment, base_dir: Path) -> Path:
-    output_root = resolve_output_root(experiment, base_dir)
-    if experiment.expansion.output:
-        return _resolve_artifact_path(output_root, experiment.expansion.output)
-    return output_root / "runs"
+def resolve_manifest_path(output_root: Path) -> Path:
+    return output_root / "manifest.json"
 
 
-def resolve_expand_jsonl_path(experiment: Experiment, base_dir: Path) -> Path | None:
+def resolve_queries_path(experiment: Experiment, base_dir: Path) -> Path:
     output_root = resolve_output_root(experiment, base_dir)
     if experiment.expansion.jsonl:
         return _resolve_artifact_path(output_root, experiment.expansion.jsonl)
-    return output_root / "runs.jsonl"
+    return output_root / "queries.jsonl"
 
 
-def resolve_run_output_dir(experiment: Experiment, base_dir: Path) -> Path:
-    output_root = resolve_output_root(experiment, base_dir)
-    if experiment.execution.output:
-        return _resolve_artifact_path(output_root, experiment.execution.output)
-    return output_root / "results"
-
-
-def resolve_run_jsonl_path(experiment: Experiment, base_dir: Path) -> Path | None:
+def resolve_answers_path(experiment: Experiment, base_dir: Path) -> Path:
     output_root = resolve_output_root(experiment, base_dir)
     if experiment.execution.jsonl:
         return _resolve_artifact_path(output_root, experiment.execution.jsonl)
-    return output_root / "results.jsonl"
+    return output_root / "answers.jsonl"
 
 
-def resolve_eval_output_dir(experiment: Experiment, base_dir: Path) -> Path:
-    output_root = resolve_output_root(experiment, base_dir)
-    if experiment.evaluation.output:
-        return _resolve_artifact_path(output_root, experiment.evaluation.output)
-    return output_root / "evaluation"
-
-
-def resolve_eval_jsonl_path(experiment: Experiment, base_dir: Path) -> Path | None:
+def resolve_evals_path(experiment: Experiment, base_dir: Path) -> Path:
     output_root = resolve_output_root(experiment, base_dir)
     if experiment.evaluation.jsonl:
         return _resolve_artifact_path(output_root, experiment.evaluation.jsonl)
-    return output_root / "evaluation.jsonl"
+    return output_root / "evals.jsonl"
+
+
+# Aliases kept for any remaining internal references
+def resolve_expand_output_dir(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_output_root(experiment, base_dir)
+
+
+def resolve_expand_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_queries_path(experiment, base_dir)
+
+
+def resolve_run_output_dir(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_output_root(experiment, base_dir)
+
+
+def resolve_run_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_answers_path(experiment, base_dir)
+
+
+def resolve_eval_output_dir(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_output_root(experiment, base_dir)
+
+
+def resolve_eval_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
+    return resolve_evals_path(experiment, base_dir)

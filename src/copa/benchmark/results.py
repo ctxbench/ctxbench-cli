@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from copa.benchmark.models import EvaluationRunResult, EvaluationTrace, RunResult, RunTrace
-from copa.util.artifacts import evalresult_filename, runresult_filename
 from copa.util.fs import write_json
 from copa.util.jsonl import append_jsonl, write_jsonl
 
@@ -47,12 +46,12 @@ def write_trace_file(result: RunResult, artifact_root: str | Path) -> str | None
     payload = {
         "experimentId": result.experimentId,
         "runId": result.runId,
-        "task": "runs",
+        "task": "queries",
         "trace": result.trace.model_dump(mode="json"),
     }
     return _write_trace_payload(
         artifact_root=artifact_root,
-        task="runs",
+        task="queries",
         run_id=result.runId,
         payload=payload,
     )
@@ -112,38 +111,6 @@ def serialize_evaluation_result(
     return payload
 
 
-def write_result_file(
-    result: RunResult,
-    out_dir: str | Path,
-    *,
-    artifact_root: str | Path | None = None,
-    write_trace: bool = True,
-) -> Path:
-    target = Path(out_dir)
-    target.mkdir(parents=True, exist_ok=True)
-    root = Path(artifact_root) if artifact_root is not None else target.parent
-    path = target / runresult_filename(result.experimentId, result.runId)
-    write_json(path, serialize_run_result(result, artifact_root=root, write_trace=write_trace))
-    return path
-
-
-def write_result_files(
-    results: Iterable[RunResult],
-    out_dir: str | Path,
-    *,
-    artifact_root: str | Path | None = None,
-) -> list[Path]:
-    result_list = list(results)
-    target = Path(out_dir)
-    target.mkdir(parents=True, exist_ok=True)
-    root = Path(artifact_root) if artifact_root is not None else target.parent
-    paths: list[Path] = []
-    for result in result_list:
-        path = write_result_file(result, target, artifact_root=root)
-        paths.append(path)
-    return paths
-
-
 def append_result_jsonl(
     result: RunResult,
     path: str | Path,
@@ -167,40 +134,8 @@ def write_results_jsonl(
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
     result_list = list(results)
-    write_jsonl(target_path, [serialize_run_result(result, artifact_root=root, write_trace=write_trace) for result in result_list])
+    write_jsonl(target_path, [serialize_run_result(r, artifact_root=root, write_trace=write_trace) for r in result_list])
     return target_path
-
-
-def write_evaluation_files(
-    evaluations: Iterable[EvaluationRunResult],
-    out_dir: str | Path,
-    *,
-    artifact_root: str | Path | None = None,
-) -> list[Path]:
-    evaluation_list = list(evaluations)
-    target = Path(out_dir)
-    target.mkdir(parents=True, exist_ok=True)
-    root = Path(artifact_root) if artifact_root is not None else target.parent
-    paths: list[Path] = []
-    for item in evaluation_list:
-        path = write_evaluation_file(item, target, artifact_root=root)
-        paths.append(path)
-    return paths
-
-
-def write_evaluation_file(
-    evaluation: EvaluationRunResult,
-    out_dir: str | Path,
-    *,
-    artifact_root: str | Path | None = None,
-    write_trace: bool = True,
-) -> Path:
-    target = Path(out_dir)
-    target.mkdir(parents=True, exist_ok=True)
-    root = Path(artifact_root) if artifact_root is not None else target.parent
-    path = target / evalresult_filename(evaluation.experimentId, evaluation.runId)
-    write_json(path, serialize_evaluation_result(evaluation, artifact_root=root, write_trace=write_trace))
-    return path
 
 
 def append_evaluation_jsonl(
@@ -223,8 +158,8 @@ def write_evaluation_jsonl(
     artifact_root: str | Path | None = None,
     write_trace: bool = True,
 ) -> Path:
-    evaluation_list = list(evaluations)
     target_path = Path(path)
     root = Path(artifact_root) if artifact_root is not None else target_path.parent
-    write_jsonl(target_path, [serialize_evaluation_result(item, artifact_root=root, write_trace=write_trace) for item in evaluation_list])
+    evaluation_list = list(evaluations)
+    write_jsonl(target_path, [serialize_evaluation_result(e, artifact_root=root, write_trace=write_trace) for e in evaluation_list])
     return Path(path)

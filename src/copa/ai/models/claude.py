@@ -219,7 +219,7 @@ class ClaudeModel(ModelAdapter):
         if not isinstance(config, dict):
             raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Claude models.")
         server_url = config.get("server_url") or config.get("url")
-        server_label = config.get("server_label") or config.get("label") or "lattes"
+        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
         if not isinstance(server_url, str) or not server_url:
             raise RuntimeError("Claude MCP config requires a non-empty 'server_url' or 'url'.")
         server: dict[str, Any] = {
@@ -227,7 +227,13 @@ class ClaudeModel(ModelAdapter):
             "url": server_url,
             "name": str(server_label),
         }
+        server_description = config.get("server_description") or config.get("description")
+        if isinstance(server_description, str) and server_description:
+            server["description"] = server_description
         tool_configuration: dict[str, Any] = {"enabled": True}
+        require_approval = config.get("require_approval")
+        if require_approval in {"always", "never"} or isinstance(require_approval, dict):
+            tool_configuration["require_approval"] = require_approval
         if isinstance(config.get("allowed_tools"), list) and config["allowed_tools"]:
             tool_configuration["allowed_tools"] = list(config["allowed_tools"])
         if tool_configuration:
