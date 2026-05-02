@@ -285,10 +285,11 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
         engine=Engine(),
     )
 
-    assert details["correctness"]["rating"] == "meets"
-    assert details["completeness"]["rating"] == "partially meets"
+    assert details["outcome"]["correctness"]["rating"] == "meets"
+    assert details["outcome"]["completeness"]["rating"] == "partial"
+    assert details["outcome"]["correctness"]["consensus"] is True
+    assert details["outcome"]["completeness"]["consensus"] is True
     assert len(details["judges"]) == 1
-    assert details["outcome"] == "partially_meets"
     assert judge_info.used is True
 
 
@@ -346,11 +347,11 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
         engine=Engine(),
     )
 
-    assert details["correctness"]["rating"] == "does not meet"
-    assert details["correctness"]["votes"] == {"meets": 1, "partially meets": 0, "does not meet": 1}
-    assert details["completeness"]["rating"] == "partially meets"
+    assert details["outcome"]["correctness"]["rating"] == "meets"
+    assert details["outcome"]["correctness"]["consensus"] is False
+    assert details["outcome"]["completeness"]["rating"] == "partial"
+    assert details["outcome"]["completeness"]["consensus"] is True
     assert len(details["judges"]) == 2
-    assert details["outcome"] == "does_not_meet"
     assert judge_info.used is True
 
 
@@ -550,8 +551,8 @@ def test_evaluate_run_result_warns_and_ignores_missing_context_block(tmp_path, m
     )
 
     assert evaluated is not None
-    assert evaluated.items[0].details["contextBlock"] == ["summary"]
-    assert any(label == "WARN" and fields.get("contextBlock") == "missing.path" for label, _message, fields in events)
+    assert evaluated.items[0].details["contextBlocks"] == []
+    assert any(label == "WARN" and fields.get("questionId") == "q_year" for label, _message, fields in events)
 
 
 def test_openai_model_extracts_cache_metadata():

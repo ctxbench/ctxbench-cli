@@ -271,7 +271,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     export_parser.add_argument(
         "--output", metavar="PATH",
-        help="Output file path (default: evals.csv next to evals.jsonl)",
+        help="Output file path (default: results.csv next to evals.jsonl)",
+    )
+    export_parser.add_argument(
+        "--by", action="append", default=[], metavar="KEY=VALUE",
+        help=(
+            "Filter by key=value pair (repeatable). "
+            "Valid keys: model, strategy, format, instance"
+        ),
+    )
+    export_parser.add_argument(
+        "--id", metavar="RUN_ID", dest="run_id",
+        help="Show detailed information for a single run ID",
     )
     _add_selector_args(export_parser, include_status=True)
     export_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
@@ -282,6 +293,8 @@ def build_parser() -> argparse.ArgumentParser:
             output=args.output,
             verbose=args.verbose,
             selector=_selector_from_args(args, include_status=True),
+            by=args.by or [],
+            run_id=getattr(args, "run_id", None),
         )
     )
 
@@ -294,7 +307,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Experiment output directory (default: current directory)",
     )
     status_parser.add_argument(
-        "--by", metavar="FIELD", choices=["model", "strategy", "instance", "question"],
+        "--by", metavar="FIELD", choices=["model", "strategy", "instance", "question", "judge"],
         help="Break down counts by field",
     )
     status_parser.set_defaults(

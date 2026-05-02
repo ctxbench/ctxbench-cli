@@ -7,6 +7,8 @@ from copa.benchmark.evaluation import (
     build_evaluation_jobs,
     build_evaluation_summary_rows,
     evaluate_run_results,
+    judge_identifier,
+    recompute_judge_outcome,
 )
 from copa.benchmark.evaluation_batch import (
     DEFAULT_BATCH_POLL_INTERVAL_SECONDS,
@@ -16,7 +18,11 @@ from copa.benchmark.evaluation_batch import (
 )
 from copa.benchmark.models import EvaluationModelConfig, ExperimentTrace, RunResult
 from copa.benchmark.selectors import RunSelector, matches_run_result
-from copa.benchmark.results import serialize_evaluation_result, append_evaluation_jsonl
+from copa.benchmark.results import (
+    _resolve_eval_trace_ref,
+    serialize_evaluation_result,
+    serialize_judge_votes,
+)
 from copa.util.fs import load_json, write_json
 from copa.util.jsonl import append_jsonl, read_jsonl, write_jsonl
 from copa.util.logging import PhaseLogger, ProgressTracker
@@ -114,16 +120,46 @@ def _judge_identifiers(config: EvaluationModelConfig) -> set[str]:
 # Eval status tracking (replaces checkpoint)
 # ---------------------------------------------------------------------------
 
-def _load_eval_statuses(path: Path) -> dict[str, str]:
-    """Returns {runId: latest status} from evals.jsonl."""
+def _load_votes_index(path: Path) -> dict[str, list[dict[str, Any]]]:
+    """Returns {runId: [vote dicts]} from judge_votes.jsonl."""
     if not path.exists():
         return {}
-    statuses: dict[str, str] = {}
+    index: dict[str, list[dict[str, Any]]] = {}
     for item in read_jsonl(path):
         run_id = str(item.get("runId", ""))
         if run_id:
-            statuses[run_id] = str(item.get("status", ""))
-    return statuses
+            index.setdefault(run_id, []).append(dict(item))
+    return index
+
+
+def _merge_existing_votes(details: dict[str, Any], existing_votes: list[dict[str, Any]]) -> None:
+    """Add votes from judge_votes.jsonl for judges not in the current evaluation, recompute outcome."""
+    current_ids = {j.get("judgeId") for j in details.get("judges", [])}
+    added = False
+    for vote in existing_votes:
+        jid = vote.get("judgeId")
+        if jid in current_ids:
+            continue
+        criterias = vote.get("criterias") or {}
+        entry: dict[str, Any] = {
+            "judgeId": jid,
+            "provider": vote.get("provider"),
+            "model": vote.get("model"),
+            "status": vote.get("status") or ("error" if vote.get("error") else "evaluated"),
+            "correctness": criterias.get("correctness") or {},
+            "completeness": criterias.get("completeness") or {},
+            "inputTokens": vote.get("inputTokens"),
+            "outputTokens": vote.get("outputTokens"),
+            "durationMs": vote.get("durationMs"),
+        }
+        if vote.get("error"):
+            entry["error"] = vote.get("error")
+        details.setdefault("judges", []).append(entry)
+        added = True
+    if added:
+        outcome = recompute_judge_outcome(details["judges"])
+        if outcome is not None:
+            details["outcome"] = outcome
 
 
 def _compact_evals(path: Path) -> None:
@@ -136,6 +172,20 @@ def _compact_evals(path: Path) -> None:
         run_id = str(row.get("runId", ""))
         if run_id:
             seen[run_id] = dict(row)
+    write_jsonl(path, list(seen.values()))
+
+
+def _compact_judge_votes(path: Path) -> None:
+    """Rewrite judge_votes.jsonl keeping only the last entry per (runId, judgeId)."""
+    if not path.exists():
+        return
+    rows = list(read_jsonl(path))
+    seen: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in rows:
+        run_id = str(row.get("runId", ""))
+        judge_id = str(row.get("judgeId", ""))
+        if run_id:
+            seen[(run_id, judge_id)] = dict(row)
     write_jsonl(path, list(seen.values()))
 
 
@@ -196,12 +246,33 @@ def eval_command(
     write_traces = trace_config.writeFiles
 
     evals_path = source_root / "evals.jsonl"
+    votes_path = source_root / "judge_votes.jsonl"
     artifact_root = source_root
 
-    eval_statuses = {} if force else _load_eval_statuses(evals_path)
+    votes_index = _load_votes_index(votes_path)
+    evaluated_judge_ids: dict[str, set[str]] = {
+        run_id: {v.get("judgeId", "") for v in votes if v.get("status") != "error"}
+        for run_id, votes in votes_index.items()
+    }
     has_duplicates = False
 
-    pending = [r for r in results if force or eval_statuses.get(r.runId) != "evaluated"]
+    # Group pending runs by which judges they still need.
+    # A run is pending if at least one selected judge hasn't voted for it yet.
+    groups: dict[tuple[str, ...], tuple[list[RunResult], list[EvaluationModelConfig]]] = {}
+    for r in results:
+        if force:
+            missing = judges
+        else:
+            done = evaluated_judge_ids.get(r.runId, set())
+            missing = [j for j in judges if judge_identifier(j) not in done]
+        if not missing:
+            continue
+        key = tuple(sorted(judge_identifier(j) for j in missing))
+        if key not in groups:
+            groups[key] = ([], missing)
+        groups[key][0].append(r)
+
+    pending = [r for runs, _ in groups.values() for r in runs]
     logger.phase(
         "LOAD",
         "Answers loaded",
@@ -218,12 +289,18 @@ def eval_command(
         if evaluated is None:
             progress_tracker.advance()
             return
-        payload = serialize_evaluation_result(evaluated, artifact_root=artifact_root, write_trace=write_traces)
-        append_jsonl(evals_path, [payload])
-        if eval_statuses.get(evaluated.runId) is not None:
+        item = evaluated.items[0] if evaluated.items else None
+        existing = votes_index.get(evaluated.runId)
+        if item is not None and existing:
+            _merge_existing_votes(item.details, existing)
             nonlocal has_duplicates
             has_duplicates = True
-        eval_statuses[evaluated.runId] = str(payload.get("status", ""))
+        trace_ref = _resolve_eval_trace_ref(evaluated, artifact_root=artifact_root, write_trace=write_traces)
+        payload = serialize_evaluation_result(evaluated, trace_ref=trace_ref)
+        votes = serialize_judge_votes(evaluated, trace_ref=trace_ref)
+        append_jsonl(evals_path, [payload])
+        if votes:
+            append_jsonl(votes_path, votes)
         logger.phase("WRITE", "Evaluation written", run=evaluated.runId)
         progress_tracker.advance()
 
@@ -237,6 +314,13 @@ def eval_command(
             mode=None,
             event_logger=event_logger,
         )
+        evaluated_pairs = {
+            (run_id, jid)
+            for run_id, jids in evaluated_judge_ids.items()
+            for jid in jids
+        }
+        if not force:
+            jobs = [j for j in jobs if (j.result.runId, judge_identifier(j.judge)) not in evaluated_pairs]
         if not jobs:
             print("No pending evaluation jobs.")
             return 0
@@ -273,22 +357,25 @@ def eval_command(
 
         if has_duplicates:
             _compact_evals(evals_path)
+            _compact_judge_votes(votes_path)
         _write_summary(evals_path, source_root)
         print(f"Collected batch {resolved_batch_id} ({len(batch_evaluations)} result(s)).")
         return 0
 
-    evaluate_run_results(
-        pending,
-        judges=judges,
-        only=None,
-        mode=None,
-        continue_on_error=continue_on_error,
-        event_logger=event_logger,
-        on_result=_persist,
-    )
+    for group_runs, group_judges in groups.values():
+        evaluate_run_results(
+            group_runs,
+            judges=group_judges,
+            only=None,
+            mode=None,
+            continue_on_error=continue_on_error,
+            event_logger=event_logger,
+            on_result=_persist,
+        )
 
     if has_duplicates or force:
         _compact_evals(evals_path)
+        _compact_judge_votes(votes_path)
     _write_summary(evals_path, source_root)
 
     skipped = len(results) - len(pending)

@@ -422,5 +422,7 @@ class GeminiModel(ModelAdapter):
         if isinstance(auth_token, str) and auth_token:
             headers.pop("Authorization", None)
             headers.pop("authorization", None)
+            if not auth_token.startswith("Bearer "):
+                auth_token = f"Bearer {auth_token}"
             headers["Authorization"] = auth_token
         return headers

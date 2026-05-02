@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import csv
 import json
 import re
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Callable, Iterable
 
 from copa.ai.cache import build_judge_prompt_cache_key
@@ -38,7 +36,7 @@ Evaluate the answer to the question based on the provided curriculum context.
 # Evaluation Instructions
 - Use only the provided curriculum context.
 - If the curriculum context is silent about something, treat that as missing support.
-- Be strict: if unsure, prefer "partially meets" or "does not meet".
+- Be strict: if unsure, prefer "partial" or "misses".
 - Each criterion MUST include a short justification grounded in the provided curriculum context.
 - Do NOT include chain-of-thought or hidden reasoning. Provide only concise criterion justifications.
 
@@ -47,8 +45,8 @@ Evaluate the answer to the question based on the provided curriculum context.
 Use the following scale for ALL criteria:
 
 - "meets": fully satisfies the criterion
-- "partially meets": partially satisfies the criterion, with minor issues or omissions
-- "does not meet": does not satisfy the criterion or has major issues
+- "partial": partially satisfies the criterion, with minor issues or omissions
+- "misses": does not satisfy the criterion or has major issues
 
 # Evaluation Criteria
 
@@ -56,22 +54,26 @@ Use the following scale for ALL criteria:
 The answer must be factually correct according to the curriculum context.
 - Check whether the information provided is accurate.
 - Use the curriculum context as the source of truth.
+- Check whether the answer does not contradict the curriculum context.
+- Penalize claims that are not supported by the curriculum context, unless they are clearly marked as uncertainty or inference grounded in the context.
 
 ## Completeness
-The answer must fully address the question.
+The answer must fully address the question according to what can be answered from the curriculum context.
 - Check whether all parts of the question are answered.
 - Penalize important omissions relative to the curriculum context.
+- Do not penalize missing information when the curriculum context itself does not provide enough evidence to answer that part of the question.
+- Prefer answers that explicitly acknowledge when the curriculum context lacks enough information.
 
 # Output Format (STRICT JSON)
 Return ONLY a JSON object in the following format:
 
 {{
   "correctness": {{
-    "rating": "meets | partially meets | does not meet",
+    "rating": "meets | partial | misses",
     "justification": "short justification"
   }},
   "completeness": {{
-    "rating": "meets | partially meets | does not meet",
+    "rating": "meets | partial | misses",
     "justification": "short justification"
   }}
 }}
@@ -87,11 +89,15 @@ Return ONLY a JSON object in the following format:
 
 """
 
-RATING_SEVERITY = {
-    "meets": 0,
-    "partially meets": 1,
-    "does not meet": 2,
+_RATING_ALIASES: dict[str, str] = {
+    "meets": "meets",
+    "partial": "partial",
+    "partially meets": "partial",
+    "misses": "misses",
+    "does not meet": "misses",
 }
+
+_RATING_ORDER: dict[str, int] = {"meets": 2, "partial": 1, "misses": 0}
 
 JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
     "type": "object",
@@ -101,7 +107,7 @@ JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
             "properties": {
                 "rating": {
                     "type": "string",
-                    "enum": ["meets", "partially meets", "does not meet"],
+                    "enum": ["meets", "partial", "misses"],
                 },
                 "justification": {"type": "string"},
             },
@@ -113,7 +119,7 @@ JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
             "properties": {
                 "rating": {
                     "type": "string",
-                    "enum": ["meets", "partially meets", "does not meet"],
+                    "enum": ["meets", "partial", "misses"],
                 },
                 "justification": {"type": "string"},
             },
@@ -124,6 +130,12 @@ JUDGE_STRUCTURED_OUTPUT_SCHEMA = {
     "required": ["correctness", "completeness"],
     "additionalProperties": False,
 }
+
+
+def _normalize_rating(raw: str | None) -> str:
+    if not isinstance(raw, str):
+        return "misses"
+    return _RATING_ALIASES.get(raw.strip().lower(), raw.strip().lower())
 
 
 @dataclass(frozen=True)
@@ -357,21 +369,29 @@ def _evaluate_judge(
         judge_infos.append(judge_info)
         traces.append(trace)
         if payload is None:
-            judge_votes.append(
-                {
-                    "provider": config.provider,
-                    "model": config.model,
-                    "error": "Judge did not return valid JSON.",
-                }
-            )
+            judge_votes.append({
+                "judgeId": judge_identifier(config),
+                "provider": config.provider,
+                "model": config.model,
+                "status": "error",
+                "inputTokens": judge_info.inputTokens,
+                "outputTokens": judge_info.outputTokens,
+                "durationMs": judge_info.durationMs,
+                "error": "Judge did not return valid JSON.",
+            })
             continue
         correctness = _criterion_payload(payload.get("correctness"))
         completeness = _criterion_payload(payload.get("completeness"))
         vote = {
+            "judgeId": judge_identifier(config),
             "provider": config.provider,
             "model": config.model,
+            "status": "evaluated",
             "correctness": correctness,
             "completeness": completeness,
+            "inputTokens": judge_info.inputTokens,
+            "outputTokens": judge_info.outputTokens,
+            "durationMs": judge_info.durationMs,
         }
         judge_votes.append(vote)
         valid_votes.append(vote)
@@ -381,23 +401,20 @@ def _evaluate_judge(
     if not valid_votes:
         return {
             "evaluationMethod": "judge",
-            "contextBlock": list(context_payload.keys()),
+            "contextBlocks": list(context_payload.keys()),
             "judges": judge_votes,
             "error": "Judge did not return valid JSON.",
         }, merged_info, merged_trace
-    correctness = _aggregate_votes(valid_votes, "correctness")
-    completeness = _aggregate_votes(valid_votes, "completeness")
-    summary = _outcome_from_ratings(
-        correctness["rating"],
-        completeness["rating"],
-    )
+    agg_correctness = _aggregate_votes(valid_votes, "correctness")
+    agg_completeness = _aggregate_votes(valid_votes, "completeness")
     return {
         "evaluationMethod": "judge",
-        "contextBlock": list(context_payload.keys()),
+        "contextBlocks": list(context_payload.keys()),
         "judges": judge_votes,
-        "correctness": correctness,
-        "completeness": completeness,
-        "outcome": summary,
+        "outcome": {
+            "correctness": agg_correctness,
+            "completeness": agg_completeness,
+        },
     }, merged_info, merged_trace
 
 
@@ -408,40 +425,47 @@ def evaluation_from_judge_payload(
     judge_info: EvaluationJudgeInfo,
     trace: EvaluationTrace,
 ) -> EvaluationRunResult:
+    judge_id = judge_identifier(job.judge)
     if payload is None:
         details = {
             "evaluationMethod": "judge",
-            "contextBlock": list(job.context_payload.keys()),
-            "judges": [
-                {
-                    "provider": job.judge.provider,
-                    "model": job.judge.model,
-                    "error": "Judge did not return valid JSON.",
-                }
-            ],
+            "contextBlocks": list(job.context_payload.keys()),
+            "judges": [{
+                "judgeId": judge_id,
+                "provider": job.judge.provider,
+                "model": job.judge.model,
+                "status": "error",
+                "inputTokens": judge_info.inputTokens,
+                "outputTokens": judge_info.outputTokens,
+                "durationMs": judge_info.durationMs,
+                "error": "Judge did not return valid JSON.",
+            }],
             "error": "Judge did not return valid JSON.",
         }
     else:
         correctness = _criterion_payload(payload.get("correctness"))
         completeness = _criterion_payload(payload.get("completeness"))
         vote = {
+            "judgeId": judge_id,
             "provider": job.judge.provider,
             "model": job.judge.model,
+            "status": "evaluated",
             "correctness": correctness,
             "completeness": completeness,
+            "inputTokens": judge_info.inputTokens,
+            "outputTokens": judge_info.outputTokens,
+            "durationMs": judge_info.durationMs,
         }
-        aggregate_correctness = _aggregate_votes([vote], "correctness")
-        aggregate_completeness = _aggregate_votes([vote], "completeness")
+        agg_correctness = _aggregate_votes([vote], "correctness")
+        agg_completeness = _aggregate_votes([vote], "completeness")
         details = {
             "evaluationMethod": "judge",
-            "contextBlock": list(job.context_payload.keys()),
+            "contextBlocks": list(job.context_payload.keys()),
             "judges": [vote],
-            "correctness": aggregate_correctness,
-            "completeness": aggregate_completeness,
-            "outcome": _outcome_from_ratings(
-                aggregate_correctness["rating"],
-                aggregate_completeness["rating"],
-            ),
+            "outcome": {
+                "correctness": agg_correctness,
+                "completeness": agg_completeness,
+            },
         }
     return _build_evaluation_result(
         job.result,
@@ -464,7 +488,7 @@ def _build_evaluation_result(
 ) -> EvaluationRunResult:
     metrics = result.trace.aiTrace.get("metrics", {}) if result.trace.aiTrace else {}
     summary = result.metricsSummary
-    context_block = details.get("contextBlock") if isinstance(details, dict) else None
+    context_blocks = details.get("contextBlocks") if isinstance(details, dict) else None
     item = EvaluationItemResult(
         experimentId=result.experimentId,
         runId=result.runId,
@@ -475,7 +499,7 @@ def _build_evaluation_result(
         status="evaluated",
         evaluationMethod=details.get("evaluationMethod"),
         details=details,
-        contextBlock=context_block if isinstance(context_block, list) and context_block else None,
+        contextBlock=context_blocks if isinstance(context_blocks, list) and context_blocks else None,
         executionModel=result.modelName,
         executionStrategy=result.strategy,
         executionFormat=result.format,
@@ -531,42 +555,38 @@ def _format_curriculum_context(context_payload: dict[str, Any]) -> str:
 
 def _criterion_payload(value: Any) -> dict[str, str]:
     if isinstance(value, dict):
-        rating = str(value.get("rating", "")).strip()
+        rating = _normalize_rating(value.get("rating"))
         justification = str(value.get("justification", "")).strip()
-        return {
-            "rating": rating,
-            "justification": justification,
-        }
+        return {"rating": rating, "justification": justification}
+    return {"rating": _normalize_rating(str(value or "").strip()), "justification": ""}
+
+
+def recompute_judge_outcome(judge_votes: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Recompute the outcome dict from a list of judge vote dicts (details.judges format)."""
+    valid = [v for v in judge_votes if not v.get("error")]
+    if not valid:
+        return None
     return {
-        "rating": str(value or "").strip(),
-        "justification": "",
+        "correctness": _aggregate_votes(valid, "correctness"),
+        "completeness": _aggregate_votes(valid, "completeness"),
     }
 
 
 def _aggregate_votes(votes: list[dict[str, Any]], criterion: str) -> dict[str, Any]:
-    counts = {"meets": 0, "partially meets": 0, "does not meet": 0}
+    ratings: list[str] = []
     for vote in votes:
         payload = vote.get(criterion)
         if isinstance(payload, dict):
-            rating = str(payload.get("rating", "")).strip()
-            if rating in counts:
-                counts[rating] += 1
-    winner = max(
-        counts,
-        key=lambda item: (counts[item], RATING_SEVERITY[item]),
-    )
-    return {
-        "rating": winner,
-        "votes": counts,
-    }
-
-
-def _outcome_from_ratings(*ratings: str) -> str:
-    if any(item == "does not meet" for item in ratings):
-        return "does_not_meet"
-    if any(item == "partially meets" for item in ratings):
-        return "partially_meets"
-    return "meets"
+            ratings.append(_normalize_rating(payload.get("rating")))
+        elif isinstance(payload, str):
+            ratings.append(_normalize_rating(payload))
+    if not ratings:
+        return {"rating": "misses", "consensus": True}
+    counter: dict[str, int] = {}
+    for r in ratings:
+        counter[r] = counter.get(r, 0) + 1
+    best = max(counter, key=lambda k: (counter[k], _RATING_ORDER.get(k, 0)))
+    return {"rating": best, "consensus": len(counter) == 1}
 
 
 def _merge_judge_infos(judge_infos: list[EvaluationJudgeInfo]) -> EvaluationJudgeInfo:
@@ -735,81 +755,27 @@ def build_evaluation_summary_rows(rows: Iterable[dict[str, Any]]) -> EvaluationB
 
 
 def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
-    details = row.get("details", {})
-    if not isinstance(details, dict):
-        details = {}
-    summary: dict[str, Any] = {
+    outcome = row.get("outcome")
+    if not isinstance(outcome, dict):
+        outcome = {}
+    correctness_obj = outcome.get("correctness") or {}
+    completeness_obj = outcome.get("completeness") or {}
+    return {
         "runId": row.get("runId"),
         "questionId": row.get("questionId"),
         "instanceId": row.get("instanceId"),
         "status": row.get("status"),
         "evaluationMethod": row.get("evaluationMethod"),
+        "judgeCount": row.get("judgeCount"),
+        "outcome": {
+            "correctness": {
+                "rating": correctness_obj.get("rating"),
+                "consensus": correctness_obj.get("consensus"),
+            },
+            "completeness": {
+                "rating": completeness_obj.get("rating"),
+                "consensus": completeness_obj.get("consensus"),
+            },
+        },
     }
-    if row.get("outcome") is not None:
-        summary["outcome"] = row.get("outcome")
-    elif "outcome" in details:
-        summary["outcome"] = details.get("outcome")
-    judges = details.get("judges")
-    if isinstance(judges, list):
-        summary["judgeRatings"] = [
-            {
-                "provider": item.get("provider"),
-                "model": item.get("model"),
-                "correctness": item.get("correctness", {}).get("rating")
-                if isinstance(item.get("correctness"), dict)
-                else None,
-                "completeness": item.get("completeness", {}).get("rating")
-                if isinstance(item.get("completeness"), dict)
-                else None,
-                "error": item.get("error"),
-            }
-            for item in judges
-            if isinstance(item, dict)
-        ]
-    summary["aggregate"] = {
-        "correctness": row.get("correctness")
-        or (
-            details.get("correctness", {}).get("rating")
-            if isinstance(details.get("correctness"), dict)
-            else None
-        ),
-        "completeness": row.get("completeness")
-        or (
-            details.get("completeness", {}).get("rating")
-            if isinstance(details.get("completeness"), dict)
-            else None
-        ),
-    }
-    return summary
 
-
-def export_evaluation_rows_csv(rows: Iterable[dict[str, Any]], path: str | Path) -> Path:
-    row_list = list(rows)
-    target = Path(path)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    fieldnames = [
-        "experimentId",
-        "runId",
-        "questionId",
-        "instanceId",
-        "status",
-        "evaluationMethod",
-        "outcome",
-        "correctness",
-        "completeness",
-        "judgeProvider",
-        "judgeModel",
-        "evaluationInputTokens",
-        "evaluationOutputTokens",
-        "evaluationDurationMs",
-        "details",
-        "traceRef",
-    ]
-    with target.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in row_list:
-            payload = dict(row)
-            payload["details"] = json.dumps(payload.get("details", {}), ensure_ascii=False)
-            writer.writerow({name: payload.get(name) for name in fieldnames})
-    return target

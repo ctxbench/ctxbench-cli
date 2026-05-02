@@ -528,26 +528,74 @@ class EvaluationItemResult(BaseModel):
     contextBlock: list[str] | None = None
 
     def to_persisted_artifact(self) -> dict[str, Any]:
-        correctness = self.details.get("correctness") if isinstance(self.details, dict) else None
-        completeness = self.details.get("completeness") if isinstance(self.details, dict) else None
+        details = self.details if isinstance(self.details, dict) else {}
+        outcome = details.get("outcome") if isinstance(details.get("outcome"), dict) else {}
+        judges: list[dict[str, Any]] = details.get("judges") or []
+        judge_count = sum(1 for j in judges if isinstance(j, dict) and not j.get("error"))
+        eval_total = (
+            (self.evaluationInputTokens or 0) + (self.evaluationOutputTokens or 0)
+            if self.evaluationInputTokens is not None or self.evaluationOutputTokens is not None
+            else None
+        )
         return {
-            "experimentId": self.experimentId,
             "runId": self.runId,
-            "questionId": self.questionId,
+            "experimentId": self.experimentId,
             "instanceId": self.instanceId,
+            "questionId": self.questionId,
+            "strategy": self.executionStrategy,
             "status": self.status,
             "evaluationMethod": self.evaluationMethod,
-            "contextBlock": self.contextBlock if self.contextBlock else None,
-            "outcome": self.details.get("outcome") if isinstance(self.details, dict) else None,
-            "correctness": correctness.get("rating") if isinstance(correctness, dict) else None,
-            "completeness": completeness.get("rating") if isinstance(completeness, dict) else None,
-            "judgeProvider": self.evaluationJudgeProvider,
-            "judgeModel": self.evaluationJudgeModel,
+            "judgeCount": judge_count,
+            "outcome": outcome or None,
             "evaluationInputTokens": self.evaluationInputTokens,
             "evaluationOutputTokens": self.evaluationOutputTokens,
+            "evaluationTotalTokens": eval_total,
             "evaluationDurationMs": self.evaluationDurationMs,
-            "details": self.details,
+            "contextBlocks": self.contextBlock if self.contextBlock else None,
         }
+
+    def to_judge_votes(self, *, trace_ref: str | None = None) -> list[dict[str, Any]]:
+        details = self.details if isinstance(self.details, dict) else {}
+        judges: list[Any] = details.get("judges") or []
+        votes: list[dict[str, Any]] = []
+        for judge in judges:
+            if not isinstance(judge, dict):
+                continue
+            correctness = judge.get("correctness") or {}
+            completeness = judge.get("completeness") or {}
+            total_tokens = None
+            inp = judge.get("inputTokens")
+            out = judge.get("outputTokens")
+            if inp is not None or out is not None:
+                total_tokens = (inp or 0) + (out or 0)
+            votes.append({
+                "runId": self.runId,
+                "experimentId": self.experimentId,
+                "instanceId": self.instanceId,
+                "questionId": self.questionId,
+                "strategy": self.executionStrategy,
+                "judgeId": judge.get("judgeId"),
+                "provider": judge.get("provider"),
+                "model": judge.get("model"),
+                "status": judge.get("status") if isinstance(judge.get("status"), str) else ("error" if judge.get("error") else "evaluated"),
+                "criterias": {
+                    "correctness": {
+                        "rating": correctness.get("rating") if isinstance(correctness, dict) else None,
+                        "justification": correctness.get("justification") if isinstance(correctness, dict) else None,
+                    },
+                    "completeness": {
+                        "rating": completeness.get("rating") if isinstance(completeness, dict) else None,
+                        "justification": completeness.get("justification") if isinstance(completeness, dict) else None,
+                    },
+                },
+                "inputTokens": inp,
+                "outputTokens": out,
+                "totalTokens": total_tokens,
+                "durationMs": judge.get("durationMs"),
+                "error": judge.get("error"),
+                "traceRef": trace_ref,
+            })
+        return votes
 
 
 class EvaluationRunSummary(BaseModel):

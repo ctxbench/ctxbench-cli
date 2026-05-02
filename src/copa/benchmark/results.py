@@ -86,29 +86,62 @@ def serialize_run_result(
     return result.to_persisted_artifact(trace_ref=trace_ref)
 
 
+def _resolve_eval_trace_ref(
+    result: EvaluationRunResult,
+    *,
+    artifact_root: str | Path | None,
+    write_trace: bool,
+) -> str | None:
+    if artifact_root is None or not write_trace:
+        return None
+    return write_evaluation_trace_file(result, artifact_root)
+
+
 def serialize_evaluation_result(
     result: EvaluationRunResult,
     *,
     artifact_root: str | Path | None = None,
     write_trace: bool = True,
+    trace_ref: str | None = None,
 ) -> dict[str, Any]:
     item = result.items[0] if result.items else None
-    trace_ref = write_evaluation_trace_file(result, artifact_root) if artifact_root is not None and write_trace else None
+    resolved_trace_ref = trace_ref if trace_ref is not None else _resolve_eval_trace_ref(
+        result, artifact_root=artifact_root, write_trace=write_trace
+    )
     if item is None:
         return {
-            "experimentId": result.experimentId,
             "runId": result.runId,
-            "repeatIndex": result.metadata.repeatIndex,
+            "experimentId": result.experimentId,
+            "instanceId": result.metadata.instanceId or None,
             "questionId": result.questionId,
+            "strategy": result.metadata.strategy or None,
+            "repeatIndex": result.metadata.repeatIndex,
             "status": "not_evaluated",
             "evaluationMethod": None,
-            "details": {},
-            "traceRef": trace_ref,
+            "judgeCount": 0,
+            "outcome": None,
+            "evaluationInputTokens": None,
+            "evaluationOutputTokens": None,
+            "evaluationTotalTokens": None,
+            "evaluationDurationMs": None,
+            "contextBlocks": None,
+            "traceRef": resolved_trace_ref,
         }
     payload = item.to_persisted_artifact()
     payload["repeatIndex"] = result.metadata.repeatIndex
-    payload["traceRef"] = trace_ref
+    payload["traceRef"] = resolved_trace_ref
     return payload
+
+
+def serialize_judge_votes(
+    result: EvaluationRunResult,
+    *,
+    trace_ref: str | None = None,
+) -> list[dict[str, Any]]:
+    item = result.items[0] if result.items else None
+    if item is None:
+        return []
+    return item.to_judge_votes(trace_ref=trace_ref)
 
 
 def append_result_jsonl(
