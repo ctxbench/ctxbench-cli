@@ -767,6 +767,7 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
         "status": row.get("status"),
         "evaluationMethod": row.get("evaluationMethod"),
         "judgeCount": row.get("judgeCount"),
+        "judgeErrorCount": row.get("judgeErrorCount"),
         "outcome": {
             "correctness": {
                 "rating": correctness_obj.get("rating"),

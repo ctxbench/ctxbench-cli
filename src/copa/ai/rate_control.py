@@ -24,7 +24,9 @@ class RetryPolicy:
 class RateLimitConfig:
     enabled: bool = False
     tpm: int | None = None
+    rpm: int | None = None
     max_concurrency: int | None = None
+    min_interval_ms: int | None = None
     estimated_output_tokens: int = 512
     retry_policy: RetryPolicy = field(default_factory=RetryPolicy)
 
@@ -50,12 +52,18 @@ def extract_rate_limit_config(request: AIRequest, params: dict[str, Any] | None 
         honor_retry_after=bool(raw.get("honor_retry_after", True)),
     )
     tpm_value = raw.get("tpm")
+    rpm_value = raw.get("rpm")
     max_concurrency = raw.get("max_concurrency")
+    min_interval_ms_value = raw.get("min_interval_ms")
     return RateLimitConfig(
         enabled=bool(raw),
         tpm=int(tpm_value) if isinstance(tpm_value, (int, float)) and int(tpm_value) > 0 else None,
+        rpm=int(rpm_value) if isinstance(rpm_value, (int, float)) and int(rpm_value) > 0 else None,
         max_concurrency=int(max_concurrency)
         if isinstance(max_concurrency, (int, float)) and int(max_concurrency) > 0
+        else None,
+        min_interval_ms=int(min_interval_ms_value)
+        if isinstance(min_interval_ms_value, (int, float)) and int(min_interval_ms_value) > 0
         else None,
         estimated_output_tokens=max(1, int(raw.get("estimated_output_tokens", 512))),
         retry_policy=retry_policy,
@@ -119,6 +127,49 @@ class TokenRateLimiter:
             self._available = min(self.capacity, self._available + refund)
 
 
+class RequestRateLimiter:
+    """Token bucket that counts requests (not tokens) against an RPM limit."""
+
+    def __init__(
+        self,
+        rpm: int,
+        *,
+        clock: Callable[[], float] | None = None,
+        sleeper: Callable[[float], None] | None = None,
+    ) -> None:
+        self.capacity = max(1, rpm)
+        self.refill_rate_per_sec = self.capacity / 60.0
+        self._available = float(self.capacity)
+        self._clock = clock or time.monotonic
+        self._sleeper = sleeper or time.sleep
+        self._last_refill = self._clock()
+        self._lock = threading.Lock()
+
+    def _refill(self, now: float) -> None:
+        elapsed = max(0.0, now - self._last_refill)
+        if elapsed > 0:
+            self._available = min(self.capacity, self._available + (elapsed * self.refill_rate_per_sec))
+            self._last_refill = now
+
+    def acquire(self, *, on_wait: Callable[[int], None] | None = None) -> int:
+        total_wait_ms = 0
+        while True:
+            wait_seconds = 0.0
+            with self._lock:
+                now = self._clock()
+                self._refill(now)
+                if self._available >= 1:
+                    self._available -= 1
+                    return total_wait_ms
+                wait_seconds = (1 - self._available) / self.refill_rate_per_sec if self.refill_rate_per_sec > 0 else 0.0
+            if wait_seconds > 0:
+                wait_ms = max(0, int(wait_seconds * 1000))
+                if on_wait is not None:
+                    on_wait(wait_ms)
+                self._sleeper(wait_seconds)
+                total_wait_ms += wait_ms
+
+
 class ConcurrencyLimiter:
     def __init__(self, max_in_flight: int) -> None:
         self.max_in_flight = max(1, max_in_flight)
@@ -138,10 +189,16 @@ class ModelRateController:
         self,
         *,
         rate_limiter: TokenRateLimiter | None = None,
+        request_limiter: RequestRateLimiter | None = None,
         concurrency_limiter: ConcurrencyLimiter | None = None,
+        min_interval_ms: int | None = None,
     ) -> None:
         self.rate_limiter = rate_limiter
+        self.request_limiter = request_limiter
         self.concurrency_limiter = concurrency_limiter
+        self.min_interval_ms = min_interval_ms
+        self._last_call_time: float = 0.0
+        self._interval_lock = threading.Lock()
 
 
 class RateLimitCapacityError(RuntimeError):
@@ -160,7 +217,9 @@ class RateControlRegistry:
             if controller is None:
                 controller = ModelRateController(
                     rate_limiter=TokenRateLimiter(config.tpm) if config.tpm else None,
+                    request_limiter=RequestRateLimiter(config.rpm) if config.rpm else None,
                     concurrency_limiter=ConcurrencyLimiter(config.max_concurrency) if config.max_concurrency else None,
+                    min_interval_ms=config.min_interval_ms,
                 )
                 self._controllers[key] = controller
             return controller
@@ -307,6 +366,43 @@ class RateLimitedModelAdapter(ModelAdapter):
                 )
 
             waited_ms = controller.rate_limiter.acquire(reserved_tokens, on_wait=on_wait)
+
+        if controller.min_interval_ms is not None:
+            with controller._interval_lock:
+                gap_ms = controller.min_interval_ms - (time.monotonic() - controller._last_call_time) * 1000
+            if gap_ms > 0:
+                if trace is not None:
+                    trace.record_rate_limit_wait(
+                        provider_name=self.provider_name,
+                        model_name=self.model_name,
+                        wait_ms=int(gap_ms),
+                        reason="min_interval",
+                    )
+                time.sleep(gap_ms / 1000.0)
+            with controller._interval_lock:
+                controller._last_call_time = time.monotonic()
+
+        if controller.request_limiter is not None:
+            def on_rpm_wait(wait_ms: int) -> None:
+                if trace is not None:
+                    trace.record_rate_limit_wait(
+                        provider_name=self.provider_name,
+                        model_name=self.model_name,
+                        wait_ms=wait_ms,
+                        reason="rpm_budget",
+                    )
+                self._log_event(
+                    "THROTTLE",
+                    "Waiting for RPM budget",
+                    {
+                        "provider": self.provider_name,
+                        "model": self.model_name,
+                        "waitMs": wait_ms,
+                        **request_fields,
+                    },
+                )
+            controller.request_limiter.acquire(on_wait=on_rpm_wait)
+
         retry_policy = config.retry_policy
         attempt = 0
         limiter = controller.concurrency_limiter.slot() if controller.concurrency_limiter is not None else _nullcontext()

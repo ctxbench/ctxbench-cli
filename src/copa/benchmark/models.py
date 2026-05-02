@@ -53,6 +53,24 @@ class ExperimentDataset(BaseModel):
         return str(Path(self.root) / "questions.instance.json")
 
 
+class ModelEntry(BaseModel):
+    provider: str
+    name: str
+    params: dict[str, Any] = Field(default_factory=dict)
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "ModelEntry":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("ModelEntry requires an object input.")
+        return cls(
+            provider=str(data.get("provider", "")),
+            name=str(data.get("name", "")),
+            params=dict(data.get("params") or {}),
+        )
+
+
 class ExperimentParams(BaseModel):
     common: dict[str, Any] = Field(default_factory=dict)
     models: dict[str, dict[str, Any]] = Field(default_factory=dict)
@@ -188,6 +206,7 @@ class Experiment(BaseModel):
     dataset: ExperimentDataset
     scope: ExperimentScope = Field(default_factory=ExperimentScope)
     factors: dict[str, list[Any]]
+    models: dict[str, ModelEntry] = Field(default_factory=dict)
     params: ExperimentParams = Field(default_factory=ExperimentParams)
     expansion: ExperimentExpansion = Field(default_factory=ExperimentExpansion)
     evaluation: ExperimentEvaluation = Field(default_factory=ExperimentEvaluation)
@@ -206,6 +225,38 @@ class Experiment(BaseModel):
             payload["dataset"] = ExperimentDataset.model_validate(payload["dataset"])
         if "scope" in payload:
             payload["scope"] = ExperimentScope.model_validate(payload["scope"])
+
+        # New format: top-level "models" section present
+        if "models" in payload and isinstance(payload["models"], dict):
+            parsed_models: dict[str, ModelEntry] = {
+                k: ModelEntry.model_validate(v)
+                for k, v in payload["models"].items()
+                if isinstance(v, dict)
+            }
+            payload["models"] = parsed_models
+
+            # params at root is a flat common dict (no "common" key) → wrap for ExperimentParams
+            if "params" in payload and isinstance(payload["params"], dict):
+                if "common" not in payload["params"]:
+                    payload["params"] = {"common": payload["params"]}
+
+            # Resolve string judge references to EvaluationModelConfig dicts
+            if "evaluation" in payload and isinstance(payload["evaluation"], dict):
+                judges_raw = payload["evaluation"].get("judges", [])
+                resolved_judges: list[Any] = []
+                for j in judges_raw:
+                    if isinstance(j, str) and j in parsed_models:
+                        entry = parsed_models[j]
+                        resolved_judges.append({
+                            "provider": entry.provider,
+                            "model": entry.name,
+                            "temperature": entry.params.get("temperature"),
+                            "id": j,
+                        })
+                    elif isinstance(j, dict):
+                        resolved_judges.append(j)
+                payload["evaluation"] = {**payload["evaluation"], "judges": resolved_judges}
+
         if "params" in payload:
             payload["params"] = ExperimentParams.model_validate(payload["params"])
         if "expansion" in payload and isinstance(payload["expansion"], dict):
@@ -235,24 +286,36 @@ class Experiment(BaseModel):
         if self.execution.repeats < 1:
             raise ValueError("Experiment execution.repeats must be >= 1.")
         model_ids: set[str] = set()
-        for model in self.factors.get("model", []):
-            if not isinstance(model, dict):
-                raise ValueError("Experiment factors.model entries must be objects.")
-            provider = model.get("provider")
-            name = model.get("name")
-            if not isinstance(provider, str) or not provider.strip():
-                raise ValueError("Experiment factors.model[].provider must be a non-empty string.")
-            if not isinstance(name, str) or not name.strip():
-                raise ValueError("Experiment factors.model[].name must be a non-empty string.")
-            raw_model_id = model.get("id")
-            model_id = raw_model_id if raw_model_id is not None else name
-            if not isinstance(model_id, str) or not model_id.strip():
-                raise ValueError("Experiment factors.model[].id must be a non-empty string when provided.")
-            if raw_model_id is not None and not MODEL_ID_PATTERN.match(model_id):
-                raise ValueError("Experiment factors.model[].id must contain only letters, numbers, underscore, dot, or hyphen.")
-            if model_id in model_ids:
-                raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
-            model_ids.add(model_id)
+        if self.models:
+            # New format: factors.model contains string IDs referencing self.models
+            for model_ref in self.factors.get("model", []):
+                if not isinstance(model_ref, str) or not model_ref.strip():
+                    raise ValueError("Experiment factors.model entries must be non-empty strings in new format.")
+                if model_ref not in self.models:
+                    raise ValueError(f"factors.model references unknown model id: '{model_ref}'.")
+                if model_ref in model_ids:
+                    raise ValueError(f"Duplicate model id in experiment factors.model: {model_ref}")
+                model_ids.add(model_ref)
+        else:
+            # Old format: factors.model contains objects with provider/name
+            for model in self.factors.get("model", []):
+                if not isinstance(model, dict):
+                    raise ValueError("Experiment factors.model entries must be objects.")
+                provider = model.get("provider")
+                name = model.get("name")
+                if not isinstance(provider, str) or not provider.strip():
+                    raise ValueError("Experiment factors.model[].provider must be a non-empty string.")
+                if not isinstance(name, str) or not name.strip():
+                    raise ValueError("Experiment factors.model[].name must be a non-empty string.")
+                raw_model_id = model.get("id")
+                model_id = raw_model_id if raw_model_id is not None else name
+                if not isinstance(model_id, str) or not model_id.strip():
+                    raise ValueError("Experiment factors.model[].id must be a non-empty string when provided.")
+                if raw_model_id is not None and not MODEL_ID_PATTERN.match(model_id):
+                    raise ValueError("Experiment factors.model[].id must contain only letters, numbers, underscore, dot, or hyphen.")
+                if model_id in model_ids:
+                    raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
+                model_ids.add(model_id)
         for factor_name in ("strategy", "format"):
             invalid = [value for value in self.factors.get(factor_name, []) if not isinstance(value, str) or not value.strip()]
             if invalid:
@@ -531,7 +594,14 @@ class EvaluationItemResult(BaseModel):
         details = self.details if isinstance(self.details, dict) else {}
         outcome = details.get("outcome") if isinstance(details.get("outcome"), dict) else {}
         judges: list[dict[str, Any]] = details.get("judges") or []
-        judge_count = sum(1 for j in judges if isinstance(j, dict) and not j.get("error"))
+        judge_success_count = sum(1 for j in judges if isinstance(j, dict) and not j.get("error"))
+        judge_error_count = sum(1 for j in judges if isinstance(j, dict) and j.get("error"))
+        if judge_success_count == 0:
+            eval_status = "error"
+        elif judge_error_count > 0:
+            eval_status = "partial"
+        else:
+            eval_status = "evaluated"
         eval_total = (
             (self.evaluationInputTokens or 0) + (self.evaluationOutputTokens or 0)
             if self.evaluationInputTokens is not None or self.evaluationOutputTokens is not None
@@ -543,9 +613,10 @@ class EvaluationItemResult(BaseModel):
             "instanceId": self.instanceId,
             "questionId": self.questionId,
             "strategy": self.executionStrategy,
-            "status": self.status,
+            "status": eval_status,
             "evaluationMethod": self.evaluationMethod,
-            "judgeCount": judge_count,
+            "judgeCount": judge_success_count,
+            "judgeErrorCount": judge_error_count,
             "outcome": outcome or None,
             "evaluationInputTokens": self.evaluationInputTokens,
             "evaluationOutputTokens": self.evaluationOutputTokens,

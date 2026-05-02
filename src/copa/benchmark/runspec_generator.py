@@ -12,16 +12,34 @@ from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholde
 QUESTION_TEMPLATE_PATTERN = re.compile(r"\{([a-zA-Z_][a-zA-Z0-9_]*)\}")
 
 
-def resolve_params(experiment: Experiment, model_name: str) -> dict[str, Any]:
+def resolve_params(experiment: Experiment, model_name: str, model_id: str | None = None) -> dict[str, Any]:
     common = dict(experiment.params.common)
-    model_specific = experiment.params.models.get(model_name, {})
+    if model_id and experiment.models and model_id in experiment.models:
+        model_specific = dict(experiment.models[model_id].params)
+    else:
+        model_specific = experiment.params.models.get(model_name, {})
     params = resolve_env_placeholders({**common, **model_specific, "model_name": model_name})
     return apply_lattes_mcp_env_overrides(params)
 
 
 def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
-    models: list[dict[str, str]] = []
-    seen_ids: set[str] = set()
+    if experiment.models:
+        # New format: factors.model is a list of string IDs referencing experiment.models
+        models: list[dict[str, str]] = []
+        seen_ids: set[str] = set()
+        for model_id in experiment.factors.get("model", []):
+            if not isinstance(model_id, str):
+                continue
+            if model_id in seen_ids:
+                raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
+            seen_ids.add(model_id)
+            entry = experiment.models[model_id]
+            models.append({"id": model_id, "provider": entry.provider, "name": entry.name})
+        return models
+
+    # Old format: factors.model is a list of objects with provider/name
+    old_models: list[dict[str, str]] = []
+    seen_ids_old: set[str] = set()
     for item in experiment.factors.get("model", []):
         if not isinstance(item, dict):
             continue
@@ -34,11 +52,11 @@ def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
                 raise ValueError("Experiment factors.model[].id must be a non-empty string when provided.")
             if raw_model_id is not None and not MODEL_ID_PATTERN.match(model_id):
                 raise ValueError("Experiment factors.model[].id must contain only letters, numbers, underscore, dot, or hyphen.")
-            if model_id in seen_ids:
+            if model_id in seen_ids_old:
                 raise ValueError(f"Duplicate model id in experiment factors.model: {model_id}")
-            seen_ids.add(model_id)
-            models.append({"id": model_id, "provider": provider, "name": name})
-    return models
+            seen_ids_old.add(model_id)
+            old_models.append({"id": model_id, "provider": provider, "name": name})
+    return old_models
 
 
 def effective_formats_for_strategy(strategy_name: str, formats: list[Any]) -> list[str]:
@@ -89,7 +107,7 @@ def generate_runspecs(
                 model_name = model["name"]
                 for strategy_name in strategies:
                     for format_name in effective_formats_for_strategy(strategy_name, formats):
-                        params = resolve_params(experiment, model_name)
+                        params = resolve_params(experiment, model_name, model_id=model_id)
                         for repeat_index in range(1, experiment.execution.repeats + 1):
                             canonical_id = canonical_run_identity(
                                 experiment.id,
