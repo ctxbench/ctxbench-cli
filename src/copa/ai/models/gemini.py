@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from time import perf_counter
 from typing import Any
 
@@ -22,6 +23,7 @@ class GeminiModel(ModelAdapter):
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         cached_input_tokens = self._extract_cached_input_tokens(response)
+        reasoning_tokens = self._extract_reasoning_tokens(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -30,8 +32,9 @@ class GeminiModel(ModelAdapter):
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             cached_input_tokens=cached_input_tokens,
+            reasoning_tokens=reasoning_tokens,
             duration_ms=duration_ms,
-            metadata={"provider": "gemini", "model": request.model_name},
+            metadata={"provider": "google", "model": request.model_name},
             continuation_state=self._build_continuation_state(response),
         )
 
@@ -65,8 +68,9 @@ class GeminiModel(ModelAdapter):
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         cached_input_tokens = self._extract_cached_input_tokens(response)
+        reasoning_tokens = self._extract_reasoning_tokens(response)
         metadata = {
-            "provider": "gemini",
+            "provider": "google",
             "model": request.model_name,
             "native_mcp": self._extract_native_mcp_metadata(response),
         }
@@ -78,6 +82,7 @@ class GeminiModel(ModelAdapter):
             output_tokens=output_tokens,
             total_tokens=total_tokens,
             cached_input_tokens=cached_input_tokens,
+            reasoning_tokens=reasoning_tokens,
             duration_ms=duration_ms,
             metadata=metadata,
             continuation_state=self._build_continuation_state(response),
@@ -141,6 +146,9 @@ class GeminiModel(ModelAdapter):
             if isinstance(schema, dict):
                 config["response_mime_type"] = "application/json"
                 config["response_json_schema"] = schema
+        extra_config = params.get("config")
+        if isinstance(extra_config, dict):
+            config.update(self._normalize_config_keys(extra_config))
         if sdk_types is None:
             return config
         return sdk_types.GenerateContentConfig(**config)
@@ -293,6 +301,11 @@ class GeminiModel(ModelAdapter):
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
 
+    def _extract_reasoning_tokens(self, response: Any) -> int | None:
+        usage = getattr(response, "usage_metadata", None)
+        value = getattr(usage, "thoughts_token_count", None) if usage else None
+        return value if isinstance(value, int) and not isinstance(value, bool) else None
+
     def _extract_cached_input_tokens(self, response: Any) -> int | None:
         usage = getattr(response, "usage_metadata", None)
         if usage is None:
@@ -370,6 +383,14 @@ class GeminiModel(ModelAdapter):
                 )
             )
         return sdk_types.Part(text=str(payload))
+
+    def _normalize_config_keys(self, d: dict[str, Any]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for k, v in d.items():
+            s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", k)
+            snake_k = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+            result[snake_k] = self._normalize_config_keys(v) if isinstance(v, dict) else v
+        return result
 
     def _merged_params(self, request: AIRequest) -> dict[str, Any]:
         params = dict(self.params)

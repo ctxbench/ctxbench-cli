@@ -34,6 +34,7 @@ class AIMetrics(BaseModel):
     cachedInputTokens: int | None = None
     cacheReadInputTokens: int | None = None
     cacheCreationInputTokens: int | None = None
+    reasoningTokens: int | None = None
     questionTokensEstimated: int | None = None
     estimatedInputTokens: int | None = None
     estimatedOutputTokens: int | None = None
@@ -87,6 +88,7 @@ class TraceCollector:
         cached_input_tokens: int | None = None,
         cache_read_input_tokens: int | None = None,
         cache_creation_input_tokens: int | None = None,
+        reasoning_tokens: int | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
         self.events.append(
@@ -107,6 +109,7 @@ class TraceCollector:
             self.metrics.cacheCreationInputTokens,
             cache_creation_input_tokens,
         )
+        self.metrics.reasoningTokens = self._sum_optional(self.metrics.reasoningTokens, reasoning_tokens)
         if total_tokens is not None:
             self.metrics.totalTokens = self._sum_optional(self.metrics.totalTokens, total_tokens)
         elif input_tokens is not None and output_tokens is not None:

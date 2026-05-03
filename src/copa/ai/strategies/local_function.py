@@ -61,6 +61,7 @@ class LocalFunctionStrategy(StrategyAdapter):
                     cached_input_tokens=model_response.cached_input_tokens,
                     cache_read_input_tokens=model_response.cache_read_input_tokens,
                     cache_creation_input_tokens=model_response.cache_creation_input_tokens,
+                    reasoning_tokens=model_response.reasoning_tokens,
                     metadata=model_response.metadata,
                 )
                 if not model_response.requested_tool_calls:
@@ -72,6 +73,7 @@ class LocalFunctionStrategy(StrategyAdapter):
                         "cachedInputTokens": trace.metrics.cachedInputTokens,
                         "cacheReadInputTokens": trace.metrics.cacheReadInputTokens,
                         "cacheCreationInputTokens": trace.metrics.cacheCreationInputTokens,
+                        "reasoningTokens": trace.metrics.reasoningTokens,
                     }
                     usage = {key: value for key, value in usage.items() if value is not None}
                     return AIResult(

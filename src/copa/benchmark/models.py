@@ -596,7 +596,9 @@ class EvaluationItemResult(BaseModel):
         judges: list[dict[str, Any]] = details.get("judges") or []
         judge_success_count = sum(1 for j in judges if isinstance(j, dict) and not j.get("error"))
         judge_error_count = sum(1 for j in judges if isinstance(j, dict) and j.get("error"))
-        if judge_success_count == 0:
+        if self.status == "skipped":
+            eval_status = "skipped"
+        elif judge_success_count == 0:
             eval_status = "error"
         elif judge_error_count > 0:
             eval_status = "partial"

@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from copa.benchmark.models import EvaluationRunResult, EvaluationTrace, RunResult, RunTrace
-from copa.util.fs import write_json
+from copa.util.fs import load_json, write_json
 from copa.util.jsonl import append_jsonl, write_jsonl
 
 
@@ -61,18 +61,35 @@ def write_evaluation_trace_file(result: EvaluationRunResult, artifact_root: str 
     item = result.items[0] if result.items else None
     if item is None or not _has_evaluation_trace_payload(item.evaluationTrace):
         return None
+    root = Path(artifact_root)
+    relative_path = Path("traces") / "evals" / f"{result.runId}.json"
+    existing_file = root / relative_path
+    new_trace = item.evaluationTrace.model_dump(mode="json")
+    if existing_file.exists():
+        try:
+            existing = load_json(existing_file)
+            old_ai = existing.get("trace", {}).get("aiTrace", {})
+            new_ai = new_trace.get("aiTrace", {})
+            new_ai["judges"] = old_ai.get("judges", []) + new_ai.get("judges", [])
+            new_trace["aiTrace"] = new_ai
+            def _as_list(v: object) -> list:
+                if v is None:
+                    return []
+                return v if isinstance(v, list) else [v]
+            old_raw = existing.get("trace", {}).get("rawResponse")
+            new_raw = new_trace.get("rawResponse")
+            if old_raw is not None or new_raw is not None:
+                new_trace["rawResponse"] = _as_list(old_raw) + _as_list(new_raw)
+        except Exception:
+            pass
     payload = {
         "experimentId": result.experimentId,
         "runId": result.runId,
         "task": "evals",
-        "trace": item.evaluationTrace.model_dump(mode="json"),
+        "trace": new_trace,
     }
-    return _write_trace_payload(
-        artifact_root=artifact_root,
-        task="evals",
-        run_id=result.runId,
-        payload=payload,
-    )
+    write_json(root / relative_path, payload)
+    return relative_path.as_posix()
 
 
 def serialize_run_result(

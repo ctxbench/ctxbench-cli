@@ -287,8 +287,8 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
 
     assert details["outcome"]["correctness"]["rating"] == "meets"
     assert details["outcome"]["completeness"]["rating"] == "partial"
-    assert details["outcome"]["correctness"]["consensus"] is True
-    assert details["outcome"]["completeness"]["consensus"] is True
+    assert details["outcome"]["correctness"]["agreement"] is True
+    assert details["outcome"]["completeness"]["agreement"] is True
     assert len(details["judges"]) == 1
     assert judge_info.used is True
 
@@ -348,9 +348,9 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
     )
 
     assert details["outcome"]["correctness"]["rating"] == "meets"
-    assert details["outcome"]["correctness"]["consensus"] is False
+    assert details["outcome"]["correctness"]["agreement"] is False
     assert details["outcome"]["completeness"]["rating"] == "partial"
-    assert details["outcome"]["completeness"]["consensus"] is True
+    assert details["outcome"]["completeness"]["agreement"] is True
     assert len(details["judges"]) == 2
     assert judge_info.used is True
 
@@ -374,6 +374,7 @@ def test_judge_request_injects_structured_output_schema():
             },
         )(),
         prompt="Judge this answer.",
+        answer_text="The candidate answer.",
         run_id="run-1",
         exp_id="exp-1",
         instance_id="cv-demo",
@@ -388,7 +389,7 @@ def test_judge_request_injects_structured_output_schema():
     assert model.last_request is not None
     assert model.last_request.params["structured_output"]["schema"]["type"] == "object"
     assert model.last_request.params["structured_output"]["schema"]["required"] == ["correctness", "completeness"]
-    assert model.last_request.params["prompt_cache_key"].startswith("jud:q_summar")
+    assert model.last_request.params["prompt_cache_key"].startswith("jud:ctx:")
 
 
 def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
@@ -489,34 +490,37 @@ def test_openai_model_build_payload_includes_prompt_cache_fields():
     assert payload["prompt_cache_retention"] == "24h"
 
 
-def test_evaluate_run_result_warns_and_ignores_missing_context_block(tmp_path, monkeypatch):
-    dataset = write_mock_dataset(tmp_path / "dataset")
+def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
+    # Add a question whose contextBlock references a block that doesn't exist in blocks.json
+    dataset_root = tmp_path / "dataset"
+    dataset = write_mock_dataset(dataset_root)
+    questions_path = dataset_root / "questions.json"
+    questions = json.loads(questions_path.read_text(encoding="utf-8"))
+    questions["questions"].append({
+        "id": "q_missing",
+        "question": "What is the missing answer?",
+        "tags": [],
+        "validation": {"type": "judge"},
+        "contextBlock": ["nonexistent_block"],
+    })
+    questions_path.write_text(json.dumps(questions), encoding="utf-8")
+    instances_path = dataset_root / "questions.instance.json"
+    instances = json.loads(instances_path.read_text(encoding="utf-8"))
+    instances["instances"][0]["questions"].append({"id": "q_missing"})
+    instances_path.write_text(json.dumps(instances), encoding="utf-8")
+
     provider = DatasetProvider.from_dataset(dataset)
-    from copa.benchmark import evaluation as evaluation_module
-
-    def fake_judge_request(**kwargs):
-        return (
-            {
-                "correctness": {"rating": "meets", "justification": "ok"},
-                "completeness": {"rating": "meets", "justification": "ok"},
-            },
-            EvaluationJudgeInfo(used=True, role="judge", provider="mock", model="judge"),
-            EvaluationTrace(),
-        )
-
-    monkeypatch.setattr(evaluation_module, "_judge_request", fake_judge_request)
-
     events: list[tuple[str, str, dict[str, object]]] = []
     result = RunResult(
-        runId="run-1",
+        runId="run-skip",
         experimentId="exp-1",
         dataset=dataset,
-        questionId="q_year",
-        question="In which year did the researcher obtain their PhD?",
-        questionTemplate="In which year did the researcher obtain their PhD?",
-        questionTags=["objective", "simple"],
+        questionId="q_missing",
+        question="What is the missing answer?",
+        questionTemplate="What is the missing answer?",
+        questionTags=[],
         validationType="judge",
-        contextBlock=["summary", "missing.path"],
+        contextBlock=[],
         parameters={},
         instanceId="cv-demo",
         provider="mock",
@@ -524,15 +528,15 @@ def test_evaluate_run_result_warns_and_ignores_missing_context_block(tmp_path, m
         strategy="inline",
         format="json",
         repeatIndex=1,
-        answer="2020",
+        answer="unknown",
         status="success",
         timing=RunTiming(startedAt="2026-01-01T00:00:00Z", finishedAt="2026-01-01T00:00:01Z", durationMs=1000),
         usage={},
         metricsSummary={},
         trace=RunTrace(),
         metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|mock|mock|inline|json|1",
-            questionId="q_year",
+            canonicalId="exp-1|q_missing|cv-demo|mock|mock|inline|json|1",
+            questionId="q_missing",
             instanceId="cv-demo",
             provider="mock",
             modelName="mock",
@@ -551,8 +555,13 @@ def test_evaluate_run_result_warns_and_ignores_missing_context_block(tmp_path, m
     )
 
     assert evaluated is not None
-    assert evaluated.items[0].details["contextBlocks"] == []
-    assert any(label == "WARN" and fields.get("questionId") == "q_year" for label, _message, fields in events)
+    item = evaluated.items[0]
+    assert item.status == "skipped"
+    assert "nonexistent_block" in item.details.get("error", "")
+    artifact = item.to_persisted_artifact()
+    assert artifact["status"] == "skipped"
+    assert artifact["judgeCount"] == 0
+    assert any(label == "SKIP" and fields.get("questionId") == "q_missing" for label, _message, fields in events)
 
 
 def test_openai_model_extracts_cache_metadata():

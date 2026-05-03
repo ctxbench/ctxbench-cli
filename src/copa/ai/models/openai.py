@@ -16,6 +16,7 @@ class OpenAIModel(ModelAdapter):
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         cached_input_tokens = self._extract_cached_input_tokens(response)
+        reasoning_tokens = self._extract_reasoning_tokens(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -25,6 +26,7 @@ class OpenAIModel(ModelAdapter):
             total_tokens=total_tokens,
             cached_input_tokens=cached_input_tokens,
             cache_read_input_tokens=cached_input_tokens,
+            reasoning_tokens=reasoning_tokens,
             duration_ms=duration_ms,
             metadata={
                 "provider": "openai",
@@ -67,6 +69,8 @@ class OpenAIModel(ModelAdapter):
             payload["prompt_cache_key"] = params["prompt_cache_key"]
         if "prompt_cache_retention" in params:
             payload["prompt_cache_retention"] = params["prompt_cache_retention"]
+        if "reasoning" in params:
+            payload["reasoning"] = params["reasoning"]
         structured_output = params.get("structured_output")
         if isinstance(structured_output, dict):
             schema = structured_output.get("schema")
@@ -171,6 +175,22 @@ class OpenAIModel(ModelAdapter):
         prompt_token_details = getattr(usage, "prompt_tokens_details", None)
         return self._extract_cached_tokens_from_details(prompt_token_details)
 
+    def _extract_reasoning_tokens(self, response: Any) -> int | None:
+        usage = getattr(response, "usage", None)
+        details = getattr(usage, "output_tokens_details", None)
+        if details is None:
+            return None
+        value = getattr(details, "reasoning_tokens", None)
+        if isinstance(value, int) and not isinstance(value, bool):
+            return value
+        if isinstance(details, list):
+            for item in details:
+                if isinstance(item, dict) and item.get("type") == "reasoning_tokens":
+                    v = item.get("token_count")
+                    if isinstance(v, int) and not isinstance(v, bool):
+                        return v
+        return None
+
     def _extract_cached_tokens_from_details(self, details: Any) -> int | None:
         if details is None:
             return None
@@ -230,7 +250,13 @@ class OpenAIModel(ModelAdapter):
     def _build_continuation_state(self, response: Any) -> dict[str, Any]:
         output = getattr(response, "output", None)
         if isinstance(output, list):
-            return {"response_output": [self._normalize_raw_response(item) for item in output]}
+            items = []
+            for item in output:
+                d = self._normalize_raw_response(item)
+                if isinstance(d, dict):
+                    d.pop("status", None)
+                items.append(d)
+            return {"response_output": items}
         return {}
 
     def _parse_json_arguments(self, value: Any) -> dict[str, Any]:

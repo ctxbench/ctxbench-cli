@@ -82,6 +82,7 @@ class Engine:
                     cached_input_tokens=model_response.cached_input_tokens,
                     cache_read_input_tokens=model_response.cache_read_input_tokens,
                     cache_creation_input_tokens=model_response.cache_creation_input_tokens,
+                    reasoning_tokens=model_response.reasoning_tokens,
                     metadata=model_response.metadata,
                 )
                 usage = {
@@ -91,6 +92,7 @@ class Engine:
                     "cachedInputTokens": model_response.cached_input_tokens,
                     "cacheReadInputTokens": model_response.cache_read_input_tokens,
                     "cacheCreationInputTokens": model_response.cache_creation_input_tokens,
+                    "reasoningTokens": model_response.reasoning_tokens,
                 }
                 usage = {key: value for key, value in usage.items() if value is not None}
                 result = AIResult(

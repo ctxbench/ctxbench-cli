@@ -27,7 +27,7 @@ EVALUATION_SYSTEM_INSTRUCTION = (
     "Return only the requested JSON."
 )
 
-JUDGE_PROMPT = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided curriculum context and criteria.
+JUDGE_PROMPT_PREFIX = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided curriculum context and criteria.
 You must be objective, consistent, and conservative in your evaluation.
 Do NOT use external knowledge. Only use the provided curriculum context.
 Your output must strictly follow the requested JSON format.
@@ -80,7 +80,9 @@ Return ONLY a JSON object in the following format:
 
 # Curriculum Context
 {curriculum_context}
+"""
 
+JUDGE_PROMPT_SUFFIX = """
 # Question
 {question}
 
@@ -88,6 +90,8 @@ Return ONLY a JSON object in the following format:
 {answer}
 
 """
+
+JUDGE_PROMPT = JUDGE_PROMPT_PREFIX + JUDGE_PROMPT_SUFFIX
 
 _RATING_ALIASES: dict[str, str] = {
     "meets": "meets",
@@ -185,18 +189,23 @@ def build_evaluation_job(
     if validation_type != "judge":
         raise ValueError(f"Unsupported validation type: {validation_type}")
 
-    blocks = provider.get_context_blocks(result.instanceId)
-    context_payload, found = _get_question_block(blocks, result.questionId)
-    if not found and event_logger is not None:
-        event_logger(
-            "WARN",
-            "Context block not found for question; evaluation may be inaccurate",
-            {
-                "runId": result.runId,
-                "questionId": result.questionId,
-                "instanceId": result.instanceId,
-            },
-        )
+    question = provider.get_question(result.questionId)
+    block_ids = list(question.contextBlock)
+    all_blocks = provider.get_context_blocks(result.instanceId)
+    context_payload, missing = _get_context_blocks(all_blocks, block_ids)
+    if missing:
+        if event_logger is not None:
+            event_logger(
+                "SKIP",
+                "Context blocks not found, skipping evaluation job",
+                {
+                    "runId": result.runId,
+                    "questionId": result.questionId,
+                    "instanceId": result.instanceId,
+                    "missingBlocks": missing,
+                },
+            )
+        return None
     curriculum_context = _format_curriculum_context(context_payload)
     prompt = JUDGE_PROMPT.format(
         question=rendered_question,
@@ -227,10 +236,11 @@ def build_evaluation_jobs(
     ordered_results = sorted(
         list(results),
         key=lambda item: (
-            str(item.provider),
-            str(item.modelName or ""),
+            tuple(sorted(item.contextBlock or [])),
             str(item.instanceId),
             str(item.questionId),
+            str(item.provider),
+            str(item.modelName or ""),
             str(item.runId),
         ),
     )
@@ -257,6 +267,7 @@ def _judge_request(
     *,
     config: EvaluationModelConfig,
     prompt: str,
+    answer_text: str,
     run_id: str,
     exp_id: str,
     instance_id: str,
@@ -277,19 +288,29 @@ def _judge_request(
             "schema": JUDGE_STRUCTURED_OUTPUT_SCHEMA,
         },
     )
-    if config.provider.lower().startswith("openai"):
+    provider_lower = config.provider.lower()
+    if provider_lower.startswith("openai"):
         request_params.setdefault(
             "prompt_cache_key",
             build_judge_prompt_cache_key(
                 model_name=config.model,
                 instance_id=instance_id,
-                question_id=question_id,
                 context=curriculum_context,
-                question=question_text,
             ),
         )
+    is_claude = provider_lower.startswith("anthropic") or provider_lower.startswith("claude")
+    if is_claude:
+        request_params["prompt_cache_prefix"] = JUDGE_PROMPT_PREFIX.format(
+            curriculum_context=curriculum_context
+        )
+        effective_prompt = JUDGE_PROMPT_SUFFIX.format(
+            question=question_text,
+            answer=answer_text,
+        )
+    else:
+        effective_prompt = prompt
     request = AIRequest(
-        question=prompt,
+        question=effective_prompt,
         context="{}",
         provider_name=config.provider,
         model_name=config.model,
@@ -306,7 +327,7 @@ def _judge_request(
     )
     model_input = ModelInput(
         system_instruction=EVALUATION_SYSTEM_INSTRUCTION,
-        prompt=prompt,
+        prompt=effective_prompt,
     )
     result = engine.execute_model_input(request, model_input)
     trace = EvaluationTrace(
@@ -358,6 +379,7 @@ def _evaluate_judge(
         payload, judge_info, trace = _judge_request(
             config=config,
             prompt=prompt,
+            answer_text=result.answer,
             run_id=result.runId,
             exp_id=result.experimentId,
             instance_id=result.instanceId,
@@ -477,6 +499,46 @@ def evaluation_from_judge_payload(
     )
 
 
+def _build_skipped_evaluation_result(
+    result: RunResult,
+    question_text: str,
+    *,
+    missing_blocks: list[str],
+) -> EvaluationRunResult:
+    error_msg = f"Context blocks not found: {', '.join(missing_blocks)}"
+    details: dict[str, Any] = {
+        "evaluationMethod": "judge",
+        "contextBlocks": [],
+        "error": error_msg,
+    }
+    item = EvaluationItemResult(
+        experimentId=result.experimentId,
+        runId=result.runId,
+        questionId=result.questionId,
+        instanceId=result.instanceId,
+        question=question_text,
+        evaluationMode="judge",
+        status="skipped",
+        evaluationMethod="judge",
+        details=details,
+        executionModel=result.modelName,
+        executionStrategy=result.strategy,
+        executionFormat=result.format,
+        executionInputTokens=result.usage.get("inputTokens"),
+        executionOutputTokens=result.usage.get("outputTokens"),
+        executionDurationMs=result.timing.durationMs,
+        questionTags=list(result.questionTags),
+    )
+    return EvaluationRunResult(
+        experimentId=result.experimentId,
+        runId=result.runId,
+        questionId=result.questionId,
+        items=[item],
+        summary=EvaluationRunSummary(itemCount=1),
+        metadata=result.metadata,
+    )
+
+
 def _build_evaluation_result(
     result: RunResult,
     *,
@@ -529,14 +591,25 @@ def _build_evaluation_result(
     )
 
 
-def _get_question_block(blocks: dict[str, Any], question_id: str) -> tuple[dict[str, Any], bool]:
-    inner = blocks.get("blocks", {})
-    if not isinstance(inner, dict):
-        return {}, False
-    block = inner.get(question_id)
-    if block is None:
-        return {}, False
-    return {question_id: block}, True
+def _get_context_blocks(
+    blocks: dict[str, Any],
+    block_ids: list[str],
+) -> tuple[dict[str, Any], list[str]]:
+    """Returns (found_blocks_dict, missing_block_ids).
+
+    Supports both wrapped format {"blocks": {id: block, ...}} and flat {id: block, ...}.
+    """
+    nested = blocks.get("blocks")
+    inner: dict[str, Any] = nested if isinstance(nested, dict) else blocks
+    found: dict[str, Any] = {}
+    missing: list[str] = []
+    for bid in block_ids:
+        block = inner.get(bid)
+        if block is None:
+            missing.append(bid)
+        else:
+            found[bid] = block
+    return found, missing
 
 
 def _format_curriculum_context(context_payload: dict[str, Any]) -> str:
@@ -546,8 +619,8 @@ def _format_curriculum_context(context_payload: dict[str, Any]) -> str:
     for block_id, block in context_payload.items():
         if isinstance(block, dict):
             title = block.get("title", block_id)
-            summary = block.get("summary", "")
-            parts.append(f"## {title}\n{summary}")
+            content = block.get("content", "")
+            parts.append(f"## {title}\n{content}")
         else:
             parts.append(str(block))
     return "\n\n".join(parts)
@@ -581,12 +654,12 @@ def _aggregate_votes(votes: list[dict[str, Any]], criterion: str) -> dict[str, A
         elif isinstance(payload, str):
             ratings.append(_normalize_rating(payload))
     if not ratings:
-        return {"rating": "misses", "consensus": True}
+        return {"rating": "misses", "agreement": True}
     counter: dict[str, int] = {}
     for r in ratings:
         counter[r] = counter.get(r, 0) + 1
     best = max(counter, key=lambda k: (counter[k], _RATING_ORDER.get(k, 0)))
-    return {"rating": best, "consensus": len(counter) == 1}
+    return {"rating": best, "agreement": counter[best] > len(ratings) / 2}
 
 
 def _merge_judge_infos(judge_infos: list[EvaluationJudgeInfo]) -> EvaluationJudgeInfo:
@@ -650,18 +723,23 @@ def evaluate_run_result(
             },
         )
     if validation_type == "judge":
-        blocks = provider.get_context_blocks(result.instanceId)
-        context_payload, found = _get_question_block(blocks, result.questionId)
-        if not found and event_logger is not None:
-            event_logger(
-                "WARN",
-                "Context block not found for question; evaluation may be inaccurate",
-                {
-                    "runId": result.runId,
-                    "questionId": result.questionId,
-                    "instanceId": result.instanceId,
-                },
-            )
+        question = provider.get_question(result.questionId)
+        block_ids = list(question.contextBlock)
+        all_blocks = provider.get_context_blocks(result.instanceId)
+        context_payload, missing = _get_context_blocks(all_blocks, block_ids)
+        if missing:
+            if event_logger is not None:
+                event_logger(
+                    "SKIP",
+                    "Context blocks not found, evaluation skipped",
+                    {
+                        "runId": result.runId,
+                        "questionId": result.questionId,
+                        "instanceId": result.instanceId,
+                        "missingBlocks": missing,
+                    },
+                )
+            return _build_skipped_evaluation_result(result, rendered_question, missing_blocks=missing)
         details, judge_info, trace = _evaluate_judge(
             result,
             rendered_question,
@@ -709,10 +787,11 @@ def evaluate_run_results(
     ordered_results = sorted(
         list(results),
         key=lambda item: (
-            str(item.provider),
-            str(item.modelName or ""),
+            tuple(sorted(item.contextBlock or [])),
             str(item.instanceId),
             str(item.questionId),
+            str(item.provider),
+            str(item.modelName or ""),
             str(item.runId),
         ),
     )
@@ -771,11 +850,11 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
         "outcome": {
             "correctness": {
                 "rating": correctness_obj.get("rating"),
-                "consensus": correctness_obj.get("consensus"),
+                "agreement": correctness_obj.get("agreement"),
             },
             "completeness": {
                 "rating": completeness_obj.get("rating"),
-                "consensus": completeness_obj.get("consensus"),
+                "agreement": completeness_obj.get("agreement"),
             },
         },
     }

@@ -120,6 +120,17 @@ def _judge_identifiers(config: EvaluationModelConfig) -> set[str]:
 # Eval status tracking (replaces checkpoint)
 # ---------------------------------------------------------------------------
 
+def _load_skipped_run_ids(path: Path) -> set[str]:
+    """Returns runIds already recorded as 'skipped' in evals.jsonl."""
+    if not path.exists():
+        return set()
+    return {
+        str(item.get("runId", ""))
+        for item in read_jsonl(path)
+        if item.get("status") == "skipped" and item.get("runId")
+    }
+
+
 def _load_votes_index(path: Path) -> dict[str, list[dict[str, Any]]]:
     """Returns {runId: [vote dicts]} from judge_votes.jsonl."""
     if not path.exists():
@@ -254,12 +265,16 @@ def eval_command(
         run_id: {v.get("judgeId", "") for v in votes if v.get("status") != "error"}
         for run_id, votes in votes_index.items()
     }
+    skipped_run_ids: set[str] = _load_skipped_run_ids(evals_path) if not force else set()
     has_duplicates = False
 
     # Group pending runs by which judges they still need.
     # A run is pending if at least one selected judge hasn't voted for it yet.
+    # Runs already marked as "skipped" (missing context blocks) are excluded unless --force.
     groups: dict[tuple[str, ...], tuple[list[RunResult], list[EvaluationModelConfig]]] = {}
     for r in results:
+        if not force and r.runId in skipped_run_ids:
+            continue
         if force:
             missing = judges
         else:
@@ -290,18 +305,24 @@ def eval_command(
             progress_tracker.advance()
             return
         item = evaluated.items[0] if evaluated.items else None
-        existing = votes_index.get(evaluated.runId)
-        if item is not None and existing:
-            _merge_existing_votes(item.details, existing)
-            nonlocal has_duplicates
-            has_duplicates = True
+        is_skipped = item is not None and item.status == "skipped"
+        if not is_skipped:
+            existing = votes_index.get(evaluated.runId)
+            if item is not None and existing:
+                _merge_existing_votes(item.details, existing)
+                nonlocal has_duplicates
+                has_duplicates = True
         trace_ref = _resolve_eval_trace_ref(evaluated, artifact_root=artifact_root, write_trace=write_traces)
         payload = serialize_evaluation_result(evaluated, trace_ref=trace_ref)
-        votes = serialize_judge_votes(evaluated, trace_ref=trace_ref)
         append_jsonl(evals_path, [payload])
-        if votes:
-            append_jsonl(votes_path, votes)
-        logger.phase("WRITE", "Evaluation written", run=evaluated.runId)
+        if not is_skipped:
+            votes = serialize_judge_votes(evaluated, trace_ref=trace_ref)
+            if votes:
+                append_jsonl(votes_path, votes)
+        if is_skipped:
+            logger.phase("SKIP", "Evaluation skipped (missing context blocks)", run=evaluated.runId)
+        else:
+            logger.phase("WRITE", "Evaluation written", run=evaluated.runId)
         progress_tracker.advance()
 
     if batch:

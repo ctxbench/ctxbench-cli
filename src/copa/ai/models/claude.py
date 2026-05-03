@@ -16,6 +16,7 @@ class ClaudeModel(ModelAdapter):
         duration_ms = max(0, int((perf_counter() - started_at) * 1000))
         input_tokens, output_tokens, total_tokens = self._extract_usage(response)
         cache_read_input_tokens, cache_creation_input_tokens = self._extract_cache_usage(response)
+        reasoning_tokens = self._extract_reasoning_tokens(response)
         return ModelResponse(
             text=self._extract_text(response),
             requested_tool_calls=self._extract_tool_calls(response),
@@ -26,9 +27,10 @@ class ClaudeModel(ModelAdapter):
             cached_input_tokens=cache_read_input_tokens,
             cache_read_input_tokens=cache_read_input_tokens,
             cache_creation_input_tokens=cache_creation_input_tokens,
+            reasoning_tokens=reasoning_tokens,
             duration_ms=duration_ms,
             metadata={
-                "provider": "claude",
+                "provider": "anthropic",
                 "model": request.model_name,
                 **self._extract_native_mcp_metadata(response),
             },
@@ -46,8 +48,14 @@ class ClaudeModel(ModelAdapter):
         params = self._merged_params(request)
         payload: dict[str, Any] = {
             "model": request.model_name,
-            "system": model_input.system_instruction,
-            "messages": self._build_messages(model_input),
+            "system": [
+                {
+                    "type": "text",
+                    "text": model_input.system_instruction,
+                    "cache_control": {"type": "ephemeral"},
+                }
+            ],
+            "messages": self._build_messages(model_input, params),
             "max_tokens": params.get("max_tokens", 1024),
         }
         metadata = self._request_metadata(request)
@@ -80,8 +88,16 @@ class ClaudeModel(ModelAdapter):
                 }
         return payload
 
-    def _build_messages(self, model_input: ModelInput) -> list[dict[str, Any]]:
-        messages: list[dict[str, Any]] = [{"role": "user", "content": model_input.prompt}]
+    def _build_messages(self, model_input: ModelInput, params: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+        prefix = (params or {}).get("prompt_cache_prefix")
+        if prefix:
+            user_content: str | list[dict[str, Any]] = [
+                {"type": "text", "text": prefix, "cache_control": {"type": "ephemeral"}},
+                {"type": "text", "text": model_input.prompt},
+            ]
+        else:
+            user_content = model_input.prompt
+        messages: list[dict[str, Any]] = [{"role": "user", "content": user_content}]
         assistant_content = model_input.continuation_state.get("assistant_content")
         if isinstance(assistant_content, list) and assistant_content:
             messages.append({"role": "assistant", "content": assistant_content})
@@ -159,6 +175,14 @@ class ClaudeModel(ModelAdapter):
         if total_tokens is None and input_tokens is not None and output_tokens is not None:
             total_tokens = input_tokens + output_tokens
         return input_tokens, output_tokens, total_tokens
+
+    def _extract_reasoning_tokens(self, response: Any) -> int | None:
+        usage = getattr(response, "usage", None)
+        for field in ("thinking_input_tokens", "thinking_tokens", "reasoning_tokens"):
+            value = getattr(usage, field, None)
+            if isinstance(value, int) and not isinstance(value, bool):
+                return value
+        return None
 
     def _extract_cache_usage(self, response: Any) -> tuple[int | None, int | None]:
         usage = getattr(response, "usage", None)
@@ -257,7 +281,7 @@ class ClaudeModel(ModelAdapter):
             return {}
         return {
             "native_mcp": {
-                "provider": "claude",
+                "provider": "anthropic",
                 "blockCount": len(blocks),
                 "blocks": blocks,
             }
