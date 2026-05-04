@@ -84,6 +84,10 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     finished_at = utc_now_iso()
     finish = datetime.fromisoformat(finished_at.replace("Z", "+00:00"))
 
+    is_empty_answer = ai_result.error is None and not (ai_result.answer or "").strip()
+    error_message = ai_result.error or ("Model returned empty answer" if is_empty_answer else None)
+    run_status = "error" if error_message is not None else "success"
+
     trace = RunTrace()
     if runspec.trace.enabled:
         trace.aiTrace = ai_result.trace
@@ -98,9 +102,9 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         if runspec.trace.save_raw_response:
             trace.rawResponse = ai_result.raw_response
         if runspec.trace.save_errors:
-            trace.error = ai_result.error
+            trace.error = error_message
 
-    usage = ai_result.usage if runspec.trace.save_usage or ai_result.error else {}
+    usage = ai_result.usage if runspec.trace.save_usage or run_status == "error" else {}
     metrics_summary = _build_metrics_summary(
         ai_trace=trace.aiTrace,
         strategy=runspec.strategy,
@@ -125,8 +129,8 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         repeatIndex=runspec.repeatIndex,
         outputRoot=runspec.outputRoot,
         answer=ai_result.answer,
-        status="success" if ai_result.error is None else "error",
-        errorMessage=ai_result.error,
+        status=run_status,
+        errorMessage=error_message,
         timing=RunTiming(
             startedAt=started_at,
             finishedAt=finished_at,

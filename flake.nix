@@ -95,6 +95,7 @@
             pkgs.git
             pkgs.codex
             pkgs.claude-code
+            pkgs.duckdb
           ];
 
           shellHook = ''
