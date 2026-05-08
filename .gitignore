@@ -1,6 +1,5 @@
 .codex
 .claudeignore
-.claude/
 .venv
 .venv/
 __pycache__/
