@@ -32,6 +32,12 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.uv.sources]
+specify-cli = { git = "https://github.com/github/spec-kit.git", rev = "v0.8.7" }
+
+[tool.uv.extra-build-dependencies]
+specify-cli = ["hatchling"]
+
 [dependency-groups]
 dev = [
     "debugpy>=1.8.20",
@@ -40,4 +46,5 @@ dev = [
     "numpy>=2.4.4",
     "openai>=2.30.0",
     "pandas>=3.0.2",
+    "specify-cli",
 ]
