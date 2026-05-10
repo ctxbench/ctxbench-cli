@@ -70,7 +70,7 @@ Use current CLI commands:
 
 ```bash
 ctxbench plan
-ctxbench exec
+ctxbench execute
 ctxbench eval
 ctxbench export
 ctxbench status
@@ -258,7 +258,7 @@ Prefer aggregations such as:
 Never run these commands against real providers unless explicitly requested:
 
 ```bash
-ctxbench exec
+ctxbench execute
 ctxbench eval
 ```
 

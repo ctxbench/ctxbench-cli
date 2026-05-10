@@ -41,7 +41,7 @@ Use this skill when the user asks:
 
    ```text
    ctxbench plan
-   ctxbench exec
+   ctxbench execute
    ctxbench eval
    ctxbench export
    ctxbench status
@@ -55,7 +55,7 @@ Use this skill when the user asks:
    experiment JSON
      -> ctxbench plan
      -> queries.jsonl + manifest.json
-     -> ctxbench exec
+     -> ctxbench execute
      -> responses.jsonl + trials traces
      -> ctxbench eval
      -> evals.jsonl + judge_votes.jsonl + eval traces

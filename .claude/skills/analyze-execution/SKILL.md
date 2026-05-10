@@ -45,7 +45,7 @@ The current workflow is:
 
 ```text
 ctxbench plan
-ctxbench exec
+ctxbench execute
 ctxbench eval
 ctxbench export
 ctxbench status
