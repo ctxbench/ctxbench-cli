@@ -2,6 +2,9 @@
 
 ## Overview
 
+The diagram below depicts the flow for executing an experiment. First you have to design your experiment describing the dataset you're going to use, the models executing the tasks and how the responses should be evaluated. The `plan` command generates `trials` to be executed posterior. This summarizes the *Planning* phase.
+During *Execution*, the benchmark runs the planned `trials` and stores the `responses`. The benchmark logs the execution in `traces` that could map to `trials`. For each `trial` there is a `trace` that *tells the story* about the execution of that particular `trial`. Finally, the configured `judges` evaluate the responses of the `trials` in the *Evaluation* phase.
+
 ```mermaid
 flowchart LR
     A["experiment.json"] --> B["ctxbench plan"]

@@ -17,21 +17,39 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: Python 3.12
+**Primary Dependencies**: The primary dependencies are in pyproject.toml and flake.nix
+**Storage**: N/A
+**Testing**: pytest 
+**Target Platform**: Linux Server
+**Project Type**: cli  
+**Performance Goals**: NEEDS CLARIFICATION  
+**Constraints**: NEEDS CLARIFICATION  
+**Scale/Scope**: NEEDS CLARIFICATION
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+The plan MUST either satisfy each gate or document the violation in Complexity Tracking with
+rationale, scope, and mitigation.
+
+- [ ] Lifecycle phases remain explicit and separated.
+- [ ] Answer-generation and evaluation costs are not conflated.
+- [ ] New or changed metrics define value, unit, lifecycle phase, and provenance.
+- [ ] Metric provenance distinguishes reported, measured, derived, estimated, and unavailable values.
+- [ ] Estimated metrics are not presented as reported or measured values.
+- [ ] Unavailable metrics are represented as unavailable/null, not as zero.
+- [ ] Metric comparisons do not mix provenance categories without explicit labeling.
+- [ ] New metric metadata is minimal and justified by current research needs.
+- [ ] Canonical and derived artifacts are identified when artifacts are created or changed.
+- [ ] Artifact/schema changes are documented as compatible, breaking, transitional, or experimental.
+- [ ] Strategy comparability is preserved, or intentional asymmetries are documented.
+- [ ] Dataset/domain-specific behavior remains isolated from generic benchmark components.
+- [ ] Provider-specific behavior remains isolated from strategy orchestration.
+- [ ] Architectural boundaries and dependency direction are preserved; cycles require documented migration exceptions.
+- [ ] Provider-backed execution is not required for validation unless explicitly approved.
+- [ ] Documentation impact is identified, especially for CLI, artifacts, metrics, datasets, and reproducibility.
 
 ## Project Structure
 
