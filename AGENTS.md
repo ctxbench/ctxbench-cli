@@ -81,17 +81,16 @@ Do not introduce documentation or scripts using obsolete command names.
 ## Current and target naming
 
 The current implementation may still contain legacy names such as `copa`, `query`,
-`queries.jsonl`, `responses.jsonl`, `trialId`, `questionId`, and `answer`.
+`queries.jsonl`, `answers.jsonl`, `runId`, `questionId`, and `answer`.
 
 The target architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
 `trialId`, `taskId`, and `response`.
 
-Treat them implementation contracts. If artifact names or formats change, the
-specification must define canonical vs. derived artifacts, migration impact, and schema
-compatibility.
-
 Treat legacy names as migration details, not permanent concepts. New specs, docs, examples,
 and code should prefer target terminology unless explicitly working on compatibility.
+
+If artifact names or formats change, the specification must define canonical vs. derived
+artifacts, migration impact, and schema compatibility.
 
 ## File and artifact discipline
 

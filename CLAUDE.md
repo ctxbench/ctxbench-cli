@@ -193,6 +193,20 @@ Use the current command names:
 
 Do not document obsolete commands unless explicitly writing migration notes.
 
+## Current and target naming
+
+The current implementation may still contain legacy names such as `copa`, `query`,
+`queries.jsonl`, `answers.jsonl`, `runId`, `questionId`, and `answer`.
+
+The target architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
+`trialId`, `taskId`, and `response`.
+
+Treat legacy names as migration details, not permanent concepts. New specs, docs, examples,
+and code should prefer target terminology unless explicitly working on compatibility.
+
+If artifact names or formats change, the specification must define canonical vs. derived
+artifacts, migration impact, and schema compatibility.
+
 ## Done criteria
 
 A task is done only when:
