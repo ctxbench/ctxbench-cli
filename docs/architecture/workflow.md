@@ -86,6 +86,6 @@ ctxbench status outputs/lattes_baseline_001 --by judge
 | `local_mcp` | Exposes tools through a local MCP runtime while CTXBench controls the loop. |
 | `remote_mcp` | Uses a remote MCP server; provider/remote integration may control part of the loop. |
 
-For detailed runtime flows, see `c4-dynamic.md`.
+For detailed runtime flows, see `dynamic.md`.
 
-For physical deployment/topology, see `c4-deployment.md`.
+For physical deployment/topology see `deployment.md`.

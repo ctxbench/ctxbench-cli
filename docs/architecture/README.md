@@ -115,11 +115,11 @@ This documentation follows the C4 organization where it helps, without forcing u
 | `vocabulary.md` | Canonical terminology and naming rules. |
 | `workflow.md` | User workflow, phases, commands, artifacts, and strategy overview. |
 | `cli-architecture.md` | CLI architecture, command contract, selectors, and migration notes. |
-| `c4-system-context.md` | C4 Level 1: system context. |
-| `c4-container.md` | C4 Level 2: containers/modules. |
-| `c4-component.md` | C4 Level 3: internal components. |
-| `c4-deployment.md` | C4 supplementary: physical/runtime deployment, including local and remote MCP. |
-| `c4-dynamic.md` | C4 supplementary: runtime interaction flows for each strategy. |
+| `system-context.md` | C4 Level 1: system context. |
+| `container.md` | C4 Level 2: containers/modules. |
+| `component.md` | C4 Level 3: internal components. |
+| `deployment.md` | C4 supplementary: physical/runtime deployment, including local and remote MCP. |
+| `dynamic.md` | C4 supplementary: runtime interaction flows for each strategy. |
 
 ## C4 usage in this project
 
