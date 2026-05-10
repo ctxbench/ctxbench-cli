@@ -104,7 +104,7 @@ Check:
 - trace collection;
 - model/provider capabilities.
 
-### For token accounting changes
+### For metrics changes
 
 Check:
 
@@ -117,6 +117,9 @@ Check:
 - reasoning tokens;
 - tool schema overhead;
 - tool result tokens;
+- duration of trials and tasks;
+- tool calls;
+- retries anda failures;
 - provider-specific accounting differences.
 
 ### For export changes

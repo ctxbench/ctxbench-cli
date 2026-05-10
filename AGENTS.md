@@ -181,6 +181,22 @@ When changing evaluation logic, consider:
 - judge disagreement;
 - judge errors.
 
+## Metric rules
+
+When adding, changing, exporting, or analyzing metrics, preserve metric provenance.
+
+Use the simplest sufficient classification:
+
+- `reported`: returned by a provider API, SDK, or authoritative runtime;
+- `measured`: measured directly by benchmark-controlled instrumentation;
+- `derived`: computed deterministically from reported or measured values;
+- `estimated`: approximated through heuristics, tokenizers, assumptions, or incomplete information;
+- `unavailable`: not available and not responsibly estimated.
+
+Estimated metrics must not be presented as reported or measured values. Unavailable metrics
+must not be represented as zero unless zero is a valid observed value. Avoid adding extra
+confidence scores or complex metric taxonomies unless required by an accepted specification.
+
 ## Reproducibility rules
 
 All experiment-affecting changes should be reproducible.
