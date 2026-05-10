@@ -59,7 +59,7 @@ experiment config
   -> ctxbench plan
   -> trials.jsonl + manifest.json
   -> ctxbench execute
-  -> responses.jsonl + trials traces
+  -> responses.jsonl + execution traces
   -> ctxbench eval
   -> evals.jsonl + judge_votes.jsonl + eval traces
   -> ctxbench export
