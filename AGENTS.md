@@ -56,7 +56,7 @@ The benchmark workflow is:
 
 ```text
 experiment config
-  -> cxbench plan
+  -> ctxbench plan
   -> trials.jsonl + manifest.json
   -> ctxbench execute
   -> responses.jsonl + trials traces
