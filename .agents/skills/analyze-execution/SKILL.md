@@ -1,13 +1,13 @@
 ---
-name: analyze-run
-description: "Analyze a ContextBench/COPA experiment run directory for quality, cost, performance, tool usage, judge agreement, failures, and reproducibility without rerunning providers."
+name: analyze-execution
+description: "Analyze a cxtbench experiment execution directory for quality, cost, performance, tool usage, judge agreement, failures, and reproducibility without rerunning providers."
 ---
 
-# Analyze Run
+# Analyze Execution
 
 ## Purpose
 
-Use this skill to analyze a completed or partially completed ContextBench/COPA run directory.
+Use this skill to analyze a completed or partially completed cxtbench execution directory.
 
 The analysis should help understand answer quality, token cost, execution time, tool behavior, judge agreement, and failures.
 
@@ -15,7 +15,7 @@ The analysis should help understand answer quality, token cost, execution time, 
 
 Use this skill when the user asks:
 
-- "analyze this run"
+- "analyze this execution"
 - "what insights do you see?"
 - "compare strategies"
 - "compare models"
@@ -25,30 +25,30 @@ Use this skill when the user asks:
 - "summarize baseline_001"
 - "prepare analysis for my paper"
 
-## Expected run artifacts
+## Expected execution artifacts
 
-A run directory may contain:
+The execution directory may contain:
 
 ```text
 manifest.json
-queries.jsonl
-answers.jsonl
+trials.jsonl
+responses.jsonl
 evals.jsonl
 judge_votes.jsonl
 results.csv
 traces/
-  queries/
+  trials/
   evals/
 ```
 
 The current workflow is:
 
 ```text
-copa plan
-copa query
-copa eval
-copa export
-copa status
+ctxbench plan
+ctxbench execute
+ctxbench eval
+ctxbench export
+ctxbench status
 ```
 
 ## Required procedure
@@ -56,7 +56,7 @@ copa status
 1. Start with status and file inventory.
 
    ```bash
-   copa status path/to/run
+   ctxbench status path/to/run
    find path/to/run -maxdepth 2 -type f | sort
    ```
 
@@ -71,7 +71,7 @@ copa status
 
    If `results.csv` does not exist, derive summaries from:
 
-   - `answers.jsonl`
+   - `responses.jsonl`
    - `evals.jsonl`
    - `judge_votes.jsonl`
 
@@ -86,11 +86,11 @@ copa status
    - failures/errors;
    - strategy-level insights;
    - model-level insights;
-   - question-level insights.
+   - task-level insights.
 
-5. Keep query-phase and evaluation-phase costs separate.
+5. Keep execute-phase and evaluation-phase costs separate.
 
-   Query cost comes from answer generation artifacts.
+   execute cost comes from answer generation artifacts.
 
    Evaluation cost comes from judge/evaluation artifacts.
 
@@ -113,8 +113,8 @@ Group by:
 
 - strategy;
 - model;
-- question;
-- question tags;
+- task;
+- task tags;
 - context format;
 - instance.
 
@@ -129,12 +129,12 @@ Consider:
 
 ### Cost
 
-Group query-phase token usage by:
+Group execute-phase token usage by:
 
 - strategy;
 - model;
 - format;
-- question;
+- task;
 - tool-based vs inline strategy.
 
 Track:
@@ -177,7 +177,7 @@ Analyze:
 Analyze:
 
 - disagreement by judge;
-- disagreement by question;
+- disagreement by task;
 - disagreement by strategy;
 - judge errors;
 - systematic bias.
@@ -188,7 +188,7 @@ Analyze:
 
 ```bash
 RUN_DIR="experiments/baseline_001"
-copa status "$RUN_DIR"
+ctxbench status "$RUN_DIR"
 find "$RUN_DIR" -maxdepth 2 -type f | sort
 wc -l "$RUN_DIR"/*.jsonl
 ```
@@ -196,7 +196,7 @@ wc -l "$RUN_DIR"/*.jsonl
 ### Quick JSONL schema sample
 
 ```bash
-head -n 1 "$RUN_DIR/answers.jsonl" | jq 'keys'
+head -n 1 "$RUN_DIR/responses.jsonl" | jq 'keys'
 head -n 1 "$RUN_DIR/evals.jsonl" | jq 'keys'
 head -n 1 "$RUN_DIR/judge_votes.jsonl" | jq 'keys'
 ```
@@ -223,9 +223,9 @@ PY
 
 ## Constraints
 
-- Do not run `copa query` or `copa eval` unless explicitly requested.
+- Do not run `ctxbench execute` or `ctxbench eval` unless explicitly requested.
 - Do not call real providers.
-- Do not read full traces unless the user asks for a specific runId.
+- Do not read full traces unless the user asks for a specific trialId.
 - Do not manually inspect hundreds of rows.
 - Do not make claims without pointing to the artifact or command that supports them.
 
@@ -234,7 +234,7 @@ PY
 Return:
 
 ```text
-Run analyzed
+Execution analyzed
 - ...
 
 Artifact coverage

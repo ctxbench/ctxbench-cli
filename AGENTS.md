@@ -56,27 +56,42 @@ The benchmark workflow is:
 
 ```text
 experiment config
-  -> copa plan
-  -> queries.jsonl + manifest.json
-  -> copa query
-  -> answers.jsonl + query traces
-  -> copa eval
+  -> cxbench plan
+  -> trials.jsonl + manifest.json
+  -> ctxbench execute
+  -> responses.jsonl + trials traces
+  -> ctxbench eval
   -> evals.jsonl + judge_votes.jsonl + eval traces
-  -> copa export
+  -> ctxbench export
   -> results.csv
 ```
 
 Use current CLI commands:
 
 ```bash
-copa plan
-copa query
-copa eval
-copa export
-copa status
+ctxbench plan
+ctxbench exec
+ctxbench eval
+ctxbench export
+ctxbench status
 ```
 
 Do not introduce documentation or scripts using obsolete command names.
+
+## Current and target naming
+
+The current implementation may still contain legacy names such as `copa`, `query`,
+`queries.jsonl`, `responses.jsonl`, `trialId`, `questionId`, and `answer`.
+
+The target architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
+`trialId`, `taskId`, and `response`.
+
+Treat them implementation contracts. If artifact names or formats change, the
+specification must define canonical vs. derived artifacts, migration impact, and schema
+compatibility.
+
+Treat legacy names as migration details, not permanent concepts. New specs, docs, examples,
+and code should prefer target terminology unless explicitly working on compatibility.
 
 ## File and artifact discipline
 
@@ -84,7 +99,7 @@ Large benchmark artifacts must not be loaded entirely into the conversation.
 
 Avoid reading complete files such as:
 
-- `answers.jsonl`
+- `responses.jsonl`
 - `evals.jsonl`
 - `judge_votes.jsonl`
 - `results.csv` when large
@@ -97,10 +112,10 @@ Avoid reading complete files such as:
 Use targeted inspection:
 
 ```bash
-head -n 5 answers.jsonl
-jq -c 'select(.runId == "RUN_ID")' answers.jsonl
-rg '"questionId":"q_sup"' answers.jsonl
-rg '"strategy":"inline"' answers.jsonl
+head -n 5 responses.jsonl
+jq -c 'select(.trialId == "TRIAL_ID")' responses.jsonl
+rg '"taskId":"q_sup"' responses.jsonl
+rg '"strategy":"inline"' responses.jsonl
 ```
 
 For repeated analysis, create or use small scripts instead of pasting data into the conversation.
@@ -113,7 +128,7 @@ Keep benchmark concerns separated:
 
 - CLI parsing;
 - experiment planning;
-- query execution;
+- trials execution;
 - strategy orchestration;
 - model provider adapters;
 - MCP runtime;
@@ -121,7 +136,7 @@ Keep benchmark concerns separated:
 - export;
 - analysis utilities.
 
-Avoid coupling generic benchmark code to the Lattes dataset.
+Avoid coupling generic benchmark code to the domain-specific dataset.
 
 Avoid coupling provider-specific behavior to strategy-independent logic.
 
@@ -148,7 +163,7 @@ MCP strategies should preserve the distinction between:
 
 ## Evaluation rules
 
-Keep query execution and evaluation separate.
+Keep trial execution and evaluation separate.
 
 Do not include judge token usage in answer-generation cost.
 
@@ -195,7 +210,7 @@ Run focused tests:
 
 ```bash
 pytest -k plan
-pytest -k query
+pytest -k exec
 pytest -k eval
 pytest -k export
 pytest -k cli
@@ -233,8 +248,8 @@ Prefer aggregations such as:
 - accuracy by model;
 - token cost by strategy;
 - duration by strategy;
-- tool calls by question;
-- judge disagreement by question;
+- tool calls by task;
+- judge disagreement by task;
 - failures by provider;
 - cache effects by model.
 
@@ -243,8 +258,8 @@ Prefer aggregations such as:
 Never run these commands against real providers unless explicitly requested:
 
 ```bash
-copa query
-copa eval
+ctxbench exec
+ctxbench eval
 ```
 
 Before running provider-backed commands, state the likely cost or risk.

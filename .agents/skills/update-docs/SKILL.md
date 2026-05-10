@@ -1,13 +1,13 @@
 ---
 name: update-docs
-description: "Update README, reproducibility notes, experiment documentation, or paper-supporting documentation so it matches the actual ContextBench/COPA implementation and CLI."
+description: "Update README, reproducibility notes, experiment documentation, or paper-supporting documentation so it matches the actual ctxbench implementation and CLI."
 ---
 
 # Update Docs
 
 ## Purpose
 
-Use this skill when updating documentation for ContextBench/COPA, especially README files, reproducibility instructions, experiment descriptions, artifact descriptions, or paper-supporting docs.
+Use this skill when updating documentation for ctxbench, especially README files, reproducibility instructions, experiment descriptions, artifact descriptions, or paper-supporting docs.
 
 The goal is to keep documentation aligned with the actual implementation and avoid obsolete commands or misleading claims.
 
@@ -31,7 +31,7 @@ Use this skill when the user asks:
    Use targeted searches:
 
    ```bash
-   rg "subparsers|add_parser|def .*plan|def .*query|def .*eval|def .*export|def .*status" src tests
+   rg "subparsers|add_parser|def .*plan|def .*trial|def .*eval|def .*export|def .*status" src tests
    rg "answers.jsonl|evals.jsonl|judge_votes.jsonl|queries.jsonl|manifest.json|results.csv" src tests docs README.md
    ```
 
@@ -40,11 +40,11 @@ Use this skill when the user asks:
    Current expected workflow:
 
    ```text
-   copa plan
-   copa query
-   copa eval
-   copa export
-   copa status
+   ctxbench plan
+   ctxbench exec
+   ctxbench eval
+   ctxbench export
+   ctxbench status
    ```
 
 3. Confirm generated artifacts before documenting them.
@@ -53,13 +53,13 @@ Use this skill when the user asks:
 
    ```text
    experiment JSON
-     -> copa plan
-     -> queries.jsonl + manifest.json
-     -> copa query
-     -> answers.jsonl + query traces
-     -> copa eval
+     -> ctxbench plan
+     -> trials.jsonl + manifest.json
+     -> ctxbench exec
+     -> responses.jsonl + trials traces
+     -> ctxbench eval
      -> evals.jsonl + judge_votes.jsonl + eval traces
-     -> copa export
+     -> ctxbench export
      -> results.csv
    ```
 
@@ -67,8 +67,8 @@ Use this skill when the user asks:
 
    Do not use old names such as:
 
-   - `copa experiment expand`
-   - `copa run`
+   - `ctxbench experiment expand`
+   - `ctxbench run`
 
    unless explicitly writing migration notes.
 
@@ -133,7 +133,7 @@ A reproducible doc section should include:
 
 - Do not overstate benchmark conclusions.
 - Do not imply that remote MCP is always better or worse.
-- Do not mix query-phase and evaluation-phase cost explanations.
+- Do not mix execution-phase and evaluation-phase cost explanations.
 - Do not claim a run is complete unless artifacts support it.
 - Do not document generated files that the current implementation does not create.
 - Do not include secrets or provider keys.
@@ -157,7 +157,7 @@ A reproducible doc section should include:
 
 ### Plan
 
-### Query
+### Execute
 
 ### Evaluate
 

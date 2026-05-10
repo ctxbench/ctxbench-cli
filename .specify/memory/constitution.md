@@ -210,8 +210,10 @@ These constraints govern how benchmark results are collected, reported, and inte
 
 - Cost, performance, and quality figures from different strategies MUST be computed under
   comparable measurement conditions before comparison.
-- Metrics MUST be interpreted together with their provenance, confidence class, unit, source,
-  lifecycle phase, and collection method.
+- Metrics MUST be interpreted together with their provenance, unit, source, lifecycle phase,
+  and collection method.
+- New metrics or changes to existing metric semantics MUST define provenance, unit, source,
+collection method, and phase when relevant.
 - Estimated or derived metrics MAY be useful for analysis, but they MUST be labeled as such
   and MUST NOT be presented as authoritative provider-reported values.
 - Accuracy and quality figures MUST distinguish individual judge votes, aggregate outcomes,

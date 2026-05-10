@@ -1,13 +1,13 @@
 ---
 name: design-change
-description: "Design a safe implementation plan for changes to ContextBench/COPA architecture, evaluation, strategy behavior, MCP integration, metrics, schemas, or experiment workflow."
+description: "Design a safe implementation plan for changes to ctxbench architecture, evaluation, strategy behavior, MCP integration, metrics, schemas, or experiment workflow."
 ---
 
 # Design Change
 
 ## Purpose
 
-Use this skill before implementing a non-trivial change in ContextBench/COPA.
+Use this skill before implementing a non-trivial change in ctxbench.
 
 The goal is to produce a safe, minimal, research-aware design that protects reproducibility, output schemas, token accounting, and strategy comparability.
 
@@ -36,7 +36,7 @@ Use this skill when the user asks:
    - CLI;
    - experiment schema;
    - planning;
-   - query execution;
+   - trial execution;
    - strategy orchestration;
    - model provider adapter;
    - local function tool layer;
@@ -53,7 +53,7 @@ Use this skill when the user asks:
 
    Common invariants:
 
-   - query-phase costs remain separate from evaluation-phase costs;
+   - execution-phase costs remain separate from evaluation-phase costs;
    - individual judge votes remain available;
    - aggregate evaluation remains reproducible from judge votes;
    - strategies remain comparable;
@@ -87,7 +87,7 @@ Check:
 - evaluation traces;
 - context blocks used by judges;
 - judge token usage;
-- separation from answer-generation usage.
+- separation from response-generation usage.
 
 ### For strategy changes
 
@@ -135,10 +135,10 @@ Check:
 Check:
 
 - instance IDs;
-- question IDs;
+- task IDs;
 - context blocks;
 - ground truth;
-- raw vs cleaned vs parsed artifacts;
+- Dataset artifacts;
 - whether evaluations must be regenerated.
 
 ## Constraints
@@ -181,7 +181,7 @@ Migration/documentation impact
 Risks
 - ...
 
-Open questions
+Open tasks
 - ...
 ```
 

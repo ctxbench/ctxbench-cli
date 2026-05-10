@@ -7,7 +7,7 @@ description: "Inspect large benchmark artifacts such as JSONL files, traces, res
 
 ## Purpose
 
-Use this skill when the task involves large ContextBench/COPA artifacts.
+Use this skill when the task involves large ctxbench artifacts.
 
 Large files must be inspected economically. The goal is to extract evidence, not to read entire artifacts into the conversation.
 
@@ -15,20 +15,20 @@ Large files must be inspected economically. The goal is to extract evidence, not
 
 Use this skill when the user asks:
 
-- "look at this answers.jsonl"
+- "look at this responses.jsonl"
 - "inspect the traces"
 - "find failures in this run"
 - "check judge disagreement"
 - "analyze this large file"
 - "find rows for q_sup"
 - "inspect results without loading everything"
-- "what happened in this runId?"
+- "what happened in this trialId?"
 
 ## Large artifact types
 
 Treat these as large by default:
 
-- `answers.jsonl`
+- `responses.jsonl`
 - `evals.jsonl`
 - `judge_votes.jsonl`
 - `results.csv`
@@ -75,11 +75,11 @@ Treat these as large by default:
    Examples:
 
    ```bash
-   rg '"runId":"RUN_ID"' answers.jsonl
-   rg '"questionId":"q_sup"' answers.jsonl
-   rg '"strategy":"mcp"' answers.jsonl
-   jq -c 'select(.runId == "RUN_ID")' answers.jsonl
-   jq -c 'select(.status != "success")' answers.jsonl
+   rg '"trialId":"RUN_ID"' responses.jsonl
+   rg '"taskId":"q_sup"' responses.jsonl
+   rg '"strategy":"mcp"' responses.jsonl
+   jq -c 'select(.trialId == "RUN_ID")' responses.jsonl
+   jq -c 'select(.status != "success")' responses.jsonl
    ```
 
 4. For aggregation, prefer scripts or DuckDB instead of manual inspection.
@@ -91,7 +91,7 @@ Treat these as large by default:
    import json
    from collections import Counter
 
-   path = "answers.jsonl"
+   path = "responses.jsonl"
    c = Counter()
 
    with open(path, "r", encoding="utf-8") as f:
@@ -120,7 +120,7 @@ Treat these as large by default:
 ### Find failed answers
 
 ```bash
-jq -c 'select(.status != "success") | {runId, questionId, model, strategy, format, status, error}' answers.jsonl
+jq -c 'select(.status != "success") | {trialId, taskId, model, strategy, format, status, error}' responses.jsonl
 ```
 
 ### Count by strategy and status
@@ -131,7 +131,7 @@ import json
 from collections import Counter
 
 c = Counter()
-with open("answers.jsonl", encoding="utf-8") as f:
+with open("responses.jsonl", encoding="utf-8") as f:
     for line in f:
         r = json.loads(line)
         c[(r.get("strategy"), r.get("format"), r.get("status"))] += 1
@@ -152,7 +152,7 @@ votes = defaultdict(list)
 with open("judge_votes.jsonl", encoding="utf-8") as f:
     for line in f:
         r = json.loads(line)
-        votes[r["runId"]].append(r)
+        votes[r["trialId"]].append(r)
 
 for run_id, rows in votes.items():
     ratings = [r.get("correctness", {}).get("rating") for r in rows]
@@ -165,9 +165,9 @@ PY
 
 ```bash
 RUN_ID="..."
-jq -c --arg id "$RUN_ID" 'select(.runId == $id)' answers.jsonl
-jq -c --arg id "$RUN_ID" 'select(.runId == $id)' evals.jsonl
-jq -c --arg id "$RUN_ID" 'select(.runId == $id)' judge_votes.jsonl
+jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' responses.jsonl
+jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' evals.jsonl
+jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' judge_votes.jsonl
 ```
 
 ## Output format

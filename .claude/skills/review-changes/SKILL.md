@@ -1,13 +1,13 @@
 ---
 name: review-changes
-description: "Review code, documentation, or experiment changes in ContextBench/COPA for reproducibility, schema stability, benchmark validity, token accounting, and research risks."
+description: "Review code, documentation, or experiment changes in ctxbench for reproducibility, schema stability, benchmark validity, token accounting, and research risks."
 ---
 
 # Review Changes
 
 ## Purpose
 
-Use this skill when reviewing a diff, branch, pull request, or local change in the ContextBench/COPA research repository.
+Use this skill when reviewing a diff, branch, pull request, or local change in the ctxbench research repository.
 
 The review must focus on research correctness, reproducibility, benchmark validity, and cost/observability risks.
 
@@ -39,7 +39,7 @@ Use this skill when the user asks:
 
    - CLI
    - planning
-   - query execution
+   - trial execution
    - strategy orchestration
    - local function tools
    - local MCP
@@ -58,7 +58,7 @@ Use this skill when the user asks:
    - experiment reproducibility
    - generated artifact names
    - generated artifact schemas
-   - query/evaluation separation
+   - trial/evaluation separation
    - token accounting
    - timing metrics
    - tool-call traces
@@ -78,7 +78,7 @@ Use this skill when the user asks:
 
    ```bash
    rg "def test_" tests
-   rg "plan|query|eval|export|status" tests
+   rg "plan|exec|eval|export|status" tests
    ```
 
 6. If safe and appropriate, run focused tests only.
@@ -88,7 +88,7 @@ Use this skill when the user asks:
    ```bash
    pytest -k cli
    pytest -k plan
-   pytest -k query
+   pytest -k exec
    pytest -k eval
    pytest -k export
    ```
@@ -109,8 +109,8 @@ Check:
 - Does it keep answer-generation cost separate from judge/evaluation cost?
 - Does it preserve individual judge votes?
 - Does it preserve aggregate evaluation outputs?
-- Does it change how `answers.jsonl`, `evals.jsonl`, `judge_votes.jsonl`, or `results.csv` are produced?
-- Does it alter `runId`, `questionId`, `instanceId`, `model`, `provider`, `strategy`, or `format` semantics?
+- Does it change how `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`, or `results.csv` are produced?
+- Does it alter `trialId`, `taskId`, `instanceId`, `model`, `provider`, `strategy`, or `format` semantics?
 - Does it affect inline, local function, local MCP, and remote MCP strategies consistently?
 - Does it introduce hidden assumptions about the Lattes dataset?
 - Does it create non-determinism that harms reproducibility?

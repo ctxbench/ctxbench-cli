@@ -15,11 +15,11 @@ Core strategies:
 
 Core benchmark workflow:
 
-- `copa plan`
-- `copa query`
-- `copa eval`
-- `copa export`
-- `copa status`
+- `ctxbench plan`
+- `ctxbench exec`
+- `ctxbench eval`
+- `ctxbench export`
+- `ctxbench status`
 
 The benchmark artifacts can be large. Be careful with token usage and context size.
 
@@ -49,7 +49,7 @@ Never read full large artifacts into context unless explicitly requested.
 
 Avoid opening entire files such as:
 
-- `answers.jsonl`
+- `responses.jsonl`
 - `evals.jsonl`
 - `judge_votes.jsonl`
 - large trace files under `traces/`
@@ -59,10 +59,10 @@ Avoid opening entire files such as:
 Instead, inspect samples with commands like:
 
 ```bash
-head -n 3 answers.jsonl
-jq -c 'select(.runId == "RUN_ID")' answers.jsonl
-rg '"questionId":"q_sup"' answers.jsonl
-python scripts/inspect_run.py --run-id RUN_ID
+head -n 3 responses.jsonl
+jq -c 'select(.trialId == "TRIAL_ID")' responses.jsonl
+rg '"taskId":"q_sup"' responses.jsonl
+python scripts/inspect_run.py --run-id TRIAL_ID
 ```
 
 When analyzing benchmark outputs, prefer small scripts that aggregate data outside the conversation.
@@ -83,10 +83,10 @@ For planning changes:
 pytest -k plan
 ```
 
-For query execution changes:
+For trial execution changes:
 
 ```bash
-pytest -k query
+pytest -k trial
 ```
 
 For evaluation changes:
@@ -119,11 +119,11 @@ Preserve separation between:
 
 - answer-generation model usage;
 - judge model usage;
-- query traces;
+- trial traces;
 - evaluation traces;
 - aggregate exported results.
 
-Do not mix query-phase token usage with evaluation-phase token usage.
+Do not mix execution-phase token usage with evaluation-phase token usage.
 
 When discussing cost, distinguish:
 
@@ -158,7 +158,7 @@ Strategies should orchestrate:
 
 Dataset-specific logic should remain isolated from generic benchmark execution logic.
 
-Avoid hardcoding Lattes-specific behavior in generic COPA components.
+Avoid hardcoding Lattes-specific behavior in generic ctxbench components.
 
 ## MCP rules
 
@@ -185,11 +185,11 @@ When updating documentation:
 
 Use the current command names:
 
-- `copa plan`
-- `copa query`
-- `copa eval`
-- `copa export`
-- `copa status`
+- `ctxbench plan`
+- `ctxbench exec`
+- `ctxbench eval`
+- `ctxbench export`
+- `ctxbench status`
 
 Do not document obsolete commands unless explicitly writing migration notes.
 
