@@ -62,7 +62,7 @@ Instead, inspect samples with commands like:
 head -n 3 responses.jsonl
 jq -c 'select(.trialId == "TRIAL_ID")' responses.jsonl
 rg '"taskId":"q_sup"' responses.jsonl
-python scripts/inspect_run.py --run-id TRIAL_ID
+python scripts/inspect_trial.py --trial-id TRIAL_ID
 ```
 
 When analyzing benchmark outputs, prefer small scripts that aggregate data outside the conversation.
