@@ -25,21 +25,23 @@ Use this skill when the user asks:
 - "what happened in this trialId?"
 
 ## Large artifact types
+Treat these semantic artifact categories as large by default:
 
+- planned trial artifacts;
+- response artifacts;
+- aggregate evaluation artifacts;
+- individual judge-vote artifacts;
+- execution traces;
+- evaluation traces;
+- source context artifacts;
+- parsed or normalized dataset artifacts;
+- analysis-ready exports;
+- provider logs;
+- model traces.
+
+Current implementations may use names such as `trials.jsonl`, `responses.jsonl`,
+`evals.jsonl`, `judge_votes.jsonl`, and `results.csv`.
 Treat these as large by default:
-
-- `responses.jsonl`
-- `evals.jsonl`
-- `judge_votes.jsonl`
-- `results.csv`
-- `traces/**/*.json`
-- `raw.html`
-- `clean.html`
-- `parsed.json`
-- `blocks.json`
-- exported notebook data
-- provider logs
-- model traces
 
 ## Required procedure
 
@@ -75,10 +77,10 @@ Treat these as large by default:
    Examples:
 
    ```bash
-   rg '"trialId":"RUN_ID"' responses.jsonl
+   rg '"trialId":"TRIAL_ID"' responses.jsonl
    rg '"taskId":"q_sup"' responses.jsonl
    rg '"strategy":"mcp"' responses.jsonl
-   jq -c 'select(.trialId == "RUN_ID")' responses.jsonl
+   jq -c 'select(.trialId == "TRIAL_ID")' responses.jsonl
    jq -c 'select(.status != "success")' responses.jsonl
    ```
 
@@ -154,20 +156,20 @@ with open("judge_votes.jsonl", encoding="utf-8") as f:
         r = json.loads(line)
         votes[r["trialId"]].append(r)
 
-for run_id, rows in votes.items():
+for TRIAL_ID, rows in votes.items():
     ratings = [r.get("correctness", {}).get("rating") for r in rows]
     if len(set(ratings)) > 1:
-        print(run_id, Counter(ratings))
+        print(TRIAL_ID, Counter(ratings))
 PY
 ```
 
 ### Inspect a single run
 
 ```bash
-RUN_ID="..."
-jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' responses.jsonl
-jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' evals.jsonl
-jq -c --arg id "$RUN_ID" 'select(.trialId == $id)' judge_votes.jsonl
+TRIAL_ID="..."
+jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' responses.jsonl
+jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' evals.jsonl
+jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' judge_votes.jsonl
 ```
 
 ## Output format

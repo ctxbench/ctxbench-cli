@@ -26,20 +26,22 @@ Use this skill when the user asks:
 
 ## Large artifact types
 
-Treat these as large by default:
+Treat these semantic artifact categories as large by default:
 
-- `responses.jsonl`
-- `evals.jsonl`
-- `judge_votes.jsonl`
-- `results.csv`
-- `traces/**/*.json`
-- `raw.html`
-- `clean.html`
-- `parsed.json`
-- `blocks.json`
-- exported notebook data
-- provider logs
-- model traces
+- planned trial artifacts;
+- response artifacts;
+- aggregate evaluation artifacts;
+- individual judge-vote artifacts;
+- execution traces;
+- evaluation traces;
+- source context artifacts;
+- parsed or normalized dataset artifacts;
+- analysis-ready exports;
+- provider logs;
+- model traces.
+
+Current implementations may use names such as `trials.jsonl`, `responses.jsonl`,
+`evals.jsonl`, `judge_votes.jsonl`, and `results.csv`.
 
 ## Required procedure
 
@@ -154,22 +156,9 @@ with open("judge_votes.jsonl", encoding="utf-8") as f:
         r = json.loads(line)
         votes[r["trialId"]].append(r)
 
-for run_id, rows in votes.items():
+for trial_id, rows in votes.items():
     ratings = [r.get("correctness", {}).get("rating") for r in rows]
     if len(set(ratings)) > 1:
-        print(run_id, Counter(ratings))
-PY
-```
-
-### Inspect a single run
-
-```bash
-TRIAL_ID="..."
-jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' responses.jsonl
-jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' evals.jsonl
-jq -c --arg id "$TRIAL_ID" 'select(.trialId == $id)' judge_votes.jsonl
-```
-
 ## Output format
 
 Return:

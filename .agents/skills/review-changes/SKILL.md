@@ -108,13 +108,17 @@ Check:
 - Does the change preserve the distinction between execution-phase model usage and evaluation-phase judge usage?
 - Does it keep answer-generation cost separate from judge/evaluation cost?
 - Does it preserve individual judge votes?
+- Does the change affect canonical response artifacts, aggregate evaluation artifacts,
+individual judge-vote artifacts, traces, or analysis-ready exports?
 - Does it preserve aggregate evaluation outputs?
-- Does it change how `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`, or `results.csv` are produced?
-- Does it alter `trialId`, `taskId`, `instanceId`, `model`, `provider`, `strategy`, or `format` semantics?
 - Does it affect inline, local function, local MCP, and remote MCP strategies consistently?
 - Does it introduce hidden assumptions about the Lattes dataset?
 - Does it create non-determinism that harms reproducibility?
 - Does it increase token consumption or provider calls unnecessarily?
+
+Current implementations may use names such as `responses.jsonl`, `evals.jsonl`,
+`judge_votes.jsonl`, and `results.csv`. Treat names as implementation details; preserve
+artifact semantics. 
 
 ## Output format
 
