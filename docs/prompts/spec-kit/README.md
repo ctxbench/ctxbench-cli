@@ -1,82 +1,70 @@
-# CTXBench Prompt Templates
+# CTXBench Prompt Templates — Light Version
 
-Reusable prompt templates for running a specification-driven workflow with Spec Kit, Claude, and Codex.
+Short prompt templates for day-to-day use with Spec Kit, Claude, and Codex.
 
-These templates are meant to be copied into the chat and filled with concrete values. They are not Spec Kit internal templates. Keep them separate from `.specify/templates/`.
+These prompts intentionally avoid repeating the full constitution or architecture. They assume the agent can read the versioned project guidance:
 
-## Recommended location in the repository
+- `.specify/memory/constitution.md`
+- `docs/architecture/`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.agents/skills/`
+- `.specify/templates/`
 
-```text
-docs/
-  prompts/
-    spec-kit/
-      README.md
-      common-constraints.md
-      create-lightweight-spec.md
-      promote-spec-to-planning-ready.md
-      set-active-feature.md
-      plan-specific-spec.md
-      generate-tasks.md
-      update-spec.md
-      update-plan.md
-      update-tasks.md
-      review-spec-readiness.md
-      review-plan.md
-      review-tasks.md
-      implement-task-slice.md
-      review-diff.md
-      update-roadmap.md
-      create-placeholder-spec.md
-      simplify-spec.md
-      review-roadmap.md
-      create-command-model-spec.md
-      create-artifact-contracts-spec.md
-      create-domain-boundaries-spec.md
-      create-dataset-artifact-model-spec.md
-      create-lattes-migration-spec.md
-      spec-roadmap-template.md
-```
+Use these prompts as starting points and write the human intent yourself.
+
+## Files
+
+| File | Use when |
+|---|---|
+| `specify.md` | Create a normal spec from a human goal |
+| `specify-lightweight.md` | Create an early roadmap-level spec |
+| `specify-placeholder.md` | Register future work that is not ready |
+| `promote-spec.md` | Turn a lightweight spec into planning-ready spec |
+| `set-active-feature.md` | Point `.specify/feature.json` to the active spec |
+| `plan.md` | Generate/update plan for one spec |
+| `tasks.md` | Generate/update tasks for one spec |
+| `implement.md` | Implement a small task slice with Codex |
+| `review-spec.md` | Review spec before planning |
+| `review-plan.md` | Review plan before task generation |
+| `review-tasks.md` | Review tasks before implementation |
+| `review-diff.md` | Review current diff against spec/plan/tasks |
+| `update-spec.md` | Update spec after a decision |
+| `update-plan.md` | Update plan after a technical discovery |
+| `update-tasks.md` | Update tasks after plan/task changes |
+| `simplify.md` | Ask the agent to simplify a design/spec/plan |
+| `roadmap.md` | Create/update the spec roadmap |
+| `command-model-spec.md` | Shortcut prompt for the command-model spec |
+| `artifact-contracts-spec.md` | Shortcut prompt for artifact contracts |
+| `domain-boundaries-spec.md` | Shortcut prompt for domain boundaries |
+| `dataset-artifact-model-spec.md` | Shortcut prompt for dataset artifact model |
+| `lattes-migration-spec.md` | Shortcut prompt for Lattes migration |
 
 ## Common placeholders
 
 | Placeholder | Meaning |
 |---|---|
-| `{{SPEC_DIR}}` | Feature directory, e.g. `specs/001-command-model-and-phase-renaming` |
-| `{{SPEC_NAME}}` | Human-readable feature name |
-| `{{FEATURE_GOAL}}` | Short description of the intended change |
+| `{{SPEC_DIR}}` | Spec directory, e.g. `specs/001-command-model-and-phase-renaming` |
+| `{{FEATURE_GOAL}}` | Human description of the intended change |
+| `{{SCOPE}}` | What is included |
+| `{{OUT_OF_SCOPE}}` | What is excluded |
+| `{{DEPENDENCIES}}` | Specs/docs this depends on |
 | `{{TASK_IDS}}` | Task IDs to implement, e.g. `T001-T003` |
-| `{{DEPENDENCIES}}` | Specs or docs this work depends on |
-| `{{ENABLED_SPECS}}` | Specs enabled by this work |
-| `{{DECISION}}` | Design/research decision to incorporate |
-| `{{DISCOVERY}}` | Implementation discovery or constraint to incorporate |
-| `{{BRANCH_NAME}}` | Current development branch, if relevant |
-| `{{ROADMAP_ITEMS}}` | Ordered list of specs in the roadmap |
-| `{{TARGET_FILE}}` | File to simplify or review |
-| `{{ROADMAP_FILE}}` | Roadmap file to review |
-| `{{CURRENT_SPEC}}` | Current roadmap focus |
-| `{{OPEN_QUESTION_1}}` | Open question to track |
+| `{{DECISION}}` | Decision to incorporate into the spec |
+| `{{DISCOVERY}}` | Technical discovery to incorporate into the plan |
 
 ## Recommended flow
 
-1. Create a roadmap for related specs.
-2. Create lightweight specs for upcoming architectural changes.
-3. Promote only the next implementable spec to planning-ready.
-4. Run `/speckit.plan` only for that spec.
-5. Review the plan.
-6. Run `/speckit.tasks`.
-7. Review tasks.
-8. Implement a small slice of tasks with Codex.
-9. Review the diff against the active spec, plan, tasks, constitution, and architecture docs.
-10. Update spec/plan/tasks only when intent, technical design, or task sequencing changes.
+1. Write the goal in your own words.
+2. Use `specify.md` or `specify-lightweight.md`.
+3. Review the generated spec.
+4. Use `plan.md` only for the spec you are about to implement.
+5. Use `tasks.md`.
+6. Implement a small task slice using `implement.md`.
+7. Review with `review-diff.md`.
 
 ## Rule of thumb
 
-- Intent, scope, public contracts changed? Update `spec.md`.
-- Technical approach, files, migration strategy changed? Update `plan.md`.
-- Task order, granularity, or execution changed? Update `tasks.md`.
-
-## Agent usage
-
-- Prefer Claude for specification, planning, architecture, and semantic review.
-- Prefer Codex for focused implementation, mechanical refactors, tests, and small patches.
-- Use planning mode for changes that affect CLI, artifacts, metrics, datasets, architecture, evaluation, or compatibility.
+- Changed intent, scope, semantics, or public contract? Update `spec.md`.
+- Changed implementation approach, files, tests, or migration strategy? Update `plan.md`.
+- Changed order, granularity, or execution of work? Update `tasks.md`.

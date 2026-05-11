@@ -1,38 +1,17 @@
 # Update spec
 
-Use this when intent, scope, public contracts, compatibility, or semantics changed.
+Use when intent, scope, semantics, or public contract changed.
 
 ```text
 Update {{SPEC_DIR}}/spec.md.
 
-Do not update plan.md or tasks.md yet.
-Do not implement code.
-Do not create or switch branches.
-Do not run provider-backed commands.
-
-Incorporate this decision:
-
+Decision to incorporate:
 {{DECISION}}
 
-Update the spec to state, when relevant:
+Do not update plan.md or tasks.md yet.
+Do not implement code.
+Do not run provider-backed commands.
 
-- what changed;
-- why the change is needed;
-- whether it affects scope;
-- whether it affects public contracts;
-- whether it affects artifact semantics;
-- whether it affects metric semantics or provenance;
-- whether it affects compatibility or migration;
-- whether it affects documentation;
-- whether any prior requirement or non-goal must change.
-
-Preserve existing scope unless the decision explicitly changes it.
-Do not add implementation details unless they are necessary to define a public contract.
-
-After editing, report:
-
-- sections changed;
-- contracts or assumptions changed;
-- whether plan.md must be updated next;
-- whether tasks.md must be regenerated.
+Preserve scope unless the decision changes it.
+Report whether plan.md or tasks.md must be updated next.
 ```
