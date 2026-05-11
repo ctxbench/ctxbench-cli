@@ -77,7 +77,7 @@ def test_mcp_server_routes_resource_tools():
     tools = server.list_tools()
     result = server.call_tool(
         "get_profile",
-        {"lattes_id": "2342739419247924"},
+        {"lattes_id": "5521922960404236"},
     )
 
     assert any(tool.name == "get_profile" for tool in tools)
