@@ -11,19 +11,19 @@ class RunSelector:
     provider: tuple[str, ...] = ()
     model: tuple[str, ...] = ()
     instance: tuple[str, ...] = ()
-    question: tuple[str, ...] = ()
+    task: tuple[str, ...] = ()
     strategy: tuple[str, ...] = ()
     format: tuple[str, ...] = ()
-    repeat: tuple[int, ...] = ()
+    repetition: tuple[int, ...] = ()
     status: tuple[str, ...] = ()
-    ids: tuple[str, ...] = ()
+    trial_id: tuple[str, ...] = ()
     not_provider: tuple[str, ...] = ()
     not_model: tuple[str, ...] = ()
     not_instance: tuple[str, ...] = ()
-    not_question: tuple[str, ...] = ()
+    not_task: tuple[str, ...] = ()
     not_strategy: tuple[str, ...] = ()
     not_format: tuple[str, ...] = ()
-    not_repeat: tuple[int, ...] = ()
+    not_repetition: tuple[int, ...] = ()
     not_status: tuple[str, ...] = ()
 
 
@@ -40,7 +40,7 @@ def matches_run_result(item: Any, selector: RunSelector) -> bool:
 
 
 def _matches_common(item: Any, selector: RunSelector) -> bool:
-    if selector.ids and _field(item, "runId") not in selector.ids:
+    if selector.trial_id and _field(item, "runId") not in selector.trial_id:
         return False
     if selector.provider and _field(item, "provider") not in selector.provider:
         return False
@@ -51,13 +51,13 @@ def _matches_common(item: Any, selector: RunSelector) -> bool:
             return False
     if selector.instance and _field(item, "instanceId") not in selector.instance:
         return False
-    if selector.question and _field(item, "questionId") not in selector.question:
+    if selector.task and _field(item, "questionId") not in selector.task:
         return False
     if selector.strategy and _field(item, "strategy") not in selector.strategy:
         return False
     if selector.format and _field(item, "format") not in selector.format:
         return False
-    if selector.repeat and _field(item, "repeatIndex") not in selector.repeat:
+    if selector.repetition and _field(item, "repeatIndex") not in selector.repetition:
         return False
     if selector.not_provider and _field(item, "provider") in selector.not_provider:
         return False
@@ -68,13 +68,13 @@ def _matches_common(item: Any, selector: RunSelector) -> bool:
             return False
     if selector.not_instance and _field(item, "instanceId") in selector.not_instance:
         return False
-    if selector.not_question and _field(item, "questionId") in selector.not_question:
+    if selector.not_task and _field(item, "questionId") in selector.not_task:
         return False
     if selector.not_strategy and _field(item, "strategy") in selector.not_strategy:
         return False
     if selector.not_format and _field(item, "format") in selector.not_format:
         return False
-    if selector.not_repeat and _field(item, "repeatIndex") in selector.not_repeat:
+    if selector.not_repetition and _field(item, "repeatIndex") in selector.not_repetition:
         return False
     return True
 

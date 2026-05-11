@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.cli import build_parser, main
+from copa.cli import _selector_from_args, build_parser, main
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -59,6 +59,57 @@ def test_query_and_exec_are_rejected_by_parser(capsys):
         err = capsys.readouterr().err
         assert "invalid choice" in err
         assert f"'{command}'" in err
+
+
+def test_execute_help_uses_target_selector_flags(capsys):
+    parser = build_parser()
+
+    with pytest.raises(SystemExit) as excinfo:
+        parser.parse_args(["execute", "--help"])
+
+    assert excinfo.value.code == 0
+    out = capsys.readouterr().out
+    assert "--task" in out
+    assert "--repetition" in out
+    assert "--trial-id" in out
+    assert "--question" not in out
+    assert "--repeat" not in out
+    assert "--ids" not in out
+
+
+def test_execute_parser_maps_target_selector_flags():
+    parser = build_parser()
+
+    args = parser.parse_args(
+        [
+            "execute",
+            "--task", "q_year,q_summary",
+            "--repetition", "1,2",
+            "--trial-id", "run-a,run-b",
+            "--not-task", "q_skip",
+            "--not-repetition", "3",
+        ]
+    )
+    selector = _selector_from_args(args)
+
+    assert selector.task == ("q_year", "q_summary")
+    assert selector.repetition == (1, 2)
+    assert selector.trial_id == ("run-a", "run-b")
+    assert selector.not_task == ("q_skip",)
+    assert selector.not_repetition == (3,)
+
+
+@pytest.mark.parametrize("flag", ["--question", "--repeat", "--ids"])
+def test_execute_parser_rejects_legacy_selector_flags(flag, capsys):
+    parser = build_parser()
+
+    with pytest.raises(SystemExit) as excinfo:
+        parser.parse_args(["execute", flag, "value"])
+
+    assert excinfo.value.code == 2
+    err = capsys.readouterr().err
+    assert "unrecognized arguments" in err
+    assert flag in err
 
 
 def test_pyproject_exposes_ctxbench_script_only():

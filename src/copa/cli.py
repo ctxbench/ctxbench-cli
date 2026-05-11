@@ -30,8 +30,8 @@ def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool 
         help="Filter by instance id (repeatable, comma-separated)",
     )
     parser.add_argument(
-        "--question", action="append", default=[], metavar="ID[,ID...]",
-        help="Filter by question id (repeatable, comma-separated)",
+        "--task", action="append", default=[], metavar="ID[,ID...]",
+        help="Filter by task id (repeatable, comma-separated)",
     )
     parser.add_argument(
         "--strategy", action="append", default=[], metavar="NAME[,NAME...]",
@@ -42,8 +42,8 @@ def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool 
         help="Filter by context format (repeatable, comma-separated)",
     )
     parser.add_argument(
-        "--repeat", action="append", default=[], metavar="N[,N...]",
-        help="Filter by repeat index (repeatable, comma-separated)",
+        "--repetition", action="append", default=[], metavar="N[,N...]",
+        help="Filter by repetition index (repeatable, comma-separated)",
     )
     parser.add_argument(
         "--not-model", action="append", default=[], metavar="ID[,ID...]",
@@ -58,8 +58,8 @@ def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool 
         help="Exclude by instance id",
     )
     parser.add_argument(
-        "--not-question", action="append", default=[], metavar="ID",
-        help="Exclude by question id",
+        "--not-task", action="append", default=[], metavar="ID",
+        help="Exclude by task id",
     )
     parser.add_argument(
         "--not-strategy", action="append", default=[], metavar="NAME",
@@ -70,16 +70,16 @@ def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool 
         help="Exclude by context format",
     )
     parser.add_argument(
-        "--not-repeat", action="append", default=[], metavar="N",
-        help="Exclude by repeat index",
+        "--not-repetition", action="append", default=[], metavar="N",
+        help="Exclude by repetition index",
     )
     parser.add_argument(
-        "--ids", metavar="ID[,ID...]|-",
-        help="Filter by explicit run IDs (comma-separated, or '-' to read from stdin)",
+        "--trial-id", metavar="ID[,ID...]|-",
+        help="Filter by explicit trial IDs (comma-separated, or '-' to read from stdin)",
     )
     parser.add_argument(
-        "--ids-file", metavar="PATH",
-        help="Filter by run IDs listed in a file (one per line)",
+        "--trial-id-file", metavar="PATH",
+        help="Filter by trial IDs listed in a file (one per line)",
     )
     if include_status:
         parser.add_argument(
@@ -109,9 +109,9 @@ def _parse_multi_int(values: list[str]) -> tuple[int, ...]:
     return tuple(result)
 
 
-def _resolve_ids(args: argparse.Namespace) -> tuple[str, ...]:
-    ids_arg: str | None = getattr(args, "ids", None)
-    ids_file_arg: str | None = getattr(args, "ids_file", None)
+def _resolve_trial_ids(args: argparse.Namespace) -> tuple[str, ...]:
+    ids_arg: str | None = getattr(args, "trial_id", None)
+    ids_file_arg: str | None = getattr(args, "trial_id_file", None)
     ids: list[str] = []
     if ids_arg == "-":
         ids.extend(load_ids_from_stdin())
@@ -127,19 +127,19 @@ def _selector_from_args(args: argparse.Namespace, *, include_status: bool = Fals
         model=_parse_multi_str(getattr(args, "model", []) or []),
         provider=_parse_multi_str(getattr(args, "provider", []) or []),
         instance=_parse_multi_str(getattr(args, "instance", []) or []),
-        question=_parse_multi_str(getattr(args, "question", []) or []),
+        task=_parse_multi_str(getattr(args, "task", []) or []),
         strategy=_parse_multi_str(getattr(args, "strategy", []) or []),
         format=_parse_multi_str(getattr(args, "format", []) or []),
-        repeat=_parse_multi_int(getattr(args, "repeat", []) or []),
+        repetition=_parse_multi_int(getattr(args, "repetition", []) or []),
         status=_parse_multi_str(getattr(args, "status", []) or []) if include_status else (),
-        ids=_resolve_ids(args),
+        trial_id=_resolve_trial_ids(args),
         not_model=_parse_multi_str(getattr(args, "not_model", []) or []),
         not_provider=_parse_multi_str(getattr(args, "not_provider", []) or []),
         not_instance=_parse_multi_str(getattr(args, "not_instance", []) or []),
-        not_question=_parse_multi_str(getattr(args, "not_question", []) or []),
+        not_task=_parse_multi_str(getattr(args, "not_task", []) or []),
         not_strategy=_parse_multi_str(getattr(args, "not_strategy", []) or []),
         not_format=_parse_multi_str(getattr(args, "not_format", []) or []),
-        not_repeat=_parse_multi_int(getattr(args, "not_repeat", []) or []),
+        not_repetition=_parse_multi_int(getattr(args, "not_repetition", []) or []),
         not_status=_parse_multi_str(getattr(args, "not_status", []) or []) if include_status else (),
     )
 

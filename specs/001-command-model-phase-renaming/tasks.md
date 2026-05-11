@@ -41,7 +41,7 @@ before implementation.
 
 - [X] T001 Capture pre-migration baseline at `specs/001-command-model-phase-renaming/baseline.before.txt` by running `rg -n --no-heading 'copa|\bquery\b|queries\.jsonl|answers\.jsonl|runId|questionId|\banswer\b|--question|--repeat|--ids|\bmcp\b' src/ tests/ docs/architecture/ README.md pyproject.toml flake.nix > specs/001-command-model-phase-renaming/baseline.before.txt`. This baseline is consumed by T069.
 - [ ] T002 [P] Add CLI command/help contract tests in `tests/test_cli.py` covering `ctxbench` parser usage, allowed subcommands `{plan, execute, eval, export, status}`, and rejection of `query` and `exec`.
-- [ ] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
+- [X] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
 - [ ] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
 - [ ] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
 - [ ] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
@@ -60,7 +60,7 @@ strategy labels before command writers/readers are migrated.
 - [ ] T011 Update trial specification fields in `src/copa/benchmark/models.py`: `RunSpec.model_validate()` and `RunSpec.to_persisted_artifact()` consume and emit `trialId` / `taskId`, rejecting public `runId` / `questionId` inputs under the no-alias contract.
 - [ ] T012 Update response fields in `src/copa/benchmark/models.py`: `RunResult.model_validate()` and `RunResult.to_persisted_artifact()` consume and emit `trialId`, `taskId`, and `response`, rejecting public `runId`, `questionId`, and `answer` inputs.
 - [ ] T013 Update evaluation and judge-vote models in `src/copa/benchmark/models.py` so persisted eval and judge-vote records use `trialId`, `taskId`, and `response` where those concepts are serialized.
-- [ ] T014 Update selector data structures in `src/copa/benchmark/selectors.py`: `question` / `not_question` become `task` / `not_task`, `repeat` becomes `repetition`, and `ids` becomes `trial_id`.
+- [X] T014 Update selector data structures in `src/copa/benchmark/selectors.py`: `question` / `not_question` become `task` / `not_task`, `repeat` becomes `repetition`, and `ids` becomes `trial_id`.
 - [ ] T015 Audit `src/schemas/runspec.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
 - [ ] T016 Audit `src/schemas/plan.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
 - [ ] T017 Update strategy registry in `src/copa/ai/engine.py`: register native remote MCP as `remote_mcp`, do not register `mcp`, and keep `local_mcp` behavior separate.
@@ -83,8 +83,8 @@ fixture and produce target artifact names and fields.
 - [X] T022 [US1] Update parser identity in `src/copa/cli.py`: `ArgumentParser(prog="ctxbench", description=...)` and top-level command list uses target terminology.
 - [X] T023 [US1] Rename `src/copa/commands/query.py` to `src/copa/commands/execute.py` and rename `query_command` to `execute_command`.
 - [X] T024 [US1] Update imports and command wiring in `src/copa/cli.py` from `copa.commands.query.query_command` to `copa.commands.execute.execute_command`, and replace the `query` subparser with `execute`.
-- [ ] T025 [US1] Update selector flags in `src/copa/cli.py`: `--task` / `--not-task`, `--repetition` / `--not-repetition`, `--trial-id` / `--trial-id-file`; remove legacy long flags entirely.
-- [ ] T026 [US1] Update selector parsing in `src/copa/cli.py` to construct the renamed `RunSelector` fields from T014.
+- [X] T025 [US1] Update selector flags in `src/copa/cli.py`: `--task` / `--not-task`, `--repetition` / `--not-repetition`, `--trial-id` / `--trial-id-file`; remove legacy long flags entirely.
+- [X] T026 [US1] Update selector parsing in `src/copa/cli.py` to construct the renamed `RunSelector` fields from T014.
 - [X] T027 [US1] Sweep user-facing CLI help strings in `src/copa/cli.py` so canonical help output uses `execute`, `trials.jsonl`, `responses.jsonl`, `taskId`, `trialId`, and `response`.
 - [ ] T028 [US1] Update `src/copa/commands/plan.py` to write `trials.jsonl` through `src/copa/benchmark/paths.py` and print/log target terminology.
 - [ ] T029 [US1] Update `src/copa/commands/execute.py` to read `trials.jsonl`, write `responses.jsonl`, and use target public field names.
