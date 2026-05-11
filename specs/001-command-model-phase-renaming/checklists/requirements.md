@@ -32,6 +32,20 @@
 ## Notes
 
 - All items pass. Spec is ready for `/speckit-plan`.
-- The description provided was complete and unambiguous; no clarification markers were needed.
-- Scope boundary is explicitly enforced by FR-011: dataset semantics and domain-specific logic are excluded.
-- "Public terminology" scope is defined in Assumptions to prevent ambiguity during planning.
+- The spec declares change classification as **intentionally breaking** in a dedicated section (per Constitution Governance §).
+- Scope is enumerated explicitly under a dedicated **Scope** section (In Scope / Out of Scope), not buried in Assumptions.
+- The deprecated-term list (FR-013) is the canonical reference for compatibility documentation, tests, and verification.
+- Trace directory rename (`traces/queries/` → `traces/executions/`) is explicitly deferred to spec 002 (FR-017).
+- Internal Python package/module names are explicitly out of scope; only public-facing terminology is governed by this spec.
+- The architecture docs (`docs/architecture/README.md`, `vocabulary.md`, `cli-architecture.md`) currently carry compatibility-alias entries that contradict the no-alias policy; FR-012 requires them to be removed in the same change set.
+
+### 2026-05-11 revision
+
+- Added Change Classification section (intentionally breaking).
+- Added Scope section (In Scope / Out of Scope).
+- Added Dependencies and Enables section.
+- Added FRs covering CLI program rename (`copa` → `ctxbench`) and selector renames.
+- Added FR mandating architecture-doc updates within the change set.
+- Tightened acceptance scenarios to specify exit codes and error-message tokens.
+- Reframed SC-005 as concrete grep-based checks (now SC-003 / SC-004).
+- Aligned current-state references with the actual codebase (`copa query`, not the phantom `ctxbench exec`).
