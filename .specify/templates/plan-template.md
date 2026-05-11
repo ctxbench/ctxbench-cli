@@ -1,122 +1,102 @@
-# Implementation Plan: [FEATURE]
+# Plan: [FEATURE]
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: `[branch-name]` | **Date**: [DATE] | **Spec**: [link]  
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit-plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+[One short paragraph describing the intended change and implementation approach.]
+
+## Decisions
+
+- [decision]
+- [decision]
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: Python 3.12
-**Primary Dependencies**: The primary dependencies are in pyproject.toml and flake.nix
-**Storage**: N/A
-**Testing**: pytest 
-**Target Platform**: Linux Server
-**Project Type**: cli  
-**Performance Goals**: NEEDS CLARIFICATION  
-**Constraints**: NEEDS CLARIFICATION  
-**Scale/Scope**: NEEDS CLARIFICATION
+**Language/Version**: Python 3.12  
+**Primary Dependencies**: pyproject.toml, flake.nix  
+**Storage**: local JSON/JSONL/CSV artifacts when relevant  
+**Testing**: pytest, provider-free fixtures/mocks  
+**Target Platform**: CLI  
+**Project Type**: single Python CLI project  
+**Constraints**: provider-free validation; no full benchmark unless explicitly approved  
+**Scale/Scope**: [small/medium/large, with reason]
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+Check only gates relevant to this spec. Do not repeat irrelevant gates verbosely.
 
-The plan MUST either satisfy each gate or document the violation in Complexity Tracking with
-rationale, scope, and mitigation.
+| Gate | Status | Notes |
+|---|---|---|
+| Phase separation | pass / n/a / risk | [notes] |
+| Cost/evaluation separation | pass / n/a / risk | [notes] |
+| Metric provenance | pass / n/a / risk | [notes] |
+| Artifact contracts | pass / n/a / risk | [notes] |
+| Strategy comparability | pass / n/a / risk | [notes] |
+| Dataset/domain isolation | pass / n/a / risk | [notes] |
+| Provider isolation | pass / n/a / risk | [notes] |
+| Provider-free validation | pass / n/a / risk | [notes] |
+| Documentation impact | pass / n/a / risk | [notes] |
+| Simplicity / research sufficiency | pass / n/a / risk | [notes] |
 
-- [ ] Lifecycle phases remain explicit and separated.
-- [ ] Answer-generation and evaluation costs are not conflated.
-- [ ] New or changed metrics define value, unit, lifecycle phase, and provenance.
-- [ ] Metric provenance distinguishes reported, measured, derived, estimated, and unavailable values.
-- [ ] Estimated metrics are not presented as reported or measured values.
-- [ ] Unavailable metrics are represented as unavailable/null, not as zero.
-- [ ] Metric comparisons do not mix provenance categories without explicit labeling.
-- [ ] New metric metadata is minimal and justified by current research needs.
-- [ ] Canonical and derived artifacts are identified when artifacts are created or changed.
-- [ ] Artifact/schema changes are documented as compatible, breaking, transitional, or experimental.
-- [ ] Strategy comparability is preserved, or intentional asymmetries are documented.
-- [ ] Dataset/domain-specific behavior remains isolated from generic benchmark components.
-- [ ] Provider-specific behavior remains isolated from strategy orchestration.
-- [ ] Architectural boundaries and dependency direction are preserved; cycles require documented migration exceptions.
-- [ ] Provider-backed execution is not required for validation unless explicitly approved.
-- [ ] Documentation impact is identified, especially for CLI, artifacts, metrics, datasets, and reproducibility.
+## Files Likely Affected
 
-## Project Structure
+- [file/path]
+- [file/path]
 
-### Documentation (this feature)
+## Implementation Slices
 
-```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
-```
+The plan MUST propose small implementation slices before task generation.
 
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
+Each slice should be independently reviewable and should end in a green checkpoint.
 
-```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+| Slice | Goal | Likely files | Validation | Depends on |
+|---|---|---|---|---|
+| S1 | [goal] | [files] | [tests/checks] | [dependency] |
+| S2 | [goal] | [files] | [tests/checks] | [dependency] |
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+Slice rules:
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
+- Prefer 3–7 tasks per slice.
+- A slice must not mix unrelated concerns.
+- A slice must not require provider-backed execution.
+- A slice should end with focused tests or an explicit audit.
+- If the spec is large, tasks MUST be grouped under these slices.
+- Prefer one commit per green slice, not one commit per task.
 
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+## Process Logging
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+For Level 2 or Level 3 changes, create or update process logs in the spec directory:
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
-```
+- `worklog.md` for human-readable process history.
+- `usage.jsonl` for structured process metrics, if useful.
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+Keep logging light:
+
+- record one entry per meaningful step, review, slice, audit, or decision;
+- do not log every small prompt;
+- token fields may be `unavailable` when tools do not report usage;
+- distinguish reported, estimated, and unavailable usage.
+
+## Risks
+
+- [risk]
+- [risk]
+
+## Validation
+
+Provider-free validation:
+
+- [command/check]
+- [command/check]
+
+No real provider-backed command should be required unless explicitly approved.
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+Fill only if the plan knowingly violates a constitution gate.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+|---|---|---|
+| _(none)_ | _(n/a)_ | _(n/a)_ |

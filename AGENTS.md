@@ -30,12 +30,58 @@ Default behavior:
 - preserve reproducibility.
 
 Do not make broad architectural changes unless explicitly requested.
-
 Do not silently change experiment semantics.
-
 Do not silently change generated artifact formats.
-
 Do not run expensive experiments unless explicitly requested.
+
+## Lightweight SDD workflow
+
+Use the lightest process that preserves research validity.
+
+- **Level 0 — Direct change**: typo, local fix, small docs update. No spec required.
+- **Level 1 — Lightweight spec**: small behavior change with limited impact. Use spec-lite and direct implementation slices.
+- **Level 2 — Planned change**: touches CLI, artifacts, tests, docs, or schemas. Use spec-lite, plan, slices, and focused tasks.
+- **Level 3 — Full SDD**: architecture, metrics, datasets, evaluation, breaking changes, provider behavior. Use full spec, plan review, tasks, slices, and audit.
+
+Do not use the full Spec Kit flow for every small change.
+
+## Implementation slices
+
+Before generating or implementing tasks for a non-trivial spec, propose implementation slices.
+
+Each slice should include:
+
+- goal;
+- files likely affected;
+- focused tests/checks;
+- dependencies;
+- risks;
+- suggested commit message.
+
+Implement one slice at a time.
+Prefer one commit per green slice, not one commit per task.
+
+## Process logging
+
+For Level 2 or Level 3 specs, maintain lightweight process logs when useful:
+
+- `worklog.md` for human-readable development history;
+- `usage.jsonl` for structured process metrics.
+
+Log meaningful steps, not every prompt.
+
+Useful events:
+
+- spec-created;
+- plan-reviewed;
+- tasks-generated;
+- tasks-regrouped;
+- slice-implemented;
+- diff-reviewed;
+- audit-run;
+- spec-completed.
+
+When token usage is not available, record `token_provenance: "unavailable"` rather than inventing values.
 
 ## Prompt interpretation
 
@@ -47,7 +93,6 @@ For every task, infer and preserve:
 - Done when: what verification proves the task is complete.
 
 If the request is ambiguous and implementation could affect experiment validity, ask before editing.
-
 For simple mechanical changes, proceed with the smallest safe change.
 
 ## Project workflow
@@ -80,13 +125,12 @@ Do not introduce documentation or scripts using obsolete command names.
 
 ## Current and target naming
 
-The current implementation may still contain legacy names such as `copa`, `query`,
-`queries.jsonl`, `answers.jsonl`, `runId`, `questionId`, and `answer`.
+The implementation may still contain legacy internal names such as `copa`.
 
-The target architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
+The target public architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
 `trialId`, `taskId`, and `response`.
 
-Treat legacy names as migration details, not permanent concepts. New specs, docs, examples,
+Treat legacy names as migration details, not permanent public concepts. New specs, docs, examples,
 and code should prefer target terminology unless explicitly working on compatibility.
 
 If artifact names or formats change, the specification must define canonical vs. derived
@@ -136,50 +180,9 @@ Keep benchmark concerns separated:
 - analysis utilities.
 
 Avoid coupling generic benchmark code to the domain-specific dataset.
-
 Avoid coupling provider-specific behavior to strategy-independent logic.
-
 Use typed data structures where the project already uses them.
-
-Preserve existing naming conventions.
-
-## Strategy rules
-
-The strategy layer owns context-provisioning behavior.
-
-Provider adapters should expose model capabilities but should not decide benchmark strategy.
-
-Inline strategies may serialize context into prompts.
-
-Tool-based strategies should expose tools and run the tool loop according to the benchmark design.
-
-MCP strategies should preserve the distinction between:
-
-- local MCP;
-- remote MCP;
-- function calling;
-- provider-native tool use.
-
-## Evaluation rules
-
-Keep trial execution and evaluation separate.
-
-Do not include judge token usage in answer-generation cost.
-
-Do not overwrite answer traces with evaluation traces.
-
-Preserve individual judge votes.
-
-Preserve aggregate evaluation outputs.
-
-When changing evaluation logic, consider:
-
-- correctness;
-- completeness;
-- majority outcome;
-- unanimous outcome;
-- judge disagreement;
-- judge errors.
+Preserve existing naming conventions unless a spec changes them.
 
 ## Metric rules
 
@@ -197,20 +200,6 @@ Estimated metrics must not be presented as reported or measured values. Unavaila
 must not be represented as zero unless zero is a valid observed value. Avoid adding extra
 confidence scores or complex metric taxonomies unless required by an accepted specification.
 
-## Reproducibility rules
-
-All experiment-affecting changes should be reproducible.
-
-Prefer deterministic tests.
-
-Avoid hidden environment assumptions.
-
-If an environment variable is required, document it.
-
-Do not commit secrets, API keys, provider tokens, or private credentials.
-
-Do not add generated large artifacts unless explicitly requested.
-
 ## Commands
 
 Use targeted commands first.
@@ -225,7 +214,7 @@ Run focused tests:
 
 ```bash
 pytest -k plan
-pytest -k exec
+pytest -k execute
 pytest -k eval
 pytest -k export
 pytest -k cli
@@ -234,39 +223,7 @@ pytest -k cli
 Run formatting or linting only if configured in the repository.
 
 Do not install new dependencies without asking.
-
 Do not change lockfiles unless dependency changes are explicitly requested.
-
-## Documentation rules
-
-Documentation must match the current implementation.
-
-When updating README or experiment documentation:
-
-- include exact commands;
-- identify required input files;
-- identify generated output files;
-- explain how to reproduce results;
-- explain how to inspect status;
-- avoid vague claims about accuracy or superiority;
-- distinguish benchmark results from general conclusions.
-
-## Analysis rules
-
-For benchmark analysis, prefer notebooks, pandas, DuckDB, or small scripts.
-
-Do not ask the model to manually inspect many rows.
-
-Prefer aggregations such as:
-
-- accuracy by strategy;
-- accuracy by model;
-- token cost by strategy;
-- duration by strategy;
-- tool calls by task;
-- judge disagreement by task;
-- failures by provider;
-- cache effects by model.
 
 ## Safety and cost controls
 
@@ -296,5 +253,5 @@ If no tests were run, say so clearly and explain why.
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+shell commands, and other important information, read the current plan.
 <!-- SPECKIT END -->

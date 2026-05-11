@@ -1,41 +1,35 @@
 # Specification: [FEATURE NAME]
 
-**Feature Branch**: `[branch-name]`  
-**Spec Directory**: `[specs/###-feature-name]`  
-**Created**: [DATE]  
+**Spec Directory**: `[specs/...]`  
 **Status**: Draft  
-**Mode**: lite | full  
-**Input**: User description: "$ARGUMENTS"
+**Mode**: lite  
+**Input**: "$ARGUMENTS"
 
 ## Goal
 
-[State the intended change and why it matters. Prefer 2–5 sentences.]
+[State the intended change in 2–5 sentences.]
 
 ## Scope
 
 This spec includes:
 
-- [included item]
-- [included item]
+- [item]
+- [item]
 
 ## Out of Scope
 
 This spec does not include:
 
-- [excluded item]
-- [excluded item]
+- [item]
+- [item]
 
 ## Requirements
 
-- **FR-001**: [Specific requirement]
-- **FR-002**: [Specific requirement]
-- **FR-003**: [Specific requirement]
-
-Use requirements for what must be true. Keep implementation details out unless they define a public contract.
+- **FR-001**: [Requirement]
+- **FR-002**: [Requirement]
+- **FR-003**: [Requirement]
 
 ## Acceptance Scenarios
-
-Use Given/When/Then for observable behavior.
 
 ### AC-001 — [Scenario name]
 
@@ -59,27 +53,17 @@ Use Given/When/Then for observable behavior.
 | Dataset/domain | none / changed |
 | Provider behavior | none / changed |
 | Documentation | none / changed |
-| Tests/fixtures | none / changed |
 
 ## Compatibility / Migration
 
-State one:
-
-- compatible
-- breaking
-- transitional
-- experimental
-
-Then explain the migration expectation.
+[State whether this is compatible, breaking, transitional, or experimental.]
 
 ## Validation
 
 Provider-free validation should include:
 
-- [focused test/check]
-- [focused test/check]
-
-Do not require provider-backed execution unless explicitly approved.
+- [test/check]
+- [test/check]
 
 ## Dependencies
 

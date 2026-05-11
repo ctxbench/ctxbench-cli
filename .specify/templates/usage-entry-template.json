@@ -1,0 +1,20 @@
+{
+  "timestamp": "YYYY-MM-DDTHH:MM:SS-03:00",
+  "spec": "specs/###-feature-name",
+  "tool": "claude|codex|chatgpt|manual|other",
+  "model": "unknown",
+  "activity": "spec-created|plan-reviewed|tasks-generated|slice-implemented|diff-reviewed|audit-run|other",
+  "iteration": "I1",
+  "slice": null,
+  "tasks": [],
+  "input_tokens": null,
+  "output_tokens": null,
+  "total_tokens": null,
+  "token_provenance": "reported|estimated|unavailable",
+  "duration_minutes": null,
+  "files_changed": [],
+  "commands_run": [],
+  "tests_run": [],
+  "result": "pass|fail|partial|not-run|unknown",
+  "notes": ""
+}

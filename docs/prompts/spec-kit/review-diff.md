@@ -14,6 +14,7 @@ Do not run provider-backed commands.
 
 Focus on:
 - active spec compliance;
+- implementation slice scope;
 - phase separation;
 - artifact contracts;
 - metric provenance;
@@ -22,7 +23,7 @@ Focus on:
 - documentation drift;
 - overengineering;
 - missing tests;
-- accidental changes outside active tasks.
+- accidental changes outside active slice.
 
 Return:
 - summary;

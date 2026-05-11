@@ -11,12 +11,12 @@ Core strategies:
 - `inline`: context is inserted directly into the prompt.
 - `local_function`: local tool/function calling controlled by the benchmark.
 - `local_mcp`: local MCP runtime controlled by the benchmark.
-- `mcp`: remote MCP server used as a context provider.
+- `remote_mcp`: remote MCP server used as a context provider.
 
 Core benchmark workflow:
 
 - `ctxbench plan`
-- `ctxbench exec`
+- `ctxbench execute`
 - `ctxbench eval`
 - `ctxbench export`
 - `ctxbench status`
@@ -32,16 +32,68 @@ Before editing code:
 1. Identify the smallest relevant file set.
 2. Use `rg`, `find`, `git diff`, `jq`, or small scripts before opening large files.
 3. Read only the necessary functions, classes, or file ranges.
-4. Propose a short plan.
-5. Wait for confirmation unless the user explicitly asked for direct implementation.
+4. Propose a short plan for non-trivial changes.
+5. Proceed directly only when the user explicitly requested implementation or the change is clearly mechanical.
 
 Do not explore the whole repository unless explicitly asked.
-
 Prefer focused changes over broad refactoring.
-
 Do not perform opportunistic refactors.
-
 Do not change public file formats, experiment schemas, dataset schemas, CLI behavior, or output artifact names unless explicitly requested.
+
+## Lightweight SDD mode
+
+Prefer concise specs and plans unless the change affects architecture, artifacts, metrics,
+evaluation, datasets, or provider behavior.
+
+Use workflow levels:
+
+- Level 0: direct edit.
+- Level 1: lightweight spec.
+- Level 2: lightweight spec + plan with implementation slices.
+- Level 3: full SDD, audits, worklog, and usage tracking.
+
+For most implementation work, use compact prompts:
+
+```text
+Spec: <path>
+Slice: <goal>
+Tasks: <ids>
+Do: <short list>
+Don't: provider calls, full benchmark, opportunistic refactors
+Run: focused tests
+Report: files, tests, risks
+```
+
+## Slice planning
+
+When asked to plan a spec, include an **Implementation Slices** section before generating tasks.
+
+Each slice should include:
+
+- goal;
+- likely files;
+- focused validation;
+- dependencies;
+- suggested commit message.
+
+Do not produce a long flat task list without grouping tasks into reviewable slices.
+
+## Process logging
+
+For Level 2 or Level 3 changes, update process logs when useful:
+
+- `worklog.md`: human-readable timeline, decisions, iterations, slices, validation, lessons.
+- `usage.jsonl`: structured process metrics.
+
+Do not log every prompt.
+
+Use `token_provenance`:
+
+- `reported`: tool reported usage.
+- `estimated`: usage estimated with a documented heuristic.
+- `unavailable`: usage not available.
+
+Prefer `unavailable` over false precision.
 
 ## Large files and benchmark artifacts
 
@@ -86,7 +138,7 @@ pytest -k plan
 For trial execution changes:
 
 ```bash
-pytest -k trial
+pytest -k execute
 ```
 
 For evaluation changes:
@@ -104,13 +156,11 @@ pytest -k export
 If the exact test target is unknown, locate tests first:
 
 ```bash
-rg "def test_.*export|def test_.*eval|def test_.*query" tests
+rg "def test_.*export|def test_.*eval|def test_.*execute|def test_.*query" tests
 ```
 
 Do not run the full benchmark unless explicitly requested.
-
 Do not call real LLM providers unless explicitly requested.
-
 Prefer fixtures, mocks, and small local examples.
 
 ## Research constraints
@@ -145,33 +195,9 @@ When discussing accuracy, distinguish:
 ## Architecture constraints
 
 Keep strategy logic separate from model-provider adapters.
-
 Provider adapters should not own benchmark strategy decisions.
-
-Strategies should orchestrate:
-
-- prompt construction;
-- tool availability;
-- tool-call loop;
-- MCP/local-function execution;
-- trace collection.
-
 Dataset-specific logic should remain isolated from generic benchmark execution logic.
-
 Avoid hardcoding Lattes-specific behavior in generic ctxbench components.
-
-## MCP rules
-
-Use MCP only when the task is explicitly about MCP behavior, MCP integration, or MCP strategy execution.
-
-Do not enable or inspect unrelated MCP servers.
-
-For remote MCP analysis, pay attention to observability limits:
-
-- which tools were called;
-- whether tool calls are visible locally;
-- whether usage metrics are provider-side only;
-- whether network duration and model duration can be separated.
 
 ## Documentation rules
 
@@ -183,29 +209,15 @@ When updating documentation:
 - avoid historical implementation details unless needed;
 - avoid overstating what the benchmark proves.
 
-Use the current command names:
+Use current command names:
 
 - `ctxbench plan`
-- `ctxbench exec`
+- `ctxbench execute`
 - `ctxbench eval`
 - `ctxbench export`
 - `ctxbench status`
 
 Do not document obsolete commands unless explicitly writing migration notes.
-
-## Current and target naming
-
-The current implementation may still contain legacy names such as `copa`, `query`,
-`queries.jsonl`, `answers.jsonl`, `runId`, `questionId`, and `answer`.
-
-The target architecture uses `ctxbench`, `execute`, `trials.jsonl`, `responses.jsonl`,
-`trialId`, `taskId`, and `response`.
-
-Treat legacy names as migration details, not permanent concepts. New specs, docs, examples,
-and code should prefer target terminology unless explicitly working on compatibility.
-
-If artifact names or formats change, the specification must define canonical vs. derived
-artifacts, migration impact, and schema compatibility.
 
 ## Metric rules
 
@@ -220,8 +232,7 @@ Use the simplest sufficient classification:
 - `unavailable`: not available and not responsibly estimated.
 
 Estimated metrics must not be presented as reported or measured values. Unavailable metrics
-must not be represented as zero unless zero is a valid observed value. Avoid adding extra
-confidence scores or complex metric taxonomies unless required by an accepted specification.
+must not be represented as zero unless zero is a valid observed value.
 
 ## Done criteria
 
@@ -240,6 +251,7 @@ When context grows, compact aggressively.
 Preserve:
 
 - current task goal;
+- active spec and slice;
 - accepted plan;
 - files read;
 - files changed;
@@ -259,6 +271,5 @@ Drop:
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan at
-`specs/001-command-model-phase-renaming/plan.md`.
+shell commands, and other important information, read the current active plan.
 <!-- SPECKIT END -->
