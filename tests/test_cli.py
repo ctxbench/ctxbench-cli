@@ -68,7 +68,7 @@ def test_execute_help_uses_target_selector_flags(capsys):
     out = capsys.readouterr().out
     assert "--task" in out
     assert "--repetition" in out
-    assert "--trial-id" in out
+    assert "--trial" in out
 
 
 def test_execute_parser_maps_target_selector_flags():
@@ -79,7 +79,7 @@ def test_execute_parser_maps_target_selector_flags():
             "execute",
             "--task", "q_year,q_summary",
             "--repetition", "1,2",
-            "--trial-id", "run-a,run-b",
+            "--trial", "run-a,run-b",
             "--not-task", "q_skip",
             "--not-repetition", "3",
         ]

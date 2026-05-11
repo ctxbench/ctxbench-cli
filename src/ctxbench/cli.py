@@ -74,11 +74,11 @@ def _add_selector_args(parser: argparse.ArgumentParser, *, include_status: bool 
         help="Exclude by repetition index",
     )
     parser.add_argument(
-        "--trial-id", metavar="ID[,ID...]|-",
+        "--trial", metavar="ID[,ID...]|-",
         help="Filter by explicit trial IDs (comma-separated, or '-' to read from stdin)",
     )
     parser.add_argument(
-        "--trial-id-file", metavar="PATH",
+        "--trial-file", metavar="PATH",
         help="Filter by trial IDs listed in a file (one per line)",
     )
     if include_status:
@@ -110,8 +110,8 @@ def _parse_multi_int(values: list[str]) -> tuple[int, ...]:
 
 
 def _resolve_trial_ids(args: argparse.Namespace) -> tuple[str, ...]:
-    ids_arg: str | None = getattr(args, "trial_id", None)
-    ids_file_arg: str | None = getattr(args, "trial_id_file", None)
+    ids_arg: str | None = getattr(args, "trial", None)
+    ids_file_arg: str | None = getattr(args, "trial_file", None)
     ids: list[str] = []
     if ids_arg == "-":
         ids.extend(load_ids_from_stdin())
@@ -177,7 +177,7 @@ def build_parser() -> argparse.ArgumentParser:
         "execute", help="Execute trials and collect responses"
     )
     execute_parser.add_argument(
-        "queries", nargs="?", default=None,
+        "trials", nargs="?", default=None,
         help="Path to trials.jsonl (default: ./trials.jsonl)",
     )
     execute_parser.add_argument(
@@ -189,7 +189,7 @@ def build_parser() -> argparse.ArgumentParser:
     execute_parser.add_argument("--progress", action="store_true", help="Show progress bar")
     execute_parser.set_defaults(
         func=lambda args: execute_command(
-            args.queries,
+            args.trials,
             force=args.force,
             verbose=args.verbose,
             progress=args.progress,

@@ -52,7 +52,7 @@ def write_trace_file(result: RunResult, artifact_root: str | Path) -> str | None
     }
     return _write_trace_payload(
         artifact_root=artifact_root,
-        task="queries",
+        task="executions",
         run_id=result.runId,
         payload=payload,
     )
