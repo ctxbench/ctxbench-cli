@@ -9,7 +9,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.cli import _selector_from_args, build_parser, main
+from ctxbench.cli import _selector_from_args, build_parser, main
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -127,7 +127,7 @@ def test_pyproject_exposes_ctxbench_script_only():
     pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     scripts = pyproject["project"]["scripts"]
 
-    assert scripts["ctxbench"] == "copa.cli:main"
+    assert scripts["ctxbench"] == "ctxbench.cli:main"
     assert "copa" not in scripts
 
 
@@ -137,7 +137,7 @@ def test_flake_exposes_ctxbench_binary_and_app():
     assert 'name = "ctxbench";' in flake
     assert '"$out/bin/ctxbench"' in flake
     assert 'program = "${ctxbenchPkg}/bin/ctxbench";' in flake
-    assert '--add-flags "copa.cli"' in flake
+    assert '--add-flags "ctxbench.cli"' in flake
 
 
 def test_plan_writes_trials_jsonl_with_target_fields(tmp_path):
@@ -627,7 +627,7 @@ def test_eval_selector_excludes_instance_for_selected_model(tmp_path, monkeypatc
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         return (
@@ -667,7 +667,7 @@ def test_default_artifacts_use_jsonl_as_canonical_source(tmp_path, monkeypatch):
     assert responses_path.exists()
     assert not (trials_path.parent / "answers.jsonl").exists()
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         return (
@@ -699,7 +699,7 @@ def test_eval_writes_qualitative_outputs_and_summary(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         config = kwargs["config"]
@@ -745,7 +745,7 @@ def test_eval_selector_filters_by_model_id(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         return (
@@ -789,7 +789,7 @@ def test_eval_selector_filters_by_judge_id(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     seen: list[tuple[str, str, dict[str, object]]] = []
 
@@ -840,7 +840,7 @@ def test_eval_batch_custom_id_matches_anthropic_constraints(tmp_path, monkeypatc
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.commands import eval as eval_module
+    from ctxbench.commands import eval as eval_module
 
     custom_ids: list[str] = []
 
@@ -876,9 +876,9 @@ def test_eval_batch_wait_persists_results(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import evaluation_from_judge_payload
-    from copa.benchmark.models import EvaluationJudgeInfo, EvaluationTrace
-    from copa.commands import eval as eval_module
+    from ctxbench.benchmark.evaluation import evaluation_from_judge_payload
+    from ctxbench.benchmark.models import EvaluationJudgeInfo, EvaluationTrace
+    from ctxbench.commands import eval as eval_module
 
     def fake_submit_evaluation_batch(**kwargs):
         return {
@@ -940,9 +940,9 @@ def test_eval_batch_retrieves_openai_results(tmp_path):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import build_evaluation_jobs
-    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
-    from copa.commands.eval import _load_judges, _load_responses
+    from ctxbench.benchmark.evaluation import build_evaluation_jobs
+    from ctxbench.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from ctxbench.commands.eval import _load_judges, _load_responses
 
     jobs = build_evaluation_jobs(
         _load_responses(responses_path),
@@ -1019,9 +1019,9 @@ def test_submit_evaluation_batch_writes_target_manifest_fields(tmp_path):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import build_evaluation_jobs
-    from copa.benchmark.evaluation_batch import submit_evaluation_batch
-    from copa.commands.eval import _load_judges, _load_responses
+    from ctxbench.benchmark.evaluation import build_evaluation_jobs
+    from ctxbench.benchmark.evaluation_batch import submit_evaluation_batch
+    from ctxbench.commands.eval import _load_judges, _load_responses
 
     jobs = build_evaluation_jobs(
         _load_responses(responses_path),
@@ -1068,9 +1068,9 @@ def test_eval_batch_retrieves_openai_error_results(tmp_path):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import build_evaluation_jobs
-    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
-    from copa.commands.eval import _load_judges, _load_responses
+    from ctxbench.benchmark.evaluation import build_evaluation_jobs
+    from ctxbench.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from ctxbench.commands.eval import _load_judges, _load_responses
 
     jobs = build_evaluation_jobs(
         _load_responses(responses_path),
@@ -1129,9 +1129,9 @@ def test_eval_batch_openai_submit_uploads_pathlike_jsonl(tmp_path):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import build_evaluation_jobs
-    from copa.benchmark.evaluation_batch import OpenAIEvaluationBatchClient
-    from copa.commands.eval import _load_judges, _load_responses
+    from ctxbench.benchmark.evaluation import build_evaluation_jobs
+    from ctxbench.benchmark.evaluation_batch import OpenAIEvaluationBatchClient
+    from ctxbench.commands.eval import _load_judges, _load_responses
 
     jobs = build_evaluation_jobs(
         _load_responses(responses_path),
@@ -1181,9 +1181,9 @@ def test_eval_batch_retrieves_gemini_results(tmp_path):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark.evaluation import build_evaluation_jobs
-    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
-    from copa.commands.eval import _load_judges, _load_responses
+    from ctxbench.benchmark.evaluation import build_evaluation_jobs
+    from ctxbench.benchmark.evaluation_batch import retrieve_evaluation_batch
+    from ctxbench.commands.eval import _load_judges, _load_responses
 
     jobs = build_evaluation_jobs(
         _load_responses(responses_path),
@@ -1248,7 +1248,7 @@ def test_eval_allows_tasks_without_instance_override(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         return (
@@ -1273,7 +1273,7 @@ def test_eval_force_rewrites_existing_evaluation(tmp_path, monkeypatch):
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
     responses_path = _execute_trials(trials_path)
 
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     state = {"version": 0}
 

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from copa.util.artifacts import (
+from ctxbench.util.artifacts import (
     canonical_trial_identity,
     evaluation_filename,
     response_filename,
     trialspec_filename,
 )
-from copa.util.ids import trialspec_id
+from ctxbench.util.ids import trialspec_id
 
 
 def test_canonical_trial_identity_uses_target_task_and_repetition_terms():

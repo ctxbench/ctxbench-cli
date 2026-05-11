@@ -58,8 +58,8 @@
           ]
         );
 
-        venv = pyPkgs.mkVirtualEnv "copa-venv" {
-          copa = [ "dev" ];
+        venv = pyPkgs.mkVirtualEnv "ctxbench-venv" {
+          ctxbench = [ "dev" ];
         };
 
         ctxbenchPkg = pkgs.symlinkJoin {
@@ -73,7 +73,7 @@
             makeWrapper "${venv}/bin/python" "$out/bin/ctxbench" \
               --prefix PYTHONPATH : "${./src}" \
               --add-flags "-m" \
-              --add-flags "copa.cli"
+              --add-flags "ctxbench.cli"
           '';
         };
 

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from copa.benchmark.models import (
+from ctxbench.benchmark.models import (
     EvaluationItemResult,
     EvaluationRunResult,
     EvaluationRunSummary,
@@ -14,8 +14,6 @@ from copa.benchmark.models import (
     RunMetadata,
     RunResult,
     RunSpec,
-    RunTiming,
-    RunTrace,
 )
 
 

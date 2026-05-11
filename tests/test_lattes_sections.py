@@ -5,9 +5,9 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.datasets.lattes.mcp_server import LattesMCPServer
-from copa.datasets.lattes.provider import LattesProvider
-from copa.datasets.lattes.tools import LattesToolService
+from ctxbench.datasets.lattes.mcp_server import LattesMCPServer
+from ctxbench.datasets.lattes.provider import LattesProvider
+from ctxbench.datasets.lattes.tools import LattesToolService
 
 
 def _contexts_dir() -> str:

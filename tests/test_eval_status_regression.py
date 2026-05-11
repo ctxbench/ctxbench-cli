@@ -4,10 +4,10 @@ import json
 import csv
 from pathlib import Path
 
-from copa.benchmark import evaluation as evaluation_module
-from copa.commands.eval import eval_command
-from copa.commands.export import export_command
-from copa.commands.status import status_command
+from ctxbench.benchmark import evaluation as evaluation_module
+from ctxbench.commands.eval import eval_command
+from ctxbench.commands.export import export_command
+from ctxbench.commands.status import status_command
 
 
 def _write_eval_fixture(root: Path) -> Path:

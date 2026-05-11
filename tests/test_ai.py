@@ -7,28 +7,25 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import pytest
 
-from copa.ai.engine import Engine
-from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
-from copa.ai.models.claude import ClaudeModel
-from copa.ai.models.gemini import GeminiModel
-from copa.ai.models.mock import MockModel
-from copa.ai.models.openai import OpenAIModel
-from copa.ai.runtime import MCPRuntime
-from copa.ai.trace import TraceCollector
-from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
-from copa.benchmark.executor import execute_runspec
-from copa.benchmark.models import (
+from ctxbench.ai.engine import Engine
+from ctxbench.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
+from ctxbench.ai.models.claude import ClaudeModel
+from ctxbench.ai.models.gemini import GeminiModel
+from ctxbench.ai.models.mock import MockModel
+from ctxbench.ai.models.openai import OpenAIModel
+from ctxbench.ai.runtime import MCPRuntime
+from ctxbench.ai.trace import TraceCollector
+from ctxbench.benchmark.evaluation import _evaluate_judge, evaluate_run_result
+from ctxbench.benchmark.executor import execute_runspec
+from ctxbench.benchmark.models import (
     EvaluationJudgeInfo,
     EvaluationTrace,
     Experiment,
     ExperimentDataset,
     RunResult,
-    RunTiming,
-    RunTrace,
-    RunMetadata,
     RunSpec,
 )
-from copa.dataset.provider import DatasetProvider
+from ctxbench.dataset.provider import DatasetProvider
 import json
 
 
@@ -227,7 +224,7 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
 
 
 def test_classify_provider_error_treats_taskgroup_as_transient():
-    from copa.ai.rate_control import classify_provider_error
+    from ctxbench.ai.rate_control import classify_provider_error
 
     info = classify_provider_error("google", RuntimeError("unhandled errors in a TaskGroup (1 sub-exception)"))
 
@@ -386,7 +383,7 @@ def test_runresult_model_validate_rejects_bare_mcp_strategy_in_public_record():
 
 
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         config = kwargs["config"]
@@ -418,7 +415,7 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
 
 
 def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     experiment = Experiment.model_validate(
         {
@@ -480,7 +477,7 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
 
 
 def test_judge_request_injects_structured_output_schema():
-    from copa.benchmark.evaluation import _judge_request
+    from ctxbench.benchmark.evaluation import _judge_request
 
     engine = Engine()
     model = RecordingJudgeModel()

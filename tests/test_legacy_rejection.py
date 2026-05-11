@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from copa.cli import build_parser, main
+from ctxbench.cli import build_parser, main
 
 
 @pytest.mark.legacy_rejection
