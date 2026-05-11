@@ -29,7 +29,7 @@ class Engine:
         }
         self._strategies: dict[str, StrategyAdapter] = {
             "inline": InlineStrategy(),
-            "mcp": MCPStrategy(),
+            "remote_mcp": MCPStrategy(),
         }
         self._tool_runtime_factories = dict(tool_runtime_factories or {})
         self._rate_control_registry = RateControlRegistry()

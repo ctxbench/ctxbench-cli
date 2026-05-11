@@ -5,6 +5,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+import pytest
+
 from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
 from copa.ai.models.claude import ClaudeModel
@@ -261,6 +263,113 @@ def test_engine_local_function_uses_resource_tools_and_records_calls():
     assert result.trace["metrics"]["mcpToolCalls"] == 1
 
 
+def test_engine_resolves_remote_mcp_and_keeps_local_mcp_distinct():
+    engine = Engine(tool_runtime_factories={"local_mcp": lambda: FakeLattesRuntime()})
+
+    remote_strategy, remote_runtime = engine._resolve_strategy("remote_mcp")
+    local_strategy, local_runtime = engine._resolve_strategy("local_mcp")
+
+    assert type(remote_strategy).__name__ == "MCPStrategy"
+    assert remote_runtime is None
+    assert type(local_strategy).__name__ == "LocalMCPStrategy"
+    assert local_runtime is not None
+    local_runtime.close()
+
+
+def test_engine_rejects_bare_mcp_strategy_name():
+    engine = Engine()
+
+    with pytest.raises(ValueError, match="Unknown strategy: mcp"):
+        engine._resolve_strategy("mcp")
+
+
+def test_experiment_validation_rejects_bare_mcp_strategy_factor():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        Experiment.model_validate(
+            {
+                "id": "exp-test",
+                "output": "outputs",
+                "dataset": "/tmp/dataset",
+                "scope": {"instances": [], "questions": []},
+                "factors": {
+                    "model": [{"provider": "mock", "name": "mock"}],
+                    "strategy": ["mcp"],
+                    "format": ["json"],
+                },
+            }
+        )
+
+
+def test_runspec_model_validate_rejects_bare_mcp_strategy_in_public_record():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        RunSpec.model_validate(
+            {
+                "trialId": "trial-1",
+                "experimentId": "exp-1",
+                "taskId": "q_year",
+                "question": "In which year did the researcher obtain their PhD?",
+                "dataset": {"root": "/tmp/dataset"},
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "model": "mock",
+                "modelId": "mock",
+                "strategy": "mcp",
+                "format": "json",
+                "params": {},
+                "repeatIndex": 1,
+                "trace": {"enabled": False, "writeFiles": True, "save_raw_response": False, "save_tool_calls": False, "save_usage": False, "save_errors": False},
+                "artifacts": {"writeJsonl": True, "writeIndividualJson": False},
+                "metadata": {
+                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+                    "taskId": "q_year",
+                    "instanceId": "cv-demo",
+                    "provider": "mock",
+                    "modelId": "mock",
+                    "modelName": "mock",
+                    "strategy": "mcp",
+                    "format": "json",
+                    "repeatIndex": 1,
+                },
+            }
+        )
+
+
+def test_runresult_model_validate_rejects_bare_mcp_strategy_in_public_record():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        RunResult.model_validate(
+            {
+                "trialId": "trial-1",
+                "experimentId": "exp-1",
+                "taskId": "q_year",
+                "question": "In which year did the researcher obtain their PhD?",
+                "dataset": {"root": "/tmp/dataset"},
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "model": "mock",
+                "modelId": "mock",
+                "strategy": "mcp",
+                "format": "json",
+                "repeatIndex": 1,
+                "status": "success",
+                "response": "2018",
+                "timing": {"startedAt": "2026-01-01T00:00:00Z", "finishedAt": "2026-01-01T00:00:01Z", "durationMs": 1000},
+                "usage": {},
+                "metricsSummary": {},
+                "metadata": {
+                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+                    "taskId": "q_year",
+                    "instanceId": "cv-demo",
+                    "provider": "mock",
+                    "modelId": "mock",
+                    "modelName": "mock",
+                    "strategy": "mcp",
+                    "format": "json",
+                    "repeatIndex": 1,
+                },
+            }
+        )
+
+
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
     from copa.benchmark import evaluation as evaluation_module
 
@@ -403,17 +512,17 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
         instanceId="cv-demo",
         provider="mock",
         modelName="mock",
-        strategy="mcp",
+        strategy="remote_mcp",
         format="json",
         repeatIndex=1,
         params={"mcp_server": {"server_url": "https://example.test/mcp"}},
         metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+            canonicalId="exp-1|q_year|cv-demo|mock|mock|remote_mcp|json|1",
             questionId="q_year",
             instanceId="cv-demo",
             provider="mock",
             modelName="mock",
-            strategy="mcp",
+            strategy="remote_mcp",
             format="json",
             repeatIndex=1,
         ),

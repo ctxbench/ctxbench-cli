@@ -44,7 +44,7 @@ before implementation.
 - [X] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
 - [X] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
 - [ ] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
-- [ ] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
+- [X] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
 - [ ] T007 Add legacy-rejection tests in `tests/test_legacy_rejection.py` marked `@pytest.mark.legacy_rejection` for `ctxbench query`, `ctxbench exec`, legacy selector flags, and an experiment config containing `"mcp"`.
 - [X] T008 Register the `legacy_rejection` marker in `pytest.ini`.
 
@@ -63,9 +63,9 @@ strategy labels before command writers/readers are migrated.
 - [X] T014 Update selector data structures in `src/copa/benchmark/selectors.py`: `question` / `not_question` become `task` / `not_task`, `repeat` becomes `repetition`, and `ids` becomes `trial_id`.
 - [X] T015 Audit `src/schemas/runspec.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
 - [X] T016 Audit `src/schemas/plan.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
-- [ ] T017 Update strategy registry in `src/copa/ai/engine.py`: register native remote MCP as `remote_mcp`, do not register `mcp`, and keep `local_mcp` behavior separate.
-- [ ] T018 Update experiment strategy validation in `src/copa/benchmark/models.py` and/or `src/copa/benchmark/runspec_generator.py` so experiment factors containing `"mcp"` fail before `plan` writes artifacts.
-- [ ] T019 Update trial/response strategy validation in `src/copa/benchmark/models.py` so persisted public records containing `"mcp"` are rejected during reader validation.
+- [X] T017 Update strategy registry in `src/copa/ai/engine.py`: register native remote MCP as `remote_mcp`, do not register `mcp`, and keep `local_mcp` behavior separate.
+- [X] T018 Update experiment strategy validation in `src/copa/benchmark/models.py` and/or `src/copa/benchmark/runspec_generator.py` so experiment factors containing `"mcp"` fail before `plan` writes artifacts.
+- [X] T019 Update trial/response strategy validation in `src/copa/benchmark/models.py` so persisted public records containing `"mcp"` are rejected during reader validation.
 
 ---
 

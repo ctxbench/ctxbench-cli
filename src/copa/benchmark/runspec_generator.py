@@ -61,7 +61,7 @@ def resolve_models(experiment: Experiment) -> list[dict[str, str]]:
 
 def effective_formats_for_strategy(strategy_name: str, formats: list[Any]) -> list[str]:
     resolved_formats = [str(item) for item in formats if isinstance(item, str) and item.strip()]
-    if strategy_name in {"local_function", "local_mcp", "mcp"}:
+    if strategy_name in {"local_function", "local_mcp", "remote_mcp"}:
         return ["json"]
     return resolved_formats
 

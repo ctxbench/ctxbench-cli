@@ -7,6 +7,7 @@ from typing import Any
 from copa._compat import BaseModel, Field, ValidationError
 
 MODEL_ID_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+$")
+VALID_STRATEGY_NAMES = {"inline", "local_function", "local_mcp", "remote_mcp"}
 
 
 def _model_dump_value(value: Any, mode: str) -> Any:
@@ -273,7 +274,9 @@ class Experiment(BaseModel):
         execution_output = execution.output if isinstance(execution, ExperimentExecution) else execution.get("output") if isinstance(execution, dict) else None
         if not payload.get("output") and execution_output:
             payload["output"] = execution_output
-        return super().model_validate(payload)
+        experiment = super().model_validate(payload)
+        experiment._validate_model()
+        return experiment
 
     def _validate_model(self) -> None:
         required = {"model", "strategy", "format"}
@@ -320,6 +323,10 @@ class Experiment(BaseModel):
             invalid = [value for value in self.factors.get(factor_name, []) if not isinstance(value, str) or not value.strip()]
             if invalid:
                 raise ValueError(f"Experiment factors.{factor_name} entries must be non-empty strings.")
+        invalid_strategies = [value for value in self.factors.get("strategy", []) if value not in VALID_STRATEGY_NAMES]
+        if invalid_strategies:
+            joined = ", ".join(sorted({str(value) for value in invalid_strategies}))
+            raise ValueError(f"unknown strategy: {joined}")
 
 
 class RunMetadata(BaseModel):
@@ -392,6 +399,9 @@ class RunSpec(BaseModel):
             payload["runId"] = payload.pop("trialId")
         if "taskId" in payload:
             payload["questionId"] = payload.pop("taskId")
+        strategy = payload.get("strategy")
+        if isinstance(strategy, str) and strategy == "mcp":
+            raise ValueError("unknown strategy: mcp")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
@@ -534,6 +544,9 @@ class RunResult(BaseModel):
             payload["questionId"] = payload.pop("taskId")
         if "response" in payload:
             payload["answer"] = payload.pop("response")
+        strategy = payload.get("strategy")
+        if isinstance(strategy, str) and strategy == "mcp":
+            raise ValueError("unknown strategy: mcp")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
