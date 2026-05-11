@@ -6,7 +6,7 @@ from typing import Any, Callable
 
 from copa.benchmark.models import Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
 from copa.dataset.provider import DatasetProvider
-from copa.util.artifacts import build_short_ids, canonical_run_identity
+from copa.util.artifacts import build_short_ids, canonical_trial_identity
 from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
 
 QUESTION_TEMPLATE_PATTERN = re.compile(r"\{([a-zA-Z_][a-zA-Z0-9_]*)\}")
@@ -109,7 +109,7 @@ def generate_runspecs(
                     for format_name in effective_formats_for_strategy(strategy_name, formats):
                         params = resolve_params(experiment, model_name, model_id=model_id)
                         for repeat_index in range(1, experiment.execution.repeats + 1):
-                            canonical_id = canonical_run_identity(
+                            canonical_id = canonical_trial_identity(
                                 experiment.id,
                                 question_id,
                                 instance_id,

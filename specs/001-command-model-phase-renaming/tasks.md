@@ -111,9 +111,9 @@ produces `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`,
 - [X] T038 [US2] Update `src/copa/benchmark/results.py`: response/eval/judge-vote serializers and trace refs use target fields while preserving trace directory scope.
 - [X] T039 [US2] Update `src/copa/benchmark/checkpoints.py`: checkpoint records refer to `trialId` / completed trial IDs and keep checkpoint file behavior otherwise unchanged.
 - [X] T040 [US2] Update `src/copa/benchmark/experiment_loader.py`: manifest-facing output uses target public terminology only where it serializes public artifact metadata.
-- [ ] T041 [US2] Update identity and filename helpers in `src/copa/util/artifacts.py`: public helper names and serialized identity inputs use `trial` / `task` terminology where applicable.
-- [ ] T042 [US2] Audit `src/copa/util/jsonl.py`; update only public docstrings or helper names if they contain legacy artifact terminology.
-- [ ] T043 [US2] Update `src/copa/util/ids.py` imports/calls to match renamed artifact identity helpers from T041.
+- [X] T041 [US2] Update identity and filename helpers in `src/copa/util/artifacts.py`: public helper names and serialized identity inputs use `trial` / `task` terminology where applicable.
+- [X] T042 [US2] Audit `src/copa/util/jsonl.py`; update only public docstrings or helper names if they contain legacy artifact terminology.
+- [X] T043 [US2] Update `src/copa/util/ids.py` imports/calls to match renamed artifact identity helpers from T041.
 - [ ] T044 [US2] Update `src/copa/ai/runtime.py` where runtime metadata crosses into persisted artifacts; preserve MCP runtime protocol terminology that is not the strategy label.
 - [X] T045 [US2] Update `src/copa/ai/trace.py` so strategy span recognition uses `strategy.remote_mcp.execute` and metric aggregation meaning/provenance is unchanged.
 - [X] T046 [US2] Update `src/copa/ai/strategies/mcp.py` span names and public metadata to `remote_mcp`; keep the file name if no public import path is exposed.

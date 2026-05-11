@@ -5,7 +5,7 @@ import re
 from typing import Protocol
 
 
-class RunIdentity(Protocol):
+class TrialIdentity(Protocol):
     runId: str
     experimentId: str
     questionId: str
@@ -22,40 +22,40 @@ def sanitize_experiment_id(experiment_id: str) -> str:
     return sanitized or "experiment"
 
 
-def canonical_run_identity(
+def canonical_trial_identity(
     experiment_id: str,
-    question_id: str,
+    task_id: str,
     instance_id: str,
     provider: str,
     model_name: str,
     strategy: str,
     format_name: str,
-    repeat_index: int,
+    repetition: int,
 ) -> str:
     return "|".join(
         [
             experiment_id or "",
-            question_id or "",
+            task_id or "",
             instance_id or "",
             provider or "",
             model_name or "",
             strategy or "",
             format_name or "",
-            str(repeat_index),
+            str(repetition),
         ]
     )
 
 
-def canonical_identity_from_run(run: RunIdentity) -> str:
-    return canonical_run_identity(
-        experiment_id=run.experimentId,
-        question_id=run.questionId,
-        instance_id=run.instanceId,
-        provider=run.provider,
-        model_name=run.modelName or "",
-        strategy=run.strategy,
-        format_name=run.format,
-        repeat_index=run.repeatIndex,
+def canonical_identity_from_trial(trial: TrialIdentity) -> str:
+    return canonical_trial_identity(
+        experiment_id=trial.experimentId,
+        task_id=trial.questionId,
+        instance_id=trial.instanceId,
+        provider=trial.provider,
+        model_name=trial.modelName or "",
+        strategy=trial.strategy,
+        format_name=trial.format,
+        repetition=trial.repeatIndex,
     )
 
 
@@ -74,17 +74,26 @@ def run_id_from_identity(identity: str, min_length: int = 10) -> str:
     return build_short_ids([identity], min_length=min_length)[0]
 
 
-def artifact_filename(prefix: str, experiment_id: str, run_id: str) -> str:
-    return f"{prefix}_{sanitize_experiment_id(experiment_id)}_{run_id}.json"
+def artifact_filename(prefix: str, experiment_id: str, trial_id: str) -> str:
+    return f"{prefix}_{sanitize_experiment_id(experiment_id)}_{trial_id}.json"
 
 
-def runspec_filename(experiment_id: str, run_id: str) -> str:
-    return artifact_filename("rs", experiment_id, run_id)
+def trialspec_filename(experiment_id: str, trial_id: str) -> str:
+    return artifact_filename("rs", experiment_id, trial_id)
 
 
-def runresult_filename(experiment_id: str, run_id: str) -> str:
-    return artifact_filename("rr", experiment_id, run_id)
+def response_filename(experiment_id: str, trial_id: str) -> str:
+    return artifact_filename("rr", experiment_id, trial_id)
 
 
-def evalresult_filename(experiment_id: str, run_id: str) -> str:
-    return artifact_filename("re", experiment_id, run_id)
+def evaluation_filename(experiment_id: str, trial_id: str) -> str:
+    return artifact_filename("re", experiment_id, trial_id)
+
+
+# Backward-compatible aliases for remaining internal legacy callers.
+RunIdentity = TrialIdentity
+canonical_run_identity = canonical_trial_identity
+canonical_identity_from_run = canonical_identity_from_trial
+runspec_filename = trialspec_filename
+runresult_filename = response_filename
+evalresult_filename = evaluation_filename
