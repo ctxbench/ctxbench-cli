@@ -155,10 +155,10 @@ only in explicit legacy-rejection tests or documented historical assertions.
 **Independent Test**: `pytest -q`, `pytest -q -m legacy_rejection`, and the
 production-test legacy-term grep from `quickstart.md` pass.
 
-- [ ] T063 [US4] Migrate production-path fixtures and assertions in `tests/test_cli.py` to target commands, artifact names, selector flags, and record fields.
-- [ ] T064 [US4] Migrate production-path fixtures and assertions in `tests/test_ai.py` to target record fields and `remote_mcp`; keep protocol-level MCP terminology where appropriate.
-- [ ] T065 [US4] Migrate production-path fixtures and assertions in `tests/test_eval_status_regression.py` to `responses.jsonl`, `trialId`, `taskId`, and `response`.
-- [ ] T066 [US4] Audit `tests/test_lattes_sections.py`; update only public benchmark artifact terminology if present and preserve Lattes/domain terminology.
+- [X] T063 [US4] Migrate production-path fixtures and assertions in `tests/test_cli.py` to target commands, artifact names, selector flags, and record fields.
+- [X] T064 [US4] Migrate production-path fixtures and assertions in `tests/test_ai.py` to target record fields and `remote_mcp`; keep protocol-level MCP terminology where appropriate.
+- [X] T065 [US4] Migrate production-path fixtures and assertions in `tests/test_eval_status_regression.py` to `responses.jsonl`, `trialId`, `taskId`, and `response`.
+- [X] T066 [US4] Audit `tests/test_lattes_sections.py`; update only public benchmark artifact terminology if present and preserve Lattes/domain terminology.
 
 ---
 

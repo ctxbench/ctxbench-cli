@@ -518,30 +518,31 @@ def test_judge_request_injects_structured_output_schema():
 
 def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
     dataset = write_mock_dataset(tmp_path / "dataset")
-    runspec = RunSpec(
-        id="run-1",
-        runId="run-1",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_year",
-        instanceId="cv-demo",
-        provider="mock",
-        modelName="mock",
-        strategy="remote_mcp",
-        format="json",
-        repeatIndex=1,
-        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
-        trace={"enabled": True},
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|mock|mock|remote_mcp|json|1",
-            questionId="q_year",
-            instanceId="cv-demo",
-            provider="mock",
-            modelName="mock",
-            strategy="remote_mcp",
-            format="json",
-            repeatIndex=1,
-        ),
+    runspec = RunSpec.model_validate(
+        {
+            "trialId": "run-1",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_year",
+            "instanceId": "cv-demo",
+            "provider": "mock",
+            "model": "mock",
+            "strategy": "remote_mcp",
+            "format": "json",
+            "repeatIndex": 1,
+            "params": {"mcp_server": {"server_url": "https://example.test/mcp"}},
+            "trace": {"enabled": True},
+            "metadata": {
+                "canonicalId": "exp-1|q_year|cv-demo|mock|mock|remote_mcp|json|1",
+                "taskId": "q_year",
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "modelName": "mock",
+                "strategy": "remote_mcp",
+                "format": "json",
+                "repeatIndex": 1,
+            },
+        }
     )
 
     result = execute_runspec(runspec, Engine())
@@ -558,31 +559,32 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
 
 def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):
     dataset = write_mock_dataset(tmp_path / "dataset")
-    runspec = RunSpec(
-        id="run-1",
-        runId="run-1",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_year",
-        question="In which year did the researcher obtain their PhD?",
-        questionTemplate="In which year did the researcher obtain their PhD?",
-        instanceId="cv-demo",
-        provider="openai",
-        modelName="gpt-5.4-mini",
-        strategy="inline",
-        format="html",
-        repeatIndex=1,
-        params={},
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|openai|gpt-5.4-mini|inline|html|1",
-            questionId="q_year",
-            instanceId="cv-demo",
-            provider="openai",
-            modelName="gpt-5.4-mini",
-            strategy="inline",
-            format="html",
-            repeatIndex=1,
-        ),
+    runspec = RunSpec.model_validate(
+        {
+            "trialId": "run-1",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_year",
+            "question": "In which year did the researcher obtain their PhD?",
+            "questionTemplate": "In which year did the researcher obtain their PhD?",
+            "instanceId": "cv-demo",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "strategy": "inline",
+            "format": "html",
+            "repeatIndex": 1,
+            "params": {},
+            "metadata": {
+                "canonicalId": "exp-1|q_year|cv-demo|openai|gpt-5.4-mini|inline|html|1",
+                "taskId": "q_year",
+                "instanceId": "cv-demo",
+                "provider": "openai",
+                "modelName": "gpt-5.4-mini",
+                "strategy": "inline",
+                "format": "html",
+                "repeatIndex": 1,
+            },
+        }
     )
     engine = Engine()
     model = RecordingModel()
@@ -827,39 +829,45 @@ def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
 
     provider = DatasetProvider.from_dataset(dataset)
     events: list[tuple[str, str, dict[str, object]]] = []
-    result = RunResult(
-        runId="run-skip",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_missing",
-        question="What is the missing answer?",
-        questionTemplate="What is the missing answer?",
-        questionTags=[],
-        validationType="judge",
-        contextBlock=[],
-        parameters={},
-        instanceId="cv-demo",
-        provider="mock",
-        modelName="mock",
-        strategy="inline",
-        format="json",
-        repeatIndex=1,
-        answer="unknown",
-        status="success",
-        timing=RunTiming(startedAt="2026-01-01T00:00:00Z", finishedAt="2026-01-01T00:00:01Z", durationMs=1000),
-        usage={},
-        metricsSummary={},
-        trace=RunTrace(),
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_missing|cv-demo|mock|mock|inline|json|1",
-            questionId="q_missing",
-            instanceId="cv-demo",
-            provider="mock",
-            modelName="mock",
-            strategy="inline",
-            format="json",
-            repeatIndex=1,
-        ),
+    result = RunResult.model_validate(
+        {
+            "trialId": "run-skip",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_missing",
+            "question": "What is the missing answer?",
+            "questionTemplate": "What is the missing answer?",
+            "questionTags": [],
+            "validationType": "judge",
+            "contextBlock": [],
+            "parameters": {},
+            "instanceId": "cv-demo",
+            "provider": "mock",
+            "model": "mock",
+            "strategy": "inline",
+            "format": "json",
+            "repeatIndex": 1,
+            "response": "unknown",
+            "status": "success",
+            "timing": {
+                "startedAt": "2026-01-01T00:00:00Z",
+                "finishedAt": "2026-01-01T00:00:01Z",
+                "durationMs": 1000,
+            },
+            "usage": {},
+            "metricsSummary": {},
+            "trace": {},
+            "metadata": {
+                "canonicalId": "exp-1|q_missing|cv-demo|mock|mock|inline|json|1",
+                "taskId": "q_missing",
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "modelName": "mock",
+                "strategy": "inline",
+                "format": "json",
+                "repeatIndex": 1,
+            },
+        }
     )
 
     evaluated = evaluate_run_result(
@@ -875,6 +883,8 @@ def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
     assert item.status == "skipped"
     assert "nonexistent_block" in item.details.get("error", "")
     artifact = item.to_persisted_artifact()
+    assert artifact["trialId"] == "run-skip"
+    assert artifact["taskId"] == "q_missing"
     assert artifact["status"] == "skipped"
     assert artifact["judgeCount"] == 0
     assert any(label == "SKIP" and fields.get("questionId") == "q_missing" for label, _message, fields in events)
