@@ -23,7 +23,7 @@ responses.jsonl + traces/executions/
    ↓
 ctxbench eval
    ↓
-evals.jsonl + judge_votes.jsonl + traces/evals/
+evals.jsonl + judge_votes.jsonl + evals-summary.json + traces/evals/
    ↓
 ctxbench export
    ↓
@@ -112,6 +112,7 @@ This documentation follows the C4 organization where it helps, without forcing u
 
 | File | Purpose |
 |---|---|
+| `artifact-contracts.md` | Authoritative artifact set, classification, provenance taxonomy, and no-alias policy. |
 | `vocabulary.md` | Canonical terminology and naming rules. |
 | `workflow.md` | User workflow, phases, commands, artifacts, and strategy overview. |
 | `cli-architecture.md` | CLI architecture, command contract, selectors, and migration notes. |
@@ -210,6 +211,7 @@ outputs/<experimentId>/
 ## Historical migration reference
 
 The table below is a migration reference only. The public CLI, selectors, artifact names, record fields, and strategy labels use the target forms only. Legacy names are not accepted as aliases.
+For the authoritative artifact contract, see `docs/architecture/artifact-contracts.md`.
 
 | Current | Target |
 |---|---|

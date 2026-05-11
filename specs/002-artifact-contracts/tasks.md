@@ -59,21 +59,21 @@
 
 ### Tasks
 
-- [ ] T009 [P] [S2] In `docs/architecture/README.md`: add `artifact-contracts.md` to the documentation structure table with a one-line description
-- [ ] T010 [P] [S2] In `docs/architecture/README.md`: update the canonical workflow diagram/text so the eval-phase output line includes `evals-summary.json`; add a one-sentence pointer to `artifact-contracts.md` in the "Historical migration reference" section
-- [ ] T011 [P] [S2] In `docs/architecture/workflow.md`: update the Mermaid flowchart node for `ctxbench eval` and the Evaluation prose section so both include `evals-summary.json` in the listed outputs — make eval outputs agree with `artifact-contracts.md`
-- [ ] T012 [P] [S2] In `docs/architecture/vocabulary.md`: add one sentence after the "Historical migration reference" heading pointing readers to `docs/architecture/artifact-contracts.md` as the authoritative artifact reference
-- [ ] T013 [P] [S2] In `docs/architecture/cli-architecture.md`: add one sentence in the migration section pointing readers to `docs/architecture/artifact-contracts.md` as the authoritative artifact reference
-- [ ] T014 [S2] Validate S2: run `rg "artifact-contracts" docs/architecture/` (expect ≥3 hits); read the eval-phase output in README.md and workflow.md to confirm they agree and both include `evals-summary.json`; confirm the architecture document index lists `artifact-contracts.md`; confirm migration tables remain labeled as historical/migration-only context
-- [ ] T015 [S2] Update `specs/002-artifact-contracts/worklog.md` with an S2 completion entry
+- [x] T009 [P] [S2] In `docs/architecture/README.md`: add `artifact-contracts.md` to the documentation structure table with a one-line description
+- [x] T010 [P] [S2] In `docs/architecture/README.md`: update the canonical workflow diagram/text so the eval-phase output line includes `evals-summary.json`; add a one-sentence pointer to `artifact-contracts.md` in the "Historical migration reference" section
+- [x] T011 [P] [S2] In `docs/architecture/workflow.md`: update the Mermaid flowchart node for `ctxbench eval` and the Evaluation prose section so both include `evals-summary.json` in the listed outputs — make eval outputs agree with `artifact-contracts.md`
+- [x] T012 [P] [S2] In `docs/architecture/vocabulary.md`: add one sentence after the "Historical migration reference" heading pointing readers to `docs/architecture/artifact-contracts.md` as the authoritative artifact reference
+- [x] T013 [P] [S2] In `docs/architecture/cli-architecture.md`: add one sentence in the migration section pointing readers to `docs/architecture/artifact-contracts.md` as the authoritative artifact reference
+- [x] T014 [S2] Validate S2: run `rg "artifact-contracts" docs/architecture/` (expect ≥3 hits); read the eval-phase output in README.md and workflow.md to confirm they agree and both include `evals-summary.json`; confirm the architecture document index lists `artifact-contracts.md`; confirm migration tables remain labeled as historical/migration-only context
+- [x] T015 [S2] Update `specs/002-artifact-contracts/worklog.md` with an S2 completion entry
 
 ### Checkpoint
 
-- [ ] `rg "artifact-contracts" docs/architecture/` returns ≥3 hits
-- [ ] README.md and workflow.md eval outputs both include `evals-summary.json`
-- [ ] Migration tables in vocabulary.md, README.md, and cli-architecture.md each carry a pointer to `artifact-contracts.md`
-- [ ] No provider-backed execution required
-- [ ] `worklog.md` updated
+- [x] `rg "artifact-contracts" docs/architecture/` returns ≥3 hits
+- [x] README.md and workflow.md eval outputs both include `evals-summary.json`
+- [x] Migration tables in vocabulary.md, README.md, and cli-architecture.md each carry a pointer to `artifact-contracts.md`
+- [x] No provider-backed execution required
+- [x] `worklog.md` updated
 
 ---
 

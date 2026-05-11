@@ -12,7 +12,7 @@ flowchart LR
     C --> D["ctxbench execute"]
     D --> E["responses.jsonl<br/>traces/executions/"]
     E --> F["ctxbench eval"]
-    F --> G["evals.jsonl<br/>judge_votes.jsonl<br/>traces/evals/"]
+    F --> G["evals.jsonl<br/>judge_votes.jsonl<br/>evals-summary.json<br/>traces/evals/"]
     G --> H["ctxbench export"]
     H --> I["results.csv"]
 ```

@@ -28,3 +28,10 @@ tasks.md produced with 3 slices (S3 optional) and 22 tasks total. Organized by i
 - Defined the closed five-class metric provenance taxonomy and explicit `estimated`/`unavailable` handling rules.
 - Added the legacy migration table with explicit no-alias wording and migration responsibility language.
 - Validation stayed provider-free and was limited to targeted file inspection.
+
+## 2026-05-11 — Slice S2 implemented
+
+- Updated `docs/architecture/README.md` to index `artifact-contracts.md`, align the top-level workflow with `evals-summary.json`, and point the migration section to the authoritative reference.
+- Updated `docs/architecture/workflow.md` so the overview diagram lists `evals-summary.json` in eval outputs.
+- Updated `docs/architecture/vocabulary.md` and `docs/architecture/cli-architecture.md` to point migration readers to `docs/architecture/artifact-contracts.md`.
+- Validation stayed provider-free and used `rg` plus targeted document inspection.
