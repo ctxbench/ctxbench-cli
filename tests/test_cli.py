@@ -4,6 +4,8 @@ import tomllib
 from pathlib import Path
 import sys
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from copa.cli import build_parser, main
@@ -19,6 +21,44 @@ def test_public_cli_parser_uses_ctxbench_prog_name():
     help_output = parser.format_help()
     assert "usage: ctxbench" in help_output
     assert "CTXBench benchmark CLI" in help_output
+
+
+def test_public_cli_exposes_execute_command_in_help():
+    parser = build_parser()
+
+    help_output = parser.format_help()
+    assert "execute" in help_output
+    assert "query" not in help_output
+    assert "plan" in help_output
+    assert "eval" in help_output
+    assert "export" in help_output
+    assert "status" in help_output
+
+
+def test_execute_help_uses_target_public_terms(capsys):
+    parser = build_parser()
+
+    with pytest.raises(SystemExit) as excinfo:
+        parser.parse_args(["execute", "--help"])
+
+    assert excinfo.value.code == 0
+    out = capsys.readouterr().out
+    assert "usage: ctxbench execute" in out
+    assert "Path to trials.jsonl" in out
+    assert "responses already exist" in out
+    assert "query" not in out
+
+
+def test_query_and_exec_are_rejected_by_parser(capsys):
+    parser = build_parser()
+
+    for command in ("query", "exec"):
+        with pytest.raises(SystemExit) as excinfo:
+            parser.parse_args([command])
+        assert excinfo.value.code == 2
+        err = capsys.readouterr().err
+        assert "invalid choice" in err
+        assert f"'{command}'" in err
 
 
 def test_pyproject_exposes_ctxbench_script_only():

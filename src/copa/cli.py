@@ -5,9 +5,9 @@ import sys
 
 from copa.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
 from copa.commands.eval import eval_command
+from copa.commands.execute import execute_command
 from copa.commands.export import export_command
 from copa.commands.plan import plan_command
-from copa.commands.query import query_command
 from copa.commands.status import status_command
 from copa.util.logging import PhaseLogger
 
@@ -152,9 +152,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctxbench", description="CTXBench benchmark CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # ── copa plan ──────────────────────────────────────────────────────────
+    # ── ctxbench plan ──────────────────────────────────────────────────────
     plan_parser = subparsers.add_parser(
-        "plan", help="Expand an experiment into queries.jsonl"
+        "plan", help="Expand an experiment into trials.jsonl"
     )
     plan_parser.add_argument("path", help="Path to the experiment JSON file")
     plan_parser.add_argument(
@@ -172,23 +172,23 @@ def build_parser() -> argparse.ArgumentParser:
         )
     )
 
-    # ── copa query ─────────────────────────────────────────────────────────
-    query_parser = subparsers.add_parser(
-        "query", help="Submit queries to models and collect answers"
+    # ── ctxbench execute ───────────────────────────────────────────────────
+    execute_parser = subparsers.add_parser(
+        "execute", help="Execute trials and collect responses"
     )
-    query_parser.add_argument(
+    execute_parser.add_argument(
         "queries", nargs="?", default=None,
-        help="Path to queries.jsonl (default: ./queries.jsonl)",
+        help="Path to trials.jsonl (default: ./trials.jsonl)",
     )
-    query_parser.add_argument(
+    execute_parser.add_argument(
         "--force", action="store_true",
-        help="Re-execute even when answers already exist",
+        help="Re-execute even when responses already exist",
     )
-    _add_selector_args(query_parser)
-    query_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    query_parser.add_argument("--progress", action="store_true", help="Show progress bar")
-    query_parser.set_defaults(
-        func=lambda args: query_command(
+    _add_selector_args(execute_parser)
+    execute_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    execute_parser.add_argument("--progress", action="store_true", help="Show progress bar")
+    execute_parser.set_defaults(
+        func=lambda args: execute_command(
             args.queries,
             force=args.force,
             verbose=args.verbose,
@@ -197,17 +197,17 @@ def build_parser() -> argparse.ArgumentParser:
         )
     )
 
-    # ── copa eval ──────────────────────────────────────────────────────────
+    # ── ctxbench eval ──────────────────────────────────────────────────────
     eval_parser = subparsers.add_parser(
-        "eval", help="Evaluate answers using a judge model"
+        "eval", help="Evaluate responses using a judge model"
     )
     eval_parser.add_argument(
         "answers", nargs="?", default=None,
-        help="Path to answers.jsonl (default: ./answers.jsonl)",
+        help="Path to responses.jsonl (default: ./responses.jsonl)",
     )
     eval_parser.add_argument(
         "--force", action="store_true",
-        help="Re-evaluate even when evaluations already exist",
+        help="Re-evaluate even when evaluation results already exist",
     )
     eval_parser.add_argument(
         "--judge", action="append", default=[], metavar="ID",
@@ -257,7 +257,7 @@ def build_parser() -> argparse.ArgumentParser:
         )
     )
 
-    # ── copa export ────────────────────────────────────────────────────────
+    # ── ctxbench export ────────────────────────────────────────────────────
     export_parser = subparsers.add_parser(
         "export", help="Export evaluations to a derived format"
     )
@@ -298,7 +298,7 @@ def build_parser() -> argparse.ArgumentParser:
         )
     )
 
-    # ── copa status ────────────────────────────────────────────────────────
+    # ── ctxbench status ────────────────────────────────────────────────────
     status_parser = subparsers.add_parser(
         "status", help="Show experiment progress summary"
     )

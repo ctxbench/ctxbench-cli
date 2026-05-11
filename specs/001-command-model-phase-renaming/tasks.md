@@ -81,16 +81,16 @@ fixture and produce target artifact names and fields.
 - [X] T020 [US1] Update `pyproject.toml`: replace the public script `copa = "copa.cli:main"` with `ctxbench = "copa.cli:main"` while leaving `[project].name = "copa"` unchanged.
 - [X] T021 [US1] Update `flake.nix`: expose `/bin/ctxbench`, update package/app output names that are public, and keep `--add-flags "copa.cli"` because the internal module path is unchanged.
 - [X] T022 [US1] Update parser identity in `src/copa/cli.py`: `ArgumentParser(prog="ctxbench", description=...)` and top-level command list uses target terminology.
-- [ ] T023 [US1] Rename `src/copa/commands/query.py` to `src/copa/commands/execute.py` and rename `query_command` to `execute_command`.
-- [ ] T024 [US1] Update imports and command wiring in `src/copa/cli.py` from `copa.commands.query.query_command` to `copa.commands.execute.execute_command`, and replace the `query` subparser with `execute`.
+- [X] T023 [US1] Rename `src/copa/commands/query.py` to `src/copa/commands/execute.py` and rename `query_command` to `execute_command`.
+- [X] T024 [US1] Update imports and command wiring in `src/copa/cli.py` from `copa.commands.query.query_command` to `copa.commands.execute.execute_command`, and replace the `query` subparser with `execute`.
 - [ ] T025 [US1] Update selector flags in `src/copa/cli.py`: `--task` / `--not-task`, `--repetition` / `--not-repetition`, `--trial-id` / `--trial-id-file`; remove legacy long flags entirely.
 - [ ] T026 [US1] Update selector parsing in `src/copa/cli.py` to construct the renamed `RunSelector` fields from T014.
-- [ ] T027 [US1] Sweep user-facing CLI help strings in `src/copa/cli.py` so canonical help output uses `execute`, `trials.jsonl`, `responses.jsonl`, `taskId`, `trialId`, and `response`.
+- [X] T027 [US1] Sweep user-facing CLI help strings in `src/copa/cli.py` so canonical help output uses `execute`, `trials.jsonl`, `responses.jsonl`, `taskId`, `trialId`, and `response`.
 - [ ] T028 [US1] Update `src/copa/commands/plan.py` to write `trials.jsonl` through `src/copa/benchmark/paths.py` and print/log target terminology.
 - [ ] T029 [US1] Update `src/copa/commands/execute.py` to read `trials.jsonl`, write `responses.jsonl`, and use target public field names.
 - [ ] T030 [US1] Update trial generation in `src/copa/benchmark/runspec_generator.py` so produced trial records use `trialId`, `taskId`, and `remote_mcp`.
 - [ ] T031 [US1] Update execution result construction in `src/copa/benchmark/executor.py` so response records and execution metadata use target public field names.
-- [ ] T032 [US1] Update affected source/test imports from `copa.commands.query` to `copa.commands.execute` in `tests/test_cli.py` and any source file that imports the renamed command module.
+- [X] T032 [US1] Update affected source/test imports from `copa.commands.query` to `copa.commands.execute` in `tests/test_cli.py` and any source file that imports the renamed command module.
 
 ---
 

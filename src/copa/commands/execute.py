@@ -14,13 +14,13 @@ from copa.util.logging import PhaseLogger, ProgressTracker
 
 def _load_runspecs(path: Path) -> list[RunSpec]:
     if not path.exists():
-        raise FileNotFoundError(f"Queries file not found: {path}. Run 'copa plan' first.")
+        raise FileNotFoundError(f"Queries file not found: {path}. Run 'ctxbench plan' first.")
     payloads = [dict(item) for item in read_jsonl(path)]
     if not payloads:
         return []
     if "dataset" not in payloads[0]:
         raise ValueError(
-            "Queries file is missing context data. Re-run 'copa plan' to regenerate."
+            "Queries file is missing context data. Re-run 'ctxbench plan' to regenerate."
         )
     return [RunSpec.model_validate(payload) for payload in payloads]
 
@@ -50,7 +50,7 @@ def _compact_answers(path: Path) -> None:
     write_jsonl(path, list(seen.values()))
 
 
-def query_command(
+def execute_command(
     queries: str | None = None,
     *,
     force: bool = False,
