@@ -19,3 +19,12 @@ tasks.md produced with 3 slices (S3 optional) and 22 tasks total. Organized by i
 - Designed 3 slices: S1 (reference doc), S2 (legacy alias removal), S3 (doc pointers).
 - Produced `research.md` and `plan.md`.
 - Level 2 process logging started.
+
+## 2026-05-11 — Slice S1 implemented
+
+- Created `docs/architecture/artifact-contracts.md` as the authoritative artifact reference for FR-001 through FR-014.
+- Documented all nine canonical artifacts with producing phase, class, and role.
+- Recorded the canonical versus derived rule, including that `evals-summary.json` and `results.csv` are reproducible without provider re-runs.
+- Defined the closed five-class metric provenance taxonomy and explicit `estimated`/`unavailable` handling rules.
+- Added the legacy migration table with explicit no-alias wording and migration responsibility language.
+- Validation stayed provider-free and was limited to targeted file inspection.
