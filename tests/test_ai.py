@@ -38,7 +38,7 @@ def make_request(**overrides: object) -> AIRequest:
         "strategy_name": "inline",
         "context_format": "json",
         "params": {},
-        "metadata": {"question_id": "q1", "lattes_id": "cv-demo", "instance_id": "cv-demo"},
+        "metadata": {"taskId": "q1", "lattes_id": "cv-demo", "instanceId": "cv-demo"},
     }
     payload.update(overrides)
     return AIRequest(**payload)

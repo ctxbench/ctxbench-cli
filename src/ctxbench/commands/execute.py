@@ -31,7 +31,7 @@ def _load_response_statuses(path: Path) -> dict[str, str]:
         return {}
     statuses: dict[str, str] = {}
     for item in read_jsonl(path):
-        trial_id = str(item.get("trialId", item.get("runId", "")))
+        trial_id = str(item.get("trialId", ""))
         if trial_id:
             statuses[trial_id] = str(item.get("status", ""))
     return statuses
@@ -44,7 +44,7 @@ def _compact_responses(path: Path) -> None:
     rows = list(read_jsonl(path))
     seen: dict[str, dict[str, Any]] = {}
     for row in rows:
-        trial_id = str(row.get("trialId", row.get("runId", "")))
+        trial_id = str(row.get("trialId", ""))
         if trial_id:
             seen[trial_id] = dict(row)
     write_jsonl(path, list(seen.values()))

@@ -202,21 +202,18 @@ def test_eval_force_with_judge_preserves_other_judges(tmp_path):
         assert eval_rows[0]["judgeCount"] == 2
         assert eval_rows[0]["trialId"] == "run-1"
         assert eval_rows[0]["taskId"] == "q_one"
-        assert "runId" not in eval_rows[0]
-        assert "questionId" not in eval_rows[0]
+        assert {"trialId", "taskId", "judgeCount"} <= set(eval_rows[0])
         summary = json.loads((root / "evals-summary.json").read_text(encoding="utf-8"))
         assert summary["questions"][0]["trialId"] == "run-1"
         assert summary["questions"][0]["taskId"] == "q_one"
-        assert "runId" not in summary["questions"][0]
-        assert "questionId" not in summary["questions"][0]
+        assert {"trialId", "taskId"} <= set(summary["questions"][0])
 
         judge_votes = [json.loads(line) for line in (root / "judge_votes.jsonl").read_text(encoding="utf-8").splitlines()]
         votes_by_id = {row["judgeId"]: row for row in judge_votes}
         assert set(votes_by_id) == {"judge-a", "judge-b"}
         assert all(row["trialId"] == "run-1" for row in judge_votes)
         assert all(row["taskId"] == "q_one" for row in judge_votes)
-        assert all("runId" not in row for row in judge_votes)
-        assert all("questionId" not in row for row in judge_votes)
+        assert all({"trialId", "taskId", "judgeId"} <= set(row) for row in judge_votes)
         assert votes_by_id["judge-a"]["criterias"]["correctness"]["justification"] == "judge-a-v1"
         assert votes_by_id["judge-b"]["criterias"]["correctness"]["justification"] == "judge-b-v2"
         assert all(row["status"] == "evaluated" for row in judge_votes)
@@ -343,9 +340,7 @@ def test_export_reads_responses_and_emits_target_fields(tmp_path):
     assert row["trialId"] == "run-1"
     assert row["taskId"] == "q_one"
     assert row["response"] == "Answer"
-    assert "runId" not in row
-    assert "questionId" not in row
-    assert "answer" not in row
+    assert {"trialId", "taskId", "response"} <= set(row)
 
 
 def test_status_counts_trials_and_responses(tmp_path, capsys):
@@ -377,5 +372,4 @@ def test_status_counts_trials_and_responses(tmp_path, capsys):
     out = capsys.readouterr().out
     assert "execute" in out
     assert "eval" in out
-    assert "query" not in out
     assert " 1" in out

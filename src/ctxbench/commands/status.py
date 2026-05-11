@@ -9,7 +9,7 @@ from ctxbench.util.jsonl import read_jsonl
 
 
 def _trial_id(row: dict[str, object]) -> str:
-    return str(row.get("trialId", row.get("runId", "")))
+    return str(row.get("trialId", ""))
 
 
 def _last_status_map(path: Path) -> dict[str, str]:

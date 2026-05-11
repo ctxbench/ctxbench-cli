@@ -33,7 +33,7 @@ from ctxbench.util.logging import PhaseLogger, ProgressTracker
 # ---------------------------------------------------------------------------
 
 def _trial_id(row: dict[str, Any]) -> str:
-    return str(row.get("trialId", row.get("runId", "")))
+    return str(row.get("trialId", ""))
 
 
 def _load_responses(path: Path) -> list[RunResult]:

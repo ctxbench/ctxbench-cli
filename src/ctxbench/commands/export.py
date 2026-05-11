@@ -17,7 +17,7 @@ _SUPPORTED_FORMATS = ("csv",)
 # ---------------------------------------------------------------------------
 
 def _trial_id(row: dict[str, Any]) -> str:
-    return str(row.get("trialId", row.get("runId", "")))
+    return str(row.get("trialId", ""))
 
 
 def _ans(row: dict[str, Any], key: str, default: Any = None) -> Any:

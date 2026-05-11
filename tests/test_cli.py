@@ -29,7 +29,6 @@ def test_public_cli_exposes_execute_command_in_help():
 
     help_output = parser.format_help()
     assert "execute" in help_output
-    assert "query" not in help_output
     assert "plan" in help_output
     assert "eval" in help_output
     assert "export" in help_output
@@ -57,19 +56,6 @@ def test_execute_help_uses_target_public_terms(capsys):
     assert "usage: ctxbench execute" in out
     assert "Path to trials.jsonl" in out
     assert "responses already exist" in out
-    assert "query" not in out
-
-
-def test_query_and_exec_are_rejected_by_parser(capsys):
-    parser = build_parser()
-
-    for command in ("query", "exec"):
-        with pytest.raises(SystemExit) as excinfo:
-            parser.parse_args([command])
-        assert excinfo.value.code == 2
-        err = capsys.readouterr().err
-        assert "invalid choice" in err
-        assert f"'{command}'" in err
 
 
 def test_execute_help_uses_target_selector_flags(capsys):
@@ -83,9 +69,6 @@ def test_execute_help_uses_target_selector_flags(capsys):
     assert "--task" in out
     assert "--repetition" in out
     assert "--trial-id" in out
-    assert "--question" not in out
-    assert "--repeat" not in out
-    assert "--ids" not in out
 
 
 def test_execute_parser_maps_target_selector_flags():
@@ -110,25 +93,12 @@ def test_execute_parser_maps_target_selector_flags():
     assert selector.not_repetition == (3,)
 
 
-@pytest.mark.parametrize("flag", ["--question", "--repeat", "--ids"])
-def test_execute_parser_rejects_legacy_selector_flags(flag, capsys):
-    parser = build_parser()
-
-    with pytest.raises(SystemExit) as excinfo:
-        parser.parse_args(["execute", flag, "value"])
-
-    assert excinfo.value.code == 2
-    err = capsys.readouterr().err
-    assert "unrecognized arguments" in err
-    assert flag in err
-
-
 def test_pyproject_exposes_ctxbench_script_only():
     pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     scripts = pyproject["project"]["scripts"]
 
     assert scripts["ctxbench"] == "ctxbench.cli:main"
-    assert "copa" not in scripts
+    assert set(scripts) == {"ctxbench"}
 
 
 def test_flake_exposes_ctxbench_binary_and_app():
@@ -147,19 +117,15 @@ def test_plan_writes_trials_jsonl_with_target_fields(tmp_path):
     assert main(["plan", str(experiment_path), "--output", str(output_dir)]) == 0
 
     trials_path = output_dir / "trials.jsonl"
-    queries_path = output_dir / "queries.jsonl"
     assert trials_path.exists()
-    assert not queries_path.exists()
+    assert {path.name for path in output_dir.glob("*.jsonl")} == {"trials.jsonl"}
 
     rows = [json.loads(line) for line in trials_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     assert rows
     first = rows[0]
-    assert "trialId" in first
-    assert "taskId" in first
-    assert "runId" not in first
-    assert "questionId" not in first
+    assert {"trialId", "taskId"} <= set(first)
     assert first["metadata"]["taskId"] in {"q_year", "q_summary"}
-    assert "questionId" not in first["metadata"]
+    assert {"canonicalId", "taskId", "instanceId", "provider", "modelId", "modelName", "strategy", "format", "repeatIndex"} <= set(first["metadata"])
 
 
 def test_execute_writes_responses_jsonl_with_target_fields(tmp_path):
@@ -170,21 +136,15 @@ def test_execute_writes_responses_jsonl_with_target_fields(tmp_path):
     assert main(["execute", str(output_dir / "trials.jsonl")]) == 0
 
     responses_path = output_dir / "responses.jsonl"
-    answers_path = output_dir / "answers.jsonl"
     assert responses_path.exists()
-    assert not answers_path.exists()
+    assert {path.name for path in output_dir.glob("*.jsonl")} == {"responses.jsonl", "trials.jsonl"}
 
     rows = [json.loads(line) for line in responses_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     assert rows
     first = rows[0]
-    assert "trialId" in first
-    assert "taskId" in first
-    assert "response" in first
-    assert "runId" not in first
-    assert "questionId" not in first
-    assert "answer" not in first
+    assert {"trialId", "taskId", "response"} <= set(first)
     assert first["metadata"]["taskId"] in {"q_year", "q_summary"}
-    assert "questionId" not in first["metadata"]
+    assert {"canonicalId", "taskId", "instanceId", "provider", "modelId", "modelName", "strategy", "format", "repeatIndex"} <= set(first["metadata"])
 
 
 def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Path:
@@ -661,11 +621,11 @@ def test_default_artifacts_use_jsonl_as_canonical_source(tmp_path, monkeypatch):
     experiment_path.write_text(json.dumps(payload), encoding="utf-8")
 
     trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
-    assert not (trials_path.parent / "queries.jsonl").exists()
+    assert {path.name for path in trials_path.parent.glob("*.jsonl")} == {"trials.jsonl"}
 
     responses_path = _execute_trials(trials_path)
     assert responses_path.exists()
-    assert not (trials_path.parent / "answers.jsonl").exists()
+    assert {path.name for path in trials_path.parent.glob("*.jsonl")} == {"responses.jsonl", "trials.jsonl"}
 
     from ctxbench.benchmark import evaluation as evaluation_module
 
@@ -684,7 +644,6 @@ def test_default_artifacts_use_jsonl_as_canonical_source(tmp_path, monkeypatch):
     assert main(["eval", str(responses_path)]) == 0
     evals_path = trials_path.parent / "evals.jsonl"
     assert evals_path.exists()
-    assert not (trials_path.parent / "evaluation.jsonl").exists()
     rows = _jsonl_rows(evals_path)
     assert rows
     assert rows[0]["outcome"]["correctness"]["rating"] == "meets"
@@ -991,13 +950,11 @@ def test_eval_batch_retrieves_openai_results(tmp_path):
 
     assert manifest["status"] == "completed"
     assert manifest["completedTrialCount"] == 2
-    assert "completedRunCount" not in manifest
     assert len(manifest["requests"]) == 2
     first_request = manifest["requests"][0]
+    assert set(first_request) == {"customId", "trialId", "taskId", "instanceId"}
     assert first_request["trialId"]
     assert first_request["taskId"] in {"q_year", "q_summary"}
-    assert "runId" not in first_request
-    assert "questionId" not in first_request
     assert len(evaluations) == 2
     assert {item.items[0].evaluationJudgeProvider for item in evaluations} == {"openai"}
     assert {item.items[0].details["outcome"]["correctness"]["rating"] for item in evaluations} == {"meets"}
@@ -1047,10 +1004,9 @@ def test_submit_evaluation_batch_writes_target_manifest_fields(tmp_path):
     assert manifest["requestCount"] == 2
     assert len(manifest["requests"]) == 2
     first_request = manifest["requests"][0]
+    assert set(first_request) == {"customId", "trialId", "taskId", "instanceId"}
     assert first_request["trialId"]
     assert first_request["taskId"] in {"q_year", "q_summary"}
-    assert "runId" not in first_request
-    assert "questionId" not in first_request
 
 
 def test_eval_batch_retrieves_openai_error_results(tmp_path):

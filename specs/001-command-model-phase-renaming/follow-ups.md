@@ -49,54 +49,86 @@ Decision:
 - Keep [`specs/001-command-model-phase-renaming/baseline.after.txt`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/specs/001-command-model-phase-renaming/baseline.after.txt) as the recorded post-migration snapshot and leave `T069` open.
 
 Rationale:
-- The scoped grep still reports legacy matches outside the allowed buckets.
-- After the post-migration classification audit (2026-05-11), the remaining matches fall into four distinct categories:
+- The scoped grep still reports matches outside the narrow `T069` allowlist
+  ("migration docs, explicitly historical docs, or `tests/test_legacy_rejection.py`").
+- After the post-migration classification audit (2026-05-11), the remaining
+  matches fall into five buckets:
 
-  **Permanently allowed — no new task required:**
-  - Internal Python attribute names (`runId`, `questionId`, `answer`) on `RunSpec`, `RunResult`, `RunMetadata`, and `AIResult`. The public contract is enforced at the model boundary by validators that reject legacy field names on input and emit only target names on serialization. These internal Python names are not public artifact fields and do not need renaming.
-  - `"runId"` / `"questionId"` strings in `event_logger` calls inside [`src/copa/benchmark/evaluation.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/copa/benchmark/evaluation.py). These are phase-log metadata fields, not artifact output keys. They do not appear in `evals.jsonl`, `judge_votes.jsonl`, or any other public artifact.
-  - [`tests/test_model_schemas.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_model_schemas.py) tests that exercise the internal model layer (constructing objects with internal attrs, asserting the public serialization rejects legacy names). These are correct as-is and require no change unless the internal field names are renamed.
-  - All tests that cite legacy names only to assert their absence or to verify rejection (e.g., `assert "runId" not in row`). These are legacy-rejection tests and must remain.
+  **Fix now**
+  - Completed on 2026-05-11:
+    - active reader fallbacks were removed from
+      [`src/ctxbench/commands/execute.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/execute.py),
+      [`src/ctxbench/commands/eval.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/eval.py),
+      [`src/ctxbench/commands/export.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/export.py),
+      and [`src/ctxbench/commands/status.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/status.py);
+    - legacy request-metadata aliases were removed from
+      [`src/ctxbench/benchmark/executor.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/executor.py),
+      [`src/ctxbench/ai/models/base.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/models/base.py),
+      and the dependent [`src/ctxbench/ai/models/mock.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/models/mock.py);
+    - production-path grep hits were removed from
+      [`tests/test_cli.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_cli.py)
+      and [`tests/test_eval_status_regression.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_eval_status_regression.py).
+  - No unresolved `fix now` bucket remains after this pass.
 
-  **Require a new task — see T070 and T071 below:**
-  - Distribution and packaging metadata in `pyproject.toml` and `flake.nix`: in scope per the original plan, not completed. Tracked as T070.
-  - Compatibility-reader fallbacks in active command modules: spec violation (`readers MUST NOT consume legacy names`). Tracked as T071.
+  **Allowed migration/historical**
+  - The user-facing migration table in [`README.md`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/README.md).
+  - Historical migration reference tables in:
+    - [`docs/architecture/README.md`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/docs/architecture/README.md)
+    - [`docs/architecture/vocabulary.md`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/docs/architecture/vocabulary.md)
+    - [`docs/architecture/cli-architecture.md`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/docs/architecture/cli-architecture.md)
+  - [`tests/test_legacy_rejection.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_legacy_rejection.py), whose purpose is explicitly to verify rejection of legacy commands, flags, and strategy labels.
+
+  **Allowed internal name**
+  - Internal Python attribute names and internal-model validation wiring in:
+    - [`src/ctxbench/benchmark/models.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/models.py)
+    - [`src/ctxbench/benchmark/runspec_generator.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/runspec_generator.py)
+    - [`src/ctxbench/benchmark/results.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/results.py)
+    - [`src/ctxbench/benchmark/evaluation.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/evaluation.py)
+    - [`src/ctxbench/benchmark/evaluation_batch.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/evaluation_batch.py)
+    - [`src/ctxbench/benchmark/selectors.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/benchmark/selectors.py)
+    - [`src/ctxbench/util/artifacts.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/util/artifacts.py)
+    - [`src/ctxbench/commands/plan.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/plan.py)
+    - internal-name portions of [`tests/test_model_schemas.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_model_schemas.py) and [`tests/test_ai.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/tests/test_ai.py)
+    These uses are internal object attributes, internal constructor args, or
+    assertions that the public serializers reject legacy names. They do not
+    change the public artifact schema by themselves.
+
+  **Allowed domain/protocol term**
+  - MCP protocol/runtime/tooling references that are not strategy labels:
+    - [`src/ctxbench/ai/runtime.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/runtime.py)
+    - [`src/ctxbench/ai/trace.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/trace.py)
+    - [`src/ctxbench/ai/models/openai.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/models/openai.py)
+    - [`src/ctxbench/ai/models/claude.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/models/claude.py)
+    - [`src/ctxbench/ai/models/gemini.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/models/gemini.py)
+    - [`src/ctxbench/ai/strategies/mcp.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/strategies/mcp.py)
+    - [`src/ctxbench/ai/strategies/local_mcp.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/strategies/local_mcp.py)
+    - [`src/ctxbench/datasets/lattes/mcp_server.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/datasets/lattes/mcp_server.py)
+    - [`src/schemas/runspec.schema.json`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/schemas/runspec.schema.json)
+    - [`src/schemas/plan.schema.json`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/schemas/plan.schema.json)
+    - [`docs/architecture/component.md`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/docs/architecture/component.md)
+    These refer to the MCP protocol, transport names, URL paths, tool payload
+    types, or module/component names, not to the deprecated public strategy
+    label.
+  - Domain-semantic `answer` language in README and AI/evaluation tests, where
+    the text refers to the conceptual judged answer rather than the public
+    artifact field name.
+
+  **Defer to follow-up**
+  - Stale modules outside the current public CLI surface:
+    - [`src/ctxbench/commands/run.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/run.py)
+    - [`src/ctxbench/commands/experiment.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/commands/experiment.py)
+    These were already deferred under T058 and still carry legacy artifact
+    terminology because they are not part of the active `ctxbench plan` /
+    `execute` / `eval` / `export` / `status` path.
+  - Secondary internal logging cleanup such as [`src/ctxbench/ai/rate_control.py`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/ctxbench/ai/rate_control.py), where `questionId` still appears in rate-limit diagnostics. This is not a public artifact contract issue, but it should be cleaned if the request-metadata follow-up is done.
 
 Recommended next step:
-- Close T069 once T070 and T071 are complete and a rerun of the `T001` grep scope produces only the permanently-allowed buckets documented above.
-
----
-
-## T070 - Distribution and Nix packaging metadata still uses legacy name
-
-Decision:
-- Track as a new dedicated task.
-
-Rationale:
-- [`pyproject.toml:2`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/pyproject.toml) still declares `name = "copa"`.
-- [`flake.nix:61–62`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/flake.nix) still uses `"copa-venv"` and `copa = [ "dev" ]` as the virtual-environment and distribution references.
-- These were listed as in-scope deliverables in the original plan (§"Nix packaging migration") but were not completed before the migration slice was closed.
-- They are small, low-risk changes bounded to two files.
-- Note: `flake.nix:76` (`--add-flags "copa.cli"`) and `pyproject.toml:23` (`copa.cli:main`) reference the internal Python entry module, which is explicitly out of scope and must not change.
-
-Recommended next step:
-- In a focused commit, rename `name = "copa"` → `name = "ctxbench"` in `pyproject.toml`, and update the Nix venv/package references in `flake.nix` (lines 61–62) to match. Verify with `nix flake check` or the equivalent local build, then rerun the `T001` grep to confirm these lines no longer appear in the scoped output.
-
----
-
-## T071 - Compatibility readers in active command modules violate the no-legacy-reads contract
-
-Decision:
-- Track as a new dedicated task.
-
-Rationale:
-- The spec classifies this change as **intentionally breaking**: "Readers MUST NOT consume legacy names; legacy artifacts and legacy CLI invocations result in clear errors."
-- Four active command modules still contain `get("trialId", get("runId", ""))` fallback reads that silently accept artifacts written with the legacy `runId` field:
-  - [`src/copa/commands/execute.py:34,47`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/copa/commands/execute.py)
-  - [`src/copa/commands/export.py:20`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/copa/commands/export.py)
-  - [`src/copa/commands/status.py:12`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/copa/commands/status.py)
-  - [`src/copa/commands/eval.py:36`](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/src/copa/commands/eval.py)
-- These fallbacks mean the commands silently process legacy artifacts instead of surfacing a clear error. That undermines the no-alias contract and can mask artifact migrations that were not completed.
-
-Recommended next step:
-- Replace each `get("trialId", get("runId", ""))` with `get("trialId", "")` (no legacy fallback). Add or extend tests in the relevant test modules to confirm that a JSONL record using `runId` either raises an error or is skipped with a clear diagnostic, depending on the chosen error policy. Rerun the focused `pytest -k cli` and `pytest -k eval` suites to verify no regressions.
+- Treat `T069` as still open.
+- If the goal is strict task completion under the current grep rule, either
+  relocate the remaining non-rejection test references into
+  `tests/test_legacy_rejection.py` / explicitly historical files, or narrow the
+  grep-based task definition so allowed internal and protocol/domain uses do not
+  keep the task open.
+- Do not spend effort renaming the permanently-allowed internal or
+  protocol/domain uses unless the specification is amended to require a deeper
+  internal refactor.

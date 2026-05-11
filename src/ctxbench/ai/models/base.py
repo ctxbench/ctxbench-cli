@@ -45,15 +45,15 @@ class AIRequest(BaseModel):
         return None
 
     def trial_id(self) -> str | None:
-        value = self.metadata_value("trialId", "trial_id", "runId", "run_id")
+        value = self.metadata_value("trialId")
         return str(value) if value is not None and str(value) else None
 
     def task_id(self) -> str | None:
-        value = self.metadata_value("taskId", "task_id", "questionId", "question_id")
+        value = self.metadata_value("taskId")
         return str(value) if value is not None and str(value) else None
 
     def experiment_id(self) -> str | None:
-        value = self.metadata_value("experimentId", "experiment_id", "expId")
+        value = self.metadata_value("experimentId")
         return str(value) if value is not None and str(value) else None
 
 
