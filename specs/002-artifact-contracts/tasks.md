@@ -30,23 +30,23 @@
 
 ### Tasks
 
-- [ ] T001 [S1] Create `docs/architecture/artifact-contracts.md` with a phase-lifecycle table listing all nine canonical artifacts (`manifest.json`, `trials.jsonl`, `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`, `evals-summary.json`, `results.csv`, `traces/executions/<trialId>.json`, `traces/evals/<trialId>.json`), each row showing producing phase and class (canonical/derived) — FR-001, FR-002
-- [ ] T002 [S1] Add four named role sections to `docs/architecture/artifact-contracts.md`: Execution Artifacts, Evaluation Artifacts, Analysis-Ready Exports, Traces — with each artifact assigned to exactly one role — FR-003
-- [ ] T003 [S1] Within the Execution Artifacts section, describe `manifest.json` explicitly as a plan-phase canonical artifact whose content is sufficient to reproduce subsequent phases — FR-004; describe canonical/derived distinction and state that `results.csv` and `evals-summary.json` are derived artifacts reproducible without re-running providers — FR-005, FR-006
-- [ ] T004 [S1] Add a metric provenance taxonomy section to `docs/architecture/artifact-contracts.md` with all five class definitions (`reported`, `measured`, `derived`, `estimated`, `unavailable`); include the following explicit rule statements: (a) `estimated` MUST NOT be presented as `reported` or `measured`; (b) `unavailable` MUST NOT be recorded as zero unless zero is the observed value; (c) this taxonomy is closed in this spec — no sub-classes or extensions — FR-011, FR-012, FR-013, FR-014
-- [ ] T005 [S1] Add a legacy migration section to `docs/architecture/artifact-contracts.md` with a table mapping `queries.jsonl` → `trials.jsonl`, `answers.jsonl` → `responses.jsonl`, `traces/queries/<runId>.json` → `traces/executions/<trialId>.json`; each entry must include an explicit no-alias statement; include a sentence stating migration is the researcher's responsibility — FR-007, FR-010
-- [ ] T006 [S1] Add a reader/writer policy section to `docs/architecture/artifact-contracts.md` with two rules: writers produce only target artifact names; readers encounter legacy files silently (not an error, not consumed) — FR-008, FR-009
-- [ ] T007 [S1] Validate S1 against the acceptance checklist in `plan.md` using `sed -n '1,260p' docs/architecture/artifact-contracts.md`: confirm (a) all nine artifacts are present and each has phase + class labeling; (b) the four role treatments are present; (c) `manifest.json` is described as plan-phase canonical with reproduction-oriented responsibility; (d) `results.csv` and `evals-summary.json` are explicitly derived and reproducible without provider re-runs; (e) all three legacy mappings use explicit no-alias wording and migration responsibility language; (f) exactly five provenance classes are defined with FR-013/FR-014 rule statements; (g) no field-level schemas are included
-- [ ] T008 [S1] Update `specs/002-artifact-contracts/worklog.md` with an S1 completion entry (date, what was written, any decisions made)
+- [x] T001 [S1] Create `docs/architecture/artifact-contracts.md` with a phase-lifecycle table listing all nine canonical artifacts (`manifest.json`, `trials.jsonl`, `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`, `evals-summary.json`, `results.csv`, `traces/executions/<trialId>.json`, `traces/evals/<trialId>.json`), each row showing producing phase and class (canonical/derived) — FR-001, FR-002
+- [x] T002 [S1] Add four named role sections to `docs/architecture/artifact-contracts.md`: Execution Artifacts, Evaluation Artifacts, Analysis-Ready Exports, Traces — with each artifact assigned to exactly one role — FR-003
+- [x] T003 [S1] Within the Execution Artifacts section, describe `manifest.json` explicitly as a plan-phase canonical artifact whose content is sufficient to reproduce subsequent phases — FR-004; describe canonical/derived distinction and state that `results.csv` and `evals-summary.json` are derived artifacts reproducible without re-running providers — FR-005, FR-006
+- [x] T004 [S1] Add a metric provenance taxonomy section to `docs/architecture/artifact-contracts.md` with all five class definitions (`reported`, `measured`, `derived`, `estimated`, `unavailable`); include the following explicit rule statements: (a) `estimated` MUST NOT be presented as `reported` or `measured`; (b) `unavailable` MUST NOT be recorded as zero unless zero is the observed value; (c) this taxonomy is closed in this spec — no sub-classes or extensions — FR-011, FR-012, FR-013, FR-014
+- [x] T005 [S1] Add a legacy migration section to `docs/architecture/artifact-contracts.md` with a table mapping `queries.jsonl` → `trials.jsonl`, `answers.jsonl` → `responses.jsonl`, `traces/queries/<runId>.json` → `traces/executions/<trialId>.json`; each entry must include an explicit no-alias statement; include a sentence stating migration is the researcher's responsibility — FR-007, FR-010
+- [x] T006 [S1] Add a reader/writer policy section to `docs/architecture/artifact-contracts.md` with two rules: writers produce only target artifact names; readers encounter legacy files silently (not an error, not consumed) — FR-008, FR-009
+- [x] T007 [S1] Validate S1 against the acceptance checklist in `plan.md` using `sed -n '1,260p' docs/architecture/artifact-contracts.md`: confirm (a) all nine artifacts are present and each has phase + class labeling; (b) the four role treatments are present; (c) `manifest.json` is described as plan-phase canonical with reproduction-oriented responsibility; (d) `results.csv` and `evals-summary.json` are explicitly derived and reproducible without provider re-runs; (e) all three legacy mappings use explicit no-alias wording and migration responsibility language; (f) exactly five provenance classes are defined with FR-013/FR-014 rule statements; (g) no field-level schemas are included
+- [x] T008 [S1] Update `specs/002-artifact-contracts/worklog.md` with an S1 completion entry (date, what was written, any decisions made)
 
 ### Checkpoint
 
-- [ ] All nine canonical artifacts named with phase and class in `artifact-contracts.md`
-- [ ] Five provenance classes defined with FR-013/FR-014 rule statements present
-- [ ] Three legacy mappings with explicit no-alias wording present
-- [ ] No field-level schemas, format versions, or validation tooling described in the file
-- [ ] No provider-backed execution required to validate
-- [ ] `worklog.md` updated
+- [x] All nine canonical artifacts named with phase and class in `artifact-contracts.md`
+- [x] Five provenance classes defined with FR-013/FR-014 rule statements present
+- [x] Three legacy mappings with explicit no-alias wording present
+- [x] No field-level schemas, format versions, or validation tooling described in the file
+- [x] No provider-backed execution required to validate
+- [x] `worklog.md` updated
 
 ---
 
