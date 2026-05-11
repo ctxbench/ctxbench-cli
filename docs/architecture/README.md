@@ -32,7 +32,7 @@ results.csv
 
 ## Technology baseline
 
-The current implementation is a Python project. The current package metadata still uses the legacy name `copa`, but the target public architecture uses `ctxbench`.
+The current implementation is a Python project. The current package metadata still uses the legacy name `copa`, but the public CLI and artifact contract use `ctxbench`. The internal package path remains `src/copa/` in the current repository layout.
 
 | Concern | Decision |
 |---|---|
@@ -151,7 +151,7 @@ ctxbench-cli/
 ├── README.md
 ├── pyproject.toml
 ├── src/
-│   └── ctxbench/
+│   └── copa/
 │       ├── cli.py
 │       ├── commands/
 │       ├── benchmark/
@@ -207,12 +207,15 @@ outputs/<experimentId>/
         └── <trialId>.json
 ```
 
-## Migration summary
+## Historical migration reference
+
+The table below is a migration reference only. The public CLI, selectors, artifact names, record fields, and strategy labels use the target forms only. Legacy names are not accepted as aliases.
 
 | Current | Target |
 |---|---|
 | `copa` | `ctxbench` |
 | `query` | `execute` |
+| `exec` | prohibited abbreviation; use `execute` |
 | `queries.jsonl` | `trials.jsonl` |
 | `answers.jsonl` | `responses.jsonl` |
 | `runId` | `trialId` |
@@ -220,5 +223,3 @@ outputs/<experimentId>/
 | `answer` | `response` |
 | `mcp` | `remote_mcp` |
 | `traces/queries/` | `traces/executions/` |
-
-During migration, readers should support old artifacts. Writers should prefer canonical names.

@@ -66,24 +66,22 @@ Recommended selectors:
 --format
 --repetition
 --trial-id
---ids-file
+--trial-id-file
 --status
 --judge
 ```
 
-Compatibility aliases:
+## Historical migration reference
 
-```text
---question -> --task
---repeat -> --repetition
---ids -> --trial-id / ids list
-```
-
-## Migration notes
+The table below is a migration reference only. Public CLI commands and selectors use the target forms only and do not expose aliases.
 
 | Current | Target |
 |---|---|
 | `copa` | `ctxbench` |
-| `copa query` | `ctxbench execute` |
+| `query` | `execute` |
+| `exec` | prohibited abbreviation; use `execute` |
 | `queries.jsonl` | `trials.jsonl` |
 | `answers.jsonl` | `responses.jsonl` |
+| `--question` | `--task` |
+| `--repeat` | `--repetition` |
+| `--ids` | `--trial-id` |

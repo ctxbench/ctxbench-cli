@@ -46,12 +46,6 @@ Recommended field:
 taskId
 ```
 
-Compatibility alias:
-
-```text
-questionId
-```
-
 ## Trial
 
 A trial is one planned experimental execution:
@@ -112,13 +106,18 @@ evals.jsonl
 judge_votes.jsonl
 ```
 
-## Current-to-target mapping
+## Historical migration reference
+
+This mapping is provided for migration planning only. Public CLI and artifact contracts use the target terms only and do not expose legacy aliases.
 
 | Current | Target |
 |---|---|
+| `copa` | `ctxbench` |
 | `query` | `execute` |
+| `exec` | prohibited abbreviation; use `execute` |
 | `queries.jsonl` | `trials.jsonl` |
 | `answers.jsonl` | `responses.jsonl` |
 | `runId` | `trialId` |
 | `questionId` | `taskId` |
 | `answer` | `response` |
+| `mcp` | `remote_mcp` |

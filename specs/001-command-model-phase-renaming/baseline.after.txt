@@ -1,0 +1,333 @@
+README.md:106:  Used when the answer can be checked deterministically against `acceptedAnswers`.
+README.md:108:  Used when the answer must be evaluated qualitatively against `contextRefs` and `themes`.
+README.md:373:The installed command is `ctxbench`. The Python distribution metadata may still be named `copa` during this migration.
+README.md:377:| `copa` | `ctxbench` |
+README.md:378:| `query` | `execute` |
+README.md:380:| `queries.jsonl` | `trials.jsonl` |
+README.md:381:| `answers.jsonl` | `responses.jsonl` |
+README.md:382:| `runId` | `trialId` |
+README.md:383:| `questionId` | `taskId` |
+README.md:384:| `answer` | `response` |
+README.md:385:| `mcp` | `remote_mcp` when referring to the remote MCP strategy |
+README.md:386:| `--question` | `--task` |
+README.md:387:| `--repeat` | `--repetition` |
+README.md:388:| `--ids` | `--trial-id` |
+README.md:392:- `src/copa/cli.py`
+README.md:394:- `src/copa/commands/`
+README.md:396:- `src/copa/benchmark/`
+README.md:398:- `src/copa/ai/`
+README.md:400:- `src/copa/dataset/`
+README.md:402:- `src/copa/datasets/lattes/`
+docs/architecture/README.md:35:The current implementation is a Python project. The current package metadata still uses the legacy name `copa`, but the public CLI and artifact contract use `ctxbench`. The internal package path remains `src/copa/` in the current repository layout.
+docs/architecture/README.md:101:| Use `execute` instead of `query` or `run` | `query` is too narrow; `run` conflicts with run/runId wording. |
+docs/architecture/README.md:103:| Use `response` instead of `answer` | Not every task is Q/A. |
+docs/architecture/README.md:105:| Use `remote_mcp` instead of `mcp` | `mcp` alone is ambiguous because local MCP also exists. |
+docs/architecture/README.md:154:│   └── copa/
+docs/architecture/README.md:161:│       ├── mcp/
+docs/architecture/README.md:216:| `copa` | `ctxbench` |
+docs/architecture/README.md:217:| `query` | `execute` |
+docs/architecture/README.md:219:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/README.md:220:| `answers.jsonl` | `responses.jsonl` |
+docs/architecture/README.md:221:| `runId` | `trialId` |
+docs/architecture/README.md:222:| `questionId` | `taskId` |
+docs/architecture/README.md:223:| `answer` | `response` |
+docs/architecture/README.md:224:| `mcp` | `remote_mcp` |
+docs/architecture/cli-architecture.md:80:| `copa` | `ctxbench` |
+docs/architecture/cli-architecture.md:81:| `query` | `execute` |
+docs/architecture/cli-architecture.md:83:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/cli-architecture.md:84:| `answers.jsonl` | `responses.jsonl` |
+docs/architecture/cli-architecture.md:85:| `--question` | `--task` |
+docs/architecture/cli-architecture.md:86:| `--repeat` | `--repetition` |
+docs/architecture/cli-architecture.md:87:| `--ids` | `--trial-id` |
+src/schemas/runspec.schema.json:186:          "enum": ["mcp-stdio", "http-json", "jsonrpc-stdio"]
+docs/architecture/component.md:77:ctxbench.mcp
+src/schemas/plan.schema.json:258:          "enum": ["mcp-stdio", "http-json", "jsonrpc-stdio"]
+docs/architecture/vocabulary.md:115:| `copa` | `ctxbench` |
+docs/architecture/vocabulary.md:116:| `query` | `execute` |
+docs/architecture/vocabulary.md:118:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/vocabulary.md:119:| `answers.jsonl` | `responses.jsonl` |
+docs/architecture/vocabulary.md:120:| `runId` | `trialId` |
+docs/architecture/vocabulary.md:121:| `questionId` | `taskId` |
+docs/architecture/vocabulary.md:122:| `answer` | `response` |
+docs/architecture/vocabulary.md:123:| `mcp` | `remote_mcp` |
+tests/test_legacy_rejection.py:12:@pytest.mark.parametrize("command", ["query", "exec"])
+tests/test_legacy_rejection.py:26:@pytest.mark.parametrize("flag", ["--question", "--repeat", "--ids"])
+tests/test_legacy_rejection.py:53:                    "strategy": ["mcp"],
+tests/test_legacy_rejection.py:66:    assert "unknown strategy: mcp" in err
+src/ctxbench/util/artifacts.py:9:    runId: str
+src/ctxbench/util/artifacts.py:11:    questionId: str
+src/ctxbench/util/artifacts.py:52:        task_id=trial.questionId,
+tests/test_model_schemas.py:30:        questionId="q_year",
+tests/test_model_schemas.py:132:    assert runspec.runId == "trial-1"
+tests/test_model_schemas.py:133:    assert runspec.questionId == "q_year"
+tests/test_model_schemas.py:134:    assert runspec.metadata.questionId == "q_year"
+tests/test_model_schemas.py:140:        ("runId", "trial-1"),
+tests/test_model_schemas.py:141:        ("questionId", "q_year"),
+tests/test_model_schemas.py:158:    payload["metadata"]["questionId"] = "q_year"
+tests/test_model_schemas.py:167:    assert result.runId == "trial-1"
+tests/test_model_schemas.py:168:    assert result.questionId == "q_year"
+tests/test_model_schemas.py:169:    assert result.answer == "2018"
+tests/test_model_schemas.py:175:        ("runId", "trial-1"),
+tests/test_model_schemas.py:176:        ("questionId", "q_year"),
+tests/test_model_schemas.py:177:        ("answer", "2018"),
+tests/test_model_schemas.py:195:    payload["metadata"]["questionId"] = "q_year"
+tests/test_model_schemas.py:204:        runId="trial-1",
+tests/test_model_schemas.py:205:        questionId="q_year",
+tests/test_model_schemas.py:232:    assert "runId" not in artifact
+tests/test_model_schemas.py:233:    assert "questionId" not in artifact
+tests/test_model_schemas.py:236:    assert "runId" not in votes[0]
+tests/test_model_schemas.py:237:    assert "questionId" not in votes[0]
+tests/test_model_schemas.py:256:                "runId": "trial-1",
+tests/test_model_schemas.py:257:                "questionId": "q_year",
+src/ctxbench/benchmark/runspec_generator.py:158:                runId=run_id,
+src/ctxbench/benchmark/runspec_generator.py:162:                questionId=item["taskId"],
+src/ctxbench/benchmark/runspec_generator.py:183:                    questionId=item["taskId"],
+src/ctxbench/benchmark/runspec_generator.py:214:                    questionId=question_id,
+src/ctxbench/benchmark/runspec_generator.py:225:                questionId=question_id,
+src/ctxbench/benchmark/runspec_generator.py:236:                    questionId=question_id,
+src/ctxbench/benchmark/executor.py:44:            "trialId": runspec.runId,
+src/ctxbench/benchmark/executor.py:46:            "taskId": runspec.questionId,
+src/ctxbench/benchmark/executor.py:85:    is_empty_answer = ai_result.error is None and not (ai_result.answer or "").strip()
+src/ctxbench/benchmark/executor.py:86:    error_message = ai_result.error or ("Model returned empty answer" if is_empty_answer else None)
+src/ctxbench/benchmark/executor.py:111:        runId=runspec.runId,
+src/ctxbench/benchmark/executor.py:114:        questionId=runspec.questionId,
+src/ctxbench/benchmark/executor.py:129:        answer=ai_result.answer,
+tests/test_ai.py:216:    assert result.answer == "3"
+tests/test_ai.py:259:    assert result.answer == "Software engineering"
+tests/test_ai.py:288:    assert not any(event["name"] == "strategy.mcp.execute" for event in serialized["events"])
+tests/test_ai.py:294:    with pytest.raises(ValueError, match="Unknown strategy: mcp"):
+tests/test_ai.py:295:        engine._resolve_strategy("mcp")
+tests/test_ai.py:299:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:308:                    "strategy": ["mcp"],
+tests/test_ai.py:316:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:328:                "strategy": "mcp",
+tests/test_ai.py:335:                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+tests/test_ai.py:341:                    "strategy": "mcp",
+tests/test_ai.py:350:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:362:                "strategy": "mcp",
+tests/test_ai.py:371:                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+tests/test_ai.py:377:                    "strategy": "mcp",
+tests/test_ai.py:402:        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
+tests/test_ai.py:404:        context_payload={"summary": "Ground truth answer."},
+tests/test_ai.py:464:        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
+tests/test_ai.py:466:        context_payload={"summary": "Ground truth answer."},
+tests/test_ai.py:497:        prompt="Judge this answer.",
+tests/test_ai.py:498:        answer_text="The candidate answer.",
+tests/test_ai.py:530:            "params": {"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:547:    assert isinstance(result.answer, str)
+tests/test_ai.py:553:    assert not any(event["name"] == "strategy.mcp.execute" for event in events)
+tests/test_ai.py:683:        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:689:    assert tools[0]["type"] == "mcp"
+tests/test_ai.py:692:    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+tests/test_ai.py:693:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:706:        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:713:    assert servers[0]["url"] == "https://example.test/mcp"
+tests/test_ai.py:715:    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+tests/test_ai.py:716:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:729:        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:737:    assert tool_payload["mcp_servers"][0]["streamableHttpTransport"]["uri"] == "https://example.test/mcp"
+tests/test_ai.py:739:    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+tests/test_ai.py:742:            remote_request.model_copy(update={"strategy_name": "mcp"}),
+tests/test_ai.py:755:        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:800:    runtime = MCPRuntime(transport="streamable_http", server_url="https://example.test/mcp")
+tests/test_ai.py:805:    assert metadata["serverUrl"] == "https://example.test/mcp"
+tests/test_ai.py:816:        "question": "What is the missing answer?",
+tests/test_ai.py:835:            "question": "What is the missing answer?",
+tests/test_ai.py:836:            "questionTemplate": "What is the missing answer?",
+tests/test_ai.py:887:    assert any(label == "SKIP" and fields.get("questionId") == "q_missing" for label, _message, fields in events)
+src/ctxbench/benchmark/evaluation.py:25:    "Use only the provided question, answer and curriculum context.\n"
+src/ctxbench/benchmark/evaluation.py:30:JUDGE_PROMPT_PREFIX = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided curriculum context and criteria.
+src/ctxbench/benchmark/evaluation.py:34:Evaluate the answer to the question based on the provided curriculum context.
+src/ctxbench/benchmark/evaluation.py:54:The answer must be factually correct according to the curriculum context.
+src/ctxbench/benchmark/evaluation.py:57:- Check whether the answer does not contradict the curriculum context.
+src/ctxbench/benchmark/evaluation.py:61:The answer must fully address the question according to what can be answered from the curriculum context.
+src/ctxbench/benchmark/evaluation.py:64:- Do not penalize missing information when the curriculum context itself does not provide enough evidence to answer that part of the question.
+src/ctxbench/benchmark/evaluation.py:90:{answer}
+src/ctxbench/benchmark/evaluation.py:168:    return f"{result.runId}-{judge_slug}"[:64]
+src/ctxbench/benchmark/evaluation.py:182:    if only and result.questionId != only:
+src/ctxbench/benchmark/evaluation.py:192:    question = provider.get_question(result.questionId)
+src/ctxbench/benchmark/evaluation.py:202:                    "runId": result.runId,
+src/ctxbench/benchmark/evaluation.py:203:                    "questionId": result.questionId,
+src/ctxbench/benchmark/evaluation.py:212:        answer=result.answer,
+src/ctxbench/benchmark/evaluation.py:241:            str(item.questionId),
+src/ctxbench/benchmark/evaluation.py:244:            str(item.runId),
+src/ctxbench/benchmark/evaluation.py:308:            answer=answer_text,
+src/ctxbench/benchmark/evaluation.py:351:        return json.loads(result.answer.strip()), info, trace
+src/ctxbench/benchmark/evaluation.py:371:        answer=result.answer,
+src/ctxbench/benchmark/evaluation.py:382:            answer_text=result.answer,
+src/ctxbench/benchmark/evaluation.py:383:            run_id=result.runId,
+src/ctxbench/benchmark/evaluation.py:386:            question_id=result.questionId,
+src/ctxbench/benchmark/evaluation.py:516:        runId=result.runId,
+src/ctxbench/benchmark/evaluation.py:517:        questionId=result.questionId,
+src/ctxbench/benchmark/evaluation.py:534:        runId=result.runId,
+src/ctxbench/benchmark/evaluation.py:535:        questionId=result.questionId,
+src/ctxbench/benchmark/evaluation.py:556:        runId=result.runId,
+src/ctxbench/benchmark/evaluation.py:557:        questionId=result.questionId,
+src/ctxbench/benchmark/evaluation.py:586:        runId=result.runId,
+src/ctxbench/benchmark/evaluation.py:587:        questionId=result.questionId,
+src/ctxbench/benchmark/evaluation.py:707:    if only and result.questionId != only:
+src/ctxbench/benchmark/evaluation.py:720:                "runId": result.runId,
+src/ctxbench/benchmark/evaluation.py:721:                "questionId": result.questionId,
+src/ctxbench/benchmark/evaluation.py:726:        question = provider.get_question(result.questionId)
+src/ctxbench/benchmark/evaluation.py:736:                        "runId": result.runId,
+src/ctxbench/benchmark/evaluation.py:737:                        "questionId": result.questionId,
+src/ctxbench/benchmark/evaluation.py:758:                "runId": result.runId,
+src/ctxbench/benchmark/evaluation.py:759:                "questionId": result.questionId,
+src/ctxbench/benchmark/evaluation.py:792:            str(item.questionId),
+src/ctxbench/benchmark/evaluation.py:795:            str(item.runId),
+src/ctxbench/benchmark/results.py:48:        "trialId": result.runId,
+src/ctxbench/benchmark/results.py:49:        "taskId": result.questionId,
+src/ctxbench/benchmark/results.py:56:        run_id=result.runId,
+src/ctxbench/benchmark/results.py:66:    relative_path = Path("traces") / "evals" / f"{result.runId}.json"
+src/ctxbench/benchmark/results.py:88:        "trialId": result.runId,
+src/ctxbench/benchmark/results.py:89:        "taskId": result.questionId,
+src/ctxbench/benchmark/results.py:132:            "trialId": result.runId,
+src/ctxbench/benchmark/results.py:135:            "taskId": result.questionId,
+src/ctxbench/datasets/lattes/mcp_server.py:150:        default="/mcp",
+src/ctxbench/datasets/lattes/mcp_server.py:182:mcp = create_mcp()
+src/ctxbench/datasets/lattes/mcp_server.py:183:app = mcp
+src/ctxbench/datasets/lattes/mcp_server.py:184:server = mcp
+src/ctxbench/benchmark/evaluation_batch.py:544:                "trialId": job.result.runId,
+src/ctxbench/benchmark/evaluation_batch.py:545:                "taskId": job.result.questionId,
+src/ctxbench/ai/trace.py:124:                type="mcp.tool_call",
+src/ctxbench/ai/trace.py:125:                name="mcp.tool_call",
+src/ctxbench/ai/trace.py:151:                type="mcp.tool_result",
+src/ctxbench/ai/trace.py:152:                name="mcp.tool_result",
+src/ctxbench/benchmark/models.py:334:    questionId: str
+src/ctxbench/benchmark/models.py:353:        if "questionId" in payload:
+src/ctxbench/benchmark/models.py:354:            raise ValueError("Public RunMetadata input must use 'taskId', not 'questionId'.")
+src/ctxbench/benchmark/models.py:356:            payload["questionId"] = payload.pop("taskId")
+src/ctxbench/benchmark/models.py:362:    runId: str
+src/ctxbench/benchmark/models.py:366:    questionId: str
+src/ctxbench/benchmark/models.py:394:        if "runId" in payload:
+src/ctxbench/benchmark/models.py:395:            raise ValueError("Public RunSpec input must use 'trialId', not 'runId'.")
+src/ctxbench/benchmark/models.py:396:        if "questionId" in payload:
+src/ctxbench/benchmark/models.py:397:            raise ValueError("Public RunSpec input must use 'taskId', not 'questionId'.")
+src/ctxbench/benchmark/models.py:399:            payload["runId"] = payload.pop("trialId")
+src/ctxbench/benchmark/models.py:401:            payload["questionId"] = payload.pop("taskId")
+src/ctxbench/benchmark/models.py:403:        if isinstance(strategy, str) and strategy == "mcp":
+src/ctxbench/benchmark/models.py:404:            raise ValueError("unknown strategy: mcp")
+src/ctxbench/benchmark/models.py:410:        run_id = str(payload.get("runId") or payload.get("id") or "")
+src/ctxbench/benchmark/models.py:411:        payload["runId"] = run_id
+src/ctxbench/benchmark/models.py:416:                "taskId": payload.get("questionId", ""),
+src/ctxbench/benchmark/models.py:436:            "trialId": self.runId,
+src/ctxbench/benchmark/models.py:438:            "taskId": self.questionId,
+src/ctxbench/benchmark/models.py:460:                "taskId": self.metadata.questionId,
+src/ctxbench/benchmark/models.py:499:    runId: str
+src/ctxbench/benchmark/models.py:502:    questionId: str
+src/ctxbench/benchmark/models.py:517:    answer: str
+src/ctxbench/benchmark/models.py:535:        if "runId" in payload:
+src/ctxbench/benchmark/models.py:536:            raise ValueError("Public RunResult input must use 'trialId', not 'runId'.")
+src/ctxbench/benchmark/models.py:537:        if "questionId" in payload:
+src/ctxbench/benchmark/models.py:538:            raise ValueError("Public RunResult input must use 'taskId', not 'questionId'.")
+src/ctxbench/benchmark/models.py:539:        if "answer" in payload:
+src/ctxbench/benchmark/models.py:540:            raise ValueError("Public RunResult input must use 'response', not 'answer'.")
+src/ctxbench/benchmark/models.py:542:            payload["runId"] = payload.pop("trialId")
+src/ctxbench/benchmark/models.py:544:            payload["questionId"] = payload.pop("taskId")
+src/ctxbench/benchmark/models.py:546:            payload["answer"] = payload.pop("response")
+src/ctxbench/benchmark/models.py:548:        if isinstance(strategy, str) and strategy == "mcp":
+src/ctxbench/benchmark/models.py:549:            raise ValueError("unknown strategy: mcp")
+src/ctxbench/benchmark/models.py:555:        run_id = str(payload.get("runId") or payload.get("id") or "")
+src/ctxbench/benchmark/models.py:556:        payload["runId"] = run_id
+src/ctxbench/benchmark/models.py:560:                "taskId": payload.get("questionId", ""),
+src/ctxbench/benchmark/models.py:580:            "trialId": self.runId,
+src/ctxbench/benchmark/models.py:582:            "taskId": self.questionId,
+src/ctxbench/benchmark/models.py:595:            "response": self.answer,
+src/ctxbench/benchmark/models.py:607:                "taskId": self.metadata.questionId,
+src/ctxbench/benchmark/models.py:641:    runId: str
+src/ctxbench/benchmark/models.py:642:    questionId: str
+src/ctxbench/benchmark/models.py:689:            "trialId": self.runId,
+src/ctxbench/benchmark/models.py:692:            "taskId": self.questionId,
+src/ctxbench/benchmark/models.py:721:                "trialId": self.runId,
+src/ctxbench/benchmark/models.py:724:                "taskId": self.questionId,
+src/ctxbench/benchmark/models.py:756:    runId: str
+src/ctxbench/benchmark/models.py:757:    questionId: str
+src/ctxbench/benchmark/models.py:769:        if "runId" in payload:
+src/ctxbench/benchmark/models.py:770:            raise ValueError("Public EvaluationRunResult input must use 'trialId', not 'runId'.")
+src/ctxbench/benchmark/models.py:771:        if "questionId" in payload:
+src/ctxbench/benchmark/models.py:772:            raise ValueError("Public EvaluationRunResult input must use 'taskId', not 'questionId'.")
+src/ctxbench/benchmark/models.py:774:            payload["runId"] = payload.pop("trialId")
+src/ctxbench/benchmark/models.py:776:            payload["questionId"] = payload.pop("taskId")
+src/ctxbench/benchmark/models.py:779:                "canonicalId": str(payload.get("runId", "")),
+src/ctxbench/benchmark/models.py:780:                "taskId": payload.get("questionId", ""),
+src/ctxbench/ai/runtime.py:121:            "runtime": "mcp",
+src/ctxbench/commands/experiment.py:79:            artifact_path = target_dir / runspec_filename(runspec.experimentId, runspec.runId)
+src/ctxbench/commands/experiment.py:80:            logger.phase("WRITE", "Writing artifact", run=runspec.runId, path=artifact_path)
+src/ctxbench/commands/experiment.py:82:            logger.phase("WRITE", "Artifact written", run=runspec.runId, path=artifact_path)
+src/ctxbench/commands/experiment.py:83:            logger.phase("DONE", "Completed successfully", run=runspec.runId)
+src/ctxbench/commands/experiment.py:87:            logger.phase("DONE", "RunSpec prepared", run=runspec.runId)
+src/ctxbench/commands/run.py:62:        str(item.get("runId") or "")
+src/ctxbench/commands/run.py:64:        if isinstance(item.get("runId"), str) and str(item.get("runId"))
+src/ctxbench/commands/run.py:77:        run_id = payload.get("runId")
+src/ctxbench/commands/run.py:84:    return target_dir / runresult_filename(runspec.experimentId, runspec.runId)
+src/ctxbench/commands/run.py:97:        if runspec.runId in existing_run_ids:
+src/ctxbench/commands/run.py:109:        existing_run_ids.add(runspec.runId)
+src/ctxbench/commands/run.py:130:        existing = [row for row in read_jsonl(path) if str(row.get("runId") or "") != run_id]
+src/ctxbench/commands/run.py:209:            if runspec.runId in completed_run_ids and not force:
+src/ctxbench/commands/run.py:211:                logger.phase("SKIP", "Run already persisted; skipping execution", run=runspec.runId, path=result_path)
+src/ctxbench/commands/run.py:218:                "Starting answer generation",
+src/ctxbench/commands/run.py:219:                run=runspec.runId,
+src/ctxbench/commands/run.py:221:                question=runspec.questionId,
+src/ctxbench/commands/run.py:227:                run=runspec.runId,
+src/ctxbench/commands/run.py:229:                question=runspec.questionId,
+src/ctxbench/commands/run.py:233:                    logger.phase("WRITE", "Overwriting existing run artifact", run=result.runId, path=result_path)
+src/ctxbench/commands/run.py:234:                logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
+src/ctxbench/commands/run.py:241:                logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
+src/ctxbench/commands/run.py:246:                        run_id=result.runId,
+src/ctxbench/commands/run.py:251:                completed_run_ids.add(result.runId)
+src/ctxbench/commands/run.py:258:                logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
+src/ctxbench/commands/run.py:260:                completed_run_ids.add(result.runId)
+src/ctxbench/commands/run.py:267:            logger.phase("DONE", "Completed successfully", run=result.runId)
+src/ctxbench/ai/rate_control.py:329:                if request_fields.get("questionId"):
+src/ctxbench/ai/rate_control.py:330:                    message += f" question_id={request_fields['questionId']}"
+src/ctxbench/ai/rate_control.py:499:            fields["questionId"] = request.metadata.get("question_id")
+src/ctxbench/ai/engine.py:14:from ctxbench.ai.strategies.mcp import MCPStrategy
+src/ctxbench/ai/engine.py:59:            result = AIResult(answer="", error=str(exc))
+src/ctxbench/ai/engine.py:99:                    answer=model_response.text,
+src/ctxbench/ai/engine.py:113:            result = AIResult(answer="", error=str(exc))
+src/ctxbench/commands/plan.py:53:        logger.phase("PLAN", "Trial prepared", run=runspec.runId)
+src/ctxbench/ai/strategies/mcp.py:12:    "- Use only the available information from the tools to answer the question.\n"
+src/ctxbench/ai/strategies/mcp.py:13:    "- Inform if the provided information isn't enough to answer the question.\n"
+src/ctxbench/ai/strategies/mcp.py:55:                answer=model_response.text,
+src/ctxbench/commands/execute.py:96:            existing_status = response_statuses.get(runspec.runId)
+src/ctxbench/commands/execute.py:100:                logger.phase("SKIP", "Already responded successfully; skipping", run=runspec.runId)
+src/ctxbench/commands/execute.py:108:                run=runspec.runId,
+src/ctxbench/commands/execute.py:110:                question=runspec.questionId,
+src/ctxbench/commands/execute.py:116:                run=runspec.runId,
+src/ctxbench/commands/execute.py:124:            response_statuses[result.runId] = result.status
+src/ctxbench/commands/execute.py:125:            logger.phase("WRITE", "Response written", run=result.runId)
+src/ctxbench/commands/eval.py:280:        if not force and r.runId in skipped_run_ids:
+src/ctxbench/commands/eval.py:285:            done = evaluated_judge_ids.get(r.runId, set())
+src/ctxbench/commands/eval.py:314:            existing = votes_index.get(evaluated.runId)
+src/ctxbench/commands/eval.py:327:            logger.phase("SKIP", "Evaluation skipped (missing context blocks)", run=evaluated.runId)
+src/ctxbench/commands/eval.py:329:            logger.phase("WRITE", "Evaluation written", run=evaluated.runId)
+src/ctxbench/commands/eval.py:348:            jobs = [j for j in jobs if (j.result.runId, judge_identifier(j.judge)) not in evaluated_pairs]
+src/ctxbench/commands/eval.py:377:        results_by_run_id = {r.runId: r for r in pending}
+src/ctxbench/commands/eval.py:379:            source_result = results_by_run_id.get(evaluated.runId)
+src/ctxbench/ai/models/claude.py:67:            payload["betas"] = ["mcp-client-2025-04-04"]
+src/ctxbench/ai/models/claude.py:243:        if request.strategy_name == "mcp":
+src/ctxbench/ai/models/claude.py:244:            raise ValueError("unknown strategy: mcp")
+src/ctxbench/ai/models/claude.py:281:            if isinstance(block_type, str) and block_type.startswith("mcp"):
+src/ctxbench/ai/strategies/local_mcp.py:15:    "- Use only the available information from the tools to answer the question.\n"
+src/ctxbench/ai/strategies/local_mcp.py:16:    "- Inform if the provided information isn't enough to answer the question.\n"
+src/ctxbench/ai/strategies/local_mcp.py:80:                        answer=model_response.text,
+src/ctxbench/ai/strategies/local_mcp.py:126:            answer="",
+src/ctxbench/ai/models/mock.py:14:        answer = self._extract_answer(request.context, task_id)
+src/ctxbench/ai/models/mock.py:16:        output_tokens = len(answer.split())
+src/ctxbench/ai/models/mock.py:18:            text=answer,
+src/ctxbench/ai/models/base.py:86:    answer: str
+src/ctxbench/ai/strategies/local_function.py:15:    "- Use only the available information from the functions to answer the question.\n"
+src/ctxbench/ai/strategies/local_function.py:16:    "- Inform if the provided information isn't enough to answer the question\n"
+src/ctxbench/ai/strategies/local_function.py:80:                        answer=model_response.text,
+src/ctxbench/ai/strategies/local_function.py:126:            answer="",
+src/ctxbench/ai/models/gemini.py:13:        if request.strategy_name == "mcp":
+src/ctxbench/ai/models/gemini.py:14:            raise ValueError("unknown strategy: mcp")
+src/ctxbench/benchmark/selectors.py:43:    if selector.trial_id and _field(item, "runId") not in selector.trial_id:
+src/ctxbench/benchmark/selectors.py:54:    if selector.task and _field(item, "questionId") not in selector.task:
+src/ctxbench/benchmark/selectors.py:71:    if selector.not_task and _field(item, "questionId") in selector.not_task:
+src/ctxbench/ai/models/openai.py:300:        if request.strategy_name == "mcp":
+src/ctxbench/ai/models/openai.py:301:            raise ValueError("unknown strategy: mcp")
+src/ctxbench/ai/models/openai.py:312:            "type": "mcp",
+src/ctxbench/ai/strategies/inline.py:11:    "- Base your answer strictly on the provided data.\n"
+src/ctxbench/ai/strategies/inline.py:12:    "- Inform if the provided context isn't enough to answer the question\n"
+src/ctxbench/ai/strategies/inline.py:54:                answer=model_response.text,

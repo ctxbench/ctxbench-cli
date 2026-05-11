@@ -58,32 +58,32 @@
           ]
         );
 
-        venv = pyPkgs.mkVirtualEnv "copa-venv" {
-          copa = [ "dev" ];
+        venv = pyPkgs.mkVirtualEnv "ctxbench-venv" {
+          ctxbench = [ "dev" ];
         };
 
-        copaPkg = pkgs.symlinkJoin {
-          name = "copa";
+        ctxbenchPkg = pkgs.symlinkJoin {
+          name = "ctxbench";
           paths = [ venv ];
           nativeBuildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
-            if [ -e "$out/bin/copa" ]; then
-              rm "$out/bin/copa"
+            if [ -e "$out/bin/ctxbench" ]; then
+              rm "$out/bin/ctxbench"
             fi
-            makeWrapper "${venv}/bin/python" "$out/bin/copa" \
+            makeWrapper "${venv}/bin/python" "$out/bin/ctxbench" \
               --prefix PYTHONPATH : "${./src}" \
               --add-flags "-m" \
-              --add-flags "copa.cli"
+              --add-flags "ctxbench.cli"
           '';
         };
 
       in
       {
-        packages.default = copaPkg;
+        packages.default = ctxbenchPkg;
 
         apps.default = {
           type = "app";
-          program = "${copaPkg}/bin/copa";
+          program = "${ctxbenchPkg}/bin/ctxbench";
         };
 
         devShells.default = pkgs.mkShell {
@@ -102,14 +102,14 @@
             export REPO_ROOT="$(pwd)"
             export PYTHONPATH="$REPO_ROOT/src"
             export VIRTUAL_ENV="${venv}"
-            export PATH="${venv}/bin:${copaPkg}/bin:$PATH"
+            export PATH="${venv}/bin:${ctxbenchPkg}/bin:$PATH"
 
             # opcional: ajuda plugins que procuram uma pasta .venv no projeto
             if [ ! -e .venv ]; then
               ln -sfn "${venv}" .venv
             fi
 
-            echo "COPA dev shell ready (from uv.lock)."
+            echo "ctxbench dev shell ready (from uv.lock)."
             echo "Python: $(which python)"
             python -m debugpy --version || true
           '';

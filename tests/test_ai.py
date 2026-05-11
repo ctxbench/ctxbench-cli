@@ -5,26 +5,27 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.ai.engine import Engine
-from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
-from copa.ai.models.claude import ClaudeModel
-from copa.ai.models.gemini import GeminiModel
-from copa.ai.models.openai import OpenAIModel
-from copa.ai.trace import TraceCollector
-from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
-from copa.benchmark.executor import execute_runspec
-from copa.benchmark.models import (
+import pytest
+
+from ctxbench.ai.engine import Engine
+from ctxbench.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
+from ctxbench.ai.models.claude import ClaudeModel
+from ctxbench.ai.models.gemini import GeminiModel
+from ctxbench.ai.models.mock import MockModel
+from ctxbench.ai.models.openai import OpenAIModel
+from ctxbench.ai.runtime import MCPRuntime
+from ctxbench.ai.trace import TraceCollector
+from ctxbench.benchmark.evaluation import _evaluate_judge, evaluate_run_result
+from ctxbench.benchmark.executor import execute_runspec
+from ctxbench.benchmark.models import (
     EvaluationJudgeInfo,
     EvaluationTrace,
     Experiment,
     ExperimentDataset,
     RunResult,
-    RunTiming,
-    RunTrace,
-    RunMetadata,
     RunSpec,
 )
-from copa.dataset.provider import DatasetProvider
+from ctxbench.dataset.provider import DatasetProvider
 import json
 
 
@@ -37,7 +38,7 @@ def make_request(**overrides: object) -> AIRequest:
         "strategy_name": "inline",
         "context_format": "json",
         "params": {},
-        "metadata": {"question_id": "q1", "lattes_id": "cv-demo", "instance_id": "cv-demo"},
+        "metadata": {"taskId": "q1", "lattes_id": "cv-demo", "instanceId": "cv-demo"},
     }
     payload.update(overrides)
     return AIRequest(**payload)
@@ -223,7 +224,7 @@ def test_engine_inline_execution_records_prompt_trace_and_usage():
 
 
 def test_classify_provider_error_treats_taskgroup_as_transient():
-    from copa.ai.rate_control import classify_provider_error
+    from ctxbench.ai.rate_control import classify_provider_error
 
     info = classify_provider_error("google", RuntimeError("unhandled errors in a TaskGroup (1 sub-exception)"))
 
@@ -261,8 +262,128 @@ def test_engine_local_function_uses_resource_tools_and_records_calls():
     assert result.trace["metrics"]["mcpToolCalls"] == 1
 
 
+def test_engine_resolves_remote_mcp_and_keeps_local_mcp_distinct():
+    engine = Engine(tool_runtime_factories={"local_mcp": lambda: FakeLattesRuntime()})
+
+    remote_strategy, remote_runtime = engine._resolve_strategy("remote_mcp")
+    local_strategy, local_runtime = engine._resolve_strategy("local_mcp")
+
+    assert type(remote_strategy).__name__ == "MCPStrategy"
+    assert remote_runtime is None
+    assert type(local_strategy).__name__ == "LocalMCPStrategy"
+    assert local_runtime is not None
+    local_runtime.close()
+
+
+def test_trace_collector_recognizes_remote_mcp_strategy_span():
+    trace = TraceCollector()
+
+    with trace.span("strategy.remote_mcp.execute", "strategy.remote_mcp.execute"):
+        pass
+
+    serialized = trace.to_trace().model_dump(mode="json")
+
+    assert serialized["metrics"]["strategyDurationMs"] is not None
+    assert any(event["name"] == "strategy.remote_mcp.execute" for event in serialized["events"])
+    assert not any(event["name"] == "strategy.mcp.execute" for event in serialized["events"])
+
+
+def test_engine_rejects_bare_mcp_strategy_name():
+    engine = Engine()
+
+    with pytest.raises(ValueError, match="Unknown strategy: mcp"):
+        engine._resolve_strategy("mcp")
+
+
+def test_experiment_validation_rejects_bare_mcp_strategy_factor():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        Experiment.model_validate(
+            {
+                "id": "exp-test",
+                "output": "outputs",
+                "dataset": "/tmp/dataset",
+                "scope": {"instances": [], "questions": []},
+                "factors": {
+                    "model": [{"provider": "mock", "name": "mock"}],
+                    "strategy": ["mcp"],
+                    "format": ["json"],
+                },
+            }
+        )
+
+
+def test_runspec_model_validate_rejects_bare_mcp_strategy_in_public_record():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        RunSpec.model_validate(
+            {
+                "trialId": "trial-1",
+                "experimentId": "exp-1",
+                "taskId": "q_year",
+                "question": "In which year did the researcher obtain their PhD?",
+                "dataset": {"root": "/tmp/dataset"},
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "model": "mock",
+                "modelId": "mock",
+                "strategy": "mcp",
+                "format": "json",
+                "params": {},
+                "repeatIndex": 1,
+                "trace": {"enabled": False, "writeFiles": True, "save_raw_response": False, "save_tool_calls": False, "save_usage": False, "save_errors": False},
+                "artifacts": {"writeJsonl": True, "writeIndividualJson": False},
+                "metadata": {
+                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+                    "taskId": "q_year",
+                    "instanceId": "cv-demo",
+                    "provider": "mock",
+                    "modelId": "mock",
+                    "modelName": "mock",
+                    "strategy": "mcp",
+                    "format": "json",
+                    "repeatIndex": 1,
+                },
+            }
+        )
+
+
+def test_runresult_model_validate_rejects_bare_mcp_strategy_in_public_record():
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        RunResult.model_validate(
+            {
+                "trialId": "trial-1",
+                "experimentId": "exp-1",
+                "taskId": "q_year",
+                "question": "In which year did the researcher obtain their PhD?",
+                "dataset": {"root": "/tmp/dataset"},
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "model": "mock",
+                "modelId": "mock",
+                "strategy": "mcp",
+                "format": "json",
+                "repeatIndex": 1,
+                "status": "success",
+                "response": "2018",
+                "timing": {"startedAt": "2026-01-01T00:00:00Z", "finishedAt": "2026-01-01T00:00:01Z", "durationMs": 1000},
+                "usage": {},
+                "metricsSummary": {},
+                "metadata": {
+                    "canonicalId": "exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+                    "taskId": "q_year",
+                    "instanceId": "cv-demo",
+                    "provider": "mock",
+                    "modelId": "mock",
+                    "modelName": "mock",
+                    "strategy": "mcp",
+                    "format": "json",
+                    "repeatIndex": 1,
+                },
+            }
+        )
+
+
 def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     def fake_judge_request(**kwargs):
         config = kwargs["config"]
@@ -294,7 +415,7 @@ def test_evaluate_judge_persists_rating_and_justification(monkeypatch):
 
 
 def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
-    from copa.benchmark import evaluation as evaluation_module
+    from ctxbench.benchmark import evaluation as evaluation_module
 
     experiment = Experiment.model_validate(
         {
@@ -356,7 +477,7 @@ def test_evaluate_judge_aggregates_multiple_judges(monkeypatch):
 
 
 def test_judge_request_injects_structured_output_schema():
-    from copa.benchmark.evaluation import _judge_request
+    from ctxbench.benchmark.evaluation import _judge_request
 
     engine = Engine()
     model = RecordingJudgeModel()
@@ -394,66 +515,73 @@ def test_judge_request_injects_structured_output_schema():
 
 def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_path):
     dataset = write_mock_dataset(tmp_path / "dataset")
-    runspec = RunSpec(
-        id="run-1",
-        runId="run-1",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_year",
-        instanceId="cv-demo",
-        provider="mock",
-        modelName="mock",
-        strategy="mcp",
-        format="json",
-        repeatIndex=1,
-        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
-            questionId="q_year",
-            instanceId="cv-demo",
-            provider="mock",
-            modelName="mock",
-            strategy="mcp",
-            format="json",
-            repeatIndex=1,
-        ),
+    runspec = RunSpec.model_validate(
+        {
+            "trialId": "run-1",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_year",
+            "instanceId": "cv-demo",
+            "provider": "mock",
+            "model": "mock",
+            "strategy": "remote_mcp",
+            "format": "json",
+            "repeatIndex": 1,
+            "params": {"mcp_server": {"server_url": "https://example.test/mcp"}},
+            "trace": {"enabled": True},
+            "metadata": {
+                "canonicalId": "exp-1|q_year|cv-demo|mock|mock|remote_mcp|json|1",
+                "taskId": "q_year",
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "modelName": "mock",
+                "strategy": "remote_mcp",
+                "format": "json",
+                "repeatIndex": 1,
+            },
+        }
     )
 
     result = execute_runspec(runspec, Engine())
 
     assert isinstance(result.answer, str)
-    assert result.metricsSummary["toolCalls"] is None
-    assert result.metricsSummary["functionCalls"] is None
-    assert result.metricsSummary["inputTokens"] is None
+    assert result.metricsSummary["toolCalls"] == 0
+    assert result.metricsSummary["functionCalls"] == 0
+    assert result.metricsSummary["inputTokens"] is not None
+    events = result.trace.aiTrace.get("events", [])
+    assert any(event["name"] == "strategy.remote_mcp.execute" for event in events)
+    assert not any(event["name"] == "strategy.mcp.execute" for event in events)
+    assert result.trace.aiTrace.get("metrics", {}).get("strategyDurationMs") is not None
 
 
 def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):
     dataset = write_mock_dataset(tmp_path / "dataset")
-    runspec = RunSpec(
-        id="run-1",
-        runId="run-1",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_year",
-        question="In which year did the researcher obtain their PhD?",
-        questionTemplate="In which year did the researcher obtain their PhD?",
-        instanceId="cv-demo",
-        provider="openai",
-        modelName="gpt-5.4-mini",
-        strategy="inline",
-        format="html",
-        repeatIndex=1,
-        params={},
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_year|cv-demo|openai|gpt-5.4-mini|inline|html|1",
-            questionId="q_year",
-            instanceId="cv-demo",
-            provider="openai",
-            modelName="gpt-5.4-mini",
-            strategy="inline",
-            format="html",
-            repeatIndex=1,
-        ),
+    runspec = RunSpec.model_validate(
+        {
+            "trialId": "run-1",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_year",
+            "question": "In which year did the researcher obtain their PhD?",
+            "questionTemplate": "In which year did the researcher obtain their PhD?",
+            "instanceId": "cv-demo",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "strategy": "inline",
+            "format": "html",
+            "repeatIndex": 1,
+            "params": {},
+            "metadata": {
+                "canonicalId": "exp-1|q_year|cv-demo|openai|gpt-5.4-mini|inline|html|1",
+                "taskId": "q_year",
+                "instanceId": "cv-demo",
+                "provider": "openai",
+                "modelName": "gpt-5.4-mini",
+                "strategy": "inline",
+                "format": "html",
+                "repeatIndex": 1,
+            },
+        }
     )
     engine = Engine()
     model = RecordingModel()
@@ -490,6 +618,193 @@ def test_openai_model_build_payload_includes_prompt_cache_fields():
     assert payload["prompt_cache_retention"] == "24h"
 
 
+def test_openai_model_request_metadata_uses_target_public_keys():
+    model = OpenAIModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="openai",
+        model_name="gpt-5.4-mini",
+        strategy_name="inline",
+        context_format="text",
+        params={},
+        metadata={
+            "trialId": "trial-1",
+            "experimentId": "exp-1",
+            "taskId": "q_summary",
+            "phase": "execution",
+        },
+    )
+
+    metadata = model._request_metadata(request)
+
+    assert metadata == {
+        "trialId": "trial-1",
+        "experimentId": "exp-1",
+        "taskId": "q_summary",
+        "phase": "execution",
+    }
+
+
+def test_claude_model_request_metadata_uses_target_public_keys():
+    model = ClaudeModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="anthropic",
+        model_name="claude-sonnet",
+        strategy_name="inline",
+        context_format="text",
+        params={},
+        metadata={
+            "trialId": "trial-1",
+            "experimentId": "exp-1",
+            "taskId": "q_summary",
+            "phase": "evaluation",
+        },
+    )
+
+    metadata = model._request_metadata(request)
+
+    assert metadata == {
+        "user_id": "trialId=trial-1;experimentId=exp-1;taskId=q_summary;phase=evaluation"
+    }
+
+
+def test_openai_native_mcp_tools_accept_remote_mcp_and_reject_mcp():
+    model = OpenAIModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="openai",
+        model_name="gpt-5.4-mini",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    tools = model._build_native_mcp_tools(remote_request)
+
+    assert tools[0]["type"] == "mcp"
+    assert tools[0]["server_label"] == "ctxbench-lattes"
+
+    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model._build_native_mcp_tools(legacy_request)
+
+
+def test_claude_native_mcp_servers_accept_remote_mcp_and_reject_mcp():
+    model = ClaudeModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="anthropic",
+        model_name="claude-sonnet",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    servers = model._build_native_mcp_servers(remote_request)
+
+    assert servers[0]["name"] == "ctxbench-lattes"
+    assert servers[0]["url"] == "https://example.test/mcp"
+
+    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model._build_native_mcp_servers(legacy_request)
+
+
+def test_gemini_native_mcp_tool_accepts_remote_mcp_and_rejects_mcp():
+    model = GeminiModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="google",
+        model_name="gemini-2.5-flash",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    tool = model._build_native_mcp_tool(remote_request)
+    tool_payload = tool.model_dump(mode="json") if hasattr(tool, "model_dump") else tool
+
+    assert tool_payload["mcp_servers"][0]["name"] == "ctxbench-lattes"
+    assert tool_payload["mcp_servers"][0]["streamableHttpTransport"]["uri"] == "https://example.test/mcp"
+
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model.generate(
+            ModelInput(system_instruction="System", prompt="Prompt"),
+            remote_request.model_copy(update={"strategy_name": "mcp"}),
+        )
+
+
+def test_gemini_generate_uses_native_mcp_path_for_remote_mcp(monkeypatch):
+    model = GeminiModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="google",
+        model_name="gemini-2.5-flash",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+    expected = ModelResponse(text="ok")
+    called: dict[str, object] = {}
+
+    async def fake_generate_with_native_mcp(model_input, incoming_request):
+        called["strategy"] = incoming_request.strategy_name
+        return expected
+
+    def fake_run_async(coro):
+        called["used"] = True
+        try:
+            return coro.send(None)
+        except StopIteration as exc:
+            return exc.value
+
+    monkeypatch.setattr(model, "_generate_with_native_mcp", fake_generate_with_native_mcp)
+    monkeypatch.setattr(model, "_run_async", fake_run_async)
+
+    result = model.generate(ModelInput(system_instruction="System", prompt="Prompt"), request)
+
+    assert called == {"used": True, "strategy": "remote_mcp"}
+    assert result.text == "ok"
+
+
+def test_mock_model_uses_task_metadata_lookup():
+    model = MockModel()
+    request = AIRequest(
+        question="Question?",
+        context='{"answers": {"q_task": "42"}}',
+        provider_name="mock",
+        model_name="mock",
+        strategy_name="inline",
+        context_format="json",
+        params={},
+        metadata={"taskId": "q_task"},
+    )
+
+    response = model.generate(ModelInput(system_instruction="System", prompt="Prompt"), request)
+
+    assert response.text == "42"
+
+
+def test_mcp_runtime_defaults_public_server_label_to_ctxbench():
+    runtime = MCPRuntime(transport="streamable_http", server_url="https://example.test/mcp")
+
+    metadata = runtime._session_metadata()
+
+    assert metadata["serverLabel"] == "ctxbench-lattes"
+    assert metadata["serverUrl"] == "https://example.test/mcp"
+
+
 def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
     # Add a question whose contextBlock references a block that doesn't exist in blocks.json
     dataset_root = tmp_path / "dataset"
@@ -511,39 +826,45 @@ def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
 
     provider = DatasetProvider.from_dataset(dataset)
     events: list[tuple[str, str, dict[str, object]]] = []
-    result = RunResult(
-        runId="run-skip",
-        experimentId="exp-1",
-        dataset=dataset,
-        questionId="q_missing",
-        question="What is the missing answer?",
-        questionTemplate="What is the missing answer?",
-        questionTags=[],
-        validationType="judge",
-        contextBlock=[],
-        parameters={},
-        instanceId="cv-demo",
-        provider="mock",
-        modelName="mock",
-        strategy="inline",
-        format="json",
-        repeatIndex=1,
-        answer="unknown",
-        status="success",
-        timing=RunTiming(startedAt="2026-01-01T00:00:00Z", finishedAt="2026-01-01T00:00:01Z", durationMs=1000),
-        usage={},
-        metricsSummary={},
-        trace=RunTrace(),
-        metadata=RunMetadata(
-            canonicalId="exp-1|q_missing|cv-demo|mock|mock|inline|json|1",
-            questionId="q_missing",
-            instanceId="cv-demo",
-            provider="mock",
-            modelName="mock",
-            strategy="inline",
-            format="json",
-            repeatIndex=1,
-        ),
+    result = RunResult.model_validate(
+        {
+            "trialId": "run-skip",
+            "experimentId": "exp-1",
+            "dataset": dataset.model_dump(mode="json"),
+            "taskId": "q_missing",
+            "question": "What is the missing answer?",
+            "questionTemplate": "What is the missing answer?",
+            "questionTags": [],
+            "validationType": "judge",
+            "contextBlock": [],
+            "parameters": {},
+            "instanceId": "cv-demo",
+            "provider": "mock",
+            "model": "mock",
+            "strategy": "inline",
+            "format": "json",
+            "repeatIndex": 1,
+            "response": "unknown",
+            "status": "success",
+            "timing": {
+                "startedAt": "2026-01-01T00:00:00Z",
+                "finishedAt": "2026-01-01T00:00:01Z",
+                "durationMs": 1000,
+            },
+            "usage": {},
+            "metricsSummary": {},
+            "trace": {},
+            "metadata": {
+                "canonicalId": "exp-1|q_missing|cv-demo|mock|mock|inline|json|1",
+                "taskId": "q_missing",
+                "instanceId": "cv-demo",
+                "provider": "mock",
+                "modelName": "mock",
+                "strategy": "inline",
+                "format": "json",
+                "repeatIndex": 1,
+            },
+        }
     )
 
     evaluated = evaluate_run_result(
@@ -559,6 +880,8 @@ def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):
     assert item.status == "skipped"
     assert "nonexistent_block" in item.details.get("error", "")
     artifact = item.to_persisted_artifact()
+    assert artifact["trialId"] == "run-skip"
+    assert artifact["taskId"] == "q_missing"
     assert artifact["status"] == "skipped"
     assert artifact["judgeCount"] == 0
     assert any(label == "SKIP" and fields.get("questionId") == "q_missing" for label, _message, fields in events)

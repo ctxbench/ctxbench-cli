@@ -1,5 +1,5 @@
 [project]
-name = "copa"
+name = "ctxbench"
 version = "0.1.0"
 description = "Strict uv + Nix (uv2nix) template"
 readme = "README.md"
@@ -20,7 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-copa = "copa.cli:main"
+ctxbench = "ctxbench.cli:main"
 
 [build-system]
 requires = ["setuptools>=69", "wheel"]

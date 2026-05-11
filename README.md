@@ -1,12 +1,12 @@
-# COPA Benchmark
+# CTXBench
 
-COPA is a benchmark runner for comparing how LLMs answer dataset-backed questions under different execution strategies.
+CTXBench is a benchmark runner for comparing how LLMs respond to dataset-backed tasks under different execution strategies.
 
 The current codebase is centered on a simple idea:
 
 - keep the question set fixed
 - vary how the model accesses the source information
-- evaluate the answer qualitatively with either deterministic heuristics or a judge model
+- evaluate the response qualitatively with either deterministic heuristics or a judge model
 
 The repository currently ships a Lattes-based dataset and resource-oriented tool layer.
 
@@ -140,7 +140,7 @@ Example:
     "model": [
       { "provider": "openai", "name": "gpt-5.4-nano" }
     ],
-    "strategy": ["inline", "local_function", "local_mcp", "mcp"],
+    "strategy": ["inline", "local_function", "local_mcp", "remote_mcp"],
     "format": ["json", "html"]
   },
   "evaluation": {
@@ -161,7 +161,7 @@ Example:
 
 ## Strategies
 
-COPA currently supports four execution strategies.
+CTXBench currently supports four execution strategies.
 
 ### `inline`
 
@@ -194,7 +194,7 @@ For Lattes, the model interacts with:
 
 The benchmark still controls the loop, but the tools are accessed through a local MCP runtime.
 
-### `mcp`
+### `remote_mcp`
 
 The model provider controls the remote MCP interaction.
 
@@ -204,7 +204,7 @@ This path is less observable by design. Some metrics may be `null` because the b
 
 The Lattes integration is resource-oriented.
 
-The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The tool surface is fixed and shared across `local_function`, `local_mcp`, and `mcp`:
+The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The tool surface is fixed and shared across `local_function`, `local_mcp`, and `remote_mcp`:
 
 - `get_profile`
 - `get_expertise`
@@ -236,98 +236,106 @@ This keeps the benchmark simpler and makes tool usage easier to compare across s
 
 ## CLI
 
-The CLI entrypoint is `copa`.
+The installed CLI command is `ctxbench`.
 
-### Validate an Experiment
-
-```bash
-copa experiment validate datasets/lattes/experiment.json
-```
-
-### Expand an Experiment into RunSpecs
+### Plan an Experiment
 
 ```bash
-copa experiment expand datasets/lattes/experiment.json --out runspecs --jsonl runs.jsonl
+ctxbench plan datasets/lattes/experiment.json --output outputs/lattes_baseline_001
 ```
 
-### Execute Runs
+This writes:
+
+- `manifest.json`
+- `trials.jsonl`
+
+### Execute Planned Trials
 
 ```bash
-copa run runspecs --out results --jsonl results.jsonl
+ctxbench execute outputs/lattes_baseline_001/trials.jsonl
 ```
 
-To force re-execution even when artifacts already exist:
+This writes:
+
+- `responses.jsonl`
+- `traces/executions/<trialId>.json`
+
+To force re-execution even when response artifacts already exist:
 
 ```bash
-copa run runspecs --out results --jsonl results.jsonl --force
+ctxbench execute outputs/lattes_baseline_001/trials.jsonl --force
 ```
 
-`Ctrl-C` stops after the current item and leaves a checkpoint behind. Rerunning the same command resumes from the last completed `runId`.
+`Ctrl-C` stops after the current item and leaves a checkpoint behind. Rerunning the same command resumes from the last completed `trialId`.
 
-### Evaluate Run Results
-
-From a directory:
+### Evaluate Responses
 
 ```bash
-copa eval \
-  --run-results-dir results \
-  --experiment datasets/lattes/experiment.json \
-  --output-dir eval \
-  --output-jsonl evaluation.jsonl \
-  --output-csv evaluation.csv
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl
 ```
 
-From one JSON or JSONL input:
+Optional filters and selectors:
+
+- `--model <id>`
+- `--provider <name>`
+- `--instance <instanceId>`
+- `--task <taskId>`
+- `--strategy <name>`
+- `--format <name>`
+- `--repetition <n>`
+- `--trial-id <trialId>`
+- `--trial-id-file <path>`
+- `--judge <judgeId>`
+- `--status <status>`
+
+Batch evaluation uses the same `responses.jsonl` input:
 
 ```bash
-copa eval \
-  --run-results-json results.jsonl \
-  --experiment datasets/lattes/experiment.json \
-  --output-dir eval
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --judge juiz-gpt --batch
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --judge juiz-gpt --batch --wait --poll-interval 60
 ```
 
-Optional filters:
+This writes:
 
-- `--only <questionId>`
-- `--mode heuristic`
-- `--mode judge`
+- `evals.jsonl`
+- `judge_votes.jsonl`
+- `traces/evals/<trialId>.json`
+
+### Export Analysis-Ready Results
+
+```bash
+ctxbench export outputs/lattes_baseline_001/evals.jsonl --to csv --output outputs/lattes_baseline_001/results.csv
+```
+
+### Inspect Progress
+
+```bash
+ctxbench status outputs/lattes_baseline_001
+ctxbench status outputs/lattes_baseline_001 --by judge
+```
 
 ## Output Artifacts
 
 The benchmark persists:
 
-- runspec JSON files
-- run result JSON files
-- evaluation result JSON files
-- optional JSONL aggregations
-- optional CSV export for evaluation rows
+- `manifest.json`
+- `trials.jsonl`
+- `responses.jsonl`
+- `evals.jsonl`
+- `judge_votes.jsonl`
+- `results.csv`
 - trace artifacts
-- checkpoint files for interrupted batches (`runs.checkpoint.json`, `evaluation.checkpoint.json`)
+- checkpoint files for interrupted execution or evaluation
 
 JSONL artifacts are the default canonical source for analysis:
 
-- `runs.jsonl`
-- `results.jsonl`
-- `evaluation.jsonl`
+- `trials.jsonl`
+- `responses.jsonl`
+- `evals.jsonl`
 
-Per-item JSON files (`runs/rs_*.json`, `results/rr_*.json`, `evaluation/re_*.json`) are optional debug artifacts. Enable them explicitly:
+Run responses include a compact `metricsSummary` separate from the raw trace. When a strategy does not expose a metric reliably, the field is stored as `null`.
 
-```json
-{
-  "artifacts": {
-    "writeJsonl": true,
-    "writeIndividualJson": true
-  },
-  "trace": {
-    "enabled": true,
-    "writeFiles": true
-  }
-}
-```
-
-Run results include a compact `metricsSummary` separate from the raw trace. When a strategy does not expose a metric reliably, the field is stored as `null`.
-
-Evaluation rows persist qualitative details and expose common fields directly (`outcome`, `correctness`, `completeness`, judge metadata and evaluation token/duration fields) for easier CSV export.
+Evaluation rows persist qualitative details and expose common fields directly (`outcome`, `correctness`, `completeness`, judge metadata, and evaluation token/duration fields) for easier CSV export.
 
 Model factors can include a short `id` for filtering and reporting:
 
@@ -339,31 +347,52 @@ Model factors can include a short `id` for filtering and reporting:
 }
 ```
 
-Run and evaluation commands accept selectors:
+Execute and eval commands accept selectors:
 
 ```bash
-copa run runs.jsonl --model gpt-mini --question q_sup
-copa eval --run-jsonl results.jsonl --model gpt-mini --instance 5521922960404236
+ctxbench execute outputs/lattes_baseline_001/trials.jsonl --model gpt-mini --task q_sup
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --model gpt-mini --instance 5521922960404236
 ```
 
-`--model` matches either the short `modelId` or the full model name. Selectors are available for provider, model, instance, question, strategy, format, and repeat; evaluation also supports status and judge selection via `--judge` / `--exclude-judge`. Each of those fields also has an `--exclude-*` variant.
+`--model` matches either the short `modelId` or the full model name. Selectors are available for provider, model, instance, task, strategy, format, repetition, and trial id. Evaluation also supports status and judge selection via `--judge` / `--not-judge`. Each selector also has a `--not-*` variant.
 
-Evaluation can also use provider batch mode for supported judges. This keeps the input contract unchanged: pass the same `results.jsonl` or `results/rr_*.json` inputs used by synchronous evaluation.
+Evaluation can also use provider batch mode for supported judges. This keeps the input contract unchanged: pass the same `responses.jsonl` input used by synchronous evaluation.
 
 ```bash
-copa eval --run-jsonl results.jsonl --judge juiz-claude --batch
-copa eval --run-jsonl results.jsonl --judge juiz-gpt --batch --wait --poll-interval 60
-copa eval --run-jsonl results.jsonl --judge juiz-gemini --batch --batch-id batches/...
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --judge juiz-claude --batch
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --judge juiz-gpt --batch --wait --poll-interval 60
+ctxbench eval outputs/lattes_baseline_001/responses.jsonl --judge juiz-gemini --batch --batch-id batches/...
 ```
 
-Batch evaluation currently supports one selected judge per invocation across Anthropic/Claude, OpenAI, and Google/Gemini judges, so use `--judge` when the experiment has more than one judge. The command writes `evaluation.batch.json` beside the experiment artifacts with the provider batch id and request manifest. Without `--wait`, the first command only submits the provider batch; run again with `--batch --wait` or `--batch --batch-id ... --wait` to collect and persist `evaluation.jsonl`, `evaluation-summary.json`, and optional CSV artifacts.
+Batch evaluation currently supports one selected judge per invocation across Anthropic/Claude, OpenAI, and Google/Gemini judges, so use `--judge` when the experiment has more than one judge. The command writes `evaluation.batch.json` beside the experiment artifacts with the provider batch id and request manifest. Without `--wait`, the first command only submits the provider batch; run again with `--batch --wait` or `--batch --batch-id ... --wait` to collect and persist `evals.jsonl`, `evals-summary.json`, and optional CSV artifacts.
+
+## Compatibility / Migration
+
+This migration is intentionally breaking. The public CLI, selectors, artifact names, record fields, and strategy labels use one canonical form each. Legacy public names are documented here for migration only and are not accepted as aliases.
+
+The installed command is `ctxbench`. The Python distribution metadata may still be named `copa` during this migration.
+
+| Deprecated term | Target |
+|---|---|
+| `copa` | `ctxbench` |
+| `query` | `execute` |
+| `exec` | prohibited abbreviation; use `execute` |
+| `queries.jsonl` | `trials.jsonl` |
+| `answers.jsonl` | `responses.jsonl` |
+| `runId` | `trialId` |
+| `questionId` | `taskId` |
+| `answer` | `response` |
+| `mcp` | `remote_mcp` when referring to the remote MCP strategy |
+| `--question` | `--task` |
+| `--repeat` | `--repetition` |
+| `--ids` | `--trial-id` |
 
 ## Repository Layout
 
 - `src/copa/cli.py`
   CLI entrypoint
 - `src/copa/commands/`
-  `experiment`, `run`, and `eval` commands
+  `plan`, `execute`, `eval`, `export`, and `status` commands
 - `src/copa/benchmark/`
   experiment schema, runspec generation, execution, evaluation, persistence
 - `src/copa/ai/`

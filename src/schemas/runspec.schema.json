@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://copa-benchmark.org/schemas/runspec.schema.json",
-  "title": "COPA RunSpec",
+  "$id": "https://ctxbench-benchmark.org/schemas/runspec.schema.json",
+  "title": "CTXBench RunSpec",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
     "factorLevels"
   ],
   "properties": {
-    "kind": { "const": "copa.runspec" },
+    "kind": { "const": "ctxbench.runspec" },
     "schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "runspecId": { "type": "string", "minLength": 1 },
 

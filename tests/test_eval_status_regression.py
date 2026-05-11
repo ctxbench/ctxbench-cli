@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import csv
 from pathlib import Path
 
-from copa.benchmark import evaluation as evaluation_module
-from copa.commands.eval import eval_command
-from copa.commands.status import status_command
+from ctxbench.benchmark import evaluation as evaluation_module
+from ctxbench.commands.eval import eval_command
+from ctxbench.commands.export import export_command
+from ctxbench.commands.status import status_command
 
 
 def _write_eval_fixture(root: Path) -> Path:
@@ -62,6 +64,8 @@ def _write_eval_fixture(root: Path) -> Path:
         json.dumps(
             {
                 "experimentId": "exp_mock",
+                "trialId": "run-1",
+                "taskId": "q_one",
                 "evaluation": {
                     "judges": [
                         {"id": "judge-a", "provider": "mock", "model": "judge-a", "temperature": 0},
@@ -74,15 +78,51 @@ def _write_eval_fixture(root: Path) -> Path:
         encoding="utf-8",
     )
 
-    (root / "answers.jsonl").write_text(
+    (root / "trials.jsonl").write_text(
         "\n".join(
             [
                 json.dumps(
                     {
-                        "runId": "run-1",
+                        "trialId": "run-1",
+                        "experimentId": "exp_mock",
+                        "instanceId": "cv_demo",
+                        "taskId": "q_one",
+                        "provider": "mock",
+                        "modelId": "model",
+                        "modelName": "model",
+                        "strategy": "inline",
+                        "format": "json",
+                        "repeatIndex": 1,
+                        "metadata": {
+                            "canonicalId": "run-1",
+                            "taskId": "q_one",
+                            "instanceId": "cv_demo",
+                            "provider": "mock",
+                            "modelId": "model",
+                            "modelName": "model",
+                            "strategy": "inline",
+                            "format": "json",
+                            "repeatIndex": 1,
+                            "validationType": "judge",
+                            "parameters": {},
+                        },
+                    }
+                )
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    (root / "responses.jsonl").write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "trialId": "run-1",
                         "experimentId": "exp_mock",
                         "dataset": {"root": str(dataset_root.resolve())},
-                        "questionId": "q_one",
+                        "taskId": "q_one",
                         "question": "Question one?",
                         "questionTemplate": None,
                         "instanceId": "cv_demo",
@@ -95,7 +135,7 @@ def _write_eval_fixture(root: Path) -> Path:
                         "validationType": "judge",
                         "outputRoot": str(root.resolve()),
                         "status": "success",
-                        "answer": "Answer",
+                        "response": "Answer",
                         "errorMessage": None,
                         "timing": {
                             "startedAt": "2026-05-02T00:00:00Z",
@@ -109,7 +149,7 @@ def _write_eval_fixture(root: Path) -> Path:
                         "evaluation": {},
                         "metadata": {
                             "canonicalId": "run-1",
-                            "questionId": "q_one",
+                            "taskId": "q_one",
                             "instanceId": "cv_demo",
                             "provider": "mock",
                             "modelId": "model",
@@ -155,22 +195,32 @@ def test_eval_force_with_judge_preserves_other_judges(tmp_path):
     original = evaluation_module._judge_request
     evaluation_module._judge_request = fake_judge_request
     try:
-        assert eval_command(str(root / "answers.jsonl")) == 0
+        assert eval_command(str(root / "responses.jsonl")) == 0
 
         eval_rows = [json.loads(line) for line in (root / "evals.jsonl").read_text(encoding="utf-8").splitlines()]
         assert len(eval_rows) == 1
         assert eval_rows[0]["judgeCount"] == 2
+        assert eval_rows[0]["trialId"] == "run-1"
+        assert eval_rows[0]["taskId"] == "q_one"
+        assert {"trialId", "taskId", "judgeCount"} <= set(eval_rows[0])
+        summary = json.loads((root / "evals-summary.json").read_text(encoding="utf-8"))
+        assert summary["questions"][0]["trialId"] == "run-1"
+        assert summary["questions"][0]["taskId"] == "q_one"
+        assert {"trialId", "taskId"} <= set(summary["questions"][0])
 
         judge_votes = [json.loads(line) for line in (root / "judge_votes.jsonl").read_text(encoding="utf-8").splitlines()]
         votes_by_id = {row["judgeId"]: row for row in judge_votes}
         assert set(votes_by_id) == {"judge-a", "judge-b"}
+        assert all(row["trialId"] == "run-1" for row in judge_votes)
+        assert all(row["taskId"] == "q_one" for row in judge_votes)
+        assert all({"trialId", "taskId", "judgeId"} <= set(row) for row in judge_votes)
         assert votes_by_id["judge-a"]["criterias"]["correctness"]["justification"] == "judge-a-v1"
         assert votes_by_id["judge-b"]["criterias"]["correctness"]["justification"] == "judge-b-v2"
         assert all(row["status"] == "evaluated" for row in judge_votes)
 
         state["version"] = 9
         assert eval_command(
-            str(root / "answers.jsonl"),
+            str(root / "responses.jsonl"),
             force=True,
             judge=("judge-a",),
         ) == 0
@@ -210,7 +260,7 @@ def test_status_breaks_down_by_judge(tmp_path, capsys):
     original = evaluation_module._judge_request
     evaluation_module._judge_request = fake_judge_request
     try:
-        assert eval_command(str(root / "answers.jsonl")) == 0
+        assert eval_command(str(root / "responses.jsonl")) == 0
         assert status_command(str(root), by="judge") == 0
         out = capsys.readouterr().out
         assert "Judge" in out
@@ -218,5 +268,108 @@ def test_status_breaks_down_by_judge(tmp_path, capsys):
         assert "judge-b" in out
         assert "Success" in out
         assert "Pending" in out
+        assert "execute" in out
     finally:
         evaluation_module._judge_request = original
+
+
+def test_export_reads_responses_and_emits_target_fields(tmp_path):
+    root = _write_eval_fixture(tmp_path)
+
+    (root / "evals.jsonl").write_text(
+        json.dumps(
+            {
+                "trialId": "run-1",
+                "experimentId": "exp_mock",
+                "instanceId": "cv_demo",
+                "taskId": "q_one",
+                "strategy": "inline",
+                "status": "evaluated",
+                "evaluationMethod": "judge",
+                "judgeCount": 1,
+                "judgeErrorCount": 0,
+                "outcome": {
+                    "correctness": {"rating": "meets", "agreement": True},
+                    "completeness": {"rating": "meets", "agreement": True},
+                },
+                "evaluationInputTokens": 3,
+                "evaluationOutputTokens": 2,
+                "evaluationTotalTokens": 5,
+                "evaluationDurationMs": 4,
+                "contextBlocks": ["q_one"],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (root / "judge_votes.jsonl").write_text(
+        json.dumps(
+            {
+                "trialId": "run-1",
+                "experimentId": "exp_mock",
+                "instanceId": "cv_demo",
+                "taskId": "q_one",
+                "strategy": "inline",
+                "judgeId": "judge-a",
+                "provider": "mock",
+                "model": "judge-a",
+                "status": "evaluated",
+                "criterias": {
+                    "correctness": {"rating": "meets", "justification": "ok"},
+                    "completeness": {"rating": "meets", "justification": "ok"},
+                },
+                "inputTokens": 3,
+                "outputTokens": 2,
+                "totalTokens": 5,
+                "durationMs": 4,
+                "error": None,
+                "traceRef": None,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    assert export_command(str(root / "evals.jsonl")) == 0
+
+    with (root / "results.csv").open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["trialId"] == "run-1"
+    assert row["taskId"] == "q_one"
+    assert row["response"] == "Answer"
+    assert {"trialId", "taskId", "response"} <= set(row)
+
+
+def test_status_counts_trials_and_responses(tmp_path, capsys):
+    root = _write_eval_fixture(tmp_path)
+
+    (root / "evals.jsonl").write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "trialId": "run-1",
+                        "experimentId": "exp_mock",
+                        "instanceId": "cv_demo",
+                        "taskId": "q_one",
+                        "status": "evaluated",
+                        "evaluationMethod": "judge",
+                        "judgeCount": 1,
+                        "judgeErrorCount": 0,
+                        "outcome": None,
+                    }
+                )
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    assert status_command(str(root)) == 0
+    out = capsys.readouterr().out
+    assert "execute" in out
+    assert "eval" in out
+    assert " 1" in out

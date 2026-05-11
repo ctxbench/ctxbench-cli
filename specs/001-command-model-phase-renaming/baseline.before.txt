@@ -1,0 +1,586 @@
+flake.nix:61:        venv = pyPkgs.mkVirtualEnv "copa-venv" {
+flake.nix:62:          copa = [ "dev" ];
+flake.nix:65:        copaPkg = pkgs.symlinkJoin {
+flake.nix:66:          name = "copa";
+flake.nix:70:            if [ -e "$out/bin/copa" ]; then
+flake.nix:71:              rm "$out/bin/copa"
+flake.nix:73:            makeWrapper "${venv}/bin/python" "$out/bin/copa" \
+flake.nix:76:              --add-flags "copa.cli"
+flake.nix:82:        packages.default = copaPkg;
+flake.nix:86:          program = "${copaPkg}/bin/copa";
+flake.nix:105:            export PATH="${venv}/bin:${copaPkg}/bin:$PATH"
+pyproject.toml:2:name = "copa"
+pyproject.toml:23:copa = "copa.cli:main"
+README.md:3:COPA is a benchmark runner for comparing how LLMs answer dataset-backed questions under different execution strategies.
+README.md:9:- evaluate the answer qualitatively with either deterministic heuristics or a judge model
+README.md:106:  Used when the answer can be checked deterministically against `acceptedAnswers`.
+README.md:108:  Used when the answer must be evaluated qualitatively against `contextRefs` and `themes`.
+README.md:143:    "strategy": ["inline", "local_function", "local_mcp", "mcp"],
+README.md:197:### `mcp`
+README.md:207:The parsed curriculum in `parsed.json` is treated as the source of truth for tool-based execution. The tool surface is fixed and shared across `local_function`, `local_mcp`, and `mcp`:
+README.md:239:The CLI entrypoint is `copa`.
+README.md:244:copa experiment validate datasets/lattes/experiment.json
+README.md:250:copa experiment expand datasets/lattes/experiment.json --out runspecs --jsonl runs.jsonl
+README.md:256:copa run runspecs --out results --jsonl results.jsonl
+README.md:262:copa run runspecs --out results --jsonl results.jsonl --force
+README.md:265:`Ctrl-C` stops after the current item and leaves a checkpoint behind. Rerunning the same command resumes from the last completed `runId`.
+README.md:272:copa eval \
+README.md:283:copa eval \
+README.md:291:- `--only <questionId>`
+README.md:345:copa run runs.jsonl --model gpt-mini --question q_sup
+README.md:346:copa eval --run-jsonl results.jsonl --model gpt-mini --instance 5521922960404236
+README.md:354:copa eval --run-jsonl results.jsonl --judge juiz-claude --batch
+README.md:355:copa eval --run-jsonl results.jsonl --judge juiz-gpt --batch --wait --poll-interval 60
+README.md:356:copa eval --run-jsonl results.jsonl --judge juiz-gemini --batch --batch-id batches/...
+README.md:363:- `src/copa/cli.py`
+README.md:365:- `src/copa/commands/`
+README.md:367:- `src/copa/benchmark/`
+README.md:369:- `src/copa/ai/`
+README.md:371:- `src/copa/dataset/`
+README.md:373:- `src/copa/datasets/lattes/`
+docs/architecture/vocabulary.md:52:questionId
+docs/architecture/vocabulary.md:119:| `query` | `execute` |
+docs/architecture/vocabulary.md:120:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/vocabulary.md:121:| `answers.jsonl` | `responses.jsonl` |
+docs/architecture/vocabulary.md:122:| `runId` | `trialId` |
+docs/architecture/vocabulary.md:123:| `questionId` | `taskId` |
+docs/architecture/vocabulary.md:124:| `answer` | `response` |
+tests/test_lattes_sections.py:8:from copa.datasets.lattes.mcp_server import LattesMCPServer
+tests/test_lattes_sections.py:9:from copa.datasets.lattes.provider import LattesProvider
+tests/test_lattes_sections.py:10:from copa.datasets.lattes.tools import LattesToolService
+docs/architecture/README.md:35:The current implementation is a Python project. The current package metadata still uses the legacy name `copa`, but the target public architecture uses `ctxbench`.
+docs/architecture/README.md:101:| Use `execute` instead of `query` or `run` | `query` is too narrow; `run` conflicts with run/runId wording. |
+docs/architecture/README.md:103:| Use `response` instead of `answer` | Not every task is Q/A. |
+docs/architecture/README.md:105:| Use `remote_mcp` instead of `mcp` | `mcp` alone is ambiguous because local MCP also exists. |
+docs/architecture/README.md:161:│       ├── mcp/
+docs/architecture/README.md:214:| `copa` | `ctxbench` |
+docs/architecture/README.md:215:| `query` | `execute` |
+docs/architecture/README.md:216:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/README.md:217:| `answers.jsonl` | `responses.jsonl` |
+docs/architecture/README.md:218:| `runId` | `trialId` |
+docs/architecture/README.md:219:| `questionId` | `taskId` |
+docs/architecture/README.md:220:| `answer` | `response` |
+docs/architecture/README.md:221:| `mcp` | `remote_mcp` |
+docs/architecture/component.md:77:ctxbench.mcp
+src/schemas/runspec.schema.json:3:  "$id": "https://copa-benchmark.org/schemas/runspec.schema.json",
+src/schemas/runspec.schema.json:20:    "kind": { "const": "copa.runspec" },
+src/schemas/runspec.schema.json:186:          "enum": ["mcp-stdio", "http-json", "jsonrpc-stdio"]
+docs/architecture/cli-architecture.md:69:--ids-file
+docs/architecture/cli-architecture.md:77:--question -> --task
+docs/architecture/cli-architecture.md:78:--repeat -> --repetition
+docs/architecture/cli-architecture.md:79:--ids -> --trial-id / ids list
+docs/architecture/cli-architecture.md:86:| `copa` | `ctxbench` |
+docs/architecture/cli-architecture.md:87:| `copa query` | `ctxbench execute` |
+docs/architecture/cli-architecture.md:88:| `queries.jsonl` | `trials.jsonl` |
+docs/architecture/cli-architecture.md:89:| `answers.jsonl` | `responses.jsonl` |
+tests/test_eval_status_regression.py:6:from copa.benchmark import evaluation as evaluation_module
+tests/test_eval_status_regression.py:7:from copa.commands.eval import eval_command
+tests/test_eval_status_regression.py:8:from copa.commands.status import status_command
+tests/test_eval_status_regression.py:77:    (root / "answers.jsonl").write_text(
+tests/test_eval_status_regression.py:82:                        "runId": "run-1",
+tests/test_eval_status_regression.py:85:                        "questionId": "q_one",
+tests/test_eval_status_regression.py:98:                        "answer": "Answer",
+tests/test_eval_status_regression.py:112:                            "questionId": "q_one",
+tests/test_eval_status_regression.py:158:        assert eval_command(str(root / "answers.jsonl")) == 0
+tests/test_eval_status_regression.py:173:            str(root / "answers.jsonl"),
+tests/test_eval_status_regression.py:213:        assert eval_command(str(root / "answers.jsonl")) == 0
+tests/test_ai.py:8:from copa.ai.engine import Engine
+tests/test_ai.py:9:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
+tests/test_ai.py:10:from copa.ai.models.claude import ClaudeModel
+tests/test_ai.py:11:from copa.ai.models.gemini import GeminiModel
+tests/test_ai.py:12:from copa.ai.models.openai import OpenAIModel
+tests/test_ai.py:13:from copa.ai.trace import TraceCollector
+tests/test_ai.py:14:from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
+tests/test_ai.py:15:from copa.benchmark.executor import execute_runspec
+tests/test_ai.py:16:from copa.benchmark.models import (
+tests/test_ai.py:27:from copa.dataset.provider import DatasetProvider
+tests/test_ai.py:215:    assert result.answer == "3"
+tests/test_ai.py:226:    from copa.ai.rate_control import classify_provider_error
+tests/test_ai.py:258:    assert result.answer == "Software engineering"
+tests/test_ai.py:265:    from copa.benchmark import evaluation as evaluation_module
+tests/test_ai.py:281:        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
+tests/test_ai.py:283:        context_payload={"summary": "Ground truth answer."},
+tests/test_ai.py:297:    from copa.benchmark import evaluation as evaluation_module
+tests/test_ai.py:343:        result=type("R", (), {"answer": "Answer", "runId": "run-1", "experimentId": "exp-1", "instanceId": "cv-demo", "questionId": "q_summary"})(),
+tests/test_ai.py:345:        context_payload={"summary": "Ground truth answer."},
+tests/test_ai.py:359:    from copa.benchmark.evaluation import _judge_request
+tests/test_ai.py:376:        prompt="Judge this answer.",
+tests/test_ai.py:377:        answer_text="The candidate answer.",
+tests/test_ai.py:399:        runId="run-1",
+tests/test_ai.py:402:        questionId="q_year",
+tests/test_ai.py:406:        strategy="mcp",
+tests/test_ai.py:409:        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+tests/test_ai.py:411:            canonicalId="exp-1|q_year|cv-demo|mock|mock|mcp|json|1",
+tests/test_ai.py:412:            questionId="q_year",
+tests/test_ai.py:416:            strategy="mcp",
+tests/test_ai.py:424:    assert isinstance(result.answer, str)
+tests/test_ai.py:434:        runId="run-1",
+tests/test_ai.py:437:        questionId="q_year",
+tests/test_ai.py:449:            questionId="q_year",
+tests/test_ai.py:501:        "question": "What is the missing answer?",
+tests/test_ai.py:515:        runId="run-skip",
+tests/test_ai.py:518:        questionId="q_missing",
+tests/test_ai.py:519:        question="What is the missing answer?",
+tests/test_ai.py:520:        questionTemplate="What is the missing answer?",
+tests/test_ai.py:531:        answer="unknown",
+tests/test_ai.py:539:            questionId="q_missing",
+tests/test_ai.py:564:    assert any(label == "SKIP" and fields.get("questionId") == "q_missing" for label, _message, fields in events)
+tests/test_cli.py:8:from copa.cli import main
+tests/test_cli.py:202:    assert first["questionId"] in {"q_year", "q_summary"}
+tests/test_cli.py:208:    summary = next(row for row in rows if row["questionId"] == "q_summary")
+tests/test_cli.py:246:    assert {row["questionId"] for row in rows} == {"q_year", "q_summary"}
+tests/test_cli.py:247:    year = next(row for row in rows if row["questionId"] == "q_year")
+tests/test_cli.py:329:    payload["factors"]["strategy"] = ["inline", "local_function", "local_mcp", "mcp"]
+tests/test_cli.py:343:    for strategy_name in ("local_function", "local_mcp", "mcp"):
+tests/test_cli.py:360:        if json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_year"
+tests/test_cli.py:363:    assert first_payload["answer"] == "2018"
+tests/test_cli.py:372:    assert second_payload["answer"] == "2020"
+tests/test_cli.py:493:    year_rows = [row for row in rows if row["questionId"] == "q_year"]
+tests/test_cli.py:494:    assert next(row for row in year_rows if row["modelId"] == "m1")["answer"] == "2020"
+tests/test_cli.py:495:    assert next(row for row in year_rows if row["modelId"] == "m2")["answer"] == "2018"
+tests/test_cli.py:512:    expected_run_ids = [row["runId"] for row in runspec_rows]
+tests/test_cli.py:514:    from copa.commands import run as run_module
+tests/test_cli.py:557:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:577:        row["runId"]
+tests/test_cli.py:581:    assert {row["runId"] for row in rows} == expected_run_ids
+tests/test_cli.py:605:            str(row["questionId"]),
+tests/test_cli.py:606:            str(row["runId"]),
+tests/test_cli.py:609:    expected_run_ids = [row["runId"] for row in ordered_rows]
+tests/test_cli.py:611:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:678:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:714:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:746:    year = next(row for row in rows if row["questionId"] == "q_year")
+tests/test_cli.py:747:    judge = next(row for row in rows if row["questionId"] == "q_summary")
+tests/test_cli.py:756:    judge_summary = next(item for item in summary["questions"] if item["questionId"] == "q_summary")
+tests/test_cli.py:777:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:795:    selected_run_ids = {row["runId"] for row in result_rows if row["modelId"] == "m1"}
+tests/test_cli.py:796:    assert {row["runId"] for row in rows} == selected_run_ids
+tests/test_cli.py:823:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:879:    from copa.commands import eval as eval_module
+tests/test_cli.py:918:    from copa.benchmark.evaluation import evaluation_from_judge_payload
+tests/test_cli.py:919:    from copa.benchmark.models import EvaluationJudgeInfo, EvaluationTrace
+tests/test_cli.py:920:    from copa.commands import eval as eval_module
+tests/test_cli.py:994:    from copa.benchmark.evaluation import build_evaluation_jobs
+tests/test_cli.py:995:    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+tests/test_cli.py:996:    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+tests/test_cli.py:1068:    from copa.benchmark.evaluation import build_evaluation_jobs
+tests/test_cli.py:1069:    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+tests/test_cli.py:1070:    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+tests/test_cli.py:1132:    from copa.benchmark.evaluation import build_evaluation_jobs
+tests/test_cli.py:1133:    from copa.benchmark.evaluation_batch import OpenAIEvaluationBatchClient
+tests/test_cli.py:1134:    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+tests/test_cli.py:1187:    from copa.benchmark.evaluation import build_evaluation_jobs
+tests/test_cli.py:1188:    from copa.benchmark.evaluation_batch import retrieve_evaluation_batch
+tests/test_cli.py:1189:    from copa.commands.eval import _load_judges_from_manifest, load_results_from_input
+tests/test_cli.py:1258:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:1296:    from copa.benchmark import evaluation as evaluation_module
+tests/test_cli.py:1325:    judge_path = next(path for path in sorted(eval_dir.glob("re_*.json")) if json.loads(path.read_text(encoding="utf-8"))["questionId"] == "q_summary")
+src/schemas/plan.schema.json:3:  "$id": "https://copa-benchmark.org/schemas/runplan.schema.json",
+src/schemas/plan.schema.json:20:    "kind": { "const": "copa.runplan" },
+src/schemas/plan.schema.json:258:          "enum": ["mcp-stdio", "http-json", "jsonrpc-stdio"]
+src/copa/util/jsonl.py:7:from copa.util.fs import write_text_atomic
+src/copa/dataset/questions.py:5:from copa._compat import BaseModel, Field, ValidationError
+src/copa/util/artifacts.py:9:    runId: str
+src/copa/util/artifacts.py:11:    questionId: str
+src/copa/util/artifacts.py:52:        question_id=run.questionId,
+src/copa/util/ids.py:5:from copa.util.artifacts import canonical_run_identity
+src/copa/dataset/provider.py:5:from copa.benchmark.models import Experiment, ExperimentDataset
+src/copa/dataset/provider.py:6:from copa.dataset.questions import (
+src/copa/dataset/provider.py:13:from copa.util.fs import load_json
+src/copa/benchmark/selectors.py:43:    if selector.ids and _field(item, "runId") not in selector.ids:
+src/copa/benchmark/selectors.py:54:    if selector.question and _field(item, "questionId") not in selector.question:
+src/copa/benchmark/selectors.py:71:    if selector.not_question and _field(item, "questionId") in selector.not_question:
+src/copa/benchmark/evaluation_batch.py:9:from copa.benchmark.evaluation import (
+src/copa/benchmark/evaluation_batch.py:16:from copa.benchmark.models import EvaluationJudgeInfo, EvaluationRunResult, EvaluationTrace
+src/copa/benchmark/evaluation_batch.py:17:from copa.util.fs import write_json
+src/copa/benchmark/evaluation_batch.py:544:                "runId": job.result.runId,
+src/copa/benchmark/evaluation_batch.py:545:                "questionId": job.result.questionId,
+src/copa/commands/status.py:5:from copa.benchmark.evaluation import judge_identifier
+src/copa/commands/status.py:6:from copa.benchmark.models import EvaluationModelConfig
+src/copa/commands/status.py:7:from copa.util.fs import load_json
+src/copa/commands/status.py:8:from copa.util.jsonl import read_jsonl
+src/copa/commands/status.py:12:    """Returns {runId: status}, last entry per runId wins (handles duplicates)."""
+src/copa/commands/status.py:17:        run_id = str(item.get("runId", ""))
+src/copa/commands/status.py:38:    """Returns {(runId, judgeId): vote}, last entry wins."""
+src/copa/commands/status.py:43:        run_id = str(item.get("runId", ""))
+src/copa/commands/status.py:132:    queries_path = root / "queries.jsonl"
+src/copa/commands/status.py:133:    answers_path = root / "answers.jsonl"
+src/copa/commands/status.py:167:        f"{'query':<{col[0]}} {query_count:>{col[1]}} {answer_success:>{col[2]}} "
+src/copa/benchmark/models.py:7:from copa._compat import BaseModel, Field, ValidationError
+src/copa/benchmark/models.py:327:    questionId: str
+src/copa/benchmark/models.py:342:    runId: str
+src/copa/benchmark/models.py:346:    questionId: str
+src/copa/benchmark/models.py:379:        run_id = str(payload.get("runId") or payload.get("id") or "")
+src/copa/benchmark/models.py:380:        payload["runId"] = run_id
+src/copa/benchmark/models.py:385:                "questionId": payload.get("questionId", ""),
+src/copa/benchmark/models.py:403:            "runId": self.runId,
+src/copa/benchmark/models.py:405:            "questionId": self.questionId,
+src/copa/benchmark/models.py:453:    runId: str
+src/copa/benchmark/models.py:456:    questionId: str
+src/copa/benchmark/models.py:471:    answer: str
+src/copa/benchmark/models.py:494:        run_id = str(payload.get("runId") or payload.get("id") or "")
+src/copa/benchmark/models.py:495:        payload["runId"] = run_id
+src/copa/benchmark/models.py:499:                "questionId": payload.get("questionId", ""),
+src/copa/benchmark/models.py:517:            "runId": self.runId,
+src/copa/benchmark/models.py:519:            "questionId": self.questionId,
+src/copa/benchmark/models.py:532:            "answer": self.answer,
+src/copa/benchmark/models.py:565:    runId: str
+src/copa/benchmark/models.py:566:    questionId: str
+src/copa/benchmark/models.py:613:            "runId": self.runId,
+src/copa/benchmark/models.py:616:            "questionId": self.questionId,
+src/copa/benchmark/models.py:645:                "runId": self.runId,
+src/copa/benchmark/models.py:648:                "questionId": self.questionId,
+src/copa/benchmark/models.py:680:    runId: str
+src/copa/benchmark/models.py:681:    questionId: str
+src/copa/benchmark/models.py:695:                "canonicalId": str(payload.get("runId", "")),
+src/copa/benchmark/models.py:696:                "questionId": payload.get("questionId", ""),
+src/copa/ai/trace.py:7:from copa._compat import BaseModel, Field
+src/copa/ai/trace.py:124:                type="mcp.tool_call",
+src/copa/ai/trace.py:125:                name="mcp.tool_call",
+src/copa/ai/trace.py:151:                type="mcp.tool_result",
+src/copa/ai/trace.py:152:                name="mcp.tool_result",
+src/copa/ai/trace.py:322:            "strategy.mcp.execute",
+src/copa/datasets/lattes/mcp_server.py:8:from copa.ai.models.base import ToolResult, ToolSpec
+src/copa/datasets/lattes/mcp_server.py:9:from copa.datasets.lattes.tools import LattesToolService
+src/copa/datasets/lattes/mcp_server.py:24:            name="copa-lattes",
+src/copa/datasets/lattes/mcp_server.py:150:        default="/mcp",
+src/copa/datasets/lattes/mcp_server.py:182:mcp = create_mcp()
+src/copa/datasets/lattes/mcp_server.py:183:app = mcp
+src/copa/datasets/lattes/mcp_server.py:184:server = mcp
+src/copa/datasets/lattes/tools.py:6:from copa.ai.models.base import ToolResult, ToolSpec
+src/copa/datasets/lattes/tools.py:7:from copa.datasets.lattes.provider import LattesProvider
+src/copa/datasets/lattes/__init__.py:1:from copa.datasets.lattes.provider import LattesProvider
+src/copa/commands/run.py:6:from copa.ai.engine import Engine
+src/copa/commands/run.py:7:from copa.benchmark.checkpoints import (
+src/copa/commands/run.py:12:from copa.benchmark.executor import execute_runspec
+src/copa/commands/run.py:13:from copa.benchmark.models import RunSpec
+src/copa/commands/run.py:14:from copa.benchmark.selectors import RunSelector, matches_runspec
+src/copa/commands/run.py:15:from copa.benchmark.results import (
+src/copa/commands/run.py:20:from copa.util.artifacts import runresult_filename
+src/copa/commands/run.py:21:from copa.util.fs import load_json, write_json
+src/copa/commands/run.py:22:from copa.util.jsonl import append_jsonl, read_jsonl, write_jsonl
+src/copa/commands/run.py:23:from copa.util.logging import PhaseLogger, ProgressTracker
+src/copa/commands/run.py:62:        str(item.get("runId") or "")
+src/copa/commands/run.py:64:        if isinstance(item.get("runId"), str) and str(item.get("runId"))
+src/copa/commands/run.py:77:        run_id = payload.get("runId")
+src/copa/commands/run.py:84:    return target_dir / runresult_filename(runspec.experimentId, runspec.runId)
+src/copa/commands/run.py:97:        if runspec.runId in existing_run_ids:
+src/copa/commands/run.py:109:        existing_run_ids.add(runspec.runId)
+src/copa/commands/run.py:130:        existing = [row for row in read_jsonl(path) if str(row.get("runId") or "") != run_id]
+src/copa/commands/run.py:209:            if runspec.runId in completed_run_ids and not force:
+src/copa/commands/run.py:211:                logger.phase("SKIP", "Run already persisted; skipping execution", run=runspec.runId, path=result_path)
+src/copa/commands/run.py:218:                "Starting answer generation",
+src/copa/commands/run.py:219:                run=runspec.runId,
+src/copa/commands/run.py:221:                question=runspec.questionId,
+src/copa/commands/run.py:227:                run=runspec.runId,
+src/copa/commands/run.py:229:                question=runspec.questionId,
+src/copa/commands/run.py:233:                    logger.phase("WRITE", "Overwriting existing run artifact", run=result.runId, path=result_path)
+src/copa/commands/run.py:234:                logger.phase("WRITE", "Writing artifact", run=result.runId, path=result_path)
+src/copa/commands/run.py:241:                logger.phase("WRITE", "Artifact written", run=result.runId, path=written_path)
+src/copa/commands/run.py:246:                        run_id=result.runId,
+src/copa/commands/run.py:251:                completed_run_ids.add(result.runId)
+src/copa/commands/run.py:258:                logger.phase("WRITE", "Artifact written", run=result.runId, path=target_jsonl)
+src/copa/commands/run.py:260:                completed_run_ids.add(result.runId)
+src/copa/commands/run.py:267:            logger.phase("DONE", "Completed successfully", run=result.runId)
+src/copa/benchmark/experiment_loader.py:5:from copa._compat import ValidationError
+src/copa/benchmark/experiment_loader.py:6:from copa.benchmark.models import Experiment
+src/copa/benchmark/experiment_loader.py:7:from copa.util.fs import load_json
+src/copa/benchmark/runspec_generator.py:7:from copa.benchmark.models import Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
+src/copa/benchmark/runspec_generator.py:8:from copa.dataset.provider import DatasetProvider
+src/copa/benchmark/runspec_generator.py:9:from copa.util.artifacts import build_short_ids, canonical_run_identity
+src/copa/benchmark/runspec_generator.py:10:from copa.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
+src/copa/benchmark/runspec_generator.py:64:    if strategy_name in {"local_function", "local_mcp", "mcp"}:
+src/copa/benchmark/runspec_generator.py:130:                                    "questionId": question_id,
+src/copa/benchmark/runspec_generator.py:158:                runId=run_id,
+src/copa/benchmark/runspec_generator.py:162:                questionId=item["questionId"],
+src/copa/benchmark/runspec_generator.py:183:                    questionId=item["questionId"],
+src/copa/benchmark/runspec_generator.py:214:                    questionId=question_id,
+src/copa/benchmark/runspec_generator.py:225:                questionId=question_id,
+src/copa/benchmark/runspec_generator.py:236:                    questionId=question_id,
+src/copa/ai/strategies/mcp.py:3:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput
+src/copa/ai/strategies/mcp.py:4:from copa.ai.strategies.base import StrategyAdapter
+src/copa/ai/strategies/mcp.py:5:from copa.ai.trace import TraceCollector
+src/copa/ai/strategies/mcp.py:12:    "- Use only the available information from the tools to answer the question.\n"
+src/copa/ai/strategies/mcp.py:13:    "- Inform if the provided information isn't enough to answer the question.\n"
+src/copa/ai/strategies/mcp.py:23:        with trace.span("strategy.mcp.execute", "strategy.mcp.execute"):
+src/copa/ai/strategies/mcp.py:55:                answer=model_response.text,
+src/copa/benchmark/evaluation.py:8:from copa.ai.cache import build_judge_prompt_cache_key
+src/copa/benchmark/evaluation.py:9:from copa.ai.engine import Engine
+src/copa/benchmark/evaluation.py:10:from copa.ai.models.base import AIRequest, ModelInput
+src/copa/benchmark/evaluation.py:11:from copa.benchmark.models import (
+src/copa/benchmark/evaluation.py:21:from copa.dataset.provider import DatasetProvider
+src/copa/benchmark/evaluation.py:25:    "Use only the provided question, answer and curriculum context.\n"
+src/copa/benchmark/evaluation.py:30:JUDGE_PROMPT_PREFIX = """You are an evaluation assistant for a benchmark. Your task is to evaluate an answer given by a model based strictly on the provided curriculum context and criteria.
+src/copa/benchmark/evaluation.py:34:Evaluate the answer to the question based on the provided curriculum context.
+src/copa/benchmark/evaluation.py:54:The answer must be factually correct according to the curriculum context.
+src/copa/benchmark/evaluation.py:57:- Check whether the answer does not contradict the curriculum context.
+src/copa/benchmark/evaluation.py:61:The answer must fully address the question according to what can be answered from the curriculum context.
+src/copa/benchmark/evaluation.py:64:- Do not penalize missing information when the curriculum context itself does not provide enough evidence to answer that part of the question.
+src/copa/benchmark/evaluation.py:90:{answer}
+src/copa/benchmark/evaluation.py:168:    return f"{result.runId}-{judge_slug}"[:64]
+src/copa/benchmark/evaluation.py:182:    if only and result.questionId != only:
+src/copa/benchmark/evaluation.py:192:    question = provider.get_question(result.questionId)
+src/copa/benchmark/evaluation.py:202:                    "runId": result.runId,
+src/copa/benchmark/evaluation.py:203:                    "questionId": result.questionId,
+src/copa/benchmark/evaluation.py:212:        answer=result.answer,
+src/copa/benchmark/evaluation.py:241:            str(item.questionId),
+src/copa/benchmark/evaluation.py:244:            str(item.runId),
+src/copa/benchmark/evaluation.py:308:            answer=answer_text,
+src/copa/benchmark/evaluation.py:351:        return json.loads(result.answer.strip()), info, trace
+src/copa/benchmark/evaluation.py:371:        answer=result.answer,
+src/copa/benchmark/evaluation.py:382:            answer_text=result.answer,
+src/copa/benchmark/evaluation.py:383:            run_id=result.runId,
+src/copa/benchmark/evaluation.py:386:            question_id=result.questionId,
+src/copa/benchmark/evaluation.py:516:        runId=result.runId,
+src/copa/benchmark/evaluation.py:517:        questionId=result.questionId,
+src/copa/benchmark/evaluation.py:534:        runId=result.runId,
+src/copa/benchmark/evaluation.py:535:        questionId=result.questionId,
+src/copa/benchmark/evaluation.py:556:        runId=result.runId,
+src/copa/benchmark/evaluation.py:557:        questionId=result.questionId,
+src/copa/benchmark/evaluation.py:586:        runId=result.runId,
+src/copa/benchmark/evaluation.py:587:        questionId=result.questionId,
+src/copa/benchmark/evaluation.py:707:    if only and result.questionId != only:
+src/copa/benchmark/evaluation.py:720:                "runId": result.runId,
+src/copa/benchmark/evaluation.py:721:                "questionId": result.questionId,
+src/copa/benchmark/evaluation.py:726:        question = provider.get_question(result.questionId)
+src/copa/benchmark/evaluation.py:736:                        "runId": result.runId,
+src/copa/benchmark/evaluation.py:737:                        "questionId": result.questionId,
+src/copa/benchmark/evaluation.py:758:                "runId": result.runId,
+src/copa/benchmark/evaluation.py:759:                "questionId": result.questionId,
+src/copa/benchmark/evaluation.py:792:            str(item.questionId),
+src/copa/benchmark/evaluation.py:795:            str(item.runId),
+src/copa/benchmark/evaluation.py:843:        "runId": row.get("runId"),
+src/copa/benchmark/evaluation.py:844:        "questionId": row.get("questionId"),
+src/copa/datasets/lattes/models.py:3:from copa._compat import BaseModel, Field
+src/copa/benchmark/paths.py:5:from copa.benchmark.models import Experiment
+src/copa/benchmark/paths.py:30:    return output_root / "queries.jsonl"
+src/copa/benchmark/paths.py:37:    return output_root / "answers.jsonl"
+src/copa/datasets/lattes/readers/__init__.py:1:from copa.datasets.lattes.readers.base import LattesReader
+src/copa/datasets/lattes/readers/__init__.py:2:from copa.datasets.lattes.readers.html_reader import HtmlLattesReader
+src/copa/datasets/lattes/readers/__init__.py:3:from copa.datasets.lattes.readers.json_reader import JsonLattesReader
+src/copa/benchmark/executor.py:5:from copa.ai.cache import build_inline_prompt_cache_key
+src/copa/benchmark/executor.py:6:from copa.ai.engine import Engine
+src/copa/benchmark/executor.py:7:from copa.ai.models.base import AIRequest
+src/copa/benchmark/executor.py:8:from copa.ai.runtime import LocalFunctionRuntime, MCPRuntime
+src/copa/benchmark/executor.py:9:from copa.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
+src/copa/benchmark/executor.py:10:from copa.datasets.lattes.mcp_server import LattesMCPServer
+src/copa/benchmark/executor.py:11:from copa.datasets.lattes.tools import LattesToolService
+src/copa/benchmark/executor.py:12:from copa.util.clock import utc_now_iso
+src/copa/benchmark/executor.py:16:    from copa.dataset.provider import DatasetProvider
+src/copa/benchmark/executor.py:44:            "run_id": runspec.runId,
+src/copa/benchmark/executor.py:45:            "runId": runspec.runId,
+src/copa/benchmark/executor.py:47:            "question_id": runspec.questionId,
+src/copa/benchmark/executor.py:87:    is_empty_answer = ai_result.error is None and not (ai_result.answer or "").strip()
+src/copa/benchmark/executor.py:88:    error_message = ai_result.error or ("Model returned empty answer" if is_empty_answer else None)
+src/copa/benchmark/executor.py:113:        runId=runspec.runId,
+src/copa/benchmark/executor.py:116:        questionId=runspec.questionId,
+src/copa/benchmark/executor.py:131:        answer=ai_result.answer,
+src/copa/datasets/lattes/readers/json_reader.py:6:from copa.datasets.lattes.models import (
+src/copa/datasets/lattes/readers/json_reader.py:15:from copa.datasets.lattes.readers.base import LattesReader
+src/copa/datasets/lattes/readers/json_reader.py:16:from copa.util.fs import load_json
+src/copa/benchmark/results.py:6:from copa.benchmark.models import EvaluationRunResult, EvaluationTrace, RunResult, RunTrace
+src/copa/benchmark/results.py:7:from copa.util.fs import load_json, write_json
+src/copa/benchmark/results.py:8:from copa.util.jsonl import append_jsonl, write_jsonl
+src/copa/benchmark/results.py:48:        "runId": result.runId,
+src/copa/benchmark/results.py:55:        run_id=result.runId,
+src/copa/benchmark/results.py:65:    relative_path = Path("traces") / "evals" / f"{result.runId}.json"
+src/copa/benchmark/results.py:87:        "runId": result.runId,
+src/copa/benchmark/results.py:130:            "runId": result.runId,
+src/copa/benchmark/results.py:133:            "questionId": result.questionId,
+src/copa/ai/strategies/local_mcp.py:5:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput, ToolResult
+src/copa/ai/strategies/local_mcp.py:6:from copa.ai.runtime import ToolRuntime
+src/copa/ai/strategies/local_mcp.py:7:from copa.ai.strategies.base import StrategyAdapter
+src/copa/ai/strategies/local_mcp.py:8:from copa.ai.trace import TraceCollector
+src/copa/ai/strategies/local_mcp.py:15:    "- Use only the available information from the tools to answer the question.\n"
+src/copa/ai/strategies/local_mcp.py:16:    "- Inform if the provided information isn't enough to answer the question.\n"
+src/copa/ai/strategies/local_mcp.py:80:                        answer=model_response.text,
+src/copa/ai/strategies/local_mcp.py:126:            answer="",
+src/copa/cli.py:6:from copa.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
+src/copa/cli.py:7:from copa.commands.eval import eval_command
+src/copa/cli.py:8:from copa.commands.export import export_command
+src/copa/cli.py:9:from copa.commands.plan import plan_command
+src/copa/cli.py:10:from copa.commands.query import query_command
+src/copa/cli.py:11:from copa.commands.status import status_command
+src/copa/cli.py:12:from copa.util.logging import PhaseLogger
+src/copa/cli.py:33:        "--question", action="append", default=[], metavar="ID[,ID...]",
+src/copa/cli.py:45:        "--repeat", action="append", default=[], metavar="N[,N...]",
+src/copa/cli.py:77:        "--ids", metavar="ID[,ID...]|-",
+src/copa/cli.py:81:        "--ids-file", metavar="PATH",
+src/copa/cli.py:152:    parser = argparse.ArgumentParser(prog="copa", description="COPA benchmark CLI")
+src/copa/cli.py:155:    # ── copa plan ──────────────────────────────────────────────────────────
+src/copa/cli.py:157:        "plan", help="Expand an experiment into queries.jsonl"
+src/copa/cli.py:175:    # ── copa query ─────────────────────────────────────────────────────────
+src/copa/cli.py:177:        "query", help="Submit queries to models and collect answers"
+src/copa/cli.py:181:        help="Path to queries.jsonl (default: ./queries.jsonl)",
+src/copa/cli.py:200:    # ── copa eval ──────────────────────────────────────────────────────────
+src/copa/cli.py:206:        help="Path to answers.jsonl (default: ./answers.jsonl)",
+src/copa/cli.py:260:    # ── copa export ────────────────────────────────────────────────────────
+src/copa/cli.py:301:    # ── copa status ────────────────────────────────────────────────────────
+src/copa/benchmark/checkpoints.py:6:from copa.util.clock import utc_now_iso
+src/copa/benchmark/checkpoints.py:7:from copa.util.fs import load_json, write_json
+src/copa/datasets/lattes/readers/base.py:3:from copa.datasets.lattes.models import LattesCurriculum
+src/copa/commands/query.py:6:from copa.ai.engine import Engine
+src/copa/commands/query.py:7:from copa.benchmark.executor import execute_runspec
+src/copa/commands/query.py:8:from copa.benchmark.models import RunSpec
+src/copa/commands/query.py:9:from copa.benchmark.selectors import RunSelector, matches_runspec
+src/copa/commands/query.py:10:from copa.benchmark.results import serialize_run_result
+src/copa/commands/query.py:11:from copa.util.jsonl import append_jsonl, read_jsonl, write_jsonl
+src/copa/commands/query.py:12:from copa.util.logging import PhaseLogger, ProgressTracker
+src/copa/commands/query.py:17:        raise FileNotFoundError(f"Queries file not found: {path}. Run 'copa plan' first.")
+src/copa/commands/query.py:23:            "Queries file is missing context data. Re-run 'copa plan' to regenerate."
+src/copa/commands/query.py:29:    """Returns {runId: latest status} from answers.jsonl. Handles duplicates by taking last entry."""
+src/copa/commands/query.py:34:        run_id = str(item.get("runId", ""))
+src/copa/commands/query.py:41:    """Rewrite answers.jsonl keeping only the last entry per runId."""
+src/copa/commands/query.py:47:        run_id = str(row.get("runId", ""))
+src/copa/commands/query.py:61:    source = Path(queries).resolve() if queries else Path("queries.jsonl").resolve()
+src/copa/commands/query.py:74:    answers_path = source.parent / "answers.jsonl"
+src/copa/commands/query.py:96:            existing_status = answer_statuses.get(runspec.runId)
+src/copa/commands/query.py:100:                logger.phase("SKIP", "Already answered successfully; skipping", run=runspec.runId)
+src/copa/commands/query.py:107:                "Generating answer",
+src/copa/commands/query.py:108:                run=runspec.runId,
+src/copa/commands/query.py:110:                question=runspec.questionId,
+src/copa/commands/query.py:116:                run=runspec.runId,
+src/copa/commands/query.py:124:            answer_statuses[result.runId] = result.status
+src/copa/commands/query.py:125:            logger.phase("WRITE", "Answer written", run=result.runId)
+src/copa/commands/query.py:135:        f"Processed {completed} query(ies) → {answers_path}"
+src/copa/datasets/lattes/provider.py:8:from copa.dataset.contexts import context_path
+src/copa/datasets/lattes/provider.py:9:from copa.util.fs import load_json
+src/copa/commands/experiment.py:5:from copa.benchmark.experiment_loader import load_experiment
+src/copa/commands/experiment.py:6:from copa.benchmark.paths import resolve_expand_jsonl_path, resolve_expand_output_dir
+src/copa/commands/experiment.py:7:from copa.benchmark.runspec_generator import generate_runspecs
+src/copa/commands/experiment.py:8:from copa.dataset.provider import DatasetProvider
+src/copa/commands/experiment.py:9:from copa.util.artifacts import runspec_filename
+src/copa/commands/experiment.py:10:from copa.util.fs import ensure_dir, write_json
+src/copa/commands/experiment.py:11:from copa.util.jsonl import write_jsonl
+src/copa/commands/experiment.py:12:from copa.util.logging import PhaseLogger, ProgressTracker
+src/copa/commands/experiment.py:79:            artifact_path = target_dir / runspec_filename(runspec.experimentId, runspec.runId)
+src/copa/commands/experiment.py:80:            logger.phase("WRITE", "Writing artifact", run=runspec.runId, path=artifact_path)
+src/copa/commands/experiment.py:82:            logger.phase("WRITE", "Artifact written", run=runspec.runId, path=artifact_path)
+src/copa/commands/experiment.py:83:            logger.phase("DONE", "Completed successfully", run=runspec.runId)
+src/copa/commands/experiment.py:87:            logger.phase("DONE", "RunSpec prepared", run=runspec.runId)
+src/copa/commands/eval.py:6:from copa.benchmark.evaluation import (
+src/copa/commands/eval.py:13:from copa.benchmark.evaluation_batch import (
+src/copa/commands/eval.py:19:from copa.benchmark.models import EvaluationModelConfig, ExperimentTrace, RunResult
+src/copa/commands/eval.py:20:from copa.benchmark.selectors import RunSelector, matches_run_result
+src/copa/commands/eval.py:21:from copa.benchmark.results import (
+src/copa/commands/eval.py:26:from copa.util.fs import load_json, write_json
+src/copa/commands/eval.py:27:from copa.util.jsonl import append_jsonl, read_jsonl, write_jsonl
+src/copa/commands/eval.py:28:from copa.util.logging import PhaseLogger, ProgressTracker
+src/copa/commands/eval.py:37:        raise FileNotFoundError(f"Answers file not found: {path}. Run 'copa query' first.")
+src/copa/commands/eval.py:41:    required = {"answer", "status", "timing"}
+src/copa/commands/eval.py:46:            "Pass answers.jsonl, not queries.jsonl."
+src/copa/commands/eval.py:50:            "Answers file is missing context data. Re-run 'copa query' to regenerate."
+src/copa/commands/eval.py:63:            f"Missing manifest: {path}. Re-run 'copa plan' to regenerate."
+src/copa/commands/eval.py:124:    """Returns runIds already recorded as 'skipped' in evals.jsonl."""
+src/copa/commands/eval.py:128:        str(item.get("runId", ""))
+src/copa/commands/eval.py:130:        if item.get("status") == "skipped" and item.get("runId")
+src/copa/commands/eval.py:135:    """Returns {runId: [vote dicts]} from judge_votes.jsonl."""
+src/copa/commands/eval.py:140:        run_id = str(item.get("runId", ""))
+src/copa/commands/eval.py:177:    """Rewrite evals.jsonl keeping only the last entry per runId."""
+src/copa/commands/eval.py:183:        run_id = str(row.get("runId", ""))
+src/copa/commands/eval.py:190:    """Rewrite judge_votes.jsonl keeping only the last entry per (runId, judgeId)."""
+src/copa/commands/eval.py:196:        run_id = str(row.get("runId", ""))
+src/copa/commands/eval.py:235:    source = Path(answers).resolve() if answers else Path("answers.jsonl").resolve()
+src/copa/commands/eval.py:276:        if not force and r.runId in skipped_run_ids:
+src/copa/commands/eval.py:281:            done = evaluated_judge_ids.get(r.runId, set())
+src/copa/commands/eval.py:310:            existing = votes_index.get(evaluated.runId)
+src/copa/commands/eval.py:323:            logger.phase("SKIP", "Evaluation skipped (missing context blocks)", run=evaluated.runId)
+src/copa/commands/eval.py:325:            logger.phase("WRITE", "Evaluation written", run=evaluated.runId)
+src/copa/commands/eval.py:344:            jobs = [j for j in jobs if (j.result.runId, judge_identifier(j.judge)) not in evaluated_pairs]
+src/copa/commands/eval.py:373:        results_by_run_id = {r.runId: r for r in pending}
+src/copa/commands/eval.py:375:            source_result = results_by_run_id.get(evaluated.runId)
+src/copa/commands/eval.py:404:        f"Evaluated {len(pending)} answer(s) → {evals_path}"
+src/copa/commands/export.py:8:from copa.benchmark.selectors import RunSelector, matches_run_result
+src/copa/commands/export.py:9:from copa.util.jsonl import read_jsonl
+src/copa/commands/export.py:10:from copa.util.logging import PhaseLogger
+src/copa/commands/export.py:61:        "runId": _ans(ans, "runId"),
+src/copa/commands/export.py:64:        "questionId": _ans(ans, "questionId"),
+src/copa/commands/export.py:80:        "answer": _ans(ans, "answer"),
+src/copa/commands/export.py:114:    "experimentId", "runId", "instanceId", "format", "questionId",
+src/copa/commands/export.py:118:    "answer", "errorMessage", "modelDuration", "reservedTokens", "toolDurationMs", "totalDurationMs",
+src/copa/commands/export.py:190:        run_id = str(ev.get("runId") or "")
+src/copa/commands/export.py:199:        run_id = str(v.get("runId") or "")
+src/copa/commands/export.py:215:    ans = next((r for r in answers if str(r.get("runId") or "") == run_id), None)
+src/copa/commands/export.py:230:        "runId": merged["runId"],
+src/copa/commands/export.py:232:        "questionId": merged["questionId"],
+src/copa/commands/export.py:241:        "answer": merged["answer"],
+src/copa/commands/export.py:289:    answers_path = source_root / "answers.jsonl"
+src/copa/commands/export.py:291:        print(f"Answers file not found: {answers_path}. Run 'copa query' first.")
+src/copa/commands/export.py:320:    run_id_key = lambda ans: str(ans.get("runId") or "")
+src/copa/ai/models/openai.py:7:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
+src/copa/ai/models/openai.py:282:            ("runId", "runId"),
+src/copa/ai/models/openai.py:292:        if request.strategy_name != "mcp":
+src/copa/ai/models/openai.py:298:        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
+src/copa/ai/models/openai.py:302:            "type": "mcp",
+src/copa/ai/strategies/local_function.py:5:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput, ToolResult
+src/copa/ai/strategies/local_function.py:6:from copa.ai.runtime import ToolRuntime
+src/copa/ai/strategies/local_function.py:7:from copa.ai.strategies.base import StrategyAdapter
+src/copa/ai/strategies/local_function.py:8:from copa.ai.trace import TraceCollector
+src/copa/ai/strategies/local_function.py:15:    "- Use only the available information from the functions to answer the question.\n"
+src/copa/ai/strategies/local_function.py:16:    "- Inform if the provided information isn't enough to answer the question\n"
+src/copa/ai/strategies/local_function.py:80:                        answer=model_response.text,
+src/copa/ai/strategies/local_function.py:126:            answer="",
+src/copa/datasets/lattes/readers/html_reader.py:8:from copa.datasets.lattes.models import (
+src/copa/datasets/lattes/readers/html_reader.py:17:from copa.datasets.lattes.readers.base import LattesReader
+src/copa/ai/models/mock.py:6:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse
+src/copa/ai/models/mock.py:14:        answer = self._extract_answer(request.context, question_id)
+src/copa/ai/models/mock.py:16:        output_tokens = len(answer.split())
+src/copa/ai/models/mock.py:18:            text=answer,
+src/copa/ai/models/claude.py:7:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
+src/copa/ai/models/claude.py:67:            payload["betas"] = ["mcp-client-2025-04-04"]
+src/copa/ai/models/claude.py:225:        run_id = request.metadata.get("runId")
+src/copa/ai/models/claude.py:230:            parts.append(f"runId={run_id}")
+src/copa/ai/models/claude.py:240:        if request.strategy_name != "mcp":
+src/copa/ai/models/claude.py:246:        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
+src/copa/ai/models/claude.py:276:            if isinstance(block_type, str) and block_type.startswith("mcp"):
+src/copa/ai/strategies/base.py:3:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter
+src/copa/ai/strategies/base.py:4:from copa.ai.trace import TraceCollector
+src/copa/ai/engine.py:5:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput
+src/copa/ai/engine.py:6:from copa.ai.models.claude import ClaudeModel
+src/copa/ai/engine.py:7:from copa.ai.models.gemini import GeminiModel
+src/copa/ai/engine.py:8:from copa.ai.models.mock import MockModel
+src/copa/ai/engine.py:9:from copa.ai.models.openai import OpenAIModel
+src/copa/ai/engine.py:10:from copa.ai.rate_control import RateControlRegistry, RateLimitedModelAdapter
+src/copa/ai/engine.py:11:from copa.ai.runtime import ToolRuntime
+src/copa/ai/engine.py:12:from copa.ai.strategies.local_function import LocalFunctionStrategy
+src/copa/ai/engine.py:13:from copa.ai.strategies.local_mcp import LocalMCPStrategy
+src/copa/ai/engine.py:14:from copa.ai.strategies.mcp import MCPStrategy
+src/copa/ai/engine.py:15:from copa.ai.strategies.base import StrategyAdapter
+src/copa/ai/engine.py:16:from copa.ai.strategies.inline import InlineStrategy
+src/copa/ai/engine.py:17:from copa.ai.trace import TraceCollector
+src/copa/ai/engine.py:32:            "mcp": MCPStrategy(),
+src/copa/ai/engine.py:59:            result = AIResult(answer="", error=str(exc))
+src/copa/ai/engine.py:99:                    answer=model_response.text,
+src/copa/ai/engine.py:113:            result = AIResult(answer="", error=str(exc))
+src/copa/ai/models/gemini.py:8:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall
+src/copa/ai/models/gemini.py:13:        if request.strategy_name == "mcp":
+src/copa/ai/models/gemini.py:418:        server_label = str(config.get("server_label") or config.get("label") or "copa-lattes")
+src/copa/commands/plan.py:5:from copa.benchmark.experiment_loader import load_experiment
+src/copa/commands/plan.py:6:from copa.benchmark.paths import resolve_output_root, resolve_queries_path
+src/copa/commands/plan.py:7:from copa.benchmark.runspec_generator import generate_runspecs
+src/copa/commands/plan.py:8:from copa.dataset.provider import DatasetProvider
+src/copa/commands/plan.py:9:from copa.util.fs import ensure_dir, write_json
+src/copa/commands/plan.py:10:from copa.util.jsonl import write_jsonl
+src/copa/commands/plan.py:11:from copa.util.logging import PhaseLogger, ProgressTracker
+src/copa/commands/plan.py:41:    queries_path = resolve_queries_path(experiment, base_dir) if not output else output_root / "queries.jsonl"
+src/copa/commands/plan.py:53:        logger.phase("PLAN", "Query prepared", run=runspec.runId)
+src/copa/ai/rate_control.py:10:from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse
+src/copa/ai/rate_control.py:11:from copa.ai.trace import TraceCollector
+src/copa/ai/rate_control.py:329:                if request_fields.get("questionId"):
+src/copa/ai/rate_control.py:330:                    message += f" question_id={request_fields['questionId']}"
+src/copa/ai/rate_control.py:499:            fields["questionId"] = request.metadata.get("question_id")
+src/copa/ai/runtime.py:8:from copa.ai.models.base import ToolResult, ToolSpec
+src/copa/ai/runtime.py:9:from copa.datasets.lattes.mcp_server import LattesMCPServer
+src/copa/ai/runtime.py:10:from copa.datasets.lattes.tools import LattesToolService
+src/copa/ai/runtime.py:52:        server_label: str = "copa-lattes",
+src/copa/ai/runtime.py:84:            server_label=str(config.get("server_label") or config.get("label") or "copa-lattes"),
+src/copa/ai/runtime.py:121:            "runtime": "mcp",
+src/copa/ai/strategies/inline.py:3:from copa.ai.models.base import AIRequest, AIResult, ModelAdapter, ModelInput
+src/copa/ai/strategies/inline.py:4:from copa.ai.strategies.base import StrategyAdapter
+src/copa/ai/strategies/inline.py:5:from copa.ai.trace import TraceCollector
+src/copa/ai/strategies/inline.py:11:    "- Base your answer strictly on the provided data.\n"
+src/copa/ai/strategies/inline.py:12:    "- Inform if the provided context isn't enough to answer the question\n"
+src/copa/ai/strategies/inline.py:54:                answer=model_response.text,
+src/copa/ai/models/base.py:5:from copa._compat import BaseModel, Field
+src/copa/ai/models/base.py:6:from copa.ai.trace import TraceCollector
+src/copa/ai/models/base.py:67:    answer: str
