@@ -161,7 +161,7 @@ def retrieve_evaluation_batch(
 
     results = _evaluation_results_from_batch(active_client.results(batch_id, batch), jobs)
     manifest["status"] = "completed"
-    manifest["completedRunCount"] = len(results)
+    manifest["completedTrialCount"] = len(results)
     write_json(batch_manifest_path(source_root), manifest)
     return manifest, results
 
@@ -541,8 +541,8 @@ def _build_manifest(batch: Any, *, jobs: list[EvaluationJob], status: str) -> di
         "requests": [
             {
                 "customId": job.custom_id,
-                "runId": job.result.runId,
-                "questionId": job.result.questionId,
+                "trialId": job.result.runId,
+                "taskId": job.result.questionId,
                 "instanceId": job.result.instanceId,
             }
             for job in jobs

@@ -107,7 +107,7 @@ produces `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`,
 - [X] T034 [US2] Update `src/copa/commands/export.py`: reads `responses.jsonl`, merges evals/votes by `trialId`, and writes target CSV/detail fields including `trialId`, `taskId`, and `response`.
 - [X] T035 [US2] Update `src/copa/commands/status.py`: reads `trials.jsonl`, `responses.jsonl`, and `evals.jsonl`; rendered labels use target phase/field terms.
 - [X] T036 [US2] Update `src/copa/benchmark/evaluation.py`: judge request/evaluation aggregation reads response objects with target fields and persists target eval fields without conflating execution and judge costs.
-- [ ] T037 [US2] Update `src/copa/benchmark/evaluation_batch.py`: batch manifest/job serialization uses target field names and mocked provider tests remain provider-free.
+- [X] T037 [US2] Update `src/copa/benchmark/evaluation_batch.py`: batch manifest/job serialization uses target field names and mocked provider tests remain provider-free.
 - [X] T038 [US2] Update `src/copa/benchmark/results.py`: response/eval/judge-vote serializers and trace refs use target fields while preserving trace directory scope.
 - [X] T039 [US2] Update `src/copa/benchmark/checkpoints.py`: checkpoint records refer to `trialId` / completed trial IDs and keep checkpoint file behavior otherwise unchanged.
 - [X] T040 [US2] Update `src/copa/benchmark/experiment_loader.py`: manifest-facing output uses target public terminology only where it serializes public artifact metadata.

@@ -990,10 +990,67 @@ def test_eval_batch_retrieves_openai_results(tmp_path):
     )
 
     assert manifest["status"] == "completed"
+    assert manifest["completedTrialCount"] == 2
+    assert "completedRunCount" not in manifest
+    assert len(manifest["requests"]) == 2
+    first_request = manifest["requests"][0]
+    assert first_request["trialId"]
+    assert first_request["taskId"] in {"q_year", "q_summary"}
+    assert "runId" not in first_request
+    assert "questionId" not in first_request
     assert len(evaluations) == 2
     assert {item.items[0].evaluationJudgeProvider for item in evaluations} == {"openai"}
     assert {item.items[0].details["outcome"]["correctness"]["rating"] for item in evaluations} == {"meets"}
     assert {item.items[0].evaluationInputTokens for item in evaluations} == {11}
+
+
+def test_submit_evaluation_batch_writes_target_manifest_fields(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=True)
+    payload = json.loads(experiment_path.read_text(encoding="utf-8"))
+    payload["evaluation"]["judges"] = [
+        {
+            "provider": "openai",
+            "model": "gpt-5.5",
+            "temperature": 0,
+            "params": {"id": "juiz-gpt"},
+        }
+    ]
+    experiment_path.write_text(json.dumps(payload), encoding="utf-8")
+    trials_path = _plan_to_root(experiment_path, tmp_path / "expanded")
+    responses_path = _execute_trials(trials_path)
+
+    from copa.benchmark.evaluation import build_evaluation_jobs
+    from copa.benchmark.evaluation_batch import submit_evaluation_batch
+    from copa.commands.eval import _load_judges, _load_responses
+
+    jobs = build_evaluation_jobs(
+        _load_responses(responses_path),
+        judges=_load_judges(trials_path.parent),
+    )
+
+    class FakeOpenAIClient:
+        def submit(self, jobs):
+            return {
+                "id": "batch_test",
+                "status": "validating",
+                "output_file_id": "file_test",
+            }
+
+    manifest = submit_evaluation_batch(
+        jobs=jobs,
+        source_root=trials_path.parent,
+        client=FakeOpenAIClient(),
+    )
+
+    assert manifest["batchId"] == "batch_test"
+    assert manifest["status"] == "submitted"
+    assert manifest["requestCount"] == 2
+    assert len(manifest["requests"]) == 2
+    first_request = manifest["requests"][0]
+    assert first_request["trialId"]
+    assert first_request["taskId"] in {"q_year", "q_summary"}
+    assert "runId" not in first_request
+    assert "questionId" not in first_request
 
 
 def test_eval_batch_retrieves_openai_error_results(tmp_path):
