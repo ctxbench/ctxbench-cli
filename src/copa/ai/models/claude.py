@@ -222,14 +222,17 @@ class ClaudeModel(ModelAdapter):
         return params
 
     def _request_metadata(self, request: AIRequest) -> dict[str, str]:
-        run_id = request.metadata.get("runId")
-        exp_id = request.metadata.get("expId")
+        trial_id = request.trial_id()
+        experiment_id = request.experiment_id()
+        task_id = request.task_id()
         phase = request.metadata.get("phase")
         parts = []
-        if run_id is not None and str(run_id):
-            parts.append(f"runId={run_id}")
-        if exp_id is not None and str(exp_id):
-            parts.append(f"expId={exp_id}")
+        if trial_id is not None and str(trial_id):
+            parts.append(f"trialId={trial_id}")
+        if experiment_id is not None and str(experiment_id):
+            parts.append(f"experimentId={experiment_id}")
+        if task_id is not None and str(task_id):
+            parts.append(f"taskId={task_id}")
         if phase is not None and str(phase):
             parts.append(f"phase={phase}")
         if not parts:
@@ -237,13 +240,15 @@ class ClaudeModel(ModelAdapter):
         return {"user_id": ";".join(parts)}
 
     def _build_native_mcp_servers(self, request: AIRequest) -> list[dict[str, Any]]:
-        if request.strategy_name != "mcp":
+        if request.strategy_name == "mcp":
+            raise ValueError("unknown strategy: mcp")
+        if request.strategy_name != "remote_mcp":
             return []
         config = request.params.get("mcp_server")
         if not isinstance(config, dict):
             raise RuntimeError("Native MCP strategy requires params['mcp_server'] for Claude models.")
         server_url = config.get("server_url") or config.get("url")
-        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
+        server_label = config.get("server_label") or config.get("label") or "ctxbench-lattes"
         if not isinstance(server_url, str) or not server_url:
             raise RuntimeError("Claude MCP config requires a non-empty 'server_url' or 'url'.")
         server: dict[str, Any] = {

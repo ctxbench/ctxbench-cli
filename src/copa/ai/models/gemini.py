@@ -11,6 +11,8 @@ from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelRespon
 class GeminiModel(ModelAdapter):
     def generate(self, model_input: ModelInput, request: AIRequest, trace: Any | None = None) -> ModelResponse:
         if request.strategy_name == "mcp":
+            raise ValueError("unknown strategy: mcp")
+        if request.strategy_name == "remote_mcp":
             return self._run_async(self._generate_with_native_mcp(model_input, request))
         client = self._create_client()
         generation_config = self._build_generation_config(request, model_input)
@@ -415,7 +417,7 @@ class GeminiModel(ModelAdapter):
         if not isinstance(server_url, str) or not server_url:
             raise RuntimeError("Gemini MCP config requires a non-empty 'server_url' or 'url'.")
 
-        server_label = str(config.get("server_label") or config.get("label") or "copa-lattes")
+        server_label = str(config.get("server_label") or config.get("label") or "ctxbench-lattes")
         headers = self._build_mcp_headers(config)
 
         sdk_types = self._sdk_types()

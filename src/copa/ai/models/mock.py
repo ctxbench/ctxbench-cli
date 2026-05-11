@@ -10,8 +10,12 @@ class MockModel(ModelAdapter):
     name = "mock"
 
     def generate(self, model_input: ModelInput, request: AIRequest, trace: object | None = None) -> ModelResponse:
-        question_id = request.metadata.get("question_id", "")
-        answer = self._extract_answer(request.context, question_id)
+        task_id = (
+            request.task_id()
+            or request.metadata_value("question_id", "questionId")
+            or ""
+        )
+        answer = self._extract_answer(request.context, task_id)
         input_tokens = len(model_input.prompt.split())
         output_tokens = len(answer.split())
         return ModelResponse(

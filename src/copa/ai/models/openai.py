@@ -279,23 +279,33 @@ class OpenAIModel(ModelAdapter):
     def _request_metadata(self, request: AIRequest) -> dict[str, str]:
         metadata: dict[str, str] = {}
         for source_key, target_key in (
-            ("runId", "runId"),
-            ("expId", "expId"),
+            ("trialId", "trialId"),
+            ("experimentId", "experimentId"),
+            ("taskId", "taskId"),
             ("phase", "phase"),
         ):
-            value = request.metadata.get(source_key)
+            if source_key == "trialId":
+                value = request.trial_id()
+            elif source_key == "experimentId":
+                value = request.experiment_id()
+            elif source_key == "taskId":
+                value = request.task_id()
+            else:
+                value = request.metadata.get(source_key)
             if value is not None and str(value):
                 metadata[target_key] = str(value)
         return metadata
 
     def _build_native_mcp_tools(self, request: AIRequest) -> list[dict[str, Any]]:
-        if request.strategy_name != "mcp":
+        if request.strategy_name == "mcp":
+            raise ValueError("unknown strategy: mcp")
+        if request.strategy_name != "remote_mcp":
             return []
         config = request.params.get("mcp_server")
         if not isinstance(config, dict):
             raise RuntimeError("Native MCP strategy requires params['mcp_server'] for OpenAI models.")
         server_url = config.get("server_url") or config.get("url")
-        server_label = config.get("server_label") or config.get("label") or "copa-lattes"
+        server_label = config.get("server_label") or config.get("label") or "ctxbench-lattes"
         if not isinstance(server_url, str) or not server_url:
             raise RuntimeError("OpenAI MCP config requires a non-empty 'server_url' or 'url'.")
         tool: dict[str, Any] = {

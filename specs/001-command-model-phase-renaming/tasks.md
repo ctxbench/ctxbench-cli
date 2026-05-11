@@ -114,18 +114,18 @@ produces `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`,
 - [X] T041 [US2] Update identity and filename helpers in `src/copa/util/artifacts.py`: public helper names and serialized identity inputs use `trial` / `task` terminology where applicable.
 - [X] T042 [US2] Audit `src/copa/util/jsonl.py`; update only public docstrings or helper names if they contain legacy artifact terminology.
 - [X] T043 [US2] Update `src/copa/util/ids.py` imports/calls to match renamed artifact identity helpers from T041.
-- [ ] T044 [US2] Update `src/copa/ai/runtime.py` where runtime metadata crosses into persisted artifacts; preserve MCP runtime protocol terminology that is not the strategy label.
+- [X] T044 [US2] Update `src/copa/ai/runtime.py` where runtime metadata crosses into persisted artifacts; preserve MCP runtime protocol terminology that is not the strategy label.
 - [X] T045 [US2] Update `src/copa/ai/trace.py` so strategy span recognition uses `strategy.remote_mcp.execute` and metric aggregation meaning/provenance is unchanged.
 - [X] T046 [US2] Update `src/copa/ai/strategies/mcp.py` span names and public metadata to `remote_mcp`; keep the file name if no public import path is exposed.
 - [ ] T047 [P] [US2] Audit `src/copa/ai/strategies/inline.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T048 [P] [US2] Audit `src/copa/ai/strategies/local_function.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T049 [P] [US2] Audit `src/copa/ai/strategies/local_mcp.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T050 [P] [US2] Audit `src/copa/ai/strategies/base.py` for artifact-facing legacy fields and update only those occurrences.
-- [ ] T051 [US2] Update `src/copa/ai/models/base.py` request/response metadata names that are serialized into artifacts.
-- [ ] T052 [US2] Update `src/copa/ai/models/openai.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
-- [ ] T053 [US2] Update `src/copa/ai/models/claude.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
-- [ ] T054 [US2] Update `src/copa/ai/models/gemini.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
-- [ ] T055 [P] [US2] Audit `src/copa/ai/models/mock.py` for artifact-facing legacy fields and update only those occurrences.
+- [X] T051 [US2] Update `src/copa/ai/models/base.py` request/response metadata names that are serialized into artifacts.
+- [X] T052 [US2] Update `src/copa/ai/models/openai.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
+- [X] T053 [US2] Update `src/copa/ai/models/claude.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
+- [X] T054 [US2] Update `src/copa/ai/models/gemini.py`: native MCP payload path accepts `remote_mcp`, rejects `mcp`, and tests use fake clients/payload helpers only.
+- [X] T055 [P] [US2] Audit `src/copa/ai/models/mock.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T056 [P] [US2] Audit `src/copa/dataset/questions.py` and `src/copa/dataset/provider.py` for artifact-facing legacy fields; preserve dataset-internal question terminology where it is not public benchmark artifact schema.
 - [ ] T057 [P] [US2] Audit `src/copa/datasets/lattes/provider.py`, `src/copa/datasets/lattes/mcp_server.py`, `src/copa/datasets/lattes/models.py`, `src/copa/datasets/lattes/tools.py`, `src/copa/datasets/lattes/readers/base.py`, `src/copa/datasets/lattes/readers/html_reader.py`, and `src/copa/datasets/lattes/readers/json_reader.py`; update only artifact-facing legacy fields and preserve Lattes/domain terminology.
 - [ ] T058 [US2] Audit stale modules `src/copa/commands/run.py` and `src/copa/commands/experiment.py`; either migrate artifact-facing terminology or document a removal/follow-up decision in `specs/001-command-model-phase-renaming/follow-ups.md`.

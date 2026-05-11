@@ -49,7 +49,7 @@ class MCPRuntime:
         authorization: str | None = None,
         verify: Any | None = None,
         sse_read_timeout: float | int | None = None,
-        server_label: str = "copa-lattes",
+        server_label: str = "ctxbench-lattes",
     ) -> None:
         self._transport = transport.strip().lower().replace("-", "_")
         self._server = server
@@ -81,7 +81,7 @@ class MCPRuntime:
             authorization=authorization,
             verify=config.get("verify"),
             sse_read_timeout=config.get("sse_read_timeout"),
-            server_label=str(config.get("server_label") or config.get("label") or "copa-lattes"),
+            server_label=str(config.get("server_label") or config.get("label") or "ctxbench-lattes"),
         )
 
     def list_tools(self) -> list[ToolSpec]:

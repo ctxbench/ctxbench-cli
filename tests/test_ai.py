@@ -11,7 +11,9 @@ from copa.ai.engine import Engine
 from copa.ai.models.base import AIRequest, ModelAdapter, ModelInput, ModelResponse, ToolCall, ToolResult, ToolSpec
 from copa.ai.models.claude import ClaudeModel
 from copa.ai.models.gemini import GeminiModel
+from copa.ai.models.mock import MockModel
 from copa.ai.models.openai import OpenAIModel
+from copa.ai.runtime import MCPRuntime
 from copa.ai.trace import TraceCollector
 from copa.benchmark.evaluation import _evaluate_judge, evaluate_run_result
 from copa.benchmark.executor import execute_runspec
@@ -615,6 +617,193 @@ def test_openai_model_build_payload_includes_prompt_cache_fields():
 
     assert payload["prompt_cache_key"] == "inl:html:abc123"
     assert payload["prompt_cache_retention"] == "24h"
+
+
+def test_openai_model_request_metadata_uses_target_public_keys():
+    model = OpenAIModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="openai",
+        model_name="gpt-5.4-mini",
+        strategy_name="inline",
+        context_format="text",
+        params={},
+        metadata={
+            "trialId": "trial-1",
+            "experimentId": "exp-1",
+            "taskId": "q_summary",
+            "phase": "execution",
+        },
+    )
+
+    metadata = model._request_metadata(request)
+
+    assert metadata == {
+        "trialId": "trial-1",
+        "experimentId": "exp-1",
+        "taskId": "q_summary",
+        "phase": "execution",
+    }
+
+
+def test_claude_model_request_metadata_uses_target_public_keys():
+    model = ClaudeModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="anthropic",
+        model_name="claude-sonnet",
+        strategy_name="inline",
+        context_format="text",
+        params={},
+        metadata={
+            "trialId": "trial-1",
+            "experimentId": "exp-1",
+            "taskId": "q_summary",
+            "phase": "evaluation",
+        },
+    )
+
+    metadata = model._request_metadata(request)
+
+    assert metadata == {
+        "user_id": "trialId=trial-1;experimentId=exp-1;taskId=q_summary;phase=evaluation"
+    }
+
+
+def test_openai_native_mcp_tools_accept_remote_mcp_and_reject_mcp():
+    model = OpenAIModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="openai",
+        model_name="gpt-5.4-mini",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    tools = model._build_native_mcp_tools(remote_request)
+
+    assert tools[0]["type"] == "mcp"
+    assert tools[0]["server_label"] == "ctxbench-lattes"
+
+    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model._build_native_mcp_tools(legacy_request)
+
+
+def test_claude_native_mcp_servers_accept_remote_mcp_and_reject_mcp():
+    model = ClaudeModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="anthropic",
+        model_name="claude-sonnet",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    servers = model._build_native_mcp_servers(remote_request)
+
+    assert servers[0]["name"] == "ctxbench-lattes"
+    assert servers[0]["url"] == "https://example.test/mcp"
+
+    legacy_request = remote_request.model_copy(update={"strategy_name": "mcp"})
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model._build_native_mcp_servers(legacy_request)
+
+
+def test_gemini_native_mcp_tool_accepts_remote_mcp_and_rejects_mcp():
+    model = GeminiModel()
+    remote_request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="google",
+        model_name="gemini-2.5-flash",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+
+    tool = model._build_native_mcp_tool(remote_request)
+    tool_payload = tool.model_dump(mode="json") if hasattr(tool, "model_dump") else tool
+
+    assert tool_payload["mcp_servers"][0]["name"] == "ctxbench-lattes"
+    assert tool_payload["mcp_servers"][0]["streamableHttpTransport"]["uri"] == "https://example.test/mcp"
+
+    with pytest.raises(ValueError, match="unknown strategy: mcp"):
+        model.generate(
+            ModelInput(system_instruction="System", prompt="Prompt"),
+            remote_request.model_copy(update={"strategy_name": "mcp"}),
+        )
+
+
+def test_gemini_generate_uses_native_mcp_path_for_remote_mcp(monkeypatch):
+    model = GeminiModel()
+    request = AIRequest(
+        question="Question?",
+        context="Context",
+        provider_name="google",
+        model_name="gemini-2.5-flash",
+        strategy_name="remote_mcp",
+        context_format="text",
+        params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        metadata={},
+    )
+    expected = ModelResponse(text="ok")
+    called: dict[str, object] = {}
+
+    async def fake_generate_with_native_mcp(model_input, incoming_request):
+        called["strategy"] = incoming_request.strategy_name
+        return expected
+
+    def fake_run_async(coro):
+        called["used"] = True
+        try:
+            return coro.send(None)
+        except StopIteration as exc:
+            return exc.value
+
+    monkeypatch.setattr(model, "_generate_with_native_mcp", fake_generate_with_native_mcp)
+    monkeypatch.setattr(model, "_run_async", fake_run_async)
+
+    result = model.generate(ModelInput(system_instruction="System", prompt="Prompt"), request)
+
+    assert called == {"used": True, "strategy": "remote_mcp"}
+    assert result.text == "ok"
+
+
+def test_mock_model_uses_task_metadata_lookup():
+    model = MockModel()
+    request = AIRequest(
+        question="Question?",
+        context='{"answers": {"q_task": "42"}}',
+        provider_name="mock",
+        model_name="mock",
+        strategy_name="inline",
+        context_format="json",
+        params={},
+        metadata={"taskId": "q_task"},
+    )
+
+    response = model.generate(ModelInput(system_instruction="System", prompt="Prompt"), request)
+
+    assert response.text == "42"
+
+
+def test_mcp_runtime_defaults_public_server_label_to_ctxbench():
+    runtime = MCPRuntime(transport="streamable_http", server_url="https://example.test/mcp")
+
+    metadata = runtime._session_metadata()
+
+    assert metadata["serverLabel"] == "ctxbench-lattes"
+    assert metadata["serverUrl"] == "https://example.test/mcp"
 
 
 def test_evaluate_run_result_skips_when_context_block_missing(tmp_path):

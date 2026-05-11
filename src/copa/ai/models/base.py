@@ -37,6 +37,25 @@ class AIRequest(BaseModel):
     params: dict[str, Any] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
+    def metadata_value(self, *keys: str) -> Any | None:
+        for key in keys:
+            value = self.metadata.get(key)
+            if value is not None:
+                return value
+        return None
+
+    def trial_id(self) -> str | None:
+        value = self.metadata_value("trialId", "trial_id", "runId", "run_id")
+        return str(value) if value is not None and str(value) else None
+
+    def task_id(self) -> str | None:
+        value = self.metadata_value("taskId", "task_id", "questionId", "question_id")
+        return str(value) if value is not None and str(value) else None
+
+    def experiment_id(self) -> str | None:
+        value = self.metadata_value("experimentId", "experiment_id", "expId")
+        return str(value) if value is not None and str(value) else None
+
 
 class ModelInput(BaseModel):
     system_instruction: str = ""
