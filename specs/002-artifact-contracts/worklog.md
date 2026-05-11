@@ -35,3 +35,10 @@ tasks.md produced with 3 slices (S3 optional) and 22 tasks total. Organized by i
 - Updated `docs/architecture/workflow.md` so the overview diagram lists `evals-summary.json` in eval outputs.
 - Updated `docs/architecture/vocabulary.md` and `docs/architecture/cli-architecture.md` to point migration readers to `docs/architecture/artifact-contracts.md`.
 - Validation stayed provider-free and used `rg` plus targeted document inspection.
+
+## 2026-05-11 — Slice S3 implemented
+
+- Added `tests/test_artifact_contracts.py` with focused contract coverage for target artifact writer paths and mixed legacy/target directories.
+- Removed six unused legacy artifact alias helpers from `src/ctxbench/benchmark/paths.py`.
+- Kept `resolve_expand_output_dir` and `resolve_expand_jsonl_path` because `commands/experiment.py` still uses them.
+- Validation stayed provider-free and used focused pytest plus repo search for removed alias names.

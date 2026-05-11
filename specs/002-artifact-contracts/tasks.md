@@ -86,21 +86,21 @@
 
 ### Tasks
 
-- [ ] T016 [S3] Audit callers of the six target functions in `src/`: run `rg "resolve_queries_path|resolve_answers_path|resolve_run_jsonl_path|resolve_eval_jsonl_path|resolve_run_output_dir|resolve_eval_output_dir" src/` and confirm no hits outside `src/ctxbench/benchmark/paths.py` before touching any code
-- [ ] T017 [S3] Add focused contract tests in `tests/test_artifact_contracts.py` for writer behavior: verify plan/execution path construction or command-level write targets use only `trials.jsonl`, `responses.jsonl`, and other target artifact names, never `queries.jsonl` or `answers.jsonl`
-- [ ] T018 [S3] Add focused contract tests in `tests/test_artifact_contracts.py` for reader behavior: verify command-level readers such as status/export/eval consume target artifact names and ignore legacy-named files when target files are present in the same directory — FR-009 edge case coverage
-- [ ] T019 [S3] Remove the six unused legacy alias functions from `src/ctxbench/benchmark/paths.py`: `resolve_queries_path`, `resolve_answers_path`, `resolve_run_jsonl_path`, `resolve_eval_jsonl_path`, `resolve_run_output_dir`, `resolve_eval_output_dir`; keep `resolve_expand_output_dir` and `resolve_expand_jsonl_path` (still used by `commands/experiment.py`)
-- [ ] T020 [S3] Validate S3: `pytest -k "legacy_rejection or artifact_contracts or status or export or eval"` passes; `rg "resolve_queries_path|resolve_answers_path|resolve_run_jsonl_path|resolve_eval_jsonl_path|resolve_run_output_dir|resolve_eval_output_dir" src/` returns no results
-- [ ] T021 [S3] Update `specs/002-artifact-contracts/worklog.md` and `specs/002-artifact-contracts/usage.jsonl` with S3 completion entry
+- [x] T016 [S3] Audit callers of the six target functions in `src/`: run `rg "resolve_queries_path|resolve_answers_path|resolve_run_jsonl_path|resolve_eval_jsonl_path|resolve_run_output_dir|resolve_eval_output_dir" src/` and confirm no hits outside `src/ctxbench/benchmark/paths.py` before touching any code
+- [x] T017 [S3] Add focused contract tests in `tests/test_artifact_contracts.py` for writer behavior: verify plan/execution path construction or command-level write targets use only `trials.jsonl`, `responses.jsonl`, and other target artifact names, never `queries.jsonl` or `answers.jsonl`
+- [x] T018 [S3] Add focused contract tests in `tests/test_artifact_contracts.py` for reader behavior: verify command-level readers such as status/export/eval consume target artifact names and ignore legacy-named files when target files are present in the same directory — FR-009 edge case coverage
+- [x] T019 [S3] Remove the six unused legacy alias functions from `src/ctxbench/benchmark/paths.py`: `resolve_queries_path`, `resolve_answers_path`, `resolve_run_jsonl_path`, `resolve_eval_jsonl_path`, `resolve_run_output_dir`, `resolve_eval_output_dir`; keep `resolve_expand_output_dir` and `resolve_expand_jsonl_path` (still used by `commands/experiment.py`)
+- [x] T020 [S3] Validate S3: `pytest -k "legacy_rejection or artifact_contracts or status or export or eval"` passes; `rg "resolve_queries_path|resolve_answers_path|resolve_run_jsonl_path|resolve_eval_jsonl_path|resolve_run_output_dir|resolve_eval_output_dir" src/` returns no results
+- [x] T021 [S3] Update `specs/002-artifact-contracts/worklog.md` and `specs/002-artifact-contracts/usage.jsonl` with S3 completion entry
 
 ### Checkpoint
 
-- [ ] Contract tests in `test_artifact_contracts.py` pass green before code removal
-- [ ] All six legacy alias functions absent from `src/ctxbench/benchmark/paths.py`
-- [ ] `resolve_expand_output_dir` and `resolve_expand_jsonl_path` still present (used by `experiment.py`)
-- [ ] `pytest -k "legacy_rejection or artifact_contracts or status or export or eval"` passes
-- [ ] No provider-backed execution required
-- [ ] `worklog.md` and `usage.jsonl` updated
+- [x] Contract tests in `test_artifact_contracts.py` pass green before code removal
+- [x] All six legacy alias functions absent from `src/ctxbench/benchmark/paths.py`
+- [x] `resolve_expand_output_dir` and `resolve_expand_jsonl_path` still present (used by `experiment.py`)
+- [x] `pytest -k "legacy_rejection or artifact_contracts or status or export or eval"` passes
+- [x] No provider-backed execution required
+- [x] `worklog.md` and `usage.jsonl` updated
 
 ---
 
