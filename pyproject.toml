@@ -20,7 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-copa = "copa.cli:main"
+ctxbench = "copa.cli:main"
 
 [build-system]
 requires = ["setuptools>=69", "wheel"]

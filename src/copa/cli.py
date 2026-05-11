@@ -149,7 +149,7 @@ def _selector_from_args(args: argparse.Namespace, *, include_status: bool = Fals
 # ---------------------------------------------------------------------------
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="copa", description="COPA benchmark CLI")
+    parser = argparse.ArgumentParser(prog="ctxbench", description="CTXBench benchmark CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # ── copa plan ──────────────────────────────────────────────────────────

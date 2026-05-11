@@ -78,9 +78,9 @@ fixture and produce target artifact names and fields.
 `execute` produces `trials.jsonl` and `responses.jsonl` with `trialId`,
 `taskId`, and `response`.
 
-- [ ] T020 [US1] Update `pyproject.toml`: replace the public script `copa = "copa.cli:main"` with `ctxbench = "copa.cli:main"` while leaving `[project].name = "copa"` unchanged.
-- [ ] T021 [US1] Update `flake.nix`: expose `/bin/ctxbench`, update package/app output names that are public, and keep `--add-flags "copa.cli"` because the internal module path is unchanged.
-- [ ] T022 [US1] Update parser identity in `src/copa/cli.py`: `ArgumentParser(prog="ctxbench", description=...)` and top-level command list uses target terminology.
+- [X] T020 [US1] Update `pyproject.toml`: replace the public script `copa = "copa.cli:main"` with `ctxbench = "copa.cli:main"` while leaving `[project].name = "copa"` unchanged.
+- [X] T021 [US1] Update `flake.nix`: expose `/bin/ctxbench`, update package/app output names that are public, and keep `--add-flags "copa.cli"` because the internal module path is unchanged.
+- [X] T022 [US1] Update parser identity in `src/copa/cli.py`: `ArgumentParser(prog="ctxbench", description=...)` and top-level command list uses target terminology.
 - [ ] T023 [US1] Rename `src/copa/commands/query.py` to `src/copa/commands/execute.py` and rename `query_command` to `execute_command`.
 - [ ] T024 [US1] Update imports and command wiring in `src/copa/cli.py` from `copa.commands.query.query_command` to `copa.commands.execute.execute_command`, and replace the `query` subparser with `execute`.
 - [ ] T025 [US1] Update selector flags in `src/copa/cli.py`: `--task` / `--not-task`, `--repetition` / `--not-repetition`, `--trial-id` / `--trial-id-file`; remove legacy long flags entirely.

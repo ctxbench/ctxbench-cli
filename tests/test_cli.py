@@ -1,11 +1,41 @@
 import json
 import re
+import tomllib
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from copa.cli import main
+from copa.cli import build_parser, main
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_public_cli_parser_uses_ctxbench_prog_name():
+    parser = build_parser()
+
+    assert parser.prog == "ctxbench"
+    help_output = parser.format_help()
+    assert "usage: ctxbench" in help_output
+    assert "CTXBench benchmark CLI" in help_output
+
+
+def test_pyproject_exposes_ctxbench_script_only():
+    pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    scripts = pyproject["project"]["scripts"]
+
+    assert scripts["ctxbench"] == "copa.cli:main"
+    assert "copa" not in scripts
+
+
+def test_flake_exposes_ctxbench_binary_and_app():
+    flake = (REPO_ROOT / "flake.nix").read_text(encoding="utf-8")
+
+    assert 'name = "ctxbench";' in flake
+    assert '"$out/bin/ctxbench"' in flake
+    assert 'program = "${ctxbenchPkg}/bin/ctxbench";' in flake
+    assert '--add-flags "copa.cli"' in flake
 
 
 def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Path:
