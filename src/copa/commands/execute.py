@@ -14,39 +14,39 @@ from copa.util.logging import PhaseLogger, ProgressTracker
 
 def _load_runspecs(path: Path) -> list[RunSpec]:
     if not path.exists():
-        raise FileNotFoundError(f"Queries file not found: {path}. Run 'ctxbench plan' first.")
+        raise FileNotFoundError(f"Trials file not found: {path}. Run 'ctxbench plan' first.")
     payloads = [dict(item) for item in read_jsonl(path)]
     if not payloads:
         return []
     if "dataset" not in payloads[0]:
         raise ValueError(
-            "Queries file is missing context data. Re-run 'ctxbench plan' to regenerate."
+            "Trials file is missing context data. Re-run 'ctxbench plan' to regenerate."
         )
     return [RunSpec.model_validate(payload) for payload in payloads]
 
 
-def _load_answer_statuses(path: Path) -> dict[str, str]:
-    """Returns {runId: latest status} from answers.jsonl. Handles duplicates by taking last entry."""
+def _load_response_statuses(path: Path) -> dict[str, str]:
+    """Returns {trialId: latest status} from responses.jsonl. Handles duplicates by taking last entry."""
     if not path.exists():
         return {}
     statuses: dict[str, str] = {}
     for item in read_jsonl(path):
-        run_id = str(item.get("runId", ""))
-        if run_id:
-            statuses[run_id] = str(item.get("status", ""))
+        trial_id = str(item.get("trialId", item.get("runId", "")))
+        if trial_id:
+            statuses[trial_id] = str(item.get("status", ""))
     return statuses
 
 
-def _compact_answers(path: Path) -> None:
-    """Rewrite answers.jsonl keeping only the last entry per runId."""
+def _compact_responses(path: Path) -> None:
+    """Rewrite responses.jsonl keeping only the last entry per trialId."""
     if not path.exists():
         return
     rows = list(read_jsonl(path))
     seen: dict[str, dict[str, Any]] = {}
     for row in rows:
-        run_id = str(row.get("runId", ""))
-        if run_id:
-            seen[run_id] = dict(row)
+        trial_id = str(row.get("trialId", row.get("runId", "")))
+        if trial_id:
+            seen[trial_id] = dict(row)
     write_jsonl(path, list(seen.values()))
 
 
@@ -58,30 +58,30 @@ def execute_command(
     progress: bool = False,
     selector: RunSelector | None = None,
 ) -> int:
-    source = Path(queries).resolve() if queries else Path("queries.jsonl").resolve()
+    source = Path(queries).resolve() if queries else Path("trials.jsonl").resolve()
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
 
-    logger.phase("LOAD", "Loading queries", path=str(source))
+    logger.phase("LOAD", "Loading trials", path=str(source))
     runspecs = _load_runspecs(source)
 
     active_selector = selector or RunSelector()
     runspecs = [r for r in runspecs if matches_runspec(r, active_selector)]
     if not runspecs:
-        print("No queries matched the selector.")
+        print("No trials matched the selector.")
         return 0
 
-    answers_path = source.parent / "answers.jsonl"
+    responses_path = source.parent / "responses.jsonl"
     artifact_root = source.parent
     write_traces = runspecs[0].trace.writeFiles
 
-    answer_statuses = {} if force else _load_answer_statuses(answers_path)
+    response_statuses = {} if force else _load_response_statuses(responses_path)
     has_duplicates = False
     logger.phase(
         "LOAD",
-        "Queries loaded",
+        "Trials loaded",
         total=len(runspecs),
-        answered=sum(1 for s in answer_statuses.values() if s == "success"),
+        answered=sum(1 for s in response_statuses.values() if s == "success"),
     )
 
     progress_tracker = ProgressTracker(total=len(runspecs), enabled=progress)
@@ -93,18 +93,18 @@ def execute_command(
     engine = Engine(event_logger=event_logger)
     try:
         for runspec in runspecs:
-            existing_status = answer_statuses.get(runspec.runId)
+            existing_status = response_statuses.get(runspec.runId)
 
             if existing_status == "success" and not force:
                 skipped += 1
-                logger.phase("SKIP", "Already answered successfully; skipping", run=runspec.runId)
+                logger.phase("SKIP", "Already responded successfully; skipping", run=runspec.runId)
                 progress_tracker.advance()
                 completed += 1
                 continue
 
             logger.phase(
                 "EXECUTE",
-                "Generating answer",
+                "Generating response",
                 run=runspec.runId,
                 model=runspec.modelName or "",
                 question=runspec.questionId,
@@ -112,27 +112,27 @@ def execute_command(
             result = execute_runspec(runspec, engine)
             logger.phase(
                 "EXECUTE",
-                "Answer generated",
+                "Response generated",
                 run=runspec.runId,
                 status=result.status,
             )
             payload = serialize_run_result(result, artifact_root=artifact_root, write_trace=write_traces)
-            append_jsonl(answers_path, [payload])
+            append_jsonl(responses_path, [payload])
             if existing_status is not None:
                 # Previous entry exists (error case) — will compact at end
                 has_duplicates = True
-            answer_statuses[result.runId] = result.status
-            logger.phase("WRITE", "Answer written", run=result.runId)
+            response_statuses[result.runId] = result.status
+            logger.phase("WRITE", "Response written", run=result.runId)
             progress_tracker.advance()
             completed += 1
     finally:
         engine.close()
 
     if has_duplicates or force:
-        _compact_answers(answers_path)
+        _compact_responses(responses_path)
 
     print(
-        f"Processed {completed} query(ies) → {answers_path}"
+        f"Processed {completed} trial(s) → {responses_path}"
         + (f" ({skipped} skipped)" if skipped else "")
     )
     return 0

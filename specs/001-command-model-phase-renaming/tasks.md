@@ -42,7 +42,7 @@ before implementation.
 - [X] T001 Capture pre-migration baseline at `specs/001-command-model-phase-renaming/baseline.before.txt` by running `rg -n --no-heading 'copa|\bquery\b|queries\.jsonl|answers\.jsonl|runId|questionId|\banswer\b|--question|--repeat|--ids|\bmcp\b' src/ tests/ docs/architecture/ README.md pyproject.toml flake.nix > specs/001-command-model-phase-renaming/baseline.before.txt`. This baseline is consumed by T069.
 - [ ] T002 [P] Add CLI command/help contract tests in `tests/test_cli.py` covering `ctxbench` parser usage, allowed subcommands `{plan, execute, eval, export, status}`, and rejection of `query` and `exec`.
 - [X] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
-- [ ] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
+- [X] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
 - [ ] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
 - [ ] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
 - [ ] T007 Add legacy-rejection tests in `tests/test_legacy_rejection.py` marked `@pytest.mark.legacy_rejection` for `ctxbench query`, `ctxbench exec`, legacy selector flags, and an experiment config containing `"mcp"`.
@@ -55,7 +55,7 @@ before implementation.
 **Purpose**: Update shared constants, model fields, selectors, schemas, and
 strategy labels before command writers/readers are migrated.
 
-- [ ] T009 Update artifact path helpers in `src/copa/benchmark/paths.py`: default planning artifact becomes `trials.jsonl`, default execution artifact becomes `responses.jsonl`, and helper names are renamed only where needed by callers.
+- [X] T009 Update artifact path helpers in `src/copa/benchmark/paths.py`: default planning artifact becomes `trials.jsonl`, default execution artifact becomes `responses.jsonl`, and helper names are renamed only where needed by callers.
 - [ ] T010 Update trial identity fields in `src/copa/benchmark/models.py`: `RunMetadata` uses `trialId` / `taskId` in persisted/public structures while preserving non-public behavior.
 - [ ] T011 Update trial specification fields in `src/copa/benchmark/models.py`: `RunSpec.model_validate()` and `RunSpec.to_persisted_artifact()` consume and emit `trialId` / `taskId`, rejecting public `runId` / `questionId` inputs under the no-alias contract.
 - [ ] T012 Update response fields in `src/copa/benchmark/models.py`: `RunResult.model_validate()` and `RunResult.to_persisted_artifact()` consume and emit `trialId`, `taskId`, and `response`, rejecting public `runId`, `questionId`, and `answer` inputs.
@@ -86,10 +86,10 @@ fixture and produce target artifact names and fields.
 - [X] T025 [US1] Update selector flags in `src/copa/cli.py`: `--task` / `--not-task`, `--repetition` / `--not-repetition`, `--trial-id` / `--trial-id-file`; remove legacy long flags entirely.
 - [X] T026 [US1] Update selector parsing in `src/copa/cli.py` to construct the renamed `RunSelector` fields from T014.
 - [X] T027 [US1] Sweep user-facing CLI help strings in `src/copa/cli.py` so canonical help output uses `execute`, `trials.jsonl`, `responses.jsonl`, `taskId`, `trialId`, and `response`.
-- [ ] T028 [US1] Update `src/copa/commands/plan.py` to write `trials.jsonl` through `src/copa/benchmark/paths.py` and print/log target terminology.
-- [ ] T029 [US1] Update `src/copa/commands/execute.py` to read `trials.jsonl`, write `responses.jsonl`, and use target public field names.
-- [ ] T030 [US1] Update trial generation in `src/copa/benchmark/runspec_generator.py` so produced trial records use `trialId`, `taskId`, and `remote_mcp`.
-- [ ] T031 [US1] Update execution result construction in `src/copa/benchmark/executor.py` so response records and execution metadata use target public field names.
+- [X] T028 [US1] Update `src/copa/commands/plan.py` to write `trials.jsonl` through `src/copa/benchmark/paths.py` and print/log target terminology.
+- [X] T029 [US1] Update `src/copa/commands/execute.py` to read `trials.jsonl`, write `responses.jsonl`, and use target public field names.
+- [X] T030 [US1] Update trial generation in `src/copa/benchmark/runspec_generator.py` so produced trial records use `trialId`, `taskId`, and `remote_mcp`.
+- [X] T031 [US1] Update execution result construction in `src/copa/benchmark/executor.py` so response records and execution metadata use target public field names.
 - [X] T032 [US1] Update affected source/test imports from `copa.commands.query` to `copa.commands.execute` in `tests/test_cli.py` and any source file that imports the renamed command module.
 
 ---

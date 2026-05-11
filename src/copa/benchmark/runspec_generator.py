@@ -127,7 +127,7 @@ def generate_runspecs(
                                     "experimentPath": str(Path(experiment_path).resolve())
                                     if experiment_path
                                     else None,
-                                    "questionId": question_id,
+                                    "taskId": question_id,
                                     "question": rendered_question,
                                     "questionTemplate": question.question,
                                     "instanceId": instance_id,
@@ -159,7 +159,7 @@ def generate_runspecs(
                 experimentId=item["experimentId"],
                 dataset=item["dataset"],
                 experimentPath=item["experimentPath"],
-                questionId=item["questionId"],
+                questionId=item["taskId"],
                 question=item["question"],
                 questionTemplate=item["questionTemplate"],
                 questionTags=item["questionTags"],
@@ -180,7 +180,7 @@ def generate_runspecs(
                 artifacts=item["artifacts"],
                 metadata=RunMetadata(
                     canonicalId=item["canonical_id"],
-                    questionId=item["questionId"],
+                    questionId=item["taskId"],
                     instanceId=item["instanceId"],
                     provider=item["provider"],
                     modelId=item["modelId"],

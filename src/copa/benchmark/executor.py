@@ -43,8 +43,12 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         metadata={
             "run_id": runspec.runId,
             "runId": runspec.runId,
+            "trial_id": runspec.runId,
+            "trialId": runspec.runId,
             "expId": runspec.experimentId,
             "question_id": runspec.questionId,
+            "task_id": runspec.questionId,
+            "taskId": runspec.questionId,
             "instance_id": runspec.instanceId,
             "experiment_id": runspec.experimentId,
             "phase": "execution",

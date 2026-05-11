@@ -371,6 +371,10 @@ class RunSpec(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("RunSpec requires an object input.")
         payload = dict(data)
+        if "runId" not in payload and "trialId" in payload:
+            payload["runId"] = payload.get("trialId")
+        if "questionId" not in payload and "taskId" in payload:
+            payload["questionId"] = payload.get("taskId")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
@@ -379,6 +383,12 @@ class RunSpec(BaseModel):
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
         payload["id"] = run_id
+        metadata = payload.get("metadata")
+        if isinstance(metadata, dict):
+            metadata = dict(metadata)
+            if "questionId" not in metadata and "taskId" in metadata:
+                metadata["questionId"] = metadata.get("taskId")
+            payload["metadata"] = metadata
         if "metadata" not in payload:
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
@@ -400,9 +410,9 @@ class RunSpec(BaseModel):
 
     def to_persisted_artifact(self) -> dict[str, Any]:
         return {
-            "runId": self.runId,
+            "trialId": self.runId,
             "experimentId": self.experimentId,
-            "questionId": self.questionId,
+            "taskId": self.questionId,
             "question": self.question,
             "questionTemplate": self.questionTemplate,
             "dataset": self.dataset.model_dump(mode="json"),
@@ -422,7 +432,20 @@ class RunSpec(BaseModel):
             "validationType": self.validationType,
             "contextBlock": list(self.contextBlock),
             "parameters": dict(self.parameters),
-            "metadata": self.metadata.model_dump(mode="json"),
+            "metadata": {
+                "canonicalId": self.metadata.canonicalId,
+                "taskId": self.metadata.questionId,
+                "instanceId": self.metadata.instanceId,
+                "provider": self.metadata.provider,
+                "modelId": self.metadata.modelId,
+                "modelName": self.metadata.modelName,
+                "strategy": self.metadata.strategy,
+                "format": self.metadata.format,
+                "repeatIndex": self.metadata.repeatIndex,
+                "questionTags": list(self.metadata.questionTags),
+                "validationType": self.metadata.validationType,
+                "parameters": dict(self.metadata.parameters),
+            },
         }
 
 
@@ -486,6 +509,12 @@ class RunResult(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("RunResult requires an object input.")
         payload = dict(data)
+        if "runId" not in payload and "trialId" in payload:
+            payload["runId"] = payload.get("trialId")
+        if "questionId" not in payload and "taskId" in payload:
+            payload["questionId"] = payload.get("taskId")
+        if "answer" not in payload and "response" in payload:
+            payload["answer"] = payload.get("response")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
@@ -493,6 +522,12 @@ class RunResult(BaseModel):
         original_id = str(payload.get("id") or "")
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
+        metadata = payload.get("metadata")
+        if isinstance(metadata, dict):
+            metadata = dict(metadata)
+            if "questionId" not in metadata and "taskId" in metadata:
+                metadata["questionId"] = metadata.get("taskId")
+            payload["metadata"] = metadata
         if "metadata" not in payload:
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
@@ -514,9 +549,9 @@ class RunResult(BaseModel):
 
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
         return {
-            "runId": self.runId,
+            "trialId": self.runId,
             "experimentId": self.experimentId,
-            "questionId": self.questionId,
+            "taskId": self.questionId,
             "question": self.question,
             "questionTemplate": self.questionTemplate,
             "dataset": self.dataset.model_dump(mode="json"),
@@ -529,7 +564,7 @@ class RunResult(BaseModel):
             "repeatIndex": self.repeatIndex,
             "outputRoot": self.outputRoot,
             "status": self.status,
-            "answer": self.answer,
+            "response": self.answer,
             "errorMessage": self.errorMessage,
             "timing": self.timing.model_dump(mode="json"),
             "usage": self.usage,
@@ -539,7 +574,20 @@ class RunResult(BaseModel):
             "validationType": self.validationType,
             "contextBlock": list(self.contextBlock),
             "parameters": dict(self.parameters),
-            "metadata": self.metadata.model_dump(mode="json"),
+            "metadata": {
+                "canonicalId": self.metadata.canonicalId,
+                "taskId": self.metadata.questionId,
+                "instanceId": self.metadata.instanceId,
+                "provider": self.metadata.provider,
+                "modelId": self.metadata.modelId,
+                "modelName": self.metadata.modelName,
+                "strategy": self.metadata.strategy,
+                "format": self.metadata.format,
+                "repeatIndex": self.metadata.repeatIndex,
+                "questionTags": list(self.metadata.questionTags),
+                "validationType": self.metadata.validationType,
+                "parameters": dict(self.metadata.parameters),
+            },
         }
 
 

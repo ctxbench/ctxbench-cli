@@ -129,6 +129,53 @@ def test_flake_exposes_ctxbench_binary_and_app():
     assert '--add-flags "copa.cli"' in flake
 
 
+def test_plan_writes_trials_jsonl_with_target_fields(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    output_dir = tmp_path / "planned"
+
+    assert main(["plan", str(experiment_path), "--output", str(output_dir)]) == 0
+
+    trials_path = output_dir / "trials.jsonl"
+    queries_path = output_dir / "queries.jsonl"
+    assert trials_path.exists()
+    assert not queries_path.exists()
+
+    rows = [json.loads(line) for line in trials_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert rows
+    first = rows[0]
+    assert "trialId" in first
+    assert "taskId" in first
+    assert "runId" not in first
+    assert "questionId" not in first
+    assert first["metadata"]["taskId"] in {"q_year", "q_summary"}
+    assert "questionId" not in first["metadata"]
+
+
+def test_execute_writes_responses_jsonl_with_target_fields(tmp_path):
+    experiment_path = write_mock_experiment(tmp_path / "experiment.json", evaluation_enabled=False)
+    output_dir = tmp_path / "planned"
+
+    assert main(["plan", str(experiment_path), "--output", str(output_dir)]) == 0
+    assert main(["execute", str(output_dir / "trials.jsonl")]) == 0
+
+    responses_path = output_dir / "responses.jsonl"
+    answers_path = output_dir / "answers.jsonl"
+    assert responses_path.exists()
+    assert not answers_path.exists()
+
+    rows = [json.loads(line) for line in responses_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert rows
+    first = rows[0]
+    assert "trialId" in first
+    assert "taskId" in first
+    assert "response" in first
+    assert "runId" not in first
+    assert "questionId" not in first
+    assert "answer" not in first
+    assert first["metadata"]["taskId"] in {"q_year", "q_summary"}
+    assert "questionId" not in first["metadata"]
+
+
 def write_mock_experiment(path: Path, *, evaluation_enabled: bool = True) -> Path:
     dataset_root = path.parent / "dataset"
     instance_dir = dataset_root / "context" / "cv_demo"

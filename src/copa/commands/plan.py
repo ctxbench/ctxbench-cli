@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from copa.benchmark.experiment_loader import load_experiment
-from copa.benchmark.paths import resolve_output_root, resolve_queries_path
+from copa.benchmark.paths import resolve_output_root, resolve_trials_path
 from copa.benchmark.runspec_generator import generate_runspecs
 from copa.dataset.provider import DatasetProvider
 from copa.util.fs import ensure_dir, write_json
@@ -35,10 +35,10 @@ def plan_command(
         experiment_path=path,
         on_warning=lambda message, **fields: logger.warn(message, **fields),
     )
-    logger.phase("PLAN", "Expanding queries", input=path, total=len(runspecs))
+    logger.phase("PLAN", "Expanding trials", input=path, total=len(runspecs))
 
     output_root = Path(output).resolve() if output else resolve_output_root(experiment, base_dir)
-    queries_path = resolve_queries_path(experiment, base_dir) if not output else output_root / "queries.jsonl"
+    trials_path = resolve_trials_path(experiment, base_dir) if not output else output_root / "trials.jsonl"
     manifest_path = output_root / "manifest.json"
 
     ensure_dir(output_root)
@@ -50,11 +50,11 @@ def plan_command(
     payloads = []
     for runspec in runspecs:
         payloads.append(runspec.to_persisted_artifact())
-        logger.phase("PLAN", "Query prepared", run=runspec.runId)
+        logger.phase("PLAN", "Trial prepared", run=runspec.runId)
         progress_tracker.advance()
 
-    write_jsonl(queries_path, payloads)
-    logger.phase("WRITE", "Queries written", path=str(queries_path), total=len(payloads))
+    write_jsonl(trials_path, payloads)
+    logger.phase("WRITE", "Trials written", path=str(trials_path), total=len(payloads))
 
     manifest = {
         "experimentId": experiment.id,
@@ -69,5 +69,5 @@ def plan_command(
     write_json(manifest_path, manifest)
     logger.phase("WRITE", "Manifest written", path=str(manifest_path))
 
-    print(f"Planned {len(runspecs)} queries → {queries_path}")
+    print(f"Planned {len(runspecs)} trials → {trials_path}")
     return 0
