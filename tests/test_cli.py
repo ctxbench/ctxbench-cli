@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 import tomllib
@@ -33,6 +34,16 @@ def test_public_cli_exposes_execute_command_in_help():
     assert "eval" in help_output
     assert "export" in help_output
     assert "status" in help_output
+
+
+def test_public_cli_registers_only_target_subcommands():
+    parser = build_parser()
+
+    subparser_action = next(
+        action for action in parser._actions if isinstance(action, argparse._SubParsersAction)
+    )
+
+    assert set(subparser_action.choices) == {"plan", "execute", "eval", "export", "status"}
 
 
 def test_execute_help_uses_target_public_terms(capsys):

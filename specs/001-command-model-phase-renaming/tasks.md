@@ -40,12 +40,12 @@ fields, or bare `mcp` remote-strategy label.
 before implementation.
 
 - [X] T001 Capture pre-migration baseline at `specs/001-command-model-phase-renaming/baseline.before.txt` by running `rg -n --no-heading 'copa|\bquery\b|queries\.jsonl|answers\.jsonl|runId|questionId|\banswer\b|--question|--repeat|--ids|\bmcp\b' src/ tests/ docs/architecture/ README.md pyproject.toml flake.nix > specs/001-command-model-phase-renaming/baseline.before.txt`. This baseline is consumed by T069.
-- [ ] T002 [P] Add CLI command/help contract tests in `tests/test_cli.py` covering `ctxbench` parser usage, allowed subcommands `{plan, execute, eval, export, status}`, and rejection of `query` and `exec`.
+- [X] T002 [P] Add CLI command/help contract tests in `tests/test_cli.py` covering `ctxbench` parser usage, allowed subcommands `{plan, execute, eval, export, status}`, and rejection of `query` and `exec`.
 - [X] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
 - [X] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
 - [X] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
 - [X] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
-- [ ] T007 Add legacy-rejection tests in `tests/test_legacy_rejection.py` marked `@pytest.mark.legacy_rejection` for `ctxbench query`, `ctxbench exec`, legacy selector flags, and an experiment config containing `"mcp"`.
+- [X] T007 Add legacy-rejection tests in `tests/test_legacy_rejection.py` marked `@pytest.mark.legacy_rejection` for `ctxbench query`, `ctxbench exec`, legacy selector flags, and an experiment config containing `"mcp"`.
 - [X] T008 Register the `legacy_rejection` marker in `pytest.ini`.
 
 ---
