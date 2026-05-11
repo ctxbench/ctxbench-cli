@@ -61,9 +61,26 @@ Use this skill when the user asks:
    - dataset-specific logic does not leak into generic benchmark logic;
    - provider-specific logic stays inside provider adapters;
    - generated artifact schemas are stable or versioned;
-   - old experiments remain interpretable.
+   - old experiments remain interpretable;
+   - refactors preserve research semantics and artifact interpretation;
+   - simplification opportunities are considered before adding abstractions;
+   - obsolete compatibility paths are removed only when migration rules allow it.
 
 4. Propose the smallest design.
+
+Before proposing new abstractions, check whether the change can be implemented by simplifying
+or reusing the existing design.
+
+Prefer to:
+- remove obsolete compatibility paths when migration rules allow it;
+- collapse unnecessary layers;
+- avoid new registries, factories, plugins, or metadata fields unless justified by the spec;
+- keep domain abstractions minimal until at least two real domains require the variation;
+- preserve research contracts over architectural elegance.
+
+Refactoring should reduce accidental complexity while preserving research semantics,
+artifact contracts, metric interpretation, reproducibility, and migration expectations.
+Do not refactor opportunistically outside the active specification.
 
 5. Identify files likely to change.
 
@@ -74,6 +91,19 @@ Use this skill when the user asks:
 8. Only after the design is accepted should implementation begin.
 
 ## Design checklist
+
+### For refactoring changes
+
+Check:
+
+- What complexity is being removed?
+- Which concepts, names, layers, or compatibility paths become simpler?
+- Which research semantics must remain unchanged?
+- Are artifact contracts preserved or explicitly migrated?
+- Are metric meanings and provenance preserved?
+- Are lifecycle phases still explicit and separated?
+- Are domain/provider/strategy boundaries clearer after the change?
+- Is the refactor covered by focused tests?
 
 ### For evaluation changes
 
@@ -151,6 +181,16 @@ Check:
 - Do not hide breaking changes.
 - Do not change public schemas without naming the migration strategy.
 - Do not assume provider behavior is identical across OpenAI, Anthropic, and Google.
+
+### Simplicity check
+
+Check:
+
+- Can this change be implemented by simplifying the current design?
+- Is any new abstraction required by a current spec or real domain variation?
+- Can an existing layer, field, schema, or compatibility path be removed?
+- Does the simpler design still preserve reproducibility, traceability, artifact contracts,
+  metric provenance, and migration expectations?
 
 ## Output format
 

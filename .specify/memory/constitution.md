@@ -204,6 +204,11 @@ structures only because they may be useful in the future.
 When a simpler representation is sufficient to preserve interpretation and reproducibility,
 the simpler representation MUST be preferred.
 
+When changing existing designs, plans SHOULD actively look for opportunities to reduce
+complexity, remove obsolete compatibility paths, collapse unnecessary abstractions, or
+simplify metadata, as long as research validity, reproducibility, traceability, and migration
+expectations are preserved.
+
 ## Research Constraints
 
 These constraints govern how benchmark results are collected, reported, and interpreted.
@@ -241,7 +246,7 @@ These constraints govern how the codebase is maintained.
 - Provider adapters, strategy orchestrators, dataset adapters, evaluators, and exporters
   MUST remain independently testable where practical.
 - New abstractions MUST be justified by current benchmark needs, not speculative future use.
-- New metrics or changes to existing metric semantics MUST define provenance, confidence,
+- New metrics or changes to existing metric semantics MUST define provenance,
   unit, source, collection method, and phase.
 
 ## Specification and Planning Governance

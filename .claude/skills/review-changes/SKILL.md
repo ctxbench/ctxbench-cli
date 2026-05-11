@@ -115,6 +115,11 @@ individual judge-vote artifacts, traces, or analysis-ready exports?
 - Does it introduce hidden assumptions about the Lattes dataset?
 - Does it create non-determinism that harms reproducibility?
 - Does it increase token consumption or provider calls unnecessarily?
+- Does the change reduce or increase design complexity?
+- Are new abstractions, metadata fields, compatibility paths, or layers justified by the
+  active spec?
+- Could the same research goal be achieved with a simpler design?
+- Did the change remove obsolete code or concepts safely?
 
 Current implementations may use names such as `responses.jsonl`, `evals.jsonl`,
 `judge_votes.jsonl`, and `results.csv`. Treat names as implementation details; preserve
