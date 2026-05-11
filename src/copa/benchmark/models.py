@@ -336,6 +336,19 @@ class RunMetadata(BaseModel):
     validationType: str | None = None
     parameters: dict[str, Any] = Field(default_factory=dict)
 
+    @classmethod
+    def model_validate(cls, data: Any) -> "RunMetadata":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("RunMetadata requires an object input.")
+        payload = dict(data)
+        if "questionId" in payload:
+            raise ValueError("Public RunMetadata input must use 'taskId', not 'questionId'.")
+        if "taskId" in payload:
+            payload["questionId"] = payload.pop("taskId")
+        return super().model_validate(payload)
+
 
 class RunSpec(BaseModel):
     id: str
@@ -371,10 +384,14 @@ class RunSpec(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("RunSpec requires an object input.")
         payload = dict(data)
-        if "runId" not in payload and "trialId" in payload:
-            payload["runId"] = payload.get("trialId")
-        if "questionId" not in payload and "taskId" in payload:
-            payload["questionId"] = payload.get("taskId")
+        if "runId" in payload:
+            raise ValueError("Public RunSpec input must use 'trialId', not 'runId'.")
+        if "questionId" in payload:
+            raise ValueError("Public RunSpec input must use 'taskId', not 'questionId'.")
+        if "trialId" in payload:
+            payload["runId"] = payload.pop("trialId")
+        if "taskId" in payload:
+            payload["questionId"] = payload.pop("taskId")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
@@ -383,16 +400,10 @@ class RunSpec(BaseModel):
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
         payload["id"] = run_id
-        metadata = payload.get("metadata")
-        if isinstance(metadata, dict):
-            metadata = dict(metadata)
-            if "questionId" not in metadata and "taskId" in metadata:
-                metadata["questionId"] = metadata.get("taskId")
-            payload["metadata"] = metadata
         if "metadata" not in payload:
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
-                "questionId": payload.get("questionId", ""),
+                "taskId": payload.get("questionId", ""),
                 "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
                 "modelId": payload.get("modelId"),
@@ -402,10 +413,12 @@ class RunSpec(BaseModel):
                 "repeatIndex": payload.get("repeatIndex", 1),
                 "parameters": payload.get("parameters", {}),
             }
-        payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
-        payload.setdefault("validationType", payload["metadata"].get("validationType"))
-        payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
-        payload.setdefault("modelId", payload["metadata"].get("modelId", payload.get("modelName")))
+        validated_metadata = RunMetadata.model_validate(payload["metadata"])
+        payload["metadata"] = validated_metadata
+        payload.setdefault("questionTags", validated_metadata.questionTags)
+        payload.setdefault("validationType", validated_metadata.validationType)
+        payload.setdefault("parameters", validated_metadata.parameters)
+        payload.setdefault("modelId", validated_metadata.modelId or payload.get("modelName"))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self) -> dict[str, Any]:
@@ -509,12 +522,18 @@ class RunResult(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("RunResult requires an object input.")
         payload = dict(data)
-        if "runId" not in payload and "trialId" in payload:
-            payload["runId"] = payload.get("trialId")
-        if "questionId" not in payload and "taskId" in payload:
-            payload["questionId"] = payload.get("taskId")
-        if "answer" not in payload and "response" in payload:
-            payload["answer"] = payload.get("response")
+        if "runId" in payload:
+            raise ValueError("Public RunResult input must use 'trialId', not 'runId'.")
+        if "questionId" in payload:
+            raise ValueError("Public RunResult input must use 'taskId', not 'questionId'.")
+        if "answer" in payload:
+            raise ValueError("Public RunResult input must use 'response', not 'answer'.")
+        if "trialId" in payload:
+            payload["runId"] = payload.pop("trialId")
+        if "taskId" in payload:
+            payload["questionId"] = payload.pop("taskId")
+        if "response" in payload:
+            payload["answer"] = payload.pop("response")
         if "modelName" not in payload and "model" in payload:
             payload["modelName"] = payload.get("model")
         if "instanceId" not in payload and "contextId" in payload:
@@ -522,16 +541,10 @@ class RunResult(BaseModel):
         original_id = str(payload.get("id") or "")
         run_id = str(payload.get("runId") or payload.get("id") or "")
         payload["runId"] = run_id
-        metadata = payload.get("metadata")
-        if isinstance(metadata, dict):
-            metadata = dict(metadata)
-            if "questionId" not in metadata and "taskId" in metadata:
-                metadata["questionId"] = metadata.get("taskId")
-            payload["metadata"] = metadata
         if "metadata" not in payload:
             payload["metadata"] = {
                 "canonicalId": original_id or run_id,
-                "questionId": payload.get("questionId", ""),
+                "taskId": payload.get("questionId", ""),
                 "instanceId": payload.get("instanceId", payload.get("contextId", "")),
                 "provider": payload.get("provider", ""),
                 "modelId": payload.get("modelId"),
@@ -541,10 +554,12 @@ class RunResult(BaseModel):
                 "repeatIndex": payload.get("repeatIndex", 1),
                 "parameters": payload.get("parameters", {}),
             }
-        payload.setdefault("questionTags", payload["metadata"].get("questionTags", []))
-        payload.setdefault("validationType", payload["metadata"].get("validationType"))
-        payload.setdefault("parameters", payload["metadata"].get("parameters", {}))
-        payload.setdefault("modelId", payload["metadata"].get("modelId", payload.get("modelName")))
+        validated_metadata = RunMetadata.model_validate(payload["metadata"])
+        payload["metadata"] = validated_metadata
+        payload.setdefault("questionTags", validated_metadata.questionTags)
+        payload.setdefault("validationType", validated_metadata.validationType)
+        payload.setdefault("parameters", validated_metadata.parameters)
+        payload.setdefault("modelId", validated_metadata.modelId or payload.get("modelName"))
         return super().model_validate(payload)
 
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
@@ -658,10 +673,10 @@ class EvaluationItemResult(BaseModel):
             else None
         )
         return {
-            "runId": self.runId,
+            "trialId": self.runId,
             "experimentId": self.experimentId,
             "instanceId": self.instanceId,
-            "questionId": self.questionId,
+            "taskId": self.questionId,
             "strategy": self.executionStrategy,
             "status": eval_status,
             "evaluationMethod": self.evaluationMethod,
@@ -690,10 +705,10 @@ class EvaluationItemResult(BaseModel):
             if inp is not None or out is not None:
                 total_tokens = (inp or 0) + (out or 0)
             votes.append({
-                "runId": self.runId,
+                "trialId": self.runId,
                 "experimentId": self.experimentId,
                 "instanceId": self.instanceId,
-                "questionId": self.questionId,
+                "taskId": self.questionId,
                 "strategy": self.executionStrategy,
                 "judgeId": judge.get("judgeId"),
                 "provider": judge.get("provider"),
@@ -738,10 +753,18 @@ class EvaluationRunResult(BaseModel):
         if not isinstance(data, dict):
             raise ValidationError("EvaluationRunResult requires an object input.")
         payload = dict(data)
+        if "runId" in payload:
+            raise ValueError("Public EvaluationRunResult input must use 'trialId', not 'runId'.")
+        if "questionId" in payload:
+            raise ValueError("Public EvaluationRunResult input must use 'taskId', not 'questionId'.")
+        if "trialId" in payload:
+            payload["runId"] = payload.pop("trialId")
+        if "taskId" in payload:
+            payload["questionId"] = payload.pop("taskId")
         if "metadata" not in payload:
             payload["metadata"] = {
                 "canonicalId": str(payload.get("runId", "")),
-                "questionId": payload.get("questionId", ""),
+                "taskId": payload.get("questionId", ""),
                 "instanceId": "",
                 "provider": "",
                 "modelId": None,
@@ -750,6 +773,8 @@ class EvaluationRunResult(BaseModel):
                 "format": "",
                 "repeatIndex": 1,
             }
+        else:
+            payload["metadata"] = RunMetadata.model_validate(payload["metadata"])
         return super().model_validate(payload)
 
 

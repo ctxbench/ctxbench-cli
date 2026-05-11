@@ -56,13 +56,13 @@ before implementation.
 strategy labels before command writers/readers are migrated.
 
 - [X] T009 Update artifact path helpers in `src/copa/benchmark/paths.py`: default planning artifact becomes `trials.jsonl`, default execution artifact becomes `responses.jsonl`, and helper names are renamed only where needed by callers.
-- [ ] T010 Update trial identity fields in `src/copa/benchmark/models.py`: `RunMetadata` uses `trialId` / `taskId` in persisted/public structures while preserving non-public behavior.
-- [ ] T011 Update trial specification fields in `src/copa/benchmark/models.py`: `RunSpec.model_validate()` and `RunSpec.to_persisted_artifact()` consume and emit `trialId` / `taskId`, rejecting public `runId` / `questionId` inputs under the no-alias contract.
-- [ ] T012 Update response fields in `src/copa/benchmark/models.py`: `RunResult.model_validate()` and `RunResult.to_persisted_artifact()` consume and emit `trialId`, `taskId`, and `response`, rejecting public `runId`, `questionId`, and `answer` inputs.
-- [ ] T013 Update evaluation and judge-vote models in `src/copa/benchmark/models.py` so persisted eval and judge-vote records use `trialId`, `taskId`, and `response` where those concepts are serialized.
+- [X] T010 Update trial identity fields in `src/copa/benchmark/models.py`: `RunMetadata` uses `trialId` / `taskId` in persisted/public structures while preserving non-public behavior.
+- [X] T011 Update trial specification fields in `src/copa/benchmark/models.py`: `RunSpec.model_validate()` and `RunSpec.to_persisted_artifact()` consume and emit `trialId` / `taskId`, rejecting public `runId` / `questionId` inputs under the no-alias contract.
+- [X] T012 Update response fields in `src/copa/benchmark/models.py`: `RunResult.model_validate()` and `RunResult.to_persisted_artifact()` consume and emit `trialId`, `taskId`, and `response`, rejecting public `runId`, `questionId`, and `answer` inputs.
+- [X] T013 Update evaluation and judge-vote models in `src/copa/benchmark/models.py` so persisted eval and judge-vote records use `trialId`, `taskId`, and `response` where those concepts are serialized.
 - [X] T014 Update selector data structures in `src/copa/benchmark/selectors.py`: `question` / `not_question` become `task` / `not_task`, `repeat` becomes `repetition`, and `ids` becomes `trial_id`.
-- [ ] T015 Audit `src/schemas/runspec.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
-- [ ] T016 Audit `src/schemas/plan.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
+- [X] T015 Audit `src/schemas/runspec.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
+- [X] T016 Audit `src/schemas/plan.schema.json`; update only schema fields, `$id`, title, or required entries that define public legacy command/artifact/field contracts. Do not invent schema fields that are not present.
 - [ ] T017 Update strategy registry in `src/copa/ai/engine.py`: register native remote MCP as `remote_mcp`, do not register `mcp`, and keep `local_mcp` behavior separate.
 - [ ] T018 Update experiment strategy validation in `src/copa/benchmark/models.py` and/or `src/copa/benchmark/runspec_generator.py` so experiment factors containing `"mcp"` fail before `plan` writes artifacts.
 - [ ] T019 Update trial/response strategy validation in `src/copa/benchmark/models.py` so persisted public records containing `"mcp"` are rejected during reader validation.
