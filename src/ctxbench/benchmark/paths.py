@@ -51,28 +51,3 @@ def resolve_expand_output_dir(experiment: Experiment, base_dir: Path) -> Path:
 
 def resolve_expand_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
     return resolve_trials_path(experiment, base_dir)
-
-
-def resolve_run_output_dir(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_output_root(experiment, base_dir)
-
-
-def resolve_run_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_responses_path(experiment, base_dir)
-
-
-def resolve_eval_output_dir(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_output_root(experiment, base_dir)
-
-
-def resolve_eval_jsonl_path(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_evals_path(experiment, base_dir)
-
-
-# Aliases kept for any remaining internal references
-def resolve_queries_path(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_trials_path(experiment, base_dir)
-
-
-def resolve_answers_path(experiment: Experiment, base_dir: Path) -> Path:
-    return resolve_responses_path(experiment, base_dir)

@@ -74,6 +74,7 @@ Recommended selectors:
 ## Historical migration reference
 
 The table below is a migration reference only. Public CLI commands and selectors use the target forms only and do not expose aliases.
+For the authoritative artifact reference, see `docs/architecture/artifact-contracts.md`.
 
 | Current | Target |
 |---|---|

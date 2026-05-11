@@ -78,3 +78,16 @@ Do not log every prompt. Log meaningful steps:
 - spec-completed.
 
 Token usage may be unavailable. Do not invent token counts.
+
+## Converting existing specs to lite format
+
+Existing specs may be converted to the lite format when they are too verbose for their risk level.
+
+Recommended flow:
+
+1. Use `docs/prompts/spec-kit/review-spec-for-lite.md`.
+2. If conversion is safe, use `docs/prompts/spec-kit/convert-spec-to-lite.md`.
+3. Review the diff with `docs/prompts/spec-kit/compare-lite-spec.md`.
+4. Update `plan.md` or `tasks.md` only if the conversion changed scope, requirements, or acceptance criteria.
+
+Do not convert a spec if doing so would hide a public contract, migration decision, metric rule, artifact change, or research constraint.
