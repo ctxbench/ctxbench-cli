@@ -20,7 +20,7 @@ class MCPStrategy(StrategyAdapter):
     def execute(self, model: ModelAdapter, request: AIRequest, trace: TraceCollector) -> AIResult:
         lattes_id = _resolve_lattes_id(request)
 
-        with trace.span("strategy.mcp.execute", "strategy.mcp.execute"):
+        with trace.span("strategy.remote_mcp.execute", "strategy.remote_mcp.execute"):
             trace.record_steps(1)
             prompt = (
                 f"# Question:\n{request.question}\n\n"

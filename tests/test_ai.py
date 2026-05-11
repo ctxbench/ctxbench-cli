@@ -276,6 +276,19 @@ def test_engine_resolves_remote_mcp_and_keeps_local_mcp_distinct():
     local_runtime.close()
 
 
+def test_trace_collector_recognizes_remote_mcp_strategy_span():
+    trace = TraceCollector()
+
+    with trace.span("strategy.remote_mcp.execute", "strategy.remote_mcp.execute"):
+        pass
+
+    serialized = trace.to_trace().model_dump(mode="json")
+
+    assert serialized["metrics"]["strategyDurationMs"] is not None
+    assert any(event["name"] == "strategy.remote_mcp.execute" for event in serialized["events"])
+    assert not any(event["name"] == "strategy.mcp.execute" for event in serialized["events"])
+
+
 def test_engine_rejects_bare_mcp_strategy_name():
     engine = Engine()
 
@@ -516,6 +529,7 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
         format="json",
         repeatIndex=1,
         params={"mcp_server": {"server_url": "https://example.test/mcp"}},
+        trace={"enabled": True},
         metadata=RunMetadata(
             canonicalId="exp-1|q_year|cv-demo|mock|mock|remote_mcp|json|1",
             questionId="q_year",
@@ -531,9 +545,13 @@ def test_execute_runspec_persists_metrics_summary_with_nulls_for_remote_mcp(tmp_
     result = execute_runspec(runspec, Engine())
 
     assert isinstance(result.answer, str)
-    assert result.metricsSummary["toolCalls"] is None
-    assert result.metricsSummary["functionCalls"] is None
-    assert result.metricsSummary["inputTokens"] is None
+    assert result.metricsSummary["toolCalls"] == 0
+    assert result.metricsSummary["functionCalls"] == 0
+    assert result.metricsSummary["inputTokens"] is not None
+    events = result.trace.aiTrace.get("events", [])
+    assert any(event["name"] == "strategy.remote_mcp.execute" for event in events)
+    assert not any(event["name"] == "strategy.mcp.execute" for event in events)
+    assert result.trace.aiTrace.get("metrics", {}).get("strategyDurationMs") is not None
 
 
 def test_execute_runspec_injects_openai_inline_prompt_cache_key(tmp_path):

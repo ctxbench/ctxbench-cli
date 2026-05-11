@@ -115,8 +115,8 @@ produces `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`,
 - [ ] T042 [US2] Audit `src/copa/util/jsonl.py`; update only public docstrings or helper names if they contain legacy artifact terminology.
 - [ ] T043 [US2] Update `src/copa/util/ids.py` imports/calls to match renamed artifact identity helpers from T041.
 - [ ] T044 [US2] Update `src/copa/ai/runtime.py` where runtime metadata crosses into persisted artifacts; preserve MCP runtime protocol terminology that is not the strategy label.
-- [ ] T045 [US2] Update `src/copa/ai/trace.py` so strategy span recognition uses `strategy.remote_mcp.execute` and metric aggregation meaning/provenance is unchanged.
-- [ ] T046 [US2] Update `src/copa/ai/strategies/mcp.py` span names and public metadata to `remote_mcp`; keep the file name if no public import path is exposed.
+- [X] T045 [US2] Update `src/copa/ai/trace.py` so strategy span recognition uses `strategy.remote_mcp.execute` and metric aggregation meaning/provenance is unchanged.
+- [X] T046 [US2] Update `src/copa/ai/strategies/mcp.py` span names and public metadata to `remote_mcp`; keep the file name if no public import path is exposed.
 - [ ] T047 [P] [US2] Audit `src/copa/ai/strategies/inline.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T048 [P] [US2] Audit `src/copa/ai/strategies/local_function.py` for artifact-facing legacy fields and update only those occurrences.
 - [ ] T049 [P] [US2] Audit `src/copa/ai/strategies/local_mcp.py` for artifact-facing legacy fields and update only those occurrences.

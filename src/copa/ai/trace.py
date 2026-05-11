@@ -319,7 +319,7 @@ class TraceCollector:
             "strategy.inline.execute",
             "strategy.local_function.execute",
             "strategy.local_mcp.execute",
-            "strategy.mcp.execute",
+            "strategy.remote_mcp.execute",
         }:
             self.metrics.strategyDurationMs = event.duration_ms
 
