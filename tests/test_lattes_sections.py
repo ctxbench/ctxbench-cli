@@ -82,3 +82,9 @@ def test_mcp_server_routes_resource_tools():
 
     assert any(tool.name == "get_profile" for tool in tools)
     assert isinstance(result.content, dict)
+
+
+def test_mcp_server_uses_ctxbench_public_name():
+    server = LattesMCPServer(contexts_dir=_contexts_dir())
+
+    assert server.app.name == "ctxbench-lattes"
