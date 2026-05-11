@@ -43,7 +43,7 @@ before implementation.
 - [ ] T002 [P] Add CLI command/help contract tests in `tests/test_cli.py` covering `ctxbench` parser usage, allowed subcommands `{plan, execute, eval, export, status}`, and rejection of `query` and `exec`.
 - [X] T003 [P] Add selector contract tests in `tests/test_cli.py` covering target flags `--task`, `--repetition`, `--trial-id` and rejection of `--question`, `--repeat`, and `--ids`.
 - [X] T004 [P] Add artifact file and record-field contract tests in `tests/test_cli.py` for mock-only `plan` and `execute`: `trials.jsonl` / `responses.jsonl` exist and `queries.jsonl` / `answers.jsonl` do not.
-- [ ] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
+- [X] T005 [P] Add eval/export/status target-artifact tests in `tests/test_eval_status_regression.py`: eval reads `responses.jsonl`, export reads `responses.jsonl`, and status counts `trials.jsonl` / `responses.jsonl`.
 - [X] T006 [P] Add strategy label tests in `tests/test_ai.py`: `remote_mcp` resolves to the native remote MCP strategy path, `mcp` is rejected by engine resolution, and `local_mcp` remains distinct.
 - [ ] T007 Add legacy-rejection tests in `tests/test_legacy_rejection.py` marked `@pytest.mark.legacy_rejection` for `ctxbench query`, `ctxbench exec`, legacy selector flags, and an experiment config containing `"mcp"`.
 - [X] T008 Register the `legacy_rejection` marker in `pytest.ini`.
@@ -103,14 +103,14 @@ target public fields while preserving judge-vote separation and metric meaning.
 produces `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl`,
 `evals-summary.json`, and `results.csv` without legacy public fields.
 
-- [ ] T033 [US2] Update `src/copa/commands/eval.py`: positional/input naming becomes `responses`, default input is `responses.jsonl`, output remains `evals.jsonl` / `judge_votes.jsonl`, and public fields use target names.
-- [ ] T034 [US2] Update `src/copa/commands/export.py`: reads `responses.jsonl`, merges evals/votes by `trialId`, and writes target CSV/detail fields including `trialId`, `taskId`, and `response`.
-- [ ] T035 [US2] Update `src/copa/commands/status.py`: reads `trials.jsonl`, `responses.jsonl`, and `evals.jsonl`; rendered labels use target phase/field terms.
-- [ ] T036 [US2] Update `src/copa/benchmark/evaluation.py`: judge request/evaluation aggregation reads response objects with target fields and persists target eval fields without conflating execution and judge costs.
+- [X] T033 [US2] Update `src/copa/commands/eval.py`: positional/input naming becomes `responses`, default input is `responses.jsonl`, output remains `evals.jsonl` / `judge_votes.jsonl`, and public fields use target names.
+- [X] T034 [US2] Update `src/copa/commands/export.py`: reads `responses.jsonl`, merges evals/votes by `trialId`, and writes target CSV/detail fields including `trialId`, `taskId`, and `response`.
+- [X] T035 [US2] Update `src/copa/commands/status.py`: reads `trials.jsonl`, `responses.jsonl`, and `evals.jsonl`; rendered labels use target phase/field terms.
+- [X] T036 [US2] Update `src/copa/benchmark/evaluation.py`: judge request/evaluation aggregation reads response objects with target fields and persists target eval fields without conflating execution and judge costs.
 - [ ] T037 [US2] Update `src/copa/benchmark/evaluation_batch.py`: batch manifest/job serialization uses target field names and mocked provider tests remain provider-free.
-- [ ] T038 [US2] Update `src/copa/benchmark/results.py`: response/eval/judge-vote serializers and trace refs use target fields while preserving trace directory scope.
-- [ ] T039 [US2] Update `src/copa/benchmark/checkpoints.py`: checkpoint records refer to `trialId` / completed trial IDs and keep checkpoint file behavior otherwise unchanged.
-- [ ] T040 [US2] Update `src/copa/benchmark/experiment_loader.py`: manifest-facing output uses target public terminology only where it serializes public artifact metadata.
+- [X] T038 [US2] Update `src/copa/benchmark/results.py`: response/eval/judge-vote serializers and trace refs use target fields while preserving trace directory scope.
+- [X] T039 [US2] Update `src/copa/benchmark/checkpoints.py`: checkpoint records refer to `trialId` / completed trial IDs and keep checkpoint file behavior otherwise unchanged.
+- [X] T040 [US2] Update `src/copa/benchmark/experiment_loader.py`: manifest-facing output uses target public terminology only where it serializes public artifact metadata.
 - [ ] T041 [US2] Update identity and filename helpers in `src/copa/util/artifacts.py`: public helper names and serialized identity inputs use `trial` / `task` terminology where applicable.
 - [ ] T042 [US2] Audit `src/copa/util/jsonl.py`; update only public docstrings or helper names if they contain legacy artifact terminology.
 - [ ] T043 [US2] Update `src/copa/util/ids.py` imports/calls to match renamed artifact identity helpers from T041.

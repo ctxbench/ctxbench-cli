@@ -8,15 +8,19 @@ from copa.util.fs import load_json
 from copa.util.jsonl import read_jsonl
 
 
+def _trial_id(row: dict[str, object]) -> str:
+    return str(row.get("trialId", row.get("runId", "")))
+
+
 def _last_status_map(path: Path) -> dict[str, str]:
-    """Returns {runId: status}, last entry per runId wins (handles duplicates)."""
+    """Returns {trialId: status}, last entry per trialId wins (handles duplicates)."""
     if not path.exists():
         return {}
     result: dict[str, str] = {}
     for item in read_jsonl(path):
-        run_id = str(item.get("runId", ""))
-        if run_id:
-            result[run_id] = str(item.get("status", "unknown"))
+        trial_id = _trial_id(item)
+        if trial_id:
+            result[trial_id] = str(item.get("status", "unknown"))
     return result
 
 
@@ -35,15 +39,15 @@ def _judge_status(value: dict[str, object]) -> str:
 
 
 def _load_judge_votes(path: Path) -> dict[tuple[str, str], dict[str, object]]:
-    """Returns {(runId, judgeId): vote}, last entry wins."""
+    """Returns {(trialId, judgeId): vote}, last entry wins."""
     if not path.exists():
         return {}
     result: dict[tuple[str, str], dict[str, object]] = {}
     for item in read_jsonl(path):
-        run_id = str(item.get("runId", ""))
+        trial_id = _trial_id(item)
         judge_id = str(item.get("judgeId", ""))
-        if run_id and judge_id:
-            result[(run_id, judge_id)] = dict(item)
+        if trial_id and judge_id:
+            result[(trial_id, judge_id)] = dict(item)
     return result
 
 
@@ -108,7 +112,7 @@ def _judge_breakdown(root: Path, answer_total: int) -> list[tuple[str, int, int,
     return rows
 
 
-def _count_queries(path: Path) -> int:
+def _count_trials(path: Path) -> int:
     if not path.exists():
         return 0
     return sum(1 for _ in read_jsonl(path))
@@ -129,21 +133,21 @@ def _load_experiment_id(root: Path) -> str:
 def status_command(output_dir: str | None = None, *, by: str | None = None) -> int:
     root = Path(output_dir).resolve() if output_dir else Path(".").resolve()
 
-    queries_path = root / "queries.jsonl"
-    answers_path = root / "answers.jsonl"
+    trials_path = root / "trials.jsonl"
+    responses_path = root / "responses.jsonl"
     evals_path = root / "evals.jsonl"
 
     experiment_id = _load_experiment_id(root)
-    query_count = _count_queries(queries_path)
-    answer_map = _last_status_map(answers_path)
+    trial_count = _count_trials(trials_path)
+    response_map = _last_status_map(responses_path)
     eval_map = _last_status_map(evals_path)
 
-    answer_tally = _tally(answer_map)
+    response_tally = _tally(response_map)
     eval_tally = _tally(eval_map)
 
-    answer_success = answer_tally.get("success", 0)
-    answer_error = answer_tally.get("error", 0)
-    answer_total = sum(answer_tally.values())
+    response_success = response_tally.get("success", 0)
+    response_error = response_tally.get("error", 0)
+    response_total = sum(response_tally.values())
 
     eval_done = eval_tally.get("evaluated", 0)
     eval_error = eval_tally.get("error", 0)
@@ -162,21 +166,21 @@ def status_command(output_dir: str | None = None, *, by: str | None = None) -> i
     print(header)
     print(sep)
 
-    query_pending = max(0, query_count - answer_total)
+    execute_pending = max(0, trial_count - response_total)
     print(
-        f"{'query':<{col[0]}} {query_count:>{col[1]}} {answer_success:>{col[2]}} "
-        f"{answer_error:>{col[3]}} {query_pending:>{col[4]}}"
+        f"{'execute':<{col[0]}} {trial_count:>{col[1]}} {response_success:>{col[2]}} "
+        f"{response_error:>{col[3]}} {execute_pending:>{col[4]}}"
     )
 
-    eval_pending = max(0, answer_success - eval_total)
+    eval_pending = max(0, response_success - eval_total)
     print(
-        f"{'eval':<{col[0]}} {answer_success:>{col[1]}} {eval_done:>{col[2]}} "
+        f"{'eval':<{col[0]}} {response_success:>{col[1]}} {eval_done:>{col[2]}} "
         f"{eval_error:>{col[3]}} {eval_pending:>{col[4]}}"
     )
 
     if by:
         if by == "judge":
-            rows = _judge_breakdown(root, answer_success)
+            rows = _judge_breakdown(root, response_success)
             print()
             print(f"{'Judge':<24} {'Total':>8} {'Success':>8} {'Failed':>8} {'Pending':>8}")
             print("─" * 64)

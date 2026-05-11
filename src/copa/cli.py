@@ -202,7 +202,7 @@ def build_parser() -> argparse.ArgumentParser:
         "eval", help="Evaluate responses using a judge model"
     )
     eval_parser.add_argument(
-        "answers", nargs="?", default=None,
+        "responses", nargs="?", default=None,
         help="Path to responses.jsonl (default: ./responses.jsonl)",
     )
     eval_parser.add_argument(
@@ -242,7 +242,7 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("--progress", action="store_true", help="Show progress bar")
     eval_parser.set_defaults(
         func=lambda args: eval_command(
-            args.answers,
+            args.responses,
             force=args.force,
             judge=tuple(args.judge),
             not_judge=tuple(getattr(args, "not_judge", []) or []),
@@ -281,8 +281,8 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     export_parser.add_argument(
-        "--id", metavar="RUN_ID", dest="run_id",
-        help="Show detailed information for a single run ID",
+        "--id", metavar="TRIAL_ID", dest="run_id",
+        help="Show detailed information for a single trial ID",
     )
     _add_selector_args(export_parser, include_status=True)
     export_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
@@ -307,7 +307,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Experiment output directory (default: current directory)",
     )
     status_parser.add_argument(
-        "--by", metavar="FIELD", choices=["model", "strategy", "instance", "question", "judge"],
+        "--by", metavar="FIELD", choices=["model", "strategy", "instance", "task", "judge"],
         help="Break down counts by field",
     )
     status_parser.set_defaults(

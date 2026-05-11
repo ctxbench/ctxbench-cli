@@ -33,7 +33,7 @@ def load_completed_run_ids(path: str | Path | None, *, experiment_id: str, kind:
         return set()
     if str(payload.get("experimentId") or "") not in {"", experiment_id}:
         return set()
-    completed = payload.get("completedRunIds", [])
+    completed = payload.get("completedTrialIds", payload.get("completedRunIds", []))
     if not isinstance(completed, list):
         return set()
     return {str(item) for item in completed if isinstance(item, str) and item}
@@ -51,7 +51,7 @@ def write_completed_run_ids(
         "experimentId": experiment_id,
         "kind": kind,
         "completedCount": len(normalized),
-        "completedRunIds": normalized,
+        "completedTrialIds": normalized,
         "updatedAt": utc_now_iso(),
     }
     write_json(path, payload)

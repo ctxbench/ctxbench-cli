@@ -16,6 +16,10 @@ _SUPPORTED_FORMATS = ("csv",)
 # Field extraction helpers
 # ---------------------------------------------------------------------------
 
+def _trial_id(row: dict[str, Any]) -> str:
+    return str(row.get("trialId", row.get("runId", "")))
+
+
 def _ans(row: dict[str, Any], key: str, default: Any = None) -> Any:
     return row.get(key, default)
 
@@ -56,12 +60,12 @@ def _merge_row(
     completeness_outcome = outcome.get("completeness") or {}
     context_blocks = ev.get("contextBlocks")
     return {
-        # ── from answers ────────────────────────────────────────────────────
+        # ── from responses ──────────────────────────────────────────────────
         "experimentId": _ans(ans, "experimentId"),
-        "runId": _ans(ans, "runId"),
+        "trialId": _ans(ans, "trialId"),
         "instanceId": _ans(ans, "instanceId"),
         "format": _ans(ans, "format"),
-        "questionId": _ans(ans, "questionId"),
+        "taskId": _ans(ans, "taskId"),
         "modelId": _ans(ans, "modelId"),
         "modelName": _ans(ans, "model") or _ans(ans, "modelName"),
         "tags": ",".join(_ans(ans, "questionTags") or []),
@@ -77,7 +81,7 @@ def _merge_row(
         "modelCalls": _metrics(ans, "modelCalls"),
         "toolCalls": _metrics(ans, "toolCalls"),
         "mcpToolCalls": _metrics(ans, "mcpToolCalls"),
-        "answer": _ans(ans, "answer"),
+        "response": _ans(ans, "response"),
         "errorMessage": _ans(ans, "errorMessage"),
         "modelDuration": _metrics(ans, "modelDurationMs"),
         "reservedTokens": _metrics(ans, "reservedTokens"),
@@ -111,11 +115,11 @@ def _merge_row(
 
 
 _CSV_FIELDS = [
-    "experimentId", "runId", "instanceId", "format", "questionId",
+    "experimentId", "trialId", "instanceId", "format", "taskId",
     "modelId", "modelName", "tags", "index", "strategy", "temperature",
     "inputTokens", "outputTokens", "totalTokens", "cachedInputTokens", "cachedReadTokens",
     "status", "modelCalls", "toolCalls", "mcpToolCalls",
-    "answer", "errorMessage", "modelDuration", "reservedTokens", "toolDurationMs", "totalDurationMs",
+    "response", "errorMessage", "modelDuration", "reservedTokens", "toolDurationMs", "totalDurationMs",
     "completeness", "completeness_agreement", "correctness", "correctness_agreement",
     "completeness_justification", "correctness_justification",
     "judge", "judgeId", "judgeModel",
@@ -187,18 +191,18 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
 def _build_eval_index(evals: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     index: dict[str, dict[str, Any]] = {}
     for ev in evals:
-        run_id = str(ev.get("runId") or "")
-        if run_id:
-            index[run_id] = ev
+        trial_id = _trial_id(ev)
+        if trial_id:
+            index[trial_id] = ev
     return index
 
 
 def _build_votes_index(votes: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     index: dict[str, list[dict[str, Any]]] = {}
     for v in votes:
-        run_id = str(v.get("runId") or "")
-        if run_id:
-            index.setdefault(run_id, []).append(v)
+        trial_id = _trial_id(v)
+        if trial_id:
+            index.setdefault(trial_id, []).append(v)
     return index
 
 
@@ -208,39 +212,39 @@ def _build_votes_index(votes: list[dict[str, Any]]) -> dict[str, list[dict[str, 
 
 def _print_run_detail(
     run_id: str,
-    answers: list[dict[str, Any]],
+    responses: list[dict[str, Any]],
     evals_index: dict[str, dict[str, Any]],
     votes_index: dict[str, list[dict[str, Any]]],
 ) -> int:
-    ans = next((r for r in answers if str(r.get("runId") or "") == run_id), None)
-    if ans is None:
-        print(f"Run '{run_id}' not found in answers.")
+    response = next((r for r in responses if _trial_id(r) == run_id), None)
+    if response is None:
+        print(f"Trial '{run_id}' not found in responses.")
         return 1
 
     ev = evals_index.get(run_id)
     votes = votes_index.get(run_id, [])
-    merged = _merge_row(ans, ev, votes)
+    merged = _merge_row(response, ev, votes)
 
-    metadata = ans.get("metadata") or {}
-    parameters = ans.get("parameters") or {}
-    metrics = ans.get("metricsSummary") or {}
-    timing = ans.get("timing") or {}
+    metadata = response.get("metadata") or {}
+    parameters = response.get("parameters") or {}
+    metrics = response.get("metricsSummary") or {}
+    timing = response.get("timing") or {}
 
     detail: dict[str, Any] = {
-        "runId": merged["runId"],
+        "trialId": merged["trialId"],
         "experimentId": merged["experimentId"],
-        "questionId": merged["questionId"],
+        "taskId": merged["taskId"],
         "instanceId": merged["instanceId"],
         "model": {"id": merged["modelId"], "name": merged["modelName"]},
         "strategy": merged["strategy"],
         "format": merged["format"],
         "index": merged["index"],
-        "tags": (ans.get("questionTags") or []),
+        "tags": (response.get("questionTags") or []),
         "status": merged["status"],
         "errorMessage": merged["errorMessage"],
-        "answer": merged["answer"],
+        "response": merged["response"],
         "timing": timing,
-        "usage": ans.get("usage") or {},
+        "usage": response.get("usage") or {},
         "metrics": metrics,
         "parameters": parameters,
         "metadata": metadata,
@@ -286,12 +290,12 @@ def export_command(
     source_root = source.parent
     logger = PhaseLogger(verbose=verbose)
 
-    answers_path = source_root / "answers.jsonl"
-    if not answers_path.exists():
-        print(f"Answers file not found: {answers_path}. Run 'copa query' first.")
+    responses_path = source_root / "responses.jsonl"
+    if not responses_path.exists():
+        print(f"Responses file not found: {responses_path}. Run 'ctxbench execute' first.")
         return 1
 
-    answers = _load_jsonl(answers_path)
+    responses = _load_jsonl(responses_path)
 
     evals_list = _load_jsonl(source) if source.exists() else []
     evals_index = _build_eval_index(evals_list)
@@ -302,25 +306,25 @@ def export_command(
 
     logger.phase(
         "LOAD", "Files loaded",
-        answers=len(answers), evals=len(evals_list), votes=len(votes_list),
+        responses=len(responses), evals=len(evals_list), votes=len(votes_list),
     )
 
     if run_id is not None:
-        return _print_run_detail(run_id, answers, evals_index, votes_index)
+        return _print_run_detail(run_id, responses, evals_index, votes_index)
 
     active_selector = selector or RunSelector()
-    answers = [r for r in answers if matches_run_result(r, active_selector)]
+    responses = [r for r in responses if matches_run_result(r, active_selector)]
 
     try:
-        answers = _apply_by_filters(answers, by or [])
+        responses = _apply_by_filters(responses, by or [])
     except ValueError as exc:
         print(f"[ERROR] {exc}")
         return 1
 
-    run_id_key = lambda ans: str(ans.get("runId") or "")
+    run_id_key = _trial_id
     merged = [
-        _merge_row(ans, evals_index.get(run_id_key(ans)), votes_index.get(run_id_key(ans)))
-        for ans in answers
+        _merge_row(response, evals_index.get(run_id_key(response)), votes_index.get(run_id_key(response)))
+        for response in responses
     ]
 
     if format == "csv":

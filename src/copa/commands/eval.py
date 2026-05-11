@@ -32,22 +32,26 @@ from copa.util.logging import PhaseLogger, ProgressTracker
 # Input loading
 # ---------------------------------------------------------------------------
 
-def _load_answers(path: Path) -> list[RunResult]:
+def _trial_id(row: dict[str, Any]) -> str:
+    return str(row.get("trialId", row.get("runId", "")))
+
+
+def _load_responses(path: Path) -> list[RunResult]:
     if not path.exists():
-        raise FileNotFoundError(f"Answers file not found: {path}. Run 'copa query' first.")
+        raise FileNotFoundError(f"Responses file not found: {path}. Run 'ctxbench execute' first.")
     payloads = [dict(item) for item in read_jsonl(path)]
     if not payloads:
         return []
-    required = {"answer", "status", "timing"}
+    required = {"response", "status", "timing"}
     missing = sorted(required - set(payloads[0]))
     if missing:
         raise ValueError(
-            f"Input looks like queries, not answers (missing: {', '.join(missing)}). "
-            "Pass answers.jsonl, not queries.jsonl."
+            f"Input looks like trials, not responses (missing: {', '.join(missing)}). "
+            "Pass responses.jsonl, not trials.jsonl."
         )
     if "dataset" not in payloads[0]:
         raise ValueError(
-            "Answers file is missing context data. Re-run 'copa query' to regenerate."
+            "Responses file is missing context data. Re-run 'ctxbench execute' to regenerate."
         )
     return [RunResult.model_validate(item) for item in payloads]
 
@@ -60,7 +64,7 @@ def _load_manifest(source_root: Path) -> dict[str, Any]:
     path = source_root / "manifest.json"
     if not path.exists():
         raise ValueError(
-            f"Missing manifest: {path}. Re-run 'copa plan' to regenerate."
+            f"Missing manifest: {path}. Re-run 'ctxbench plan' to regenerate."
         )
     payload = load_json(path)
     if not isinstance(payload, dict):
@@ -121,25 +125,25 @@ def _judge_identifiers(config: EvaluationModelConfig) -> set[str]:
 # ---------------------------------------------------------------------------
 
 def _load_skipped_run_ids(path: Path) -> set[str]:
-    """Returns runIds already recorded as 'skipped' in evals.jsonl."""
+    """Returns trialIds already recorded as 'skipped' in evals.jsonl."""
     if not path.exists():
         return set()
     return {
-        str(item.get("runId", ""))
+        _trial_id(item)
         for item in read_jsonl(path)
-        if item.get("status") == "skipped" and item.get("runId")
+        if item.get("status") == "skipped" and _trial_id(item)
     }
 
 
 def _load_votes_index(path: Path) -> dict[str, list[dict[str, Any]]]:
-    """Returns {runId: [vote dicts]} from judge_votes.jsonl."""
+    """Returns {trialId: [vote dicts]} from judge_votes.jsonl."""
     if not path.exists():
         return {}
     index: dict[str, list[dict[str, Any]]] = {}
     for item in read_jsonl(path):
-        run_id = str(item.get("runId", ""))
-        if run_id:
-            index.setdefault(run_id, []).append(dict(item))
+        trial_id = _trial_id(item)
+        if trial_id:
+            index.setdefault(trial_id, []).append(dict(item))
     return index
 
 
@@ -174,29 +178,29 @@ def _merge_existing_votes(details: dict[str, Any], existing_votes: list[dict[str
 
 
 def _compact_evals(path: Path) -> None:
-    """Rewrite evals.jsonl keeping only the last entry per runId."""
+    """Rewrite evals.jsonl keeping only the last entry per trialId."""
     if not path.exists():
         return
     rows = list(read_jsonl(path))
     seen: dict[str, dict[str, Any]] = {}
     for row in rows:
-        run_id = str(row.get("runId", ""))
-        if run_id:
-            seen[run_id] = dict(row)
+        trial_id = _trial_id(row)
+        if trial_id:
+            seen[trial_id] = dict(row)
     write_jsonl(path, list(seen.values()))
 
 
 def _compact_judge_votes(path: Path) -> None:
-    """Rewrite judge_votes.jsonl keeping only the last entry per (runId, judgeId)."""
+    """Rewrite judge_votes.jsonl keeping only the last entry per (trialId, judgeId)."""
     if not path.exists():
         return
     rows = list(read_jsonl(path))
     seen: dict[tuple[str, str], dict[str, Any]] = {}
     for row in rows:
-        run_id = str(row.get("runId", ""))
+        trial_id = _trial_id(row)
         judge_id = str(row.get("judgeId", ""))
-        if run_id:
-            seen[(run_id, judge_id)] = dict(row)
+        if trial_id:
+            seen[(trial_id, judge_id)] = dict(row)
     write_jsonl(path, list(seen.values()))
 
 
@@ -205,7 +209,7 @@ def _compact_judge_votes(path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 def eval_command(
-    answers: str | None = None,
+    responses: str | None = None,
     *,
     force: bool = False,
     judge: tuple[str, ...] = (),
@@ -232,16 +236,16 @@ def eval_command(
     logger = PhaseLogger(verbose=verbose)
     event_logger = lambda label, message, fields: logger.phase(label, message, **fields)
 
-    source = Path(answers).resolve() if answers else Path("answers.jsonl").resolve()
+    source = Path(responses).resolve() if responses else Path("responses.jsonl").resolve()
     source_root = source.parent
 
-    logger.phase("LOAD", "Loading answers", path=str(source))
-    results = _load_answers(source)
+    logger.phase("LOAD", "Loading responses", path=str(source))
+    results = _load_responses(source)
 
     active_selector = selector or RunSelector()
     results = [r for r in results if matches_run_result(r, active_selector)]
     if not results:
-        print("No answers matched the selector.")
+        print("No responses matched the selector.")
         return 0
 
     judges = _filter_judges(
@@ -290,7 +294,7 @@ def eval_command(
     pending = [r for runs, _ in groups.values() for r in runs]
     logger.phase(
         "LOAD",
-        "Answers loaded",
+        "Responses loaded",
         total=len(results),
         evaluated=len(results) - len(pending),
         pending=len(pending),
@@ -401,7 +405,7 @@ def eval_command(
 
     skipped = len(results) - len(pending)
     print(
-        f"Evaluated {len(pending)} answer(s) → {evals_path}"
+        f"Evaluated {len(pending)} response(s) → {evals_path}"
         + (f" ({skipped} skipped)" if skipped else "")
     )
     return 0

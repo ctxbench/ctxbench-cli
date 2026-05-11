@@ -45,8 +45,9 @@ def write_trace_file(result: RunResult, artifact_root: str | Path) -> str | None
         return None
     payload = {
         "experimentId": result.experimentId,
-        "runId": result.runId,
-        "task": "queries",
+        "trialId": result.runId,
+        "taskId": result.questionId,
+        "task": "responses",
         "trace": result.trace.model_dump(mode="json"),
     }
     return _write_trace_payload(
@@ -84,7 +85,8 @@ def write_evaluation_trace_file(result: EvaluationRunResult, artifact_root: str 
             pass
     payload = {
         "experimentId": result.experimentId,
-        "runId": result.runId,
+        "trialId": result.runId,
+        "taskId": result.questionId,
         "task": "evals",
         "trace": new_trace,
     }
@@ -127,10 +129,10 @@ def serialize_evaluation_result(
     )
     if item is None:
         return {
-            "runId": result.runId,
+            "trialId": result.runId,
             "experimentId": result.experimentId,
             "instanceId": result.metadata.instanceId or None,
-            "questionId": result.questionId,
+            "taskId": result.questionId,
             "strategy": result.metadata.strategy or None,
             "repeatIndex": result.metadata.repeatIndex,
             "status": "not_evaluated",

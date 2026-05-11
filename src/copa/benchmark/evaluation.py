@@ -840,8 +840,8 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
     correctness_obj = outcome.get("correctness") or {}
     completeness_obj = outcome.get("completeness") or {}
     return {
-        "runId": row.get("runId"),
-        "questionId": row.get("questionId"),
+        "trialId": row.get("trialId"),
+        "taskId": row.get("taskId"),
         "instanceId": row.get("instanceId"),
         "status": row.get("status"),
         "evaluationMethod": row.get("evaluationMethod"),
@@ -858,4 +858,3 @@ def _build_evaluation_question_summary(row: dict[str, Any]) -> dict[str, Any]:
             },
         },
     }
-
