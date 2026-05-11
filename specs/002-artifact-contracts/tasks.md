@@ -106,9 +106,9 @@
 
 ## Final Audit
 
-- [ ] T022 [Audit] Run full provider-free validation from `plan.md`: inspect `docs/architecture/artifact-contracts.md` and confirm (a) all nine artifacts are named with phase + class labels; (b) four role treatments are present; (c) `manifest.json` responsibility text is present; (d) `results.csv` and `evals-summary.json` are explicitly derived; (e) three legacy mappings use explicit no-alias wording; (f) five provenance classes plus FR-013/FR-014 rule statements are present; confirm `rg "artifact-contracts" docs/architecture/` ≥3 hits and that README.md/workflow.md agree on eval outputs; if S3 was applied, confirm `rg` for removed functions returns nothing and focused pytest coverage is green
-- [ ] T023 [Audit] Update `specs/002-artifact-contracts/worklog.md` with final validation result and any deferred findings (e.g., `evals-summary.json` path still hardcoded in `commands/eval.py`, `expand`-named aliases still present for follow-on rename, manual review used because branch naming does not match spec-kit prerequisite helper expectations)
-- [ ] T024 [Audit] Update `specs/002-artifact-contracts/usage.jsonl` with implementation phase entry (token_provenance: unavailable if tool does not report usage)
+- [x] T022 [Audit] Run full provider-free validation from `plan.md`: inspect `docs/architecture/artifact-contracts.md` and confirm (a) all nine artifacts are named with phase + class labels; (b) four role treatments are present; (c) `manifest.json` responsibility text is present; (d) `results.csv` and `evals-summary.json` are explicitly derived; (e) three legacy mappings use explicit no-alias wording; (f) five provenance classes plus FR-013/FR-014 rule statements are present; confirm `rg "artifact-contracts" docs/architecture/` ≥3 hits and that README.md/workflow.md agree on eval outputs; if S3 was applied, confirm `rg` for removed functions returns nothing and focused pytest coverage is green
+- [x] T023 [Audit] Update `specs/002-artifact-contracts/worklog.md` with final validation result and any deferred findings (e.g., `evals-summary.json` path still hardcoded in `commands/eval.py`, `expand`-named aliases still present for follow-on rename, manual review used because branch naming does not match spec-kit prerequisite helper expectations)
+- [x] T024 [Audit] Update `specs/002-artifact-contracts/usage.jsonl` with implementation phase entry (token_provenance: unavailable if tool does not report usage)
 
 ---
 

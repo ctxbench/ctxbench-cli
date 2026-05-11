@@ -42,3 +42,11 @@ tasks.md produced with 3 slices (S3 optional) and 22 tasks total. Organized by i
 - Removed six unused legacy artifact alias helpers from `src/ctxbench/benchmark/paths.py`.
 - Kept `resolve_expand_output_dir` and `resolve_expand_jsonl_path` because `commands/experiment.py` still uses them.
 - Validation stayed provider-free and used focused pytest plus repo search for removed alias names.
+
+## 2026-05-11 — Final audit completed
+
+- Re-validated `docs/architecture/artifact-contracts.md`: all nine artifacts are present with phase and class labels; all four role sections are present; `manifest.json` responsibility text is present; `results.csv` and `evals-summary.json` are explicitly derived; all three legacy mappings use explicit no-alias wording; and the five-class provenance taxonomy includes the FR-013 and FR-014 rule statements.
+- Re-validated architecture doc consistency: `rg "artifact-contracts" docs/architecture/` returned four hits; `docs/architecture/README.md` and `docs/architecture/workflow.md` both include `evals-summary.json` in eval outputs.
+- Re-ran focused provider-free tests: `pytest -k "legacy_rejection or artifact_contracts or status or export or eval"` passed (`34 passed, 66 deselected`).
+- Confirmed the six removed legacy alias names no longer appear under `src/` or `tests/`.
+- Deferred findings: `evals-summary.json` path remains hardcoded in `src/ctxbench/commands/eval.py`; `resolve_expand_output_dir` and `resolve_expand_jsonl_path` remain for compatibility with `src/ctxbench/commands/experiment.py`; audit used manual review and focused tests only, with no provider-backed execution.
