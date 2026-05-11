@@ -140,10 +140,10 @@ architecture doc contradicts the no-alias policy.
 **Independent Test**: Architecture alias grep is clean and `README.md` has the
 12-row Compatibility / Migration table.
 
-- [ ] T059 [US3] Add a **Compatibility / Migration** section to `README.md` with the 12 required FR-013 rows and the note that the installed command is `ctxbench` while the distribution may still be named `copa`.
-- [ ] T060 [US3] Update `docs/architecture/README.md`: remove or relabel read-side compatibility language and clarify actual `src/copa/` layout versus future target layout.
-- [ ] T061 [P] [US3] Update `docs/architecture/vocabulary.md`: remove compatibility-alias entries that conflict with no-alias behavior.
-- [ ] T062 [P] [US3] Update `docs/architecture/cli-architecture.md`: remove selector alias table and any command alias wording.
+- [X] T059 [US3] Add a **Compatibility / Migration** section to `README.md` with the 12 required FR-013 rows and the note that the installed command is `ctxbench` while the distribution may still be named `copa`.
+- [X] T060 [US3] Update `docs/architecture/README.md`: remove or relabel read-side compatibility language and clarify actual `src/copa/` layout versus future target layout.
+- [X] T061 [P] [US3] Update `docs/architecture/vocabulary.md`: remove compatibility-alias entries that conflict with no-alias behavior.
+- [X] T062 [P] [US3] Update `docs/architecture/cli-architecture.md`: remove selector alias table and any command alias wording.
 
 ---
 
