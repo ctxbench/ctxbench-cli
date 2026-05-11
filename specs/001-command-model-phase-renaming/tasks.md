@@ -166,8 +166,8 @@ production-test legacy-term grep from `quickstart.md` pass.
 
 **Purpose**: Audits, optional Nix validation, and mock-only end-to-end checks.
 
-- [ ] T067 [P] Audit `outputs_analysis.ipynb` for `runId`, `questionId`, and `answer`; update to target fields or record a follow-up in `specs/001-command-model-phase-renaming/follow-ups.md`.
-- [ ] T068 [P] Audit `docs/prompts/spec-kit/**` for legacy public terminology; if edits are required, create follow-up tasks naming exact files or add a clearly labeled historical note to retained templates.
+- [X] T067 [P] Audit `outputs_analysis.ipynb` for `runId`, `questionId`, and `answer`; update to target fields or record a follow-up in `specs/001-command-model-phase-renaming/follow-ups.md`.
+- [X] T068 [P] Audit `docs/prompts/spec-kit/**` for legacy public terminology; if edits are required, create follow-up tasks naming exact files or add a clearly labeled historical note to retained templates.
 - [ ] T069 Generate `specs/001-command-model-phase-renaming/baseline.after.txt` with the same grep scope as T001, diff it against `baseline.before.txt`, and verify remaining legacy mentions are limited to migration docs, explicitly historical docs, or `tests/test_legacy_rejection.py`.
 - [ ] T070 Run focused provider-free tests: `pytest -q -k cli`, `pytest -q -k eval`, `pytest -q -k export`, `pytest -q -k status`, `pytest -q -k mcp`, and `pytest -q -m legacy_rejection`.
 - [ ] T071 Run full provider-free test suite with `pytest -q`; do not run `ctxbench execute` or `ctxbench eval` against real providers.
