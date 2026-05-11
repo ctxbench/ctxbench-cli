@@ -15,3 +15,4 @@ result
 outputs/
 results/
 temp/
+.specify/feature.json
