@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from dataclasses import asdict
+import json
 from pathlib import Path
 import subprocess
 import tempfile
 
 from ctxbench.dataset.archive import determine_package_root, safe_extract_tar_gz
 from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.conflicts import DatasetConflictDetector
+from ctxbench.dataset.inspect import build_inspect_result
 from ctxbench.dataset.acquisition import (
     build_archive_materialization_manifest,
     classify_acquisition_source,
@@ -17,6 +21,7 @@ from ctxbench.dataset.acquisition import (
     verify_downloaded_bytes,
 )
 from ctxbench.dataset.materialization import MaterializationManifest
+from ctxbench.dataset.resolver import DatasetResolver
 
 
 def _is_git_origin(origin: str) -> bool:
@@ -122,6 +127,47 @@ def fetch_command(
     cache.store(manifest, source_path)
 
 
+def _parse_dataset_ref(dataset_ref: str) -> str | dict[str, str]:
+    candidate_path = Path(dataset_ref).expanduser()
+    if candidate_path.exists() or dataset_ref.startswith((".", "/", "~")):
+        return str(candidate_path)
+    dataset_id, separator, version = dataset_ref.rpartition("@")
+    if separator and dataset_id and version:
+        return {"id": dataset_id, "version": version}
+    return {"root": dataset_ref}
+
+
+def inspect_command(
+    dataset_ref: str,
+    json_output: bool = False,
+    *,
+    cache_dir: Path | None = None,
+) -> None:
+    cache = DatasetCache(cache_dir=cache_dir)
+    resolver = DatasetResolver()
+    parsed_ref = _parse_dataset_ref(dataset_ref)
+    manifest: MaterializationManifest | None = None
+    if isinstance(parsed_ref, dict) and parsed_ref.get("id") and parsed_ref.get("version"):
+        dataset_id = str(parsed_ref["id"])
+        version = str(parsed_ref["version"])
+        DatasetConflictDetector.check(dataset_id, version, cache)
+        matches = cache.lookup(dataset_id, version)
+        manifest = matches[0] if matches else None
+    package = resolver.resolve(parsed_ref, cache)
+    if manifest is None:
+        manifest = getattr(package, "manifest", None)
+    report = build_inspect_result(package, manifest)
+    payload = asdict(report)
+    if json_output:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return
+    print(f"identity: {report.identity}")
+    print(f"version: {report.version}")
+    print(f"conformant: {report.conformant}")
+    print(f"origin: {report.origin}")
+    print(f"missing_mandatory: {', '.join(report.missing_mandatory) if report.missing_mandatory else 'none'}")
+
+
 def fetch_command_from_args(args: object) -> int:
     dataset_id = str(getattr(args, "dataset_id"))
     origin = str(getattr(args, "origin"))
@@ -136,5 +182,13 @@ def fetch_command_from_args(args: object) -> int:
         asset_name=asset_name,
         sha256=sha256,
         sha256_url=sha256_url,
+    )
+    return 0
+
+
+def inspect_command_from_args(args: object) -> int:
+    inspect_command(
+        str(getattr(args, "dataset_ref")),
+        json_output=bool(getattr(args, "json_output", False)),
     )
     return 0

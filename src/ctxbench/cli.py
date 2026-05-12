@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from ctxbench.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
-from ctxbench.commands.dataset import fetch_command_from_args
+from ctxbench.commands.dataset import fetch_command_from_args, inspect_command_from_args
 from ctxbench.commands.eval import eval_command
 from ctxbench.commands.execute import execute_command
 from ctxbench.commands.export import export_command
@@ -168,6 +168,12 @@ def build_parser() -> argparse.ArgumentParser:
     fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for archive or release asset")
     fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for archive or release asset")
     fetch_parser.set_defaults(func=fetch_command_from_args)
+    inspect_parser = dataset_sub.add_parser(
+        "inspect", help="Inspect a local or cached dataset reference"
+    )
+    inspect_parser.add_argument("dataset_ref", help="Dataset reference path or <dataset-id>@<version>")
+    inspect_parser.add_argument("--json", action="store_true", dest="json_output", help="Emit JSON output")
+    inspect_parser.set_defaults(func=inspect_command_from_args)
 
     # ── ctxbench plan ──────────────────────────────────────────────────────
     plan_parser = subparsers.add_parser(

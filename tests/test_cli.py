@@ -28,6 +28,7 @@ def test_public_cli_exposes_execute_command_in_help():
     parser = build_parser()
 
     help_output = parser.format_help()
+    assert "dataset" in help_output
     assert "execute" in help_output
     assert "plan" in help_output
     assert "eval" in help_output
@@ -42,7 +43,7 @@ def test_public_cli_registers_only_target_subcommands():
         action for action in parser._actions if isinstance(action, argparse._SubParsersAction)
     )
 
-    assert set(subparser_action.choices) == {"plan", "execute", "eval", "export", "status"}
+    assert set(subparser_action.choices) == {"dataset", "plan", "execute", "eval", "export", "status"}
 
 
 def test_execute_help_uses_target_public_terms(capsys):

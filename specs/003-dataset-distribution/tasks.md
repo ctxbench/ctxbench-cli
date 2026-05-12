@@ -214,17 +214,17 @@ module also used by `ctxbench plan` (FR-028); reject ambiguous references.
 
 ### Tasks
 
-- [ ] T022 [S6] Implement `validate_package(package: DatasetPackage) -> DatasetCapabilityReport` in `src/ctxbench/dataset/validation.py`. Check each mandatory extension point method; check each `StrategyDescriptor` for all nine required fields (FR-030); populate `missing_mandatory`, `nonconformant_descriptors`, and `conformant` accordingly. This function is the shared validation logic called by both `inspect` and `plan`.
-- [ ] T023 [P] [S6] Implement `build_inspect_result(package: DatasetPackage, manifest: MaterializationManifest | None) -> DatasetCapabilityReport` in `src/ctxbench/dataset/inspect.py`: call `validate_package`, populate provenance fields from manifest when available.
-- [ ] T024 [S6] Implement `inspect_command(dataset_ref: str, json_output: bool = False) -> None` in `src/ctxbench/commands/dataset.py`: call `DatasetConflictDetector.check` then `DatasetResolver.resolve`, then `build_inspect_result`; print human-readable or JSON output. Wire `inspect` sub-subparser in `src/ctxbench/cli.py` with positional `dataset_ref` and `--json` flag.
-- [ ] T025 [S6] Write `tests/test_dataset_inspect.py` asserting: (a) a fully conformant fake package reports `conformant=True` and empty `missing_mandatory`; (b) a package missing one mandatory extension point lists it in `missing_mandatory` and sets `conformant=False`; (c) a package with a `StrategyDescriptor` missing one field lists it in `nonconformant_descriptors`; (d) an ambiguous ref raises `AmbiguousDatasetError` before any capability check (FR-039); (e) `--json` output is valid JSON with keys `identity`, `version`, `conformant`, `missing_mandatory`.
+- [x] T022 [S6] Implement `validate_package(package: DatasetPackage) -> DatasetCapabilityReport` in `src/ctxbench/dataset/validation.py`. Check each mandatory extension point method; check each `StrategyDescriptor` for all nine required fields (FR-030); populate `missing_mandatory`, `nonconformant_descriptors`, and `conformant` accordingly. This function is the shared validation logic called by both `inspect` and `plan`.
+- [x] T023 [P] [S6] Implement `build_inspect_result(package: DatasetPackage, manifest: MaterializationManifest | None) -> DatasetCapabilityReport` in `src/ctxbench/dataset/inspect.py`: call `validate_package`, populate provenance fields from manifest when available.
+- [x] T024 [S6] Implement `inspect_command(dataset_ref: str, json_output: bool = False) -> None` in `src/ctxbench/commands/dataset.py`: call `DatasetConflictDetector.check` then `DatasetResolver.resolve`, then `build_inspect_result`; print human-readable or JSON output. Wire `inspect` sub-subparser in `src/ctxbench/cli.py` with positional `dataset_ref` and `--json` flag.
+- [x] T025 [S6] Write `tests/test_dataset_inspect.py` asserting: (a) a fully conformant fake package reports `conformant=True` and empty `missing_mandatory`; (b) a package missing one mandatory extension point lists it in `missing_mandatory` and sets `conformant=False`; (c) a package with a `StrategyDescriptor` missing one field lists it in `nonconformant_descriptors`; (d) an ambiguous ref raises `AmbiguousDatasetError` before any capability check (FR-039); (e) `--json` output is valid JSON with keys `identity`, `version`, `conformant`, `missing_mandatory`.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_inspect.py` passes.
-- [ ] `ctxbench dataset inspect --help` runs without error.
-- [ ] No provider calls; no Lattes-specific imports.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_inspect.py` passes.
+- [x] `ctxbench dataset inspect --help` runs without error.
+- [x] No provider calls; no Lattes-specific imports.
+- [x] Diff is reviewable.
 
 ---
 

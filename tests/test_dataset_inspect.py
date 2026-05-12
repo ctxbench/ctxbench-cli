@@ -1,0 +1,226 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+
+from ctxbench.cli import build_parser
+from ctxbench.commands.dataset import inspect_command
+from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.conflicts import AmbiguousDatasetError
+from ctxbench.dataset.inspect import build_inspect_result
+from ctxbench.dataset.materialization import MaterializationManifest
+from ctxbench.dataset.package import DatasetMetadata, StrategyDescriptor
+
+
+def _metadata() -> DatasetMetadata:
+    return DatasetMetadata(
+        name="Fake Dataset",
+        description="Synthetic dataset for inspect testing.",
+        domain="testing",
+        intended_uses="Inspect validation checks.",
+        limitations="Not a real benchmark dataset.",
+        license_url=None,
+        citation_url=None,
+    )
+
+
+class ConformantPackage:
+    def metadata(self) -> DatasetMetadata:
+        return _metadata()
+
+    def identity(self) -> str:
+        return "ctxbench/fake"
+
+    def version(self) -> str:
+        return "0.1.0"
+
+    def origin(self) -> str | None:
+        return None
+
+    def list_instance_ids(self) -> list[str]:
+        return ["inst-001"]
+
+    def list_task_ids(self) -> list[str]:
+        return ["task-001"]
+
+    def get_context_artifact(self, instance_id: str, task_id: str, strategy: str, format_name: str) -> object:
+        return {"instance": instance_id, "task": task_id, "strategy": strategy, "format": format_name}
+
+    def get_evidence_artifact(self, instance_id: str, task_id: str) -> object:
+        return {"instance": instance_id, "task": task_id}
+
+    def fixtures(self) -> object:
+        return {"fixture": "ok"}
+
+    def capability_report(self) -> object:
+        return None
+
+    def tool_provider(self) -> object | None:
+        return None
+
+    def evaluation_helpers(self) -> object | None:
+        return None
+
+    def strategy_descriptors(self) -> list[StrategyDescriptor] | None:
+        return [
+            StrategyDescriptor(
+                name="inline",
+                classification="canonical",
+                context_access_mode="inline-context",
+                inline_vs_operation="inline",
+                local_vs_remote="local",
+                loop_ownership="benchmark",
+                metric_provenance={"totalTokens": "reported"},
+                observability_limitations="None",
+                comparability_implications="Comparable with inline runs.",
+            )
+        ]
+
+
+class MissingMandatoryPackage(ConformantPackage):
+    get_context_artifact = None  # type: ignore[assignment]
+
+
+class NonconformantDescriptorPackage(ConformantPackage):
+    def strategy_descriptors(self) -> list[object] | None:
+        return [
+            SimpleNamespace(
+                name="inline",
+                classification="canonical",
+                context_access_mode="inline-context",
+                inline_vs_operation="inline",
+                local_vs_remote="local",
+                loop_ownership="benchmark",
+                metric_provenance={"totalTokens": "reported"},
+                observability_limitations="None",
+            )
+        ]
+
+
+def _write_local_dataset(root: Path) -> Path:
+    instance_dir = root / "context" / "cv-demo"
+    instance_dir.mkdir(parents=True, exist_ok=True)
+    (root / "questions.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "ctxbench/fake",
+                "version": "0.1.0",
+                "questions": [
+                    {
+                        "id": "q_year",
+                        "question": "When?",
+                        "tags": ["objective"],
+                        "validation": {"type": "judge"},
+                        "contextBlock": ["summary"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "questions.instance.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "ctxbench/fake",
+                "version": "0.1.0",
+                "instances": [{"instanceId": "cv-demo", "questions": [{"id": "q_year"}]}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (instance_dir / "parsed.json").write_text(json.dumps({"answers": {"q_year": 2020}}), encoding="utf-8")
+    (instance_dir / "blocks.json").write_text(json.dumps({"summary": "ok"}), encoding="utf-8")
+    return root
+
+
+def _manifest(*, origin: str, revision: str) -> MaterializationManifest:
+    return MaterializationManifest(
+        datasetId="ctxbench/fake",
+        requestedVersion="0.1.0",
+        resolvedRevision=revision,
+        origin=origin,
+        materializedPath="",
+        contentHash="sha256:same",
+        fetchedAt="2026-05-12T00:00:00Z",
+        ctxbenchVersion="0.1.0",
+        fetchMethod="file-copy",
+        sourceType="local-path",
+        verifiedSha256=None,
+    )
+
+
+def test_build_inspect_result_reports_conformant_package() -> None:
+    report = build_inspect_result(ConformantPackage(), None)
+
+    assert report.conformant is True
+    assert report.missing_mandatory == []
+
+
+def test_build_inspect_result_reports_missing_mandatory_method() -> None:
+    report = build_inspect_result(MissingMandatoryPackage(), None)
+
+    assert report.conformant is False
+    assert "get_context_artifact" in report.missing_mandatory
+
+
+def test_build_inspect_result_reports_nonconformant_strategy_descriptor() -> None:
+    report = build_inspect_result(NonconformantDescriptorPackage(), None)
+
+    assert report.conformant is False
+    assert report.nonconformant_descriptors
+    assert "comparability_implications" in report.nonconformant_descriptors[0]
+
+
+def test_inspect_command_rejects_ambiguous_reference_before_validation(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    dataset_a = _write_local_dataset(tmp_path / "dataset-a")
+    dataset_b = _write_local_dataset(tmp_path / "dataset-b")
+    manifest_a = _manifest(origin=str(dataset_a), revision="rev-a")
+    manifest_b = _manifest(origin=str(dataset_b), revision="rev-b")
+    cache.store(manifest_a, dataset_a)
+    cache.store(manifest_b, dataset_b)
+    calls: list[str] = []
+
+    def _unexpected(*args: object, **kwargs: object) -> object:
+        calls.append("called")
+        raise AssertionError("build_inspect_result should not run for ambiguous refs")
+
+    monkeypatch.setattr("ctxbench.commands.dataset.build_inspect_result", _unexpected)
+
+    with pytest.raises(AmbiguousDatasetError):
+        inspect_command("ctxbench/fake@0.1.0", cache_dir=tmp_path / "cache")
+
+    assert calls == []
+
+
+def test_inspect_command_json_output_is_valid_json(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+) -> None:
+    dataset_root = _write_local_dataset(tmp_path / "dataset")
+
+    inspect_command(str(dataset_root), json_output=True, cache_dir=tmp_path / "cache")
+
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["identity"] == "ctxbench/fake"
+    assert payload["version"] == "0.1.0"
+    assert payload["conformant"] is True
+    assert payload["missing_mandatory"] == []
+
+
+def test_dataset_inspect_help_prints_usage(capsys: pytest.CaptureFixture[str]) -> None:
+    parser = build_parser()
+
+    with pytest.raises(SystemExit):
+        parser.parse_args(["dataset", "inspect", "--help"])
+
+    captured = capsys.readouterr()
+    assert "usage:" in captured.out
+    assert "dataset inspect" in captured.out
+    assert "--json" in captured.out
