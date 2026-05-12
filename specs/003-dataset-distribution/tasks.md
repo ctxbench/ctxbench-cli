@@ -3,7 +3,7 @@
 **Spec**: `specs/003-dataset-distribution/spec.md`  
 **Plan**: `specs/003-dataset-distribution/plan.md`  
 **Branch**: `feat/dataset-distribution`  
-**Amendment**: `specs/003-dataset-distribution/simplified-fetch-ux.md` — adds Slice S-A1
+**Amendment**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md` — adds Slice S-A1
 
 ## Task Format
 

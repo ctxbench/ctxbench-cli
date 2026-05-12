@@ -28,9 +28,12 @@ The benchmark now uses:
 
 A dataset is composed of:
 
+- `ctxbench.dataset.json`
 - `questions.json`
 - `questions.instance.json`
 - `context/<instanceId>/...`
+
+`ctxbench.dataset.json` identifies the dataset package and its `datasetVersion`.
 
 `questions.json` defines the stable question catalog.
 
@@ -88,6 +91,7 @@ Each instance lives in its own directory:
 
 ```text
 dataset-root/
+  ctxbench.dataset.json
   questions.json
   questions.instance.json
   context/
@@ -96,6 +100,16 @@ dataset-root/
       cleaned.html
       parsed.json
       blocks.json
+```
+
+Minimal package manifest:
+
+```json
+{
+  "id": "ctxbench/lattes",
+  "datasetVersion": "0.1.0",
+  "manifestSchemaVersion": 1
+}
 ```
 
 ### Validation Modes
@@ -248,7 +262,7 @@ ctxbench dataset fetch \
   --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
   --cache-dir ./.ctxbench/datasets
 
-ctxbench dataset inspect ctxbench/lattes@2026-04-28 --cache-dir ./.ctxbench/datasets
+ctxbench dataset inspect ctxbench/lattes@0.1.0 --cache-dir ./.ctxbench/datasets
 ```
 
 If your experiment already points to a local dataset root, skip fetch and inspect the root directly:
@@ -325,7 +339,7 @@ This writes:
 ### Export Analysis-Ready Results
 
 ```bash
-ctxbench export outputs/lattes_baseline_001/evals.jsonl --format csv --output outputs/lattes_baseline_001/results.csv
+ctxbench export outputs/lattes_baseline_001/evals.jsonl --to csv --output outputs/lattes_baseline_001/results.csv
 ```
 
 ### Inspect Progress

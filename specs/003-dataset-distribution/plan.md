@@ -4,7 +4,7 @@
 **Branch**: `feat/dataset-distribution`  
 **Status**: Draft — Amendment A1 applied (Simplified Fetch UX)  
 **Related specs**: Spec 001, Spec 002, Spec 004  
-**Amendment**: `specs/003-dataset-distribution/simplified-fetch-ux.md`
+**Amendment**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md`
 
 ## Summary
 

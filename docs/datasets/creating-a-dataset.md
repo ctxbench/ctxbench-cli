@@ -19,6 +19,7 @@ The current compatibility path for a local dataset root is:
 
 ```text
 dataset-root/
+  ctxbench.dataset.json
   questions.json
   questions.instance.json
   context/
@@ -30,6 +31,36 @@ dataset-root/
 
 The dataset root may be used directly by experiments through `dataset.root`, or it may be
 distributed as a materialized package referenced by `dataset.id` and `dataset.version`.
+
+## Dataset package manifest
+
+The canonical dataset package manifest is:
+
+```text
+ctxbench.dataset.json
+```
+
+The manifest is distinct from benchmark lifecycle `manifest.json` files produced during planning.
+
+Minimum recommended shape:
+
+```json
+{
+  "id": "ctxbench/lattes",
+  "datasetVersion": "0.1.0",
+  "manifestSchemaVersion": 1,
+  "name": "CTXBench Lattes",
+  "description": "Lattes benchmark dataset for CTXBench.",
+  "layout": {
+    "tasks": "questions.json",
+    "taskInstances": "questions.instance.json",
+    "contextRoot": "context/"
+  }
+}
+```
+
+`datasetVersion` is the version of the dataset package contents. It is not the CTXBench CLI
+version, a GitHub release tag, the manifest schema version, or a checksum.
 
 ## Mandatory extension points
 
@@ -80,11 +111,12 @@ analysis.
 
 Avoid identity/version conflicts:
 
-- keep `datasetId` stable across repackaging of the same dataset line
-- change `version` when task sets, instance bindings, or underlying payloads change
-- do not publish two different contents under the same `datasetId` + requested version
+- keep manifest `id` stable across repackaging of the same dataset line
+- change `datasetVersion` when task sets, instance bindings, preprocessing outputs, or underlying payloads change
+- use `manifestSchemaVersion` only for the schema of `ctxbench.dataset.json`
+- do not publish two different contents under the same `id` + `datasetVersion`
 
-The local cache treats conflicting provenance for the same `datasetId` + version as an error.
+The local cache treats conflicting provenance for the same dataset identity and dataset version as an error.
 
 ## Archive packaging guidance
 
@@ -95,11 +127,12 @@ Recommended archive forms:
 
 The fetch path validates:
 
-- checksum presence via `--sha256` or `--sha256-url`
+- checksum presence via `--sha256`, `--sha256-url`, or `--sha256-file`, depending on source kind
 - checksum correctness before extraction
 - archive extraction safety
 - exact-one-manifest discovery
-- requested identity/version match
+- presence of `ctxbench.dataset.json`
+- optional identity/version validation overrides, if provided
 
 Unsafe archive entries are rejected.
 
@@ -125,8 +158,8 @@ What to check:
 - missing mandatory capabilities are empty
 
 For workflow-level validation, use the provider-free conformance path described in
-[quickstart.md](/home/michel/repos/doutorado/ctxbench/ctxbench-cli/specs/003-dataset-distribution/quickstart.md)
-and keep fake responders/judges in test-only fixtures.
+[`quickstart.md`](../../specs/003-dataset-distribution/quickstart.md) and keep fake
+responders/judges in test-only fixtures.
 
 ## Boundary ownership note
 

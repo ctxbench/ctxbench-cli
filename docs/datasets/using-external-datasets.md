@@ -19,17 +19,17 @@ Use this path when the experiment references a dataset by `id` and `version`.
 ```bash
 ctxbench dataset fetch \
   --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+  --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.sha256 \
   --cache-dir ./.ctxbench/datasets
 
-ctxbench dataset inspect ctxbench/lattes@2026-04-28 --cache-dir ./.ctxbench/datasets
+ctxbench dataset inspect ctxbench/lattes@0.1.0 --cache-dir ./.ctxbench/datasets
 
 ctxbench plan tests/fixtures/lattes_provider_free/experiment.json \
   --output outputs/lattes_example \
   --cache-dir ./.ctxbench/datasets
 ctxbench execute outputs/lattes_example/trials.jsonl
 ctxbench eval outputs/lattes_example/responses.jsonl
-ctxbench export outputs/lattes_example/evals.jsonl --format csv --output outputs/lattes_example/results.csv
+ctxbench export outputs/lattes_example/evals.jsonl --to csv --output outputs/lattes_example/results.csv
 ctxbench status outputs/lattes_example
 ```
 
@@ -142,8 +142,8 @@ Resolution options:
 
 ### Identity/version mismatch
 
-If the fetched or unpacked dataset manifest does not match the requested identity/version, the
-fetch operation fails and nothing is materialized into the cache.
+If optional identity or dataset-version validation overrides are provided and the fetched or
+unpacked dataset manifest does not match them, the fetch operation fails and nothing is materialized into the cache.
 
 ## No implicit network rule
 
@@ -166,7 +166,7 @@ Consequences:
 Dataset provenance is preserved across canonical artifacts as a nested `dataset` object with:
 
 - `id`
-- `version`
+- `version` (the dataset version selected at planning time)
 - `origin`
 - `resolvedRevision`
 - `contentHash`

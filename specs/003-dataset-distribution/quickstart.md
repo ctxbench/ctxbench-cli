@@ -14,20 +14,21 @@ tests/fixtures/lattes_provider_free/dataset
 Representative command:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin tests/fixtures/lattes_provider_free/dataset \
-  --version 2026-04-28
+ctxbench dataset fetch \
+  --dataset-dir tests/fixtures/lattes_provider_free/dataset \
+  --cache-dir ./.ctxbench/datasets
 ```
 
 Expected result:
 
 - dataset is materialized into the local cache
-- a materialization manifest records local-path provenance
+- dataset identity and `datasetVersion` are read from `ctxbench.dataset.json`
+- a materialization manifest records local-directory provenance
 
 ## 2. Inspect the fetched dataset
 
 ```bash
-ctxbench dataset inspect ctxbench/lattes@2026-04-28
+ctxbench dataset inspect ctxbench/lattes@2026-04-28 --cache-dir ./.ctxbench/datasets
 ```
 
 Expected result:
@@ -47,7 +48,9 @@ tests/fixtures/lattes_provider_free/experiment.json
 Representative command:
 
 ```bash
-ctxbench plan tests/fixtures/lattes_provider_free/experiment.json --output outputs/lattes_provider_free
+ctxbench plan tests/fixtures/lattes_provider_free/experiment.json \
+  --output outputs/lattes_provider_free \
+  --cache-dir ./.ctxbench/datasets
 ```
 
 Expected result:
@@ -90,7 +93,7 @@ Expected result:
 ## 6. Export results
 
 ```bash
-ctxbench export outputs/lattes_provider_free/evals.jsonl --format csv --output outputs/lattes_provider_free/results.csv
+ctxbench export outputs/lattes_provider_free/evals.jsonl --to csv --output outputs/lattes_provider_free/results.csv
 ```
 
 Expected result:
