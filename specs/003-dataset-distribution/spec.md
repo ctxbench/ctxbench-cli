@@ -144,6 +144,9 @@ It MUST NOT:
 - dynamically register adapters;
 - perform opaque auto-discovery.
 
+For archive-based acquisition, `ctxbench dataset fetch` may also download a release archive asset,
+but only when archive integrity is explicitly verified before extraction.
+
 ### D4 — `dataset inspect` is read-only
 
 `ctxbench dataset inspect` resolves a local or cached dataset reference, validates metadata and capability declarations, and reports a `DatasetCapabilityReport`.
@@ -222,6 +225,7 @@ The dataset package MUST expose the following responsibilities. The concrete imp
 ### Dataset Acquisition and Materialization
 
 - **FR-019**: `ctxbench-cli` MUST provide an explicit dataset acquisition command:
+ - **FR-019**: `ctxbench-cli` MUST provide an explicit dataset acquisition command:
 
   ```bash
   ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
@@ -233,12 +237,34 @@ The dataset package MUST expose the following responsibilities. The concrete imp
   - requested version;
   - resolved version or resolved revision;
   - origin;
+  - acquisition source type;
   - materialized path;
   - content hash when available;
   - acquisition timestamp;
   - CTXBench version;
   - fetch method.
 - **FR-022**: Dataset acquisition MUST NOT execute code from the remote dataset repository/package.
+- **FR-022a**: When acquisition uses a `.tar.gz` archive URL or release asset, the archive MUST be
+  downloaded before extraction and MUST require explicit SHA-256 verification through either
+  `--sha256` or `--sha256-url`.
+- **FR-022b**: Archive acquisition MUST fail before extraction if checksum material is missing,
+  cannot be obtained, or does not match the downloaded bytes.
+- **FR-022c**: Archive extraction MUST reject:
+  - path traversal entries;
+  - absolute paths;
+  - unsafe symlinks;
+  - unsafe hardlinks;
+  - device nodes;
+  - FIFOs;
+  - sockets or other special files.
+- **FR-022d**: After safe extraction, CTXBench MUST locate exactly one dataset package manifest.
+  It MUST support either a single top-level directory or files extracted directly at archive root.
+  It MUST fail when no manifest is found or when multiple manifests are found.
+- **FR-022e**: After manifest discovery, CTXBench MUST validate dataset identity and version against
+  the requested acquisition arguments before materialization.
+- **FR-022f**: Archive or release-asset acquisition MUST record archive provenance in the
+  materialization manifest, including the verified SHA-256 and enough source information to
+  reproduce the exact downloaded asset.
 - **FR-023**: Lifecycle commands MUST NOT perform implicit dataset acquisition or network fetches.
 - **FR-024**: If a lifecycle command references a dataset not available locally, it MUST fail with a clear message naming the missing dataset and suggesting a `ctxbench dataset fetch` command when enough origin/version information is available.
 
@@ -302,6 +328,12 @@ The dataset package MUST expose the following responsibilities. The concrete imp
 - **FR-039**: When ambiguity is detected, `ctxbench dataset inspect` and `ctxbench plan` MUST fail with an explicit error listing conflicting candidates and requiring disambiguation by origin or resolved revision.
 - **FR-040**: If a dataset identity/version pair is materialized again and resolves to different content, the command MUST not silently overwrite the existing materialization. It MUST either fail, store a distinct materialization keyed by resolved revision/content hash, or require an explicit force/update flag.
 - **FR-041**: Tags or mutable version references MUST be resolved to immutable revisions when possible, and the immutable revision MUST be recorded in provenance.
+- **FR-041a**: For GitHub Release asset acquisition, a release tag URL plus explicit asset name is a
+  valid acquisition source. CTXBench MUST resolve exactly one asset for the requested tag+asset
+  tuple and MUST record both the release tag URL and the resolved asset identity in acquisition
+  provenance.
+- **FR-041b**: Direct archive URL acquisition is a valid acquisition source when checksum
+  verification succeeds.
 
 ### Dataset Identity, Version, and Provenance in Artifacts
 
@@ -363,6 +395,45 @@ ctxbench dataset fetch ctxbench/lattes --origin https://github.com/ctxbench/latt
 ```
 
 Then the dataset is materialized into the local dataset cache and a materialization manifest records identity, origin, requested version, resolved revision, materialized path, and content hash when available.
+
+### Archive Acquisition
+
+Given a researcher has a direct `.tar.gz` dataset archive URL and a trusted SHA-256 value,  
+When they run:
+
+```bash
+ctxbench dataset fetch ctxbench/lattes \
+  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --version v0.1.0 \
+  --sha256 <sha256>
+```
+
+Then CTXBench downloads the archive, verifies SHA-256 before extraction, safely extracts it,
+discovers exactly one dataset package manifest, validates dataset identity/version, and
+materializes the dataset into the local cache.
+
+### Release Asset Acquisition
+
+Given a researcher has a GitHub Release tag URL and explicit asset name,  
+When they run:
+
+```bash
+ctxbench dataset fetch ctxbench/lattes \
+  --origin https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset \
+  --asset-name ctxbench-lattes-v0.1.0.tar.gz \
+  --version v0.1.0 \
+  --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz.sha256
+```
+
+Then CTXBench resolves exactly that release asset, downloads it, verifies checksum before
+extraction, safely extracts it, discovers exactly one dataset manifest, validates
+identity/version, and records release+asset provenance in the materialization manifest.
+
+### Unsafe Archive Rejection
+
+Given an archive contains path traversal, absolute paths, unsafe links, or special files,  
+When the researcher runs `ctxbench dataset fetch`,  
+Then CTXBench fails before materialization and does not extract unsafe entries into the cache.
 
 ### Dataset Inspection
 

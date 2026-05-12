@@ -4,6 +4,7 @@ import argparse
 import sys
 
 from ctxbench.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
+from ctxbench.commands.dataset import fetch_command_from_args
 from ctxbench.commands.eval import eval_command
 from ctxbench.commands.execute import execute_command
 from ctxbench.commands.export import export_command
@@ -151,6 +152,22 @@ def _selector_from_args(args: argparse.Namespace, *, include_status: bool = Fals
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctxbench", description="CTXBench benchmark CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # ── ctxbench dataset ───────────────────────────────────────────────────
+    dataset_parser = subparsers.add_parser(
+        "dataset", help="Dataset management"
+    )
+    dataset_sub = dataset_parser.add_subparsers(dest="dataset_command", required=True)
+    fetch_parser = dataset_sub.add_parser(
+        "fetch", help="Materialize a dataset into the local cache"
+    )
+    fetch_parser.add_argument("dataset_id", help="Dataset identifier")
+    fetch_parser.add_argument("--origin", required=True, help="Dataset origin URL or local path")
+    fetch_parser.add_argument("--version", required=True, help="Dataset version or tag")
+    fetch_parser.add_argument("--asset-name", help="Release asset name for release-tag origins")
+    fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for archive or release asset")
+    fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for archive or release asset")
+    fetch_parser.set_defaults(func=fetch_command_from_args)
 
     # ── ctxbench plan ──────────────────────────────────────────────────────
     plan_parser = subparsers.add_parser(

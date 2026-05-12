@@ -33,11 +33,12 @@ class DatasetCache:
     def store(self, manifest: MaterializationManifest, source_path: Path) -> None:
         existing = self.lookup(manifest.datasetId, manifest.requestedVersion)
         for item in existing:
-            if item.contentHash != manifest.contentHash:
+            if self._is_conflicting(item, manifest):
                 raise DatasetConflictError(
                     "Conflicting dataset materialization for "
                     f"{manifest.datasetId}@{manifest.requestedVersion}: "
-                    f"{item.contentHash!r} != {manifest.contentHash!r}"
+                    f"existing(contentHash={item.contentHash!r}, verifiedSha256={item.verifiedSha256!r}) != "
+                    f"new(contentHash={manifest.contentHash!r}, verifiedSha256={manifest.verifiedSha256!r})"
                 )
 
         target_dir = self._target_dir(manifest)
@@ -73,3 +74,14 @@ class DatasetCache:
 
     def _write_manifest(self, path: Path, manifest: MaterializationManifest) -> None:
         path.write_text(json.dumps(asdict(manifest), indent=2, sort_keys=True), encoding="utf-8")
+
+    def _is_conflicting(
+        self,
+        existing: MaterializationManifest,
+        candidate: MaterializationManifest,
+    ) -> bool:
+        if existing.contentHash != candidate.contentHash:
+            return True
+        if existing.verifiedSha256 != candidate.verifiedSha256:
+            return True
+        return False

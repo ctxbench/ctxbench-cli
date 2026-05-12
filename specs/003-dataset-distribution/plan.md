@@ -59,6 +59,9 @@ ctxbench status
 
 It MUST NOT execute code from the fetched dataset.
 
+Archive- and release-asset-based fetches are allowed only when checksum verification succeeds
+before extraction.
+
 ### D3 — Inspect is read-only (spec D4)
 
 `ctxbench dataset inspect` validates metadata and reports capabilities. It does not fetch, plan, execute, evaluate, export, or mutate benchmark artifacts.
@@ -74,6 +77,18 @@ Spec 003 keeps the current single-dataset experiment model. Multiple datasets ca
 ### D6 — Dataset cache is not a registry (spec D5)
 
 The local dataset cache is a materialization cache keyed by explicit identity/version/origin/revision information. It does not perform plugin discovery, package marketplace behavior, dynamic loading, or adapter registration.
+
+### D6a — Acquisition source types are explicit
+
+Dataset acquisition source handling is explicit and closed over a small set of source types:
+
+- local filesystem path copied into the cache;
+- git repository origin materialized by clone/download in a follow-on implementation path;
+- direct `.tar.gz` archive URL;
+- GitHub Release tag URL plus explicit asset name.
+
+Archive and release-asset flows are acquisition-only behaviors. They do not change the no-network
+rule for lifecycle commands.
 
 ### D7 — Reuse existing task/instance models where possible (spec D8)
 
@@ -100,6 +115,9 @@ Artifact provenance (written by lifecycle phases) uses a nested `dataset` object
 ```
 
 These are intentionally different representations with different owners. The materialization manifest is owned by the cache layer; artifact provenance is owned by the planning phase and propagated through lifecycle artifacts. Both record the same identity/version/origin/resolvedRevision/contentHash values.
+
+For archive/release acquisition, the materialization manifest additionally records acquisition
+source and checksum provenance not required in lifecycle artifact carriers.
 
 ### D10 — `ctxbench dataset` uses nested argparse subparsers
 
@@ -187,6 +205,8 @@ src/ctxbench/dataset/resolver.py                         # NEW
 src/ctxbench/dataset/cache.py                            # NEW
 src/ctxbench/dataset/inspect.py                          # NEW
 src/ctxbench/dataset/materialization.py                  # NEW
+src/ctxbench/dataset/acquisition.py                      # NEW
+src/ctxbench/dataset/archive.py                          # NEW
 src/ctxbench/dataset/capabilities.py                     # NEW
 src/ctxbench/dataset/validation.py                       # NEW — shared capability validation (S5/S6)
 src/ctxbench/dataset/conflicts.py                        # NEW
@@ -206,6 +226,9 @@ tests/fixtures/fake_dataset/
 tests/fixtures/lattes_provider_free/                     # NEW — fake responder for S9
 tests/test_dataset_cache.py
 tests/test_dataset_fetch.py
+tests/test_dataset_archive_fetch.py                      # NEW
+tests/test_dataset_archive_safety.py                     # NEW
+tests/test_dataset_manifest_discovery.py                 # NEW
 tests/test_dataset_inspect.py
 tests/test_dataset_resolver.py
 tests/test_dataset_conflicts.py
@@ -317,7 +340,7 @@ feat(dataset): add dataset package distribution envelope
 
 ---
 
-### S2 — Dataset Materialization Cache
+### S2 — Dataset Materialization Cache and Provenance Model
 
 **Goal**: Add local cache support for explicitly fetched external datasets.
 
@@ -328,6 +351,7 @@ feat(dataset): add dataset package distribution envelope
 - Write materialization manifest.
 - Refuse silent overwrite of conflicting materializations.
 - Support lookup by identity/version/origin/revision.
+- Preserve acquisition source and verified checksum provenance.
 
 **Likely files**:
 
@@ -345,6 +369,11 @@ tests/test_dataset_cache.py
   "requestedVersion": "v0.1.0",
   "resolvedRevision": "abc123",
   "origin": "https://github.com/ctxbench/lattes",
+  "sourceType": "git" ,
+  "assetName": null,
+  "releaseTagUrl": null,
+  "archiveUrl": null,
+  "verifiedSha256": "sha256:...",
   "materializedPath": "~/.cache/ctxbench/datasets/ctxbench/lattes/v0.1.0/abc123",
   "contentHash": "sha256:...",
   "fetchedAt": "2026-05-11T00:00:00Z",
@@ -354,8 +383,9 @@ tests/test_dataset_cache.py
 ```
 
 Valid `fetchMethod` values: `"git-clone"` (clone a git repository by URL), `"file-copy"` (copy
-from a local filesystem path). Additional values require a follow-on spec amendment; unknown values
-MUST be rejected at manifest-read time with an explicit error.
+from a local filesystem path), `"archive-download"` (download and extract a verified archive).
+Additional values require a follow-on spec amendment; unknown values MUST be rejected at
+manifest-read time with an explicit error.
 
 **Validation**:
 
@@ -371,14 +401,18 @@ feat(dataset): add local materialization cache
 
 ---
 
-### S3 — `ctxbench dataset fetch`
+### S3 — Acquisition Source Model and CLI Surface
 
-**Goal**: Implement explicit dataset acquisition.
+**Goal**: Extend `ctxbench dataset fetch` to model acquisition sources and checksum requirements
+without yet implementing archive extraction details in unrelated modules.
 
 **Command**:
 
 ```bash
 ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
+ctxbench dataset fetch <dataset-id> --origin <release-tag-url> --asset-name <asset.tar.gz> --version <version>
+ctxbench dataset fetch <dataset-id> --origin <archive.tar.gz-url> --version <version> --sha256 <hex>
+ctxbench dataset fetch <dataset-id> --origin <archive.tar.gz-url> --version <version> --sha256-url <url>
 ```
 
 **Rules**:
@@ -386,6 +420,7 @@ ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
 - May clone/download/copy from explicit origin.
 - Must resolve tag/version to immutable revision when possible.
 - Must write materialization manifest (including `fetchMethod` field).
+- Must require `--sha256` or `--sha256-url` for archive/release asset acquisition.
 - Must not execute dataset code.
 - Must not import dataset modules.
 - Must not install dependencies.
@@ -396,6 +431,7 @@ ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
 ```text
 src/ctxbench/commands/dataset.py
 src/ctxbench/cli.py
+src/ctxbench/dataset/acquisition.py
 src/ctxbench/dataset/materialization.py
 tests/test_dataset_fetch.py
 ```
@@ -410,11 +446,73 @@ pytest tests/test_dataset_fetch.py
 - `dataset fetch` completes without importing any Python module from the fetched dataset path.
 - `dataset fetch` completes without calling `exec`, `eval`, `subprocess.run`, or `importlib.import_module` on dataset content.
 - The written manifest contains all required FR-021 fields, including `fetchMethod`.
+- archive/release inputs without `--sha256` or `--sha256-url` fail before download/extraction.
 
 **Commit**:
 
 ```text
 feat(cli): add ctxbench dataset fetch
+```
+
+---
+
+### S3a — Verified Archive and Release-Asset Acquisition
+
+**Goal**: Support verified dataset materialization from direct `.tar.gz` URLs and GitHub Release
+tag URLs plus explicit asset names.
+
+**Responsibilities**:
+
+- model archive vs release-asset acquisition sources;
+- download archive bytes;
+- require checksum verification before extraction;
+- resolve release tag URL + asset name to exactly one asset URL;
+- record archive/release provenance in the materialization manifest.
+
+**Likely files**:
+
+```text
+src/ctxbench/commands/dataset.py
+src/ctxbench/dataset/acquisition.py
+src/ctxbench/dataset/materialization.py
+tests/test_dataset_archive_fetch.py
+```
+
+**Validation**:
+
+```bash
+pytest tests/test_dataset_archive_fetch.py
+```
+
+---
+
+### S3b — Safe Extraction and Manifest Discovery
+
+**Goal**: Safely extract verified archives and locate exactly one dataset package manifest before
+cache materialization.
+
+**Responsibilities**:
+
+- reject path traversal, absolute paths, unsafe links, and special files;
+- support either a single top-level directory or files extracted at archive root;
+- find exactly one dataset manifest;
+- fail on no manifest or multiple manifests;
+- validate dataset identity/version before materialization.
+
+**Likely files**:
+
+```text
+src/ctxbench/dataset/archive.py
+src/ctxbench/dataset/acquisition.py
+tests/test_dataset_archive_safety.py
+tests/test_dataset_manifest_discovery.py
+```
+
+**Validation**:
+
+```bash
+pytest tests/test_dataset_archive_safety.py
+pytest tests/test_dataset_manifest_discovery.py
 ```
 
 ---
@@ -727,6 +825,7 @@ ctxbench status
   materialization/local package.
 - `export` and `status`: do not fetch and do not require dataset re-resolution when artifacts
   already contain sufficient provenance.
+- archive/release acquisition logic is unreachable from lifecycle command paths.
 - No network acquisition during lifecycle phases.
 
 **Likely files**:

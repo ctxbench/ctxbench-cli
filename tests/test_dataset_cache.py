@@ -15,6 +15,11 @@ def _manifest(
     revision: str | None = "rev-001",
     content_hash: str | None = "sha256:abc123",
     fetch_method: str = "file-copy",
+    source_type: str | None = None,
+    archive_url: str | None = None,
+    release_tag_url: str | None = None,
+    asset_name: str | None = None,
+    verified_sha256: str | None = None,
 ) -> MaterializationManifest:
     return MaterializationManifest(
         datasetId=dataset_id,
@@ -26,6 +31,11 @@ def _manifest(
         fetchedAt="2026-05-12T00:00:00Z",
         ctxbenchVersion="0.1.0",
         fetchMethod=fetch_method,
+        sourceType=source_type,
+        archiveUrl=archive_url,
+        releaseTagUrl=release_tag_url,
+        assetName=asset_name,
+        verifiedSha256=verified_sha256,
     )
 
 
@@ -50,6 +60,30 @@ def test_dataset_cache_store_and_lookup_round_trip(tmp_path: Path) -> None:
     assert (Path(items[0].materializedPath) / "payload.txt").read_text(encoding="utf-8") == "fixture"
 
 
+def test_dataset_cache_manifest_round_trip_preserves_archive_release_provenance(tmp_path: Path) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    source = _write_source(tmp_path / "source")
+    manifest = _manifest(
+        fetch_method="archive-download",
+        source_type="github-release-asset",
+        archive_url="https://example.invalid/dataset.tar.gz",
+        release_tag_url="https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset",
+        asset_name="ctxbench-lattes-v0.1.0.tar.gz",
+        verified_sha256="sha256:feedbeef",
+    )
+
+    cache.store(manifest, source)
+
+    items = cache.lookup("ctxbench/fake-dataset", "0.1.0")
+    assert len(items) == 1
+    assert items[0].fetchMethod == "archive-download"
+    assert items[0].sourceType == "github-release-asset"
+    assert items[0].archiveUrl == "https://example.invalid/dataset.tar.gz"
+    assert items[0].releaseTagUrl == "https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset"
+    assert items[0].assetName == "ctxbench-lattes-v0.1.0.tar.gz"
+    assert items[0].verifiedSha256 == "sha256:feedbeef"
+
+
 def test_dataset_cache_lookup_unknown_returns_empty_list(tmp_path: Path) -> None:
     cache = DatasetCache(cache_dir=tmp_path / "cache")
 
@@ -67,6 +101,56 @@ def test_dataset_cache_store_conflicting_content_hash_raises(tmp_path: Path) -> 
         cache.store(_manifest(content_hash="sha256:two", revision="rev-002"), second_source)
 
 
+def test_dataset_cache_store_identical_manifest_is_idempotent(tmp_path: Path) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    source = _write_source(tmp_path / "source", text="same")
+    manifest = _manifest(
+        content_hash="sha256:same",
+        fetch_method="archive-download",
+        source_type="archive-url",
+        archive_url="https://example.invalid/fake.tar.gz",
+        verified_sha256="sha256:verified",
+    )
+
+    cache.store(manifest, source)
+    cache.store(manifest, source)
+
+    items = cache.lookup("ctxbench/fake-dataset", "0.1.0")
+    assert len(items) == 1
+    assert items[0].contentHash == "sha256:same"
+    assert items[0].verifiedSha256 == "sha256:verified"
+
+
+def test_dataset_cache_store_conflicting_verified_sha256_raises(tmp_path: Path) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    first_source = _write_source(tmp_path / "source-a", text="one")
+    second_source = _write_source(tmp_path / "source-b", text="one")
+
+    cache.store(
+        _manifest(
+            content_hash="sha256:one",
+            fetch_method="archive-download",
+            source_type="archive-url",
+            archive_url="https://example.invalid/fake.tar.gz",
+            verified_sha256="sha256:verified-one",
+        ),
+        first_source,
+    )
+
+    with pytest.raises(DatasetConflictError):
+        cache.store(
+            _manifest(
+                content_hash="sha256:one",
+                revision="rev-002",
+                fetch_method="archive-download",
+                source_type="archive-url",
+                archive_url="https://example.invalid/fake.tar.gz",
+                verified_sha256="sha256:verified-two",
+            ),
+            second_source,
+        )
+
+
 def test_dataset_cache_read_manifest_rejects_unknown_fetch_method(tmp_path: Path) -> None:
     path = tmp_path / "manifest.json"
     path.write_text(
@@ -80,7 +164,12 @@ def test_dataset_cache_read_manifest_rejects_unknown_fetch_method(tmp_path: Path
           "contentHash": "sha256:abc123",
           "fetchedAt": "2026-05-12T00:00:00Z",
           "ctxbenchVersion": "0.1.0",
-          "fetchMethod": "unknown-method"
+          "fetchMethod": "unknown-method",
+          "sourceType": null,
+          "archiveUrl": null,
+          "releaseTagUrl": null,
+          "assetName": null,
+          "verifiedSha256": null
         }
         """.strip(),
         encoding="utf-8",

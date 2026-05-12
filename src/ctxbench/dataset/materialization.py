@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
-VALID_FETCH_METHODS = {"git-clone", "file-copy"}
+VALID_FETCH_METHODS = {"archive-download", "git-clone", "file-copy"}
 
 
 @dataclass(slots=True)
@@ -17,6 +17,11 @@ class MaterializationManifest:
     fetchedAt: str
     ctxbenchVersion: str
     fetchMethod: str
+    sourceType: str | None = None
+    archiveUrl: str | None = None
+    releaseTagUrl: str | None = None
+    assetName: str | None = None
+    verifiedSha256: str | None = None
 
     def __post_init__(self) -> None:
         if self.fetchMethod not in VALID_FETCH_METHODS:

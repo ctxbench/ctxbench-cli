@@ -28,6 +28,8 @@
 - `plan` is the provenance-producing phase for dataset identity/version/origin/revision fields.
 - Generic execution/evaluation decoupling from embedded Lattes services is in scope, but only in
   the slices that explicitly name those files.
+- Archive and release-asset acquisition require verified SHA-256 before extraction.
+- Lifecycle commands must not depend on archive/release acquisition code paths.
 
 ---
 
@@ -67,9 +69,9 @@ refuse silent overwrites.
 
 ### Tasks
 
-- [x] T007 [S2] Define `MaterializationManifest` dataclass in `src/ctxbench/dataset/materialization.py` with all FR-021 fields: `datasetId: str`, `requestedVersion: str`, `resolvedRevision: str | None`, `origin: str`, `materializedPath: str`, `contentHash: str | None`, `fetchedAt: str`, `ctxbenchVersion: str`, `fetchMethod: str`. Add a `__post_init__` validator that raises `ValueError` if `fetchMethod` is not in `{"git-clone", "file-copy"}`; unknown values must be rejected at manifest-read time as well.
-- [x] T008 [S2] Implement `DatasetCache` in `src/ctxbench/dataset/cache.py` with methods: `cache_dir() -> Path` (default `~/.cache/ctxbench/datasets/`), `lookup(dataset_id, version) -> list[MaterializationManifest]` (returns all matching materializations), `store(manifest: MaterializationManifest, source_path: Path)` (copies source into cache tree, refuses silent overwrite when content hash differs — raises `DatasetConflictError`), `read_manifest(path: Path) -> MaterializationManifest`.
-- [x] T009 [S2] Write `tests/test_dataset_cache.py` asserting: (a) `store` + `lookup` round-trip returns the stored manifest; (b) `lookup` for unknown id/version returns empty list; (c) `store` of a second materialization with the same id+version but different content hash raises `DatasetConflictError`; (d) `read_manifest` with `fetchMethod="unknown-method"` raises `ValueError`; (e) cache directory is configurable via constructor argument (for test isolation).
+- [x] T007 [S2] Extend `MaterializationManifest` in `src/ctxbench/dataset/materialization.py` to include archive/release provenance fields needed by Spec 003: `sourceType`, `archiveUrl`, `releaseTagUrl`, `assetName`, `verifiedSha256`. Keep existing FR-021 fields and update validation so `fetchMethod` accepts `"archive-download"` in addition to existing values.
+- [x] T008 [S2] Extend `DatasetCache` in `src/ctxbench/dataset/cache.py` so manifest read/write and conflict checks preserve archive/release provenance and verified checksum values. Idempotent re-materialization with identical identity/version/content/checksum should remain non-conflicting; conflicting checksum/content must still raise `DatasetConflictError`.
+- [x] T009 [S2] Extend `tests/test_dataset_cache.py` asserting: (a) archive/release provenance fields round-trip through manifest IO; (b) `fetchMethod="archive-download"` is accepted; (c) idempotent store of identical manifest content remains non-conflicting; (d) conflicting checksum/content still raises `DatasetConflictError`.
 
 ### Checkpoint
 
@@ -90,18 +92,67 @@ methods; wire nested subparser per D10; write manifest.
 
 ### Tasks
 
-- [ ] T010 [S3] Add nested `dataset` subparser to `src/ctxbench/cli.py` per D10: `dataset_parser = subparsers.add_parser("dataset")`, `dataset_sub = dataset_parser.add_subparsers(dest="dataset_command", required=True)`. Dispatch: in `main()`, when `args.command == "dataset"`, delegate to `args.func(args)`. `dataset_parser` itself has no `func` default; missing subcommand produces an argparse usage error.
-- [ ] T011 [P] [S3] Implement `fetch_command(dataset_id: str, origin: str, version: str, cache_dir: Path | None = None) -> None` in `src/ctxbench/commands/dataset.py`. When `origin` starts with `http://` or `https://` or ends with `.git`, use `git-clone` fetchMethod; when `origin` is a local path, use `file-copy`. Resolve the HEAD commit hash for git origins when possible; write a `MaterializationManifest` to the cache. MUST NOT import Python modules from the fetched dataset path.
-- [ ] T012 [S3] Wire `fetch` sub-subparser in `src/ctxbench/cli.py`: `fetch_parser = dataset_sub.add_parser("fetch")` with positional `dataset_id`, `--origin` (required), `--version` (required). Set `func` to call `fetch_command`.
-- [ ] T013 [S3] Write `tests/test_dataset_fetch.py` asserting (FR-022): (a) `fetch_command` with a local-path origin copies files and writes manifest with `fetchMethod="file-copy"`; (b) written manifest contains all FR-021 fields; (c) `fetch_command` does not import any Python module from the copied dataset path (patch `importlib.import_module` to assert it is never called on dataset-path modules); (d) missing `--origin` raises a clear error; (e) `ctxbench dataset fetch --help` prints usage without error.
+- [x] T010 [S3] Extend nested `dataset fetch` parser wiring in `src/ctxbench/cli.py` to accept archive/release acquisition options: `--asset-name`, `--sha256`, and `--sha256-url`. Parser validation must reject archive/release acquisition without one of `--sha256` or `--sha256-url`.
+- [x] T011 [P] [S3] Refactor `fetch_command(...)` in `src/ctxbench/commands/dataset.py` behind an explicit acquisition source model in `src/ctxbench/dataset/acquisition.py`. Local-path `file-copy` behavior remains supported; direct `.tar.gz` URLs and GitHub Release tag URLs plus explicit asset name become recognized acquisition source types.
+- [x] T012 [S3] Keep `fetch` sub-subparser behavior in `src/ctxbench/cli.py`, but update it so `ctxbench dataset fetch` dispatches the expanded acquisition source handling.
+- [x] T013 [S3] Extend `tests/test_dataset_fetch.py` asserting: (a) local-path behavior still works; (b) archive/release inputs without checksum material fail before download/extraction; (c) `--asset-name` is accepted for release-tag origins; (d) `ctxbench dataset fetch --help` shows the new options.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_fetch.py` passes (file-copy tests; git-clone tests with network may be skipped via `@pytest.mark.skip`).
-- [ ] `ctxbench dataset fetch --help` runs without error.
-- [ ] `ctxbench dataset` without subcommand prints usage without traceback.
-- [ ] No provider calls; no Lattes-specific imports.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_fetch.py` passes (local-path + parser/validation tests only; no real remote fetches).
+- [x] `ctxbench dataset fetch --help` runs without error.
+- [x] `ctxbench dataset` without subcommand prints usage without traceback.
+- [x] No provider calls; no Lattes-specific imports.
+- [x] Diff is reviewable.
+
+---
+
+## Slice S3a — Verified Archive and Release-Asset Acquisition
+
+**Goal**: Support dataset acquisition from direct `.tar.gz` archive URLs and GitHub Release tag URLs
+plus explicit asset names, with checksum verification required before extraction.  
+**Validation**: `pytest tests/test_dataset_archive_fetch.py`  
+**Depends on**: S2, S3  
+**Suggested commit**: `feat(dataset): add verified archive acquisition sources`
+
+### Tasks
+
+- [x] T013a [S3a] Add acquisition source types in `src/ctxbench/dataset/acquisition.py` for: local path, direct archive URL, and GitHub Release tag URL plus explicit asset name.
+- [x] T013b [P] [S3a] Implement archive/release checksum handling in `src/ctxbench/dataset/acquisition.py`: require `--sha256` or `--sha256-url`, load checksum material, and fail before extraction if checksum is missing or invalid.
+- [x] T013c [P] [S3a] Implement release-tag source resolution in `src/ctxbench/dataset/acquisition.py` for a GitHub Release tag URL plus explicit `--asset-name`, returning exactly one resolved asset source or a structured error.
+- [x] T013d [S3a] Write `tests/test_dataset_archive_fetch.py` covering: direct archive URL with `--sha256`, direct archive URL with `--sha256-url`, release tag URL plus `--asset-name`, missing checksum rejection, invalid checksum rejection, and provenance fields recorded in the materialization manifest. Use only local fixtures/mocks; do not fetch real assets.
+
+### Checkpoint
+
+- [x] `pytest tests/test_dataset_archive_fetch.py` passes.
+- [x] No real remote assets fetched.
+- [x] No provider calls.
+- [x] Diff is reviewable.
+
+---
+
+## Slice S3b — Safe Extraction and Manifest Discovery
+
+**Goal**: Safely extract verified `.tar.gz` archives, discover exactly one dataset manifest, and
+validate identity/version before cache materialization.  
+**Validation**: `pytest tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py`  
+**Depends on**: S2, S3a  
+**Suggested commit**: `feat(dataset): add safe archive extraction and manifest discovery`
+
+### Tasks
+
+- [x] T013e [S3b] Implement safe extraction in `src/ctxbench/dataset/archive.py` for verified tar.gz archives. Reject path traversal, absolute paths, unsafe symlinks/hardlinks, device nodes, FIFOs, sockets, and other special files before writing them.
+- [x] T013f [P] [S3b] Implement manifest discovery in `src/ctxbench/dataset/archive.py` or `src/ctxbench/dataset/acquisition.py`: support either a single top-level directory or files at archive root; require exactly one dataset package manifest; fail on zero or multiple manifests.
+- [x] T013g [P] [S3b] Validate dataset identity/version after manifest discovery and before cache materialization in `src/ctxbench/dataset/acquisition.py`.
+- [x] T013h [S3b] Write `tests/test_dataset_archive_safety.py` covering traversal entries, absolute paths, unsafe links, device nodes/FIFOs/special files, and safe extraction of a normal archive fixture.
+- [x] T013i [S3b] Write `tests/test_dataset_manifest_discovery.py` covering: single top-level directory, archive-root files, no manifest, multiple manifests, and identity/version mismatch rejection.
+
+### Checkpoint
+
+- [x] `pytest tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` passes.
+- [x] No real remote assets fetched.
+- [x] No provider calls.
+- [x] Diff is reviewable.
 
 ---
 
@@ -240,7 +291,7 @@ missing datasets raise immediately rather than fetching.
 ### Tasks
 
 - [ ] T038 [S9] In `src/ctxbench/dataset/resolver.py`, document the local-only resolution contract and keep resolver/materialization boundaries explicit. Do not add generic “network guards” unrelated to actual call sites; keep the enforcement focused on command behavior.
-- [ ] T039 [S9] Write `tests/test_lifecycle_no_network.py` using `monkeypatch` to replace fetch/materialization entry points with fail-fast stubs. Assert: (a) `plan_command` rejects unresolved datasets without fetching; (b) `execute_command` rejects missing planned materializations without fetching; (c) `eval_command` rejects missing required planned dataset evidence without fetching; (d) `export_command` succeeds from artifacts alone and does not touch dataset resolution; (e) `status_command` does not touch dataset resolution at all.
+- [ ] T039 [S9] Write `tests/test_lifecycle_no_network.py` using `monkeypatch` to replace fetch/materialization entry points with fail-fast stubs. Assert: (a) `plan_command` rejects unresolved datasets without fetching; (b) `execute_command` rejects missing planned materializations without fetching; (c) `eval_command` rejects missing required planned dataset evidence without fetching; (d) `export_command` succeeds from artifacts alone and does not touch dataset resolution; (e) `status_command` does not touch dataset resolution at all; (f) archive/release acquisition helpers are unreachable from lifecycle command paths.
 
 ### Checkpoint
 
@@ -333,7 +384,7 @@ authoring; verify S11 checklist from `plan.md` passes.
 ### Tasks
 
 - [ ] T053 [P] [S13] Create `docs/datasets/using-external-datasets.md`: remote dataset workflow (`ctxbench dataset fetch` → `ctxbench dataset inspect` → `ctxbench plan` → `execute` → `eval` → `export`); local-path dataset shortcut; conflict and ambiguity error resolution steps; no-implicit-network rule (FR-050, FR-051, FR-052, FR-058).
-- [ ] T054 [P] [S13] Create `docs/datasets/creating-a-dataset.md`: dataset author guide covering all mandatory extension points (FR-005–FR-015), optional extension points (FR-016–FR-018), fixture requirement (FR-015), `StrategyDescriptor` nine-field requirement (FR-029), provider-free validation with `ctxbench dataset inspect`, identity/version conflict avoidance (FR-053).
+- [ ] T054 [P] [S13] Create `docs/datasets/creating-a-dataset.md`: dataset author guide covering all mandatory extension points (FR-005–FR-015), optional extension points (FR-016–FR-018), fixture requirement (FR-015), `StrategyDescriptor` nine-field requirement (FR-029), provider-free validation with `ctxbench dataset inspect`, identity/version conflict avoidance (FR-053), and archive packaging/release asset guidance.
 - [ ] T055 [P] [S13] Update `docs/architecture/vocabulary.md` with all ten new terms from FR-057: `dataset repository`, `dataset package`, `dataset materialization`, `dataset cache`, `dataset resolver`, `dataset capability report`, `dataset origin`, `resolved revision`, `content hash`, `single-dataset experiment`.
 - [ ] T056 [P] [S13] Update `docs/architecture/workflow.md` canonical workflow diagram to include dataset acquisition and cache step before `ctxbench plan` for remote datasets; add local-path shortcut note.
 - [ ] T057 [P] [S13] Update `docs/architecture/cli-architecture.md` to explicitly separate lifecycle commands (`plan`, `execute`, `eval`, `export`, `status`) from dataset-management commands (`dataset fetch`, `dataset inspect`) per D10 nested subparser structure (FR-055).
@@ -343,6 +394,11 @@ authoring; verify S11 checklist from `plan.md` passes.
 - [ ] T061 [S13] Update `README.md` quickstart section to include `ctxbench dataset fetch` and `ctxbench dataset inspect` steps for remote datasets before `ctxbench plan`; add note that local-path datasets skip the fetch step.
 - [ ] T062 [P] [S13] Create `specs/003-dataset-distribution/quickstart.md` with provider-free validation steps: fetch fixture, inspect, plan, execute (monkeypatched), eval (monkeypatched), export; expected outputs at each step.
 - [ ] T063 [P] [S13] Create `specs/003-dataset-distribution/contracts/dataset-commands.md` documenting the dataset command contract: subcommand surface, argument schemas, exit codes, error message formats, and the nested subparser registration pattern (D10).
+- [ ] T063a [P] [S13] Document verified archive acquisition examples in `docs/datasets/using-external-datasets.md` and `specs/003-dataset-distribution/contracts/dataset-commands.md`, including:
+  - direct `.tar.gz` URL + `--sha256`;
+  - release tag URL + `--asset-name` + `--sha256-url`;
+  - failure behavior for missing/invalid checksums;
+  - safe extraction guarantees and manifest discovery rules.
 
 ### Checkpoint
 
@@ -373,6 +429,7 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 ## Final Audit
 
 - [ ] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
+- [ ] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
 - [ ] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
 - [ ] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
 - [ ] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
@@ -385,6 +442,8 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 S1  ──────────────────────────────────────────────┐
 S2                                                 │
 S3 (needs S2)                                     │
+S3a (needs S2, S3)                                │
+S3b (needs S2, S3a)                               │
 S4 (needs S1, S2)                                 │
 S5 (needs S1, S4)                                 │
 S6 (needs S4, S5)                                 │
