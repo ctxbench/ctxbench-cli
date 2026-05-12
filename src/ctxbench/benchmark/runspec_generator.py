@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 from typing import Any, Callable
 
-from ctxbench.benchmark.models import Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
+from ctxbench.benchmark.models import DatasetProvenance, Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
 from ctxbench.dataset.provider import LocalDatasetPackage
 from ctxbench.util.artifacts import build_short_ids, canonical_trial_identity
 from ctxbench.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
@@ -70,6 +70,7 @@ def generate_runspecs(
     experiment: Experiment,
     base_dir: str | Path,
     dataset_package: LocalDatasetPackage,
+    dataset_provenance: DatasetProvenance,
     *,
     experiment_path: str | Path | None = None,
     on_warning: Callable[..., None] | None = None,
@@ -123,7 +124,7 @@ def generate_runspecs(
                                 {
                                     "canonical_id": canonical_id,
                                     "experimentId": experiment.id,
-                                    "dataset": experiment.dataset,
+                                    "dataset": dataset_provenance,
                                     "experimentPath": str(Path(experiment_path).resolve())
                                     if experiment_path
                                     else None,

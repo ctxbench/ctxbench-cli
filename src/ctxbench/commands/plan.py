@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ctxbench.benchmark.experiment_loader import load_experiment
+from ctxbench.benchmark.models import DatasetProvenance
 from ctxbench.benchmark.paths import resolve_output_root, resolve_trials_path
 from ctxbench.benchmark.runspec_generator import generate_runspecs
 from ctxbench.dataset.cache import DatasetCache
@@ -15,15 +16,16 @@ from ctxbench.util.jsonl import write_jsonl
 from ctxbench.util.logging import PhaseLogger, ProgressTracker
 
 
-def _dataset_manifest_payload(package: LocalDatasetPackage) -> dict[str, str | None]:
+def _dataset_provenance(package: LocalDatasetPackage) -> DatasetProvenance:
     capability_report = package.capability_report()
-    return {
-        "id": package.identity(),
-        "version": package.version(),
-        "origin": package.origin(),
-        "resolvedRevision": capability_report.resolved_revision,
-        "contentHash": capability_report.content_hash,
-    }
+    return DatasetProvenance(
+        id=package.identity(),
+        version=package.version(),
+        origin=package.origin(),
+        resolved_revision=capability_report.resolved_revision,
+        content_hash=capability_report.content_hash,
+        materialized_path=capability_report.materialized_path,
+    )
 
 
 def plan_command(
@@ -68,10 +70,12 @@ def plan_command(
         missingMandatory=len(capability_report.missing_mandatory),
         nonconformantDescriptors=len(capability_report.nonconformant_descriptors),
     )
+    dataset_provenance = _dataset_provenance(package)
     runspecs = generate_runspecs(
         experiment,
         base_dir,
         package,
+        dataset_provenance,
         experiment_path=path,
         on_warning=lambda message, **fields: logger.warn(message, **fields),
     )
@@ -99,7 +103,7 @@ def plan_command(
     manifest = {
         "experimentId": experiment.id,
         "experimentPath": str(Path(path).resolve()),
-        "dataset": _dataset_manifest_payload(package),
+        "dataset": dataset_provenance.model_dump(mode="json"),
         "evaluation": {
             "enabled": experiment.evaluation.enabled,
             "judges": [item.model_dump(mode="json") for item in experiment.evaluation.judges],

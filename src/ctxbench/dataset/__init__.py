@@ -1,5 +1,6 @@
 """Dataset and provider helpers."""
 
+from ctxbench.benchmark.models import DatasetProvenance
 from ctxbench.dataset.capabilities import DatasetCapabilityReport
 from ctxbench.dataset.cache import DatasetCache, DatasetConflictError
 from ctxbench.dataset.conflicts import AmbiguousDatasetError, DatasetConflictDetector
@@ -20,6 +21,7 @@ __all__ = [
     "DatasetNotFoundError",
     "DatasetPackage",
     "DatasetProvider",
+    "DatasetProvenance",
     "DatasetResolver",
     "LocalDatasetPackage",
     "MaterializationManifest",

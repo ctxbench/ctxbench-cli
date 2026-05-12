@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from ctxbench.benchmark.models import (
+    DatasetProvenance,
     EvaluationItemResult,
     EvaluationRunResult,
     EvaluationRunSummary,
@@ -202,6 +203,12 @@ def test_evaluation_item_serializers_use_trial_and_task_ids():
     item = EvaluationItemResult(
         experimentId="exp-1",
         runId="trial-1",
+        dataset=DatasetProvenance(
+            id="ctxbench/fake",
+            version="0.1.0",
+            origin="/tmp/dataset",
+            materialized_path="/tmp/dataset",
+        ),
         questionId="q_year",
         instanceId="cv-demo",
         question="In which year did the researcher obtain their PhD?",

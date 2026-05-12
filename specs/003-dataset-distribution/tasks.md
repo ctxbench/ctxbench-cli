@@ -263,20 +263,20 @@ types; assert identity across artifacts.
 
 ### Tasks
 
-- [ ] T031 [S8] Add `DatasetProvenance` model to `src/ctxbench/benchmark/models.py` with fields: `id: str`, `version: str`, `origin: str | None`, `resolved_revision: str | None`, `content_hash: str | None`, `materialized_path: str | None`. Note: `materialized_path` is additive operational metadata — MUST NOT be treated as authoritative identity.
-- [ ] T032 [P] [S8] Update `src/ctxbench/benchmark/models.py`, `src/ctxbench/commands/plan.py`, and related serializers so `trials.jsonl` persists the dataset provenance chosen during planning. `execute.py` must not become the owner of `trials.jsonl`.
-- [ ] T033 [P] [S8] In `src/ctxbench/commands/execute.py`, preserve dataset provenance from `trials.jsonl`/`manifest.json` into `responses.jsonl` without recomputing or substituting values from another source.
-- [ ] T034 [P] [S8] In `src/ctxbench/commands/eval.py` and `src/ctxbench/benchmark/results.py`, preserve dataset provenance into `evals.jsonl` and `judge_votes.jsonl`. Both artifact types must carry first-class `dataset` objects.
-- [ ] T035 [P] [S8] In `src/ctxbench/commands/export.py` and `src/ctxbench/benchmark/results.py`, include `dataset_id` and `dataset_version` columns in `results.csv`. Do not add an export-manifest alternative in this slice; choose direct CSV columns for scope control.
-- [ ] T036 [P] [S8] Update `docs/architecture/artifact-contracts.md` to document the `dataset.*` provenance fields: their carrier artifacts, required/optional status, and the D9 note on flat vs. nested schema owners.
-- [ ] T037 [S8] Write `tests/test_dataset_provenance_artifacts.py` using the fake dataset and mocked execution: assert that `manifest.json`, `trials.jsonl`, `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl` all contain `dataset.id` and `dataset.version`; assert the values are identical across all artifact types for the same run (FR-043); assert that `execute` and `eval` do not recompute these values from a different source than the planning manifest (FR-045); assert `results.csv` contains `dataset_id` and `dataset_version` columns.
+- [x] T031 [S8] Add `DatasetProvenance` model to `src/ctxbench/benchmark/models.py` with fields: `id: str`, `version: str`, `origin: str | None`, `resolved_revision: str | None`, `content_hash: str | None`, `materialized_path: str | None`. Note: `materialized_path` is additive operational metadata — MUST NOT be treated as authoritative identity.
+- [x] T032 [P] [S8] Update `src/ctxbench/benchmark/models.py`, `src/ctxbench/commands/plan.py`, and related serializers so `trials.jsonl` persists the dataset provenance chosen during planning. `execute.py` must not become the owner of `trials.jsonl`.
+- [x] T033 [P] [S8] In `src/ctxbench/commands/execute.py`, preserve dataset provenance from `trials.jsonl`/`manifest.json` into `responses.jsonl` without recomputing or substituting values from another source.
+- [x] T034 [P] [S8] In `src/ctxbench/commands/eval.py` and `src/ctxbench/benchmark/results.py`, preserve dataset provenance into `evals.jsonl` and `judge_votes.jsonl`. Both artifact types must carry first-class `dataset` objects.
+- [x] T035 [P] [S8] In `src/ctxbench/commands/export.py` and `src/ctxbench/benchmark/results.py`, include `dataset_id` and `dataset_version` columns in `results.csv`. Do not add an export-manifest alternative in this slice; choose direct CSV columns for scope control.
+- [x] T036 [P] [S8] Update `docs/architecture/artifact-contracts.md` to document the `dataset.*` provenance fields: their carrier artifacts, required/optional status, and the D9 note on flat vs. nested schema owners.
+- [x] T037 [S8] Write `tests/test_dataset_provenance_artifacts.py` using the fake dataset and mocked execution: assert that `manifest.json`, `trials.jsonl`, `responses.jsonl`, `evals.jsonl`, `judge_votes.jsonl` all contain `dataset.id` and `dataset.version`; assert the values are identical across all artifact types for the same run (FR-043); assert that `execute` and `eval` do not recompute these values from a different source than the planning manifest (FR-045); assert `results.csv` contains `dataset_id` and `dataset_version` columns.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_provenance_artifacts.py` passes.
-- [ ] Manual spot-check via `jq '.dataset.id, .dataset.version' outputs/test-run/manifest.json` returns expected values.
-- [ ] No provider calls.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_provenance_artifacts.py` passes.
+- [x] Manual spot-check via `jq '.dataset.id, .dataset.version' outputs/test-run/manifest.json` returns expected values.
+- [x] No provider calls.
+- [x] Diff is reviewable.
 
 ---
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ctxbench.benchmark.models import Experiment, ExperimentDataset
+from ctxbench.benchmark.models import DatasetProvenance, Experiment, ExperimentDataset
 from ctxbench.dataset.capabilities import DatasetCapabilityReport
 from ctxbench.dataset.package import DatasetMetadata
 from ctxbench.dataset.questions import (
@@ -41,7 +41,14 @@ class LocalDatasetPackage:
         return cls(dataset)
 
     @classmethod
-    def from_dataset(cls, dataset: ExperimentDataset) -> "LocalDatasetPackage":
+    def from_dataset(cls, dataset: ExperimentDataset | DatasetProvenance) -> "LocalDatasetPackage":
+        if isinstance(dataset, DatasetProvenance):
+            dataset = ExperimentDataset(
+                root=dataset.root,
+                id=dataset.id,
+                version=dataset.version,
+                origin=dataset.origin,
+            )
         return cls(dataset)
 
     def metadata(self) -> DatasetMetadata:
