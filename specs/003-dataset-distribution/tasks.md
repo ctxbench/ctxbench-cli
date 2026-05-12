@@ -67,16 +67,16 @@ refuse silent overwrites.
 
 ### Tasks
 
-- [ ] T007 [S2] Define `MaterializationManifest` dataclass in `src/ctxbench/dataset/materialization.py` with all FR-021 fields: `datasetId: str`, `requestedVersion: str`, `resolvedRevision: str | None`, `origin: str`, `materializedPath: str`, `contentHash: str | None`, `fetchedAt: str`, `ctxbenchVersion: str`, `fetchMethod: str`. Add a `__post_init__` validator that raises `ValueError` if `fetchMethod` is not in `{"git-clone", "file-copy"}`; unknown values must be rejected at manifest-read time as well.
-- [ ] T008 [S2] Implement `DatasetCache` in `src/ctxbench/dataset/cache.py` with methods: `cache_dir() -> Path` (default `~/.cache/ctxbench/datasets/`), `lookup(dataset_id, version) -> list[MaterializationManifest]` (returns all matching materializations), `store(manifest: MaterializationManifest, source_path: Path)` (copies source into cache tree, refuses silent overwrite when content hash differs — raises `DatasetConflictError`), `read_manifest(path: Path) -> MaterializationManifest`.
-- [ ] T009 [S2] Write `tests/test_dataset_cache.py` asserting: (a) `store` + `lookup` round-trip returns the stored manifest; (b) `lookup` for unknown id/version returns empty list; (c) `store` of a second materialization with the same id+version but different content hash raises `DatasetConflictError`; (d) `read_manifest` with `fetchMethod="unknown-method"` raises `ValueError`; (e) cache directory is configurable via constructor argument (for test isolation).
+- [x] T007 [S2] Define `MaterializationManifest` dataclass in `src/ctxbench/dataset/materialization.py` with all FR-021 fields: `datasetId: str`, `requestedVersion: str`, `resolvedRevision: str | None`, `origin: str`, `materializedPath: str`, `contentHash: str | None`, `fetchedAt: str`, `ctxbenchVersion: str`, `fetchMethod: str`. Add a `__post_init__` validator that raises `ValueError` if `fetchMethod` is not in `{"git-clone", "file-copy"}`; unknown values must be rejected at manifest-read time as well.
+- [x] T008 [S2] Implement `DatasetCache` in `src/ctxbench/dataset/cache.py` with methods: `cache_dir() -> Path` (default `~/.cache/ctxbench/datasets/`), `lookup(dataset_id, version) -> list[MaterializationManifest]` (returns all matching materializations), `store(manifest: MaterializationManifest, source_path: Path)` (copies source into cache tree, refuses silent overwrite when content hash differs — raises `DatasetConflictError`), `read_manifest(path: Path) -> MaterializationManifest`.
+- [x] T009 [S2] Write `tests/test_dataset_cache.py` asserting: (a) `store` + `lookup` round-trip returns the stored manifest; (b) `lookup` for unknown id/version returns empty list; (c) `store` of a second materialization with the same id+version but different content hash raises `DatasetConflictError`; (d) `read_manifest` with `fetchMethod="unknown-method"` raises `ValueError`; (e) cache directory is configurable via constructor argument (for test isolation).
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_cache.py` passes.
-- [ ] No provider calls; no network access.
-- [ ] No Lattes-specific imports.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_cache.py` passes.
+- [x] No provider calls; no network access.
+- [x] No Lattes-specific imports.
+- [x] Diff is reviewable.
 
 ---
 
