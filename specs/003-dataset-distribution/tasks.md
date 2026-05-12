@@ -41,19 +41,19 @@ dataclasses that form the distribution-facing interface; verify with contract te
 
 ### Tasks
 
-- [ ] T001 [S1] Create `src/ctxbench/dataset/__init__.py` as package init (empty or with `__all__`).
-- [ ] T002 [P] [S1] Define `DatasetMetadata` dataclass in `src/ctxbench/dataset/package.py` with fields: `name: str`, `description: str`, `domain: str`, `intended_uses: str`, `limitations: str`, `license_url: str | None`, `citation_url: str | None`.
-- [ ] T003 [P] [S1] Define `StrategyDescriptor` dataclass in `src/ctxbench/dataset/package.py` with all nine required fields from FR-029: `name`, `classification`, `context_access_mode`, `inline_vs_operation`, `local_vs_remote`, `loop_ownership`, `metric_provenance: dict[str, str]`, `observability_limitations`, `comparability_implications`. All fields required; no defaults.
-- [ ] T004 [P] [S1] Define `DatasetCapabilityReport` dataclass in `src/ctxbench/dataset/capabilities.py` with all FR-026 fields: `identity`, `version`, `origin`, `resolved_revision`, `materialized_path`, `content_hash`, `metadata`, `mandatory_capabilities: dict[str, bool]`, `optional_capabilities: dict[str, bool]`, `contributed_tools`, `evaluation_helpers`, `strategy_descriptors: list[StrategyDescriptor]`, `missing_mandatory: list[str]`, `nonconformant_descriptors: list[str]`, `conformant: bool`.
-- [ ] T005 [S1] Define `@runtime_checkable class DatasetPackage(Protocol)` in `src/ctxbench/dataset/package.py` with the import `from typing import Protocol, runtime_checkable`. Mandatory methods: `metadata()`, `identity()`, `version()`, `origin()`, `list_instance_ids()`, `list_task_ids()`, `get_context_artifact()`, `get_evidence_artifact()`, `fixtures()`, `capability_report()`. Optional methods: `tool_provider()`, `evaluation_helpers()`, `strategy_descriptors()`. Return types per S1 surface sketch in `plan.md`.
-- [ ] T006 [S1] Write `tests/test_dataset_package_contract.py` asserting: (a) a class implementing all mandatory methods passes `isinstance(obj, DatasetPackage)`; (b) a class missing one mandatory method fails the check; (c) `StrategyDescriptor` with all nine fields constructs without error; (d) a `StrategyDescriptor` missing any required field raises `TypeError` at construction; (e) `DatasetCapabilityReport` with `conformant=False` and non-empty `missing_mandatory` is representable.
+- [x] T001 [S1] Create `src/ctxbench/dataset/__init__.py` as package init (empty or with `__all__`).
+- [x] T002 [P] [S1] Define `DatasetMetadata` dataclass in `src/ctxbench/dataset/package.py` with fields: `name: str`, `description: str`, `domain: str`, `intended_uses: str`, `limitations: str`, `license_url: str | None`, `citation_url: str | None`.
+- [x] T003 [P] [S1] Define `StrategyDescriptor` dataclass in `src/ctxbench/dataset/package.py` with all nine required fields from FR-029: `name`, `classification`, `context_access_mode`, `inline_vs_operation`, `local_vs_remote`, `loop_ownership`, `metric_provenance: dict[str, str]`, `observability_limitations`, `comparability_implications`. All fields required; no defaults.
+- [x] T004 [P] [S1] Define `DatasetCapabilityReport` dataclass in `src/ctxbench/dataset/capabilities.py` with all FR-026 fields: `identity`, `version`, `origin`, `resolved_revision`, `materialized_path`, `content_hash`, `metadata`, `mandatory_capabilities: dict[str, bool]`, `optional_capabilities: dict[str, bool]`, `contributed_tools`, `evaluation_helpers`, `strategy_descriptors: list[StrategyDescriptor]`, `missing_mandatory: list[str]`, `nonconformant_descriptors: list[str]`, `conformant: bool`.
+- [x] T005 [S1] Define `@runtime_checkable class DatasetPackage(Protocol)` in `src/ctxbench/dataset/package.py` with the import `from typing import Protocol, runtime_checkable`. Mandatory methods: `metadata()`, `identity()`, `version()`, `origin()`, `list_instance_ids()`, `list_task_ids()`, `get_context_artifact()`, `get_evidence_artifact()`, `fixtures()`, `capability_report()`. Optional methods: `tool_provider()`, `evaluation_helpers()`, `strategy_descriptors()`. Return types per S1 surface sketch in `plan.md`.
+- [x] T006 [S1] Write `tests/test_dataset_package_contract.py` asserting: (a) a class implementing all mandatory methods passes `isinstance(obj, DatasetPackage)`; (b) a class missing one mandatory method fails the check; (c) `StrategyDescriptor` with all nine fields constructs without error; (d) a `StrategyDescriptor` missing any required field raises `TypeError` at construction; (e) `DatasetCapabilityReport` with `conformant=False` and non-empty `missing_mandatory` is representable.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_package_contract.py` passes.
-- [ ] No provider calls.
-- [ ] No Lattes-specific imports in `src/ctxbench/dataset/package.py` or `capabilities.py`.
-- [ ] Diff is reviewable (new files only).
+- [x] `pytest tests/test_dataset_package_contract.py` passes.
+- [x] No provider calls.
+- [x] No Lattes-specific imports in `src/ctxbench/dataset/package.py` or `capabilities.py`.
+- [x] Diff is reviewable (new files only).
 
 ---
 
