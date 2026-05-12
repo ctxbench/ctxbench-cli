@@ -334,16 +334,16 @@ neutrality without any Lattes-specific terms.
 
 ### Tasks
 
-- [ ] T044 [S11] Create an on-disk fake dataset fixture under `tests/fixtures/fake_dataset/` using the same local-root compatibility path as real datasets: `questions.json`, `questions.instance.json`, minimal context/evidence artifacts, and an `experiment.json`. Do not require importing a Python package object from the fixture path.
-- [ ] T045 [S11] If needed, add a tiny fake-package adapter helper under `tests/fixtures/fake_dataset/` only for tests, but keep the production resolution path the same as local-root datasets.
-- [ ] T046 [S11] Write `tests/test_fake_dataset_workflow.py` as a provider-free integration test: (a) resolve the fake dataset via `DatasetResolver` local-root flow; (b) call `plan_command` with `tests/fixtures/fake_dataset/experiment.json` and assert `trials.jsonl` is written with generic vocabulary only; (c) assert no Lattes-specific terms (`lattes`, `curriculum`, `LattesProvider`) appear in any trial record; (d) assert `manifest.json` contains `dataset.id = "ctxbench/fake-dataset"`; (e) assert no real provider calls were made.
+- [x] T044 [S11] Create an on-disk fake dataset fixture under `tests/fixtures/fake_dataset/` using the same local-root compatibility path as real datasets: `questions.json`, `questions.instance.json`, minimal context/evidence artifacts, and an `experiment.json`. Do not require importing a Python package object from the fixture path.
+- [x] T045 [S11] No fake-package adapter helper was needed; keep the production resolution path the same as local-root datasets.
+- [x] T046 [S11] Write `tests/test_fake_dataset_workflow.py` as a provider-free integration test: (a) resolve the fake dataset via `DatasetResolver` local-root flow; (b) call `plan_command` with `tests/fixtures/fake_dataset/experiment.json` and assert `trials.jsonl` is written with generic vocabulary only; (c) assert no Lattes-specific terms (`lattes`, `curriculum`, `LattesProvider`) appear in any trial record; (d) assert `manifest.json` contains `dataset.id = "ctxbench/fake-dataset"`; (e) assert no real provider calls were made.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_fake_dataset_workflow.py` passes.
-- [ ] No Lattes terms in trial records.
-- [ ] No provider calls.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_fake_dataset_workflow.py` passes.
+- [x] No Lattes terms in trial records.
+- [x] No provider calls.
+- [x] Diff is reviewable.
 
 ---
 

@@ -1,0 +1,29 @@
+{
+  "id": "exp-fake-dataset-plan",
+  "output": "outputs",
+  "dataset": {
+    "root": "tests/fixtures/fake_dataset/dataset"
+  },
+  "scope": {
+    "instances": [],
+    "questions": []
+  },
+  "factors": {
+    "model": [
+      {
+        "provider": "mock",
+        "name": "mock-model"
+      }
+    ],
+    "strategy": [
+      "inline"
+    ],
+    "format": [
+      "json"
+    ]
+  },
+  "evaluation": {
+    "enabled": false,
+    "judges": []
+  }
+}
