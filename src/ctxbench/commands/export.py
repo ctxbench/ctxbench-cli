@@ -63,6 +63,8 @@ def _merge_row(
         # ── from responses ──────────────────────────────────────────────────
         "experimentId": _ans(ans, "experimentId"),
         "trialId": _ans(ans, "trialId"),
+        "dataset_id": (ans.get("dataset") or {}).get("id"),
+        "dataset_version": (ans.get("dataset") or {}).get("version"),
         "instanceId": _ans(ans, "instanceId"),
         "format": _ans(ans, "format"),
         "taskId": _ans(ans, "taskId"),
@@ -115,7 +117,7 @@ def _merge_row(
 
 
 _CSV_FIELDS = [
-    "experimentId", "trialId", "instanceId", "format", "taskId",
+    "experimentId", "trialId", "dataset_id", "dataset_version", "instanceId", "format", "taskId",
     "modelId", "modelName", "tags", "index", "strategy", "temperature",
     "inputTokens", "outputTokens", "totalTokens", "cachedInputTokens", "cachedReadTokens",
     "status", "modelCalls", "toolCalls", "mcpToolCalls",

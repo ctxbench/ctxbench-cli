@@ -28,9 +28,12 @@ The benchmark now uses:
 
 A dataset is composed of:
 
+- `ctxbench.dataset.json`
 - `questions.json`
 - `questions.instance.json`
 - `context/<instanceId>/...`
+
+`ctxbench.dataset.json` identifies the dataset package and its `datasetVersion`.
 
 `questions.json` defines the stable question catalog.
 
@@ -88,6 +91,7 @@ Each instance lives in its own directory:
 
 ```text
 dataset-root/
+  ctxbench.dataset.json
   questions.json
   questions.instance.json
   context/
@@ -96,6 +100,16 @@ dataset-root/
       cleaned.html
       parsed.json
       blocks.json
+```
+
+Minimal package manifest:
+
+```json
+{
+  "id": "ctxbench/lattes",
+  "datasetVersion": "0.1.0",
+  "manifestSchemaVersion": 1
+}
 ```
 
 ### Validation Modes
@@ -238,10 +252,31 @@ This keeps the benchmark simpler and makes tool usage easier to compare across s
 
 The installed CLI command is `ctxbench`.
 
+### Fetch or Inspect a Dataset
+
+For remote or cached datasets, use the dataset-management commands first:
+
+```bash
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+  --cache-dir ./.ctxbench/datasets
+
+ctxbench dataset inspect ctxbench/lattes@0.1.0 --cache-dir ./.ctxbench/datasets
+```
+
+If your experiment already points to a local dataset root, skip fetch and inspect the root directly:
+
+```bash
+ctxbench dataset inspect datasets/lattes
+```
+
 ### Plan an Experiment
 
 ```bash
-ctxbench plan datasets/lattes/experiment.json --output outputs/lattes_baseline_001
+ctxbench plan datasets/lattes/experiment.json \
+  --output outputs/lattes_baseline_001 \
+  --cache-dir ./.ctxbench/datasets
 ```
 
 This writes:

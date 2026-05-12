@@ -1,0 +1,18 @@
+{
+  "datasetId": "lattes-v2",
+  "version": "2026-04-28",
+  "domain": "lattes",
+  "language": "en",
+  "description": "Minimal provider-free Lattes fixture dataset.",
+  "questions": [
+    {
+      "id": "q_profile",
+      "question": "What is the main field of this researcher?",
+      "tags": ["factual"],
+      "validation": {
+        "type": "judge"
+      },
+      "contextBlock": ["profile"]
+    }
+  ]
+}

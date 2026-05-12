@@ -20,8 +20,17 @@ def _model_dump_value(value: Any, mode: str) -> Any:
     return value
 
 
+def _coerce_dataset_provenance(payload: dict[str, Any]) -> dict[str, Any]:
+    if "dataset" in payload:
+        payload["dataset"] = DatasetProvenance.model_validate(payload["dataset"])
+    return payload
+
+
 class ExperimentDataset(BaseModel):
-    root: str
+    root: str | None = None
+    id: str | None = None
+    version: str | None = None
+    origin: str | None = None
 
     @classmethod
     def model_validate(cls, data: Any) -> "ExperimentDataset":
@@ -31,7 +40,19 @@ class ExperimentDataset(BaseModel):
             return cls(root=data)
         if isinstance(data, dict):
             if "root" in data:
-                return cls(root=str(data["root"]))
+                return cls(
+                    root=str(data["root"]),
+                    id=str(data["id"]) if data.get("id") is not None else None,
+                    version=str(data["version"]) if data.get("version") is not None else None,
+                    origin=str(data["origin"]) if data.get("origin") is not None else None,
+                )
+            if "id" in data:
+                return cls(
+                    root=str(data["root"]) if data.get("root") is not None else None,
+                    id=str(data["id"]),
+                    version=str(data["version"]) if data.get("version") is not None else None,
+                    origin=str(data["origin"]) if data.get("origin") is not None else None,
+                )
             legacy_paths = {"questions", "contexts", "question_instances"}
             if legacy_paths & set(data):
                 raise ValidationError(
@@ -39,18 +60,134 @@ class ExperimentDataset(BaseModel):
                     "Put questions.json and questions.instance.json in the dataset root "
                     "and context files in <dataset>/context."
                 )
-        raise ValidationError("ExperimentDataset requires a dataset directory path.")
+        raise ValidationError(
+            "ExperimentDataset requires either a dataset directory path/root or an id/version reference."
+        )
+
+    def _validate_model(self) -> None:
+        has_root = bool(self.root)
+        has_id = bool(self.id)
+        if not has_root and not has_id:
+            raise ValidationError(
+                "ExperimentDataset requires either a dataset directory path/root or an id/version reference."
+            )
+        if has_id and not self.version:
+            raise ValidationError("ExperimentDataset id references require a version.")
 
     @property
     def questions(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset questions path is only available for local-root datasets.")
         return str(Path(self.root) / "questions.json")
 
     @property
     def contexts(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset contexts path is only available for local-root datasets.")
         return str(Path(self.root) / "context")
 
     @property
     def question_instances(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset question_instances path is only available for local-root datasets.")
+        return str(Path(self.root) / "questions.instance.json")
+
+
+class DatasetProvenance(BaseModel):
+    id: str
+    version: str
+    origin: str | None = None
+    resolved_revision: str | None = None
+    content_hash: str | None = None
+    materialized_path: str | None = None
+
+    @classmethod
+    def model_validate(cls, data: Any) -> "DatasetProvenance":
+        if isinstance(data, cls):
+            return data
+        if isinstance(data, ExperimentDataset):
+            root = data.root
+            inferred_id = data.id or (Path(root).name if root else "local-dataset")
+            inferred_version = data.version or "local"
+            return cls(
+                id=inferred_id,
+                version=inferred_version,
+                origin=data.origin or root,
+                materialized_path=root,
+            )
+        if isinstance(data, str):
+            root = str(Path(data).expanduser())
+            return cls(
+                id=Path(root).name or "local-dataset",
+                version="local",
+                origin=root,
+                materialized_path=root,
+            )
+        if isinstance(data, dict):
+            payload = dict(data)
+            if "root" in payload:
+                root = str(payload.get("root") or "")
+                return cls(
+                    id=str(payload.get("id") or (Path(root).name if root else "local-dataset")),
+                    version=str(payload.get("version") or "local"),
+                    origin=str(payload.get("origin") or root) if (payload.get("origin") or root) else None,
+                    resolved_revision=payload.get("resolvedRevision") or payload.get("resolved_revision"),
+                    content_hash=payload.get("contentHash") or payload.get("content_hash"),
+                    materialized_path=str(
+                        payload.get("materializedPath")
+                        or payload.get("materialized_path")
+                        or root
+                    )
+                    if (
+                        payload.get("materializedPath")
+                        or payload.get("materialized_path")
+                        or root
+                    )
+                    else None,
+                )
+            if "id" in payload:
+                return cls(
+                    id=str(payload.get("id") or ""),
+                    version=str(payload.get("version") or ""),
+                    origin=str(payload.get("origin")) if payload.get("origin") is not None else None,
+                    resolved_revision=payload.get("resolvedRevision") or payload.get("resolved_revision"),
+                    content_hash=payload.get("contentHash") or payload.get("content_hash"),
+                    materialized_path=str(payload.get("materializedPath") or payload.get("materialized_path"))
+                    if (payload.get("materializedPath") or payload.get("materialized_path")) is not None
+                    else None,
+                )
+        raise ValidationError("DatasetProvenance requires an object input.")
+
+    def model_dump(self, mode: str = "python") -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "version": self.version,
+            "origin": self.origin,
+            "resolvedRevision": self.resolved_revision,
+            "contentHash": self.content_hash,
+            "materializedPath": self.materialized_path,
+        }
+
+    @property
+    def root(self) -> str | None:
+        return self.materialized_path or self.origin
+
+    @property
+    def questions(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset questions path is unavailable without a local materialized path.")
+        return str(Path(self.root) / "questions.json")
+
+    @property
+    def contexts(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset contexts path is unavailable without a local materialized path.")
+        return str(Path(self.root) / "context")
+
+    @property
+    def question_instances(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset question_instances path is unavailable without a local materialized path.")
         return str(Path(self.root) / "questions.instance.json")
 
 
@@ -361,7 +498,7 @@ class RunSpec(BaseModel):
     id: str
     runId: str
     experimentId: str
-    dataset: ExperimentDataset
+    dataset: DatasetProvenance
     experimentPath: str | None = None
     questionId: str
     question: str = ""
@@ -429,6 +566,7 @@ class RunSpec(BaseModel):
         payload.setdefault("validationType", validated_metadata.validationType)
         payload.setdefault("parameters", validated_metadata.parameters)
         payload.setdefault("modelId", validated_metadata.modelId or payload.get("modelName"))
+        payload = _coerce_dataset_provenance(payload)
         return super().model_validate(payload)
 
     def to_persisted_artifact(self) -> dict[str, Any]:
@@ -498,7 +636,7 @@ class EvaluationResult(BaseModel):
 class RunResult(BaseModel):
     runId: str
     experimentId: str
-    dataset: ExperimentDataset
+    dataset: DatasetProvenance
     questionId: str
     question: str = ""
     questionTemplate: str | None = None
@@ -573,6 +711,7 @@ class RunResult(BaseModel):
         payload.setdefault("validationType", validated_metadata.validationType)
         payload.setdefault("parameters", validated_metadata.parameters)
         payload.setdefault("modelId", validated_metadata.modelId or payload.get("modelName"))
+        payload = _coerce_dataset_provenance(payload)
         return super().model_validate(payload)
 
     def to_persisted_artifact(self, *, trace_ref: str | None = None) -> dict[str, Any]:
@@ -639,6 +778,7 @@ class EvaluationJudgeInfo(BaseModel):
 class EvaluationItemResult(BaseModel):
     experimentId: str
     runId: str
+    dataset: DatasetProvenance
     questionId: str
     instanceId: str | None = None
     question: str
@@ -666,6 +806,14 @@ class EvaluationItemResult(BaseModel):
     evaluationTrace: EvaluationTrace = Field(default_factory=EvaluationTrace)
     contextBlock: list[str] | None = None
 
+    @classmethod
+    def model_validate(cls, data: Any) -> "EvaluationItemResult":
+        if isinstance(data, cls):
+            return data
+        if not isinstance(data, dict):
+            raise ValidationError("EvaluationItemResult requires an object input.")
+        return super().model_validate(_coerce_dataset_provenance(dict(data)))
+
     def to_persisted_artifact(self) -> dict[str, Any]:
         details = self.details if isinstance(self.details, dict) else {}
         outcome = details.get("outcome") if isinstance(details.get("outcome"), dict) else {}
@@ -688,6 +836,7 @@ class EvaluationItemResult(BaseModel):
         return {
             "trialId": self.runId,
             "experimentId": self.experimentId,
+            "dataset": self.dataset.model_dump(mode="json"),
             "instanceId": self.instanceId,
             "taskId": self.questionId,
             "strategy": self.executionStrategy,
@@ -720,6 +869,7 @@ class EvaluationItemResult(BaseModel):
             votes.append({
                 "trialId": self.runId,
                 "experimentId": self.experimentId,
+                "dataset": self.dataset.model_dump(mode="json"),
                 "instanceId": self.instanceId,
                 "taskId": self.questionId,
                 "strategy": self.executionStrategy,
@@ -754,6 +904,7 @@ class EvaluationRunSummary(BaseModel):
 class EvaluationRunResult(BaseModel):
     experimentId: str
     runId: str
+    dataset: DatasetProvenance
     questionId: str
     items: list[EvaluationItemResult] = Field(default_factory=list)
     summary: EvaluationRunSummary = Field(default_factory=EvaluationRunSummary)
@@ -788,6 +939,7 @@ class EvaluationRunResult(BaseModel):
             }
         else:
             payload["metadata"] = RunMetadata.model_validate(payload["metadata"])
+        payload = _coerce_dataset_provenance(payload)
         return super().model_validate(payload)
 
 

@@ -1,0 +1,15 @@
+{
+  "datasetId": "lattes-v2",
+  "version": "2026-04-28",
+  "referenceDate": "2026-04-28",
+  "instances": [
+    {
+      "instanceId": "1234567890123456",
+      "questions": [
+        {
+          "id": "q_profile"
+        }
+      ]
+    }
+  ]
+}

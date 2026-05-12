@@ -4,6 +4,7 @@ import argparse
 import sys
 
 from ctxbench.benchmark.selectors import RunSelector, load_ids_from_file, load_ids_from_stdin
+from ctxbench.commands.dataset import fetch_command_from_args, inspect_command_from_args
 from ctxbench.commands.eval import eval_command
 from ctxbench.commands.execute import execute_command
 from ctxbench.commands.export import export_command
@@ -152,6 +153,31 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctxbench", description="CTXBench benchmark CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    # ── ctxbench dataset ───────────────────────────────────────────────────
+    dataset_parser = subparsers.add_parser(
+        "dataset", help="Dataset management"
+    )
+    dataset_sub = dataset_parser.add_subparsers(dest="dataset_command", required=True)
+    fetch_parser = dataset_sub.add_parser(
+        "fetch", help="Materialize a dataset into the local cache"
+    )
+    fetch_source_group = fetch_parser.add_mutually_exclusive_group(required=True)
+    fetch_source_group.add_argument("--dataset-url", help="Remote .tar.gz dataset archive URL")
+    fetch_source_group.add_argument("--dataset-file", help="Local .tar.gz dataset archive path")
+    fetch_source_group.add_argument("--dataset-dir", help="Local unpacked dataset directory")
+    fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for dataset archive content")
+    fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for a remote archive")
+    fetch_parser.add_argument("--sha256-file", help="Local file containing trusted SHA-256 for a local archive")
+    fetch_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
+    fetch_parser.set_defaults(func=fetch_command_from_args)
+    inspect_parser = dataset_sub.add_parser(
+        "inspect", help="Inspect a local or cached dataset reference"
+    )
+    inspect_parser.add_argument("dataset_ref", help="Dataset reference path or <dataset-id>@<version>")
+    inspect_parser.add_argument("--json", action="store_true", dest="json_output", help="Emit JSON output")
+    inspect_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
+    inspect_parser.set_defaults(func=inspect_command_from_args)
+
     # ── ctxbench plan ──────────────────────────────────────────────────────
     plan_parser = subparsers.add_parser(
         "plan", help="Expand an experiment into trials.jsonl"
@@ -161,12 +187,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", metavar="DIR",
         help="Override output directory (default: experiment.output/<id>/)",
     )
+    plan_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
     plan_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     plan_parser.add_argument("--progress", action="store_true", help="Show progress bar")
     plan_parser.set_defaults(
         func=lambda args: plan_command(
             args.path,
             output=args.output,
+            cache_dir=args.cache_dir,
             verbose=args.verbose,
             progress=args.progress,
         )

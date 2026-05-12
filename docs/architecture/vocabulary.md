@@ -5,6 +5,16 @@
 | Term | Meaning |
 |---|---|
 | `dataset` | Versioned package of benchmark inputs. |
+| `dataset repository` | External source that publishes a dataset package or release asset. |
+| `dataset package` | The dataset distribution envelope resolved by CTXBench. |
+| `dataset materialization` | One locally materialized copy of a dataset package. |
+| `dataset cache` | Local store of fetched dataset materializations and manifests. |
+| `dataset resolver` | Local-only component that resolves `root` or `id@version` references. |
+| `dataset capability report` | Read-only validation summary returned by dataset inspection. |
+| `dataset origin` | Reproducible source pointer for the dataset package. |
+| `resolved revision` | Exact revision recorded when acquisition can resolve one. |
+| `content hash` | Content fingerprint recorded for reproducibility and conflict detection. |
+| `single-dataset experiment` | Experiment model where one experiment references exactly one dataset package. |
 | `instance` | One concrete dataset unit over which tasks are executed. |
 | `context artifact` | A representation of an instance used by a strategy. |
 | `task` | Unit of work to be performed over an instance. |
@@ -38,7 +48,9 @@ instanceId
 
 ## Task
 
-A task is what the model must do. In Q/A, a task may be a question. In a broader benchmark, a task may be classification, extraction, summarization, ranking, comparison, or tool-mediated analysis.
+A task is what the model must do. In Q/A, a task may be a question. In a broader benchmark, a
+task may be classification, extraction, summarization, ranking, comparison, or tool-mediated
+analysis.
 
 Recommended field:
 
@@ -106,10 +118,17 @@ evals.jsonl
 judge_votes.jsonl
 ```
 
+## Dataset distribution notes
+
+- `ctxbench dataset fetch` materializes a dataset into the local dataset cache.
+- `ctxbench dataset inspect` reports a dataset capability report without provider calls.
+- lifecycle artifacts preserve dataset provenance as a nested `dataset` object.
+
 ## Historical migration reference
 
-This mapping is provided for migration planning only. Public CLI and artifact contracts use the target terms only and do not expose legacy aliases.
-For the authoritative artifact reference, see `docs/architecture/artifact-contracts.md`.
+This mapping is provided for migration planning only. Public CLI and artifact contracts use the
+target terms only and do not expose legacy aliases. For the authoritative artifact reference, see
+`docs/architecture/artifact-contracts.md`.
 
 | Current | Target |
 |---|---|

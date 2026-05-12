@@ -7,8 +7,6 @@ from ctxbench.ai.engine import Engine
 from ctxbench.ai.models.base import AIRequest
 from ctxbench.ai.runtime import LocalFunctionRuntime, MCPRuntime
 from ctxbench.benchmark.models import EvaluationResult, RunResult, RunTiming, RunTrace, RunSpec
-from ctxbench.datasets.lattes.mcp_server import LattesMCPServer
-from ctxbench.datasets.lattes.tools import LattesToolService
 from ctxbench.util.clock import utc_now_iso
 
 
@@ -61,17 +59,7 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
     active_engine = engine
     owned_engine: Engine | None = None
     if runspec.strategy in {"local_function", "local_mcp"}:
-        tool_runtime_factories = {}
-        if runspec.strategy == "local_function":
-            tool_runtime_factories["local_function"] = lambda: LocalFunctionRuntime(
-                LattesToolService(contexts_dir=runspec.dataset.contexts)
-            )
-        if runspec.strategy == "local_mcp":
-            tool_runtime_factories["local_mcp"] = lambda: MCPRuntime.for_local_server(
-                LattesMCPServer(
-                    contexts_dir=runspec.dataset.contexts,
-                )
-            )
+        tool_runtime_factories = _build_tool_runtime_factories(runspec, provider)
         owned_engine = engine.copy_with_tool_runtime_factories(tool_runtime_factories)
         active_engine = owned_engine
     try:
@@ -141,6 +129,27 @@ def execute_runspec(runspec: RunSpec, engine: Engine) -> RunResult:
         metadata=runspec.metadata,
     )
     return result
+
+
+def _build_tool_runtime_factories(runspec: RunSpec, provider: object) -> dict[str, object]:
+    tool_runtime_factories: dict[str, object] = {}
+    if runspec.strategy == "local_function":
+        tool_provider = getattr(provider, "tool_provider", None)
+        service = tool_provider() if callable(tool_provider) else None
+        if service is None:
+            raise ValueError(
+                f"Strategy '{runspec.strategy}' requires a dataset tool provider."
+            )
+        tool_runtime_factories["local_function"] = lambda: LocalFunctionRuntime(service)
+    if runspec.strategy == "local_mcp":
+        server_factory = getattr(provider, "mcp_server", None)
+        server = server_factory() if callable(server_factory) else None
+        if server is None:
+            raise ValueError(
+                f"Strategy '{runspec.strategy}' requires a dataset MCP server adapter."
+            )
+        tool_runtime_factories["local_mcp"] = lambda: MCPRuntime.for_local_server(server)
+    return tool_runtime_factories
 
 
 def _build_metrics_summary(*, ai_trace: dict[str, object], strategy: str) -> dict[str, int | None]:

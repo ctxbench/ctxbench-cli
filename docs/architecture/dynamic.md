@@ -2,124 +2,79 @@
 
 ## Purpose
 
-Dynamic diagrams document runtime behavior: how components interact during a scenario.
+Dynamic diagrams document runtime behavior for the dataset-distribution flow added by Spec 003.
 
-This is the best C4 view for explaining MCP operation loops, tool calls, and strategy-specific flows.
-
-## Inline execution
+## Successful remote dataset fetch
 
 ```mermaid
 sequenceDiagram
-    participant B as CTXBench
-    participant F as Local Filesystem
-    participant L as LLM Provider
+    participant U as Researcher
+    participant C as ctxbench dataset fetch
+    participant R as Remote dataset repository
+    participant V as SHA-256 source
+    participant X as Safe extractor
+    participant K as Local dataset cache
 
-    B->>F: read context artifact
-    F-->>B: context
-    B->>L: task + inline context
-    L-->>B: response
-    B->>F: write response and trace
+    U->>C: dataset id + origin + version + checksum input
+    C->>V: read trusted checksum
+    V-->>C: expected SHA-256
+    C->>R: download archive asset
+    R-->>C: tar.gz bytes
+    C->>C: verify SHA-256 before extraction
+    C->>X: safe extract tar.gz
+    X-->>C: extracted package root
+    C->>C: discover exactly one manifest
+    C->>K: store materialization + provenance
+    K-->>U: local dataset available
 ```
 
-## Local function execution
+## Inspect reports a non-conformant package
 
 ```mermaid
 sequenceDiagram
-    participant B as CTXBench
-    participant L as LLM Provider
-    participant T as Local Python Functions
-    participant F as Local Filesystem
+    participant U as Researcher
+    participant I as ctxbench dataset inspect
+    participant R as DatasetResolver
+    participant P as DatasetPackage
 
-    B->>L: task + function declarations
-    L-->>B: function call request
-    B->>T: execute function
-    T->>F: read context artifact
-    F-->>T: context data
-    T-->>B: function result
-    B->>L: function result
-    L-->>B: final response
-    B->>F: write response and trace
+    U->>I: inspect dataset-ref
+    I->>R: resolve local dataset
+    R-->>I: package
+    I->>P: validate capabilities
+    P-->>I: capability report with missing mandatory items
+    I-->>U: conformant = false + missing_mandatory
 ```
 
-## Local MCP execution
+## Plan rejected on missing dataset
 
 ```mermaid
 sequenceDiagram
-    participant B as CTXBench
-    participant L as LLM Provider
-    participant C as MCP Client
-    participant S as Local MCP Server
-    participant F as Local Filesystem
+    participant U as Researcher
+    participant P as ctxbench plan
+    participant R as DatasetResolver
+    participant K as Local dataset cache
 
-    B->>L: task + MCP tool declarations
-    L-->>B: tool call request
-    B->>C: invoke MCP tool
-    C->>S: MCP tool call
-    S->>F: read context artifact
-    F-->>S: context data
-    S-->>C: tool result
-    C-->>B: normalized tool result
-    B->>L: tool result
-    L-->>B: final response
-    B->>F: write response and trace
+    U->>P: experiment.json with dataset id@version
+    P->>R: resolve dataset reference
+    R->>K: lookup dataset id + version
+    K-->>R: no match
+    R-->>P: DatasetNotFoundError
+    P-->>U: fail with fetch remediation
 ```
 
-## Remote MCP execution
+## Plan rejected on ambiguous dataset
 
 ```mermaid
 sequenceDiagram
-    participant B as CTXBench
-    participant L as LLM Provider
-    participant S as Remote MCP Server
-    participant D as Context Store
-    participant F as Local Filesystem
+    participant U as Researcher
+    participant P as ctxbench plan
+    participant R as DatasetResolver
+    participant K as Local dataset cache
 
-    B->>L: task + remote MCP configuration
-    L->>S: provider-managed MCP tool call
-    S->>D: read context
-    D-->>S: context data
-    S-->>L: tool result
-    L-->>B: final response + available evidence
-    B->>F: write response and trace
-```
-
-## What MCP does in these flows
-
-MCP introduces a client/server protocol boundary for context access.
-
-The MCP server exposes tools with:
-
-```text
-name
-description
-input schema
-output structure
-error behavior
-```
-
-The MCP client invokes those tools. In `local_mcp`, CTXBench controls the MCP client. In `remote_mcp`, the provider may control or mediate MCP calls.
-
-## Runtime implications
-
-| Concern | Local MCP | Remote MCP |
-|---|---|---|
-| Loop control | CTXBench | Provider/remote integration may control |
-| Tool observability | High | Lower |
-| Network boundary | Local only | Remote |
-| Context service reuse | Medium | High |
-| Latency risk | Lower | Higher |
-| Token/call accounting | More direct | Provider-specific / partial |
-
-## MCP failure modes
-
-```text
-tool not called
-wrong tool selected
-invalid arguments
-tool timeout
-remote server unavailable
-provider hides intermediate calls
-tool output too large
-tool output too unstructured
-model stops before collecting enough evidence
+    U->>P: experiment.json with dataset id@version
+    P->>R: resolve dataset reference
+    R->>K: lookup conflicting materializations
+    K-->>R: more than one conflicting match
+    R-->>P: AmbiguousDatasetError
+    P-->>U: fail without choosing one silently
 ```

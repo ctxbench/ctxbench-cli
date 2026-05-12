@@ -131,6 +131,7 @@ def serialize_evaluation_result(
         return {
             "trialId": result.runId,
             "experimentId": result.experimentId,
+            "dataset": result.dataset.model_dump(mode="json"),
             "instanceId": result.metadata.instanceId or None,
             "taskId": result.questionId,
             "strategy": result.metadata.strategy or None,

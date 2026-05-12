@@ -6,8 +6,6 @@ from time import perf_counter
 from typing import Any, Protocol
 
 from ctxbench.ai.models.base import ToolResult, ToolSpec
-from ctxbench.datasets.lattes.mcp_server import LattesMCPServer
-from ctxbench.datasets.lattes.tools import LattesToolService
 
 
 class ToolRuntime(Protocol):
@@ -21,8 +19,26 @@ class ToolRuntime(Protocol):
         ...
 
 
+class ToolService(Protocol):
+    def list_tools(self) -> list[ToolSpec]:
+        ...
+
+    def call_tool(self, name: str, arguments: dict[str, Any]) -> ToolResult:
+        ...
+
+    def close(self) -> None:
+        ...
+
+
+class InMemoryMCPServer(Protocol):
+    app: Any
+
+    def close(self) -> None:
+        ...
+
+
 class LocalFunctionRuntime:
-    def __init__(self, service: LattesToolService) -> None:
+    def __init__(self, service: ToolService) -> None:
         self._service = service
 
     def list_tools(self) -> list[ToolSpec]:
@@ -43,7 +59,7 @@ class MCPRuntime:
         self,
         *,
         transport: str,
-        server: LattesMCPServer | None = None,
+        server: InMemoryMCPServer | None = None,
         server_url: str | None = None,
         headers: dict[str, str] | None = None,
         authorization: str | None = None,
@@ -62,7 +78,7 @@ class MCPRuntime:
         self._closed = False
 
     @classmethod
-    def for_local_server(cls, server: LattesMCPServer) -> "MCPRuntime":
+    def for_local_server(cls, server: InMemoryMCPServer) -> "MCPRuntime":
         return cls(transport="in_memory", server=server)
 
     @classmethod

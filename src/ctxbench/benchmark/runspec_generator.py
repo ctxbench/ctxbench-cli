@@ -4,8 +4,8 @@ from pathlib import Path
 import re
 from typing import Any, Callable
 
-from ctxbench.benchmark.models import Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
-from ctxbench.dataset.provider import DatasetProvider
+from ctxbench.benchmark.models import DatasetProvenance, Experiment, MODEL_ID_PATTERN, RunMetadata, RunSpec
+from ctxbench.dataset.provider import LocalDatasetPackage
 from ctxbench.util.artifacts import build_short_ids, canonical_trial_identity
 from ctxbench.util.env import apply_lattes_mcp_env_overrides, resolve_env_placeholders
 
@@ -69,19 +69,20 @@ def effective_formats_for_strategy(strategy_name: str, formats: list[Any]) -> li
 def generate_runspecs(
     experiment: Experiment,
     base_dir: str | Path,
+    dataset_package: LocalDatasetPackage,
+    dataset_provenance: DatasetProvenance,
     *,
     experiment_path: str | Path | None = None,
     on_warning: Callable[..., None] | None = None,
 ) -> list[RunSpec]:
-    provider = DatasetProvider.from_experiment(experiment, base_dir)
     scoped_questions = set(experiment.scope.questions)
     scoped_instances = set(experiment.scope.instances)
     questions = [
-        question_id for question_id in provider.list_question_ids()
+        question_id for question_id in dataset_package.list_question_ids()
         if not scoped_questions or question_id in scoped_questions
     ]
     instance_ids = [
-        instance_id for instance_id in provider.list_instance_ids()
+        instance_id for instance_id in dataset_package.list_instance_ids()
         if not scoped_instances or instance_id in scoped_instances
     ]
     models = resolve_models(experiment)
@@ -91,8 +92,8 @@ def generate_runspecs(
     draft_specs: list[dict[str, Any]] = []
     for instance_id in instance_ids:
         for question_id in questions:
-            question = provider.get_question(question_id)
-            question_instance = provider.get_question_instance(question_id, instance_id)
+            question = dataset_package.get_question(question_id)
+            question_instance = dataset_package.get_question_instance(question_id, instance_id)
             parameters = dict(question_instance.parameters) if question_instance is not None else {}
             rendered_question = render_question_template(
                 question.question,
@@ -123,7 +124,7 @@ def generate_runspecs(
                                 {
                                     "canonical_id": canonical_id,
                                     "experimentId": experiment.id,
-                                    "dataset": provider.dataset_paths,
+                                    "dataset": dataset_provenance,
                                     "experimentPath": str(Path(experiment_path).resolve())
                                     if experiment_path
                                     else None,

@@ -231,7 +231,7 @@ def build_evaluation_jobs(
     mode: str | None = None,
     event_logger: Callable[[str, str, dict[str, object]], None] | None = None,
 ) -> list[EvaluationJob]:
-    provider_cache: dict[str, DatasetProvider] = {}
+    provider_cache: dict[tuple[str | None, str | None, str | None], DatasetProvider] = {}
     jobs: list[EvaluationJob] = []
     ordered_results = sorted(
         list(results),
@@ -245,10 +245,12 @@ def build_evaluation_jobs(
         ),
     )
     for result in ordered_results:
-        provider = provider_cache.setdefault(
-            result.dataset.root,
-            DatasetProvider.from_dataset(result.dataset),
+        provider_key = (
+            result.dataset.id,
+            result.dataset.version,
+            result.dataset.materialized_path or result.dataset.origin,
         )
+        provider = provider_cache.setdefault(provider_key, DatasetProvider.from_dataset(result.dataset))
         for judge in judges:
             job = build_evaluation_job(
                 result,
@@ -514,6 +516,7 @@ def _build_skipped_evaluation_result(
     item = EvaluationItemResult(
         experimentId=result.experimentId,
         runId=result.runId,
+        dataset=result.dataset,
         questionId=result.questionId,
         instanceId=result.instanceId,
         question=question_text,
@@ -532,6 +535,7 @@ def _build_skipped_evaluation_result(
     return EvaluationRunResult(
         experimentId=result.experimentId,
         runId=result.runId,
+        dataset=result.dataset,
         questionId=result.questionId,
         items=[item],
         summary=EvaluationRunSummary(itemCount=1),
@@ -554,6 +558,7 @@ def _build_evaluation_result(
     item = EvaluationItemResult(
         experimentId=result.experimentId,
         runId=result.runId,
+        dataset=result.dataset,
         questionId=result.questionId,
         instanceId=result.instanceId,
         question=question_text,
@@ -584,6 +589,7 @@ def _build_evaluation_result(
     return EvaluationRunResult(
         experimentId=result.experimentId,
         runId=result.runId,
+        dataset=result.dataset,
         questionId=result.questionId,
         items=[item],
         summary=EvaluationRunSummary(itemCount=1),

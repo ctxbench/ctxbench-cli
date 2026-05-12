@@ -6,7 +6,9 @@
 flowchart TB
     subgraph Planning["Planning components"]
         ExperimentLoader["Experiment Loader"]
-        DatasetProvider["Dataset Provider"]
+        DatasetResolver["Dataset Resolver"]
+        DatasetCache["Dataset cache"]
+        DatasetPackage["DatasetPackage boundary"]
         TrialPlanner["Trial Planner"]
         ManifestWriter["Manifest Writer"]
         TrialWriter["Trial Writer"]
@@ -38,12 +40,15 @@ flowchart TB
         CsvWriter["CSV Writer"]
     end
 
-    ExperimentLoader --> DatasetProvider
-    DatasetProvider --> TrialPlanner
+    ExperimentLoader --> DatasetResolver
+    DatasetResolver --> DatasetCache
+    DatasetResolver --> DatasetPackage
+    DatasetPackage --> TrialPlanner
     TrialPlanner --> ManifestWriter
     TrialPlanner --> TrialWriter
 
     TrialReader --> ExecutionEngine
+    DatasetPackage --> ExecutionEngine
     ExecutionEngine --> StrategyFactory
     StrategyFactory --> ModelAdapter
     StrategyFactory --> ToolRuntime
@@ -51,6 +56,7 @@ flowchart TB
     ExecutionEngine --> ExecutionTraceWriter
 
     ResponseReader --> EvalJobBuilder
+    DatasetPackage --> EvalJobBuilder
     EvalJobBuilder --> JudgeAdapter
     JudgeAdapter --> VoteWriter
     VoteWriter --> EvalAggregator
@@ -63,17 +69,13 @@ flowchart TB
 
 ## Component notes
 
-The components are implemented as Python modules. During migration from the current implementation, names may still appear under the legacy package name.
-
-Target package areas:
+The components are implemented as Python modules. During migration, some implementation details may
+still live behind compatibility adapters, but the target ownership is:
 
 ```text
 ctxbench.cli
 ctxbench.commands
 ctxbench.benchmark
 ctxbench.dataset
-ctxbench.strategies
-ctxbench.models
-ctxbench.mcp
-ctxbench.tracing
+ctxbench.ai
 ```

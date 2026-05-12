@@ -30,6 +30,34 @@ Execution artifacts are the records needed to define and carry out planned bench
 - `trials.jsonl` is the plan-phase canonical artifact that enumerates the benchmark trials scheduled for execution.
 - `responses.jsonl` is the execute-phase canonical artifact that records benchmark responses for completed trials.
 
+### Dataset provenance
+
+Dataset provenance is a nested `dataset` object carried by canonical planning, execution, and evaluation artifacts.
+
+Carrier artifacts:
+
+- `manifest.json`
+- `trials.jsonl`
+- `responses.jsonl`
+- `evals.jsonl`
+- `judge_votes.jsonl`
+
+The canonical dataset provenance fields are:
+
+- `dataset.id` required
+- `dataset.version` required
+- `dataset.origin` optional
+- `dataset.resolvedRevision` optional
+- `dataset.contentHash` optional
+- `dataset.materializedPath` optional operational metadata
+
+Rules:
+
+- `dataset.id` and `dataset.version` identify the dataset package selected during planning.
+- `dataset.materializedPath` is additive operational metadata and must not be treated as authoritative identity.
+- `plan` is the schema owner for the nested `dataset` object. Later lifecycle phases preserve it; they do not recompute or replace it from another source.
+- `results.csv` is the flat export owner for `dataset_id` and `dataset_version`, derived from the canonical nested `dataset` object.
+
 ## Evaluation Artifacts
 
 Evaluation artifacts are the canonical records produced by the evaluation phase.
