@@ -311,16 +311,16 @@ imports from generic core; first deliver the package wrapper and contract-level 
 
 ### Tasks
 
-- [ ] T040 [S10] Create `tests/fixtures/lattes_provider_free/dataset/` with minimal Lattes-structured fixture data: one instance file, one task file, one context artifact file, one evidence artifact file — enough to exercise all mandatory `DatasetPackage` extension points without real provider calls.
-- [ ] T041 [S10] Implement `LattesDatasetPackage` in `src/ctxbench/datasets/lattes/package.py` satisfying `DatasetPackage` protocol: expose `identity()` → `"ctxbench/lattes"`, `version()` → current Lattes data version string, `metadata()`, `get_context_artifact()`, `get_evidence_artifact()`, and the package/adapter methods needed by current planning semantics.
-- [ ] T042 [P] [S10] In `src/ctxbench/datasets/lattes/package.py`, implement `LattesDatasetPackage.tool_provider()` wrapping Lattes tool runtime ownership behind the dataset package boundary.
-- [ ] T043 [S10] Write `tests/test_lattes_dataset_package.py` asserting: (a) `LattesDatasetPackage()` passes `isinstance(obj, DatasetPackage)` check; (b) `fixtures()` returns a path containing at least one instance and one task file; (c) `identity()` and `version()` return non-empty strings; (d) `capability_report()` returns a `DatasetCapabilityReport` with `conformant=True` and empty `missing_mandatory`.
+- [x] T040 [S10] Create `tests/fixtures/lattes_provider_free/dataset/` with minimal Lattes-structured fixture data: one instance file, one task file, one context artifact file, one evidence artifact file — enough to exercise all mandatory `DatasetPackage` extension points without real provider calls.
+- [x] T041 [S10] Implement `LattesDatasetPackage` in `src/ctxbench/datasets/lattes/package.py` satisfying `DatasetPackage` protocol: expose `identity()` → `"ctxbench/lattes"`, `version()` → current Lattes data version string, `metadata()`, `get_context_artifact()`, `get_evidence_artifact()`, and the package/adapter methods needed by current planning semantics.
+- [x] T042 [P] [S10] In `src/ctxbench/datasets/lattes/package.py`, implement `LattesDatasetPackage.tool_provider()` wrapping Lattes tool runtime ownership behind the dataset package boundary.
+- [x] T043 [S10] Write `tests/test_lattes_dataset_package.py` asserting: (a) `LattesDatasetPackage()` passes `isinstance(obj, DatasetPackage)` check; (b) `fixtures()` returns a path containing at least one instance and one task file; (c) `identity()` and `version()` return non-empty strings; (d) `capability_report()` returns a `DatasetCapabilityReport` with `conformant=True` and empty `missing_mandatory`.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_lattes_dataset_package.py` passes.
-- [ ] No real provider tokens consumed.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_lattes_dataset_package.py` passes.
+- [x] No real provider tokens consumed.
+- [x] Diff is reviewable.
 
 ---
 

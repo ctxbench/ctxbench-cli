@@ -1,0 +1,11 @@
+{
+  "profile": {
+    "name": "Ada Researcher",
+    "summary": "Works on information retrieval."
+  },
+  "research": {
+    "areas_of_expertise": [
+      "Information Retrieval"
+    ]
+  }
+}
