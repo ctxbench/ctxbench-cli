@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from ctxbench.benchmark.models import DatasetProvenance, Experiment, ExperimentDataset
@@ -26,6 +27,16 @@ FORMAT_ARTIFACTS = {
 }
 
 
+def _specialized_local_dataset_package(
+    dataset: ExperimentDataset,
+) -> "LocalDatasetPackage | None":
+    if dataset.id == "ctxbench/lattes" and dataset.root:
+        from ctxbench.datasets.lattes.package import LattesDatasetPackage
+
+        return LattesDatasetPackage(dataset.root)
+    return None
+
+
 class LocalDatasetPackage:
     def __init__(self, dataset_paths: ExperimentDataset) -> None:
         self.dataset_paths = dataset_paths
@@ -49,6 +60,9 @@ class LocalDatasetPackage:
                 version=dataset.version,
                 origin=dataset.origin,
             )
+        specialized = _specialized_local_dataset_package(dataset)
+        if specialized is not None and cls in {LocalDatasetPackage, DatasetProvider}:
+            return specialized
         return cls(dataset)
 
     def metadata(self) -> DatasetMetadata:

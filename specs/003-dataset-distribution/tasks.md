@@ -357,19 +357,19 @@ provider-free Lattes conformance workflow end to end.
 
 ### Tasks
 
-- [ ] T047 [S12] Create `tests/fixtures/lattes_provider_free/` directory with: `__init__.py`, `experiment.json`, `fake_responder.py`, and `fake_judge.py` for provider-free end-to-end testing.
-- [ ] T048 [P] [S12] Create `tests/fixtures/lattes_provider_free/conftest.py` defining pytest fixtures that monkeypatch `ctxbench.benchmark.executor` and `ctxbench.benchmark.evaluation` to use `FakeResponder` and `FakeJudge`.
-- [ ] T049 [P] [S12] Update `src/ctxbench/benchmark/executor.py` to consume the tool provider through the resolved dataset package/adapter boundary instead of directly importing `LattesMCPServer` or `LattesToolService`.
-- [ ] T050 [P] [S12] Update `src/ctxbench/benchmark/evaluation.py` to consume dataset-backed evidence through the resolved dataset package/adapter boundary rather than rebuilding from `dataset.root` alone.
-- [ ] T051 [S12] Run static leakage grep and assert zero hits: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/`. Fix any remaining leakage in scope before proceeding.
-- [ ] T052 [S12] Write `tests/test_lattes_dataset_conformance.py` as a provider-free integration test using the monkeypatched responder and judge fixtures: fetch fixture, inspect, plan, execute, eval, export, then assert dataset provenance and non-empty trial output.
+- [x] T047 [S12] Create `tests/fixtures/lattes_provider_free/` directory with: `__init__.py`, `experiment.json`, `fake_responder.py`, and `fake_judge.py` for provider-free end-to-end testing.
+- [x] T048 [P] [S12] Create `tests/fixtures/lattes_provider_free/conftest.py` defining pytest fixtures that monkeypatch `ctxbench.benchmark.executor` and `ctxbench.benchmark.evaluation` to use `FakeResponder` and `FakeJudge`.
+- [x] T049 [P] [S12] Update `src/ctxbench/benchmark/executor.py` to consume the tool provider through the resolved dataset package/adapter boundary instead of directly importing `LattesMCPServer` or `LattesToolService`.
+- [x] T050 [P] [S12] Update `src/ctxbench/benchmark/evaluation.py` to consume dataset-backed evidence through the resolved dataset package/adapter boundary rather than rebuilding from `dataset.root` alone.
+- [x] T051 [S12] Run static leakage grep and assert zero hits: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/`. Fix any remaining leakage in scope before proceeding.
+- [x] T052 [S12] Write `tests/test_lattes_dataset_conformance.py` as a provider-free integration test using the monkeypatched responder and judge fixtures: fetch fixture, inspect, plan, execute, eval, export, then assert dataset provenance and non-empty trial output.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_lattes_dataset_conformance.py` passes.
-- [ ] `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` → zero hits.
-- [ ] No real provider tokens consumed.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_lattes_dataset_conformance.py` passes.
+- [x] `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` → zero hits.
+- [x] No real provider tokens consumed.
+- [x] Diff is reviewable.
 
 ---
 

@@ -6,6 +6,7 @@ from ctxbench.benchmark.models import ExperimentDataset
 from ctxbench.dataset.capabilities import DatasetCapabilityReport
 from ctxbench.dataset.provider import LocalDatasetPackage
 from ctxbench.dataset.validation import validate_package
+from ctxbench.datasets.lattes.mcp_server import build_lattes_mcp_server
 from ctxbench.datasets.lattes.tools import LattesToolService
 
 
@@ -33,6 +34,9 @@ class LattesDatasetPackage(LocalDatasetPackage):
 
     def tool_provider(self) -> object | None:
         return LattesToolService(contexts_dir=self.dataset_paths.contexts)
+
+    def mcp_server(self) -> object:
+        return build_lattes_mcp_server(contexts_dir=self.dataset_paths.contexts)
 
     def capability_report(self) -> DatasetCapabilityReport:
         report = validate_package(self)

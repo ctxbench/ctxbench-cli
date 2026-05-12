@@ -1,0 +1,39 @@
+{
+  "id": "exp-lattes-provider-free",
+  "output": "outputs",
+  "dataset": {
+    "id": "ctxbench/lattes",
+    "version": "2026-04-28"
+  },
+  "scope": {
+    "instances": [],
+    "questions": []
+  },
+  "factors": {
+    "model": [
+      {
+        "provider": "mock",
+        "name": "mock-model"
+      }
+    ],
+    "strategy": [
+      "inline"
+    ],
+    "format": [
+      "json"
+    ]
+  },
+  "evaluation": {
+    "enabled": true,
+    "judges": [
+      {
+        "provider": "mock",
+        "model": "mock-judge",
+        "temperature": 0,
+        "params": {
+          "id": "mock-judge"
+        }
+      }
+    ]
+  }
+}
