@@ -290,14 +290,14 @@ missing datasets raise immediately rather than fetching.
 
 ### Tasks
 
-- [ ] T038 [S9] In `src/ctxbench/dataset/resolver.py`, document the local-only resolution contract and keep resolver/materialization boundaries explicit. Do not add generic “network guards” unrelated to actual call sites; keep the enforcement focused on command behavior.
-- [ ] T039 [S9] Write `tests/test_lifecycle_no_network.py` using `monkeypatch` to replace fetch/materialization entry points with fail-fast stubs. Assert: (a) `plan_command` rejects unresolved datasets without fetching; (b) `execute_command` rejects missing planned materializations without fetching; (c) `eval_command` rejects missing required planned dataset evidence without fetching; (d) `export_command` succeeds from artifacts alone and does not touch dataset resolution; (e) `status_command` does not touch dataset resolution at all; (f) archive/release acquisition helpers are unreachable from lifecycle command paths.
+- [x] T038 [S9] In `src/ctxbench/dataset/resolver.py`, document the local-only resolution contract and keep resolver/materialization boundaries explicit. Do not add generic “network guards” unrelated to actual call sites; keep the enforcement focused on command behavior.
+- [x] T039 [S9] Write `tests/test_lifecycle_no_network.py` using `monkeypatch` to replace fetch/materialization entry points with fail-fast stubs. Assert: (a) `plan_command` rejects unresolved datasets without fetching; (b) `execute_command` rejects missing planned materializations without fetching; (c) `eval_command` rejects missing required planned dataset evidence without fetching; (d) `export_command` succeeds from artifacts alone and does not touch dataset resolution; (e) `status_command` does not touch dataset resolution at all; (f) archive/release acquisition helpers are unreachable from lifecycle command paths.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_lifecycle_no_network.py` passes.
-- [ ] No provider calls; no network access.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_lifecycle_no_network.py` passes.
+- [x] No provider calls; no network access.
+- [x] Diff is reviewable.
 
 ---
 

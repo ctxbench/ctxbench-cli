@@ -112,6 +112,14 @@ class ResolvedDatasetPackage:
 
 
 class DatasetResolver:
+    """Local-only dataset resolver.
+
+    This resolver only inspects explicit local roots or already-materialized cache entries.
+    It does not fetch, download, clone, or otherwise acquire datasets. Lifecycle commands
+    enforce the no-implicit-network rule by calling this resolver and failing immediately
+    when the dataset is missing or ambiguous.
+    """
+
     def resolve(self, ref: ExperimentDataset | dict[str, Any] | list[Any], cache: DatasetCache) -> DatasetPackage:
         if isinstance(ref, list):
             raise MultiDatasetError("Multiple datasets are not supported.")
