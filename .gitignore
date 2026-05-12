@@ -1,5 +1,3 @@
-.codex
-.claudeignore
 .venv
 .venv/
 __pycache__/
@@ -16,3 +14,5 @@ outputs/
 results/
 temp/
 .specify/feature.json
+.codex
+.claude
