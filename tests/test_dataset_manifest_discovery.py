@@ -21,7 +21,7 @@ from ctxbench.dataset.archive import (
 def _write_manifest(root: Path, dataset_id: str = "ctxbench/fake", version: str = "0.1.0") -> None:
     root.mkdir(parents=True, exist_ok=True)
     (root / DATASET_MANIFEST_NAME).write_text(
-        json.dumps({"id": dataset_id, "version": version}),
+        json.dumps({"id": dataset_id, "datasetVersion": version}),
         encoding="utf-8",
     )
 
@@ -92,7 +92,7 @@ def test_fetch_command_archive_materializes_verified_package(
 ) -> None:
     payload = _build_tar_gz(
         {
-            f"dataset/{DATASET_MANIFEST_NAME}": b'{"id":"ctxbench/fake","version":"0.1.0"}',
+            f"dataset/{DATASET_MANIFEST_NAME}": b'{"id":"ctxbench/fake","datasetVersion":"0.1.0"}',
             "dataset/data/example.txt": b"example",
         }
     )
@@ -105,9 +105,7 @@ def test_fetch_command_archive_materializes_verified_package(
     )
 
     fetch_command(
-        "ctxbench/fake",
-        "https://example.invalid/ctxbench-fake-0.1.0.tar.gz",
-        "0.1.0",
+        dataset_url="https://example.invalid/ctxbench-fake-0.1.0.tar.gz",
         sha256=digest,
         cache_dir=cache_dir,
     )

@@ -161,12 +161,13 @@ def build_parser() -> argparse.ArgumentParser:
     fetch_parser = dataset_sub.add_parser(
         "fetch", help="Materialize a dataset into the local cache"
     )
-    fetch_parser.add_argument("dataset_id", help="Dataset identifier")
-    fetch_parser.add_argument("--origin", required=True, help="Dataset origin URL or local path")
-    fetch_parser.add_argument("--version", required=True, help="Dataset version or tag")
-    fetch_parser.add_argument("--asset-name", help="Release asset name for release-tag origins")
-    fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for archive or release asset")
-    fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for archive or release asset")
+    fetch_source_group = fetch_parser.add_mutually_exclusive_group(required=True)
+    fetch_source_group.add_argument("--dataset-url", help="Remote .tar.gz dataset archive URL")
+    fetch_source_group.add_argument("--dataset-file", help="Local .tar.gz dataset archive path")
+    fetch_source_group.add_argument("--dataset-dir", help="Local unpacked dataset directory")
+    fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for dataset archive content")
+    fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for a remote archive")
+    fetch_parser.add_argument("--sha256-file", help="Local file containing trusted SHA-256 for a local archive")
     fetch_parser.set_defaults(func=fetch_command_from_args)
     inspect_parser = dataset_sub.add_parser(
         "inspect", help="Inspect a local or cached dataset reference"

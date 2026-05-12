@@ -2,8 +2,9 @@
 
 **Spec**: `specs/003-dataset-distribution/spec.md`  
 **Branch**: `feat/dataset-distribution`  
-**Status**: Draft  
-**Related specs**: Spec 001, Spec 002, Spec 004
+**Status**: Draft — Amendment A1 applied (Simplified Fetch UX)  
+**Related specs**: Spec 001, Spec 002, Spec 004  
+**Amendment**: `specs/003-dataset-distribution/simplified-fetch-ux.md`
 
 ## Summary
 
@@ -78,17 +79,19 @@ Spec 003 keeps the current single-dataset experiment model. Multiple datasets ca
 
 The local dataset cache is a materialization cache keyed by explicit identity/version/origin/revision information. It does not perform plugin discovery, package marketplace behavior, dynamic loading, or adapter registration.
 
-### D6a — Acquisition source types are explicit
+### D6a — Acquisition source types are explicit (amended by A1)
 
-Dataset acquisition source handling is explicit and closed over a small set of source types:
+Dataset acquisition source selection uses three exclusive flags:
 
-- local filesystem path copied into the cache;
-- git repository origin materialized by clone/download in a follow-on implementation path;
-- direct `.tar.gz` archive URL;
-- GitHub Release tag URL plus explicit asset name.
+- `--dataset-url`: download a remote `.tar.gz` archive; requires `--sha256` or `--sha256-url`;
+- `--dataset-file`: use a local `.tar.gz` archive; requires `--sha256` or `--sha256-file`;
+- `--dataset-dir`: import an already-unpacked local directory; manifest must be present.
 
-Archive and release-asset flows are acquisition-only behaviors. They do not change the no-network
-rule for lifecycle commands.
+Exactly one source flag must be provided. Providing none or more than one is an error.
+
+The old positional `<dataset-id> --origin <origin> --version <version>` CLI surface is superseded. The GitHub Release tag URL + `--asset-name` form is also superseded; users should resolve the direct asset download URL themselves and pass it via `--dataset-url`.
+
+Archive and release-asset flows are acquisition-only behaviors. They do not change the no-network rule for lifecycle commands.
 
 ### D7 — Reuse existing task/instance models where possible (spec D8)
 
@@ -99,6 +102,16 @@ Do not create parallel `DatasetTask` / `DatasetInstance` models duplicating exis
 Fake dataset validates generic distribution mechanics and provider-free workflow.
 
 `ctxbench/lattes` validates real dataset package conformance.
+
+### D9a — Dataset identity and version come from `ctxbench.dataset.json` (Amendment A1)
+
+Dataset identity and `datasetVersion` are read from the dataset package manifest (`ctxbench.dataset.json`), not from CLI arguments. Optional `--id` and `--version` CLI flags may exist only as validation overrides. The manifest name `ctxbench.dataset.json` is fixed to avoid confusion with lifecycle `manifest.json`.
+
+Version terminology: `datasetVersion` (from manifest) is distinct from `ctxbenchVersion`, `manifestSchemaVersion`, `releaseTag`, and `contentHash`.
+
+### D9b — Cache root selection is injectable and shared (Amendment A1)
+
+`DatasetCache` accepts an optional `cache_root` parameter. Resolution order: constructor arg → `CTXBENCH_DATASET_CACHE` env var → default location. All of `ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan` must support `--cache-dir` / `CTXBENCH_DATASET_CACHE` consistently.
 
 ### D9 — Materialization manifest and artifact provenance use different schemas
 
@@ -401,12 +414,11 @@ feat(dataset): add local materialization cache
 
 ---
 
-### S3 — Acquisition Source Model and CLI Surface
+### S3 — Acquisition Source Model and CLI Surface _(SUPERSEDED by S-A1)_
 
-**Goal**: Extend `ctxbench dataset fetch` to model acquisition sources and checksum requirements
-without yet implementing archive extraction details in unrelated modules.
+> **Amendment A1**: The CLI surface defined in S3 (positional `<dataset-id>`, `--origin`, `--version`) is superseded by S-A1. Core dispatch and `file-copy` acquisition logic implemented in S3 is preserved as prior work. The `--asset-name` flag is no longer a first-class CLI surface.
 
-**Command**:
+**Command** _(superseded — do not use as canonical reference)_:
 
 ```bash
 ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
@@ -456,9 +468,11 @@ feat(cli): add ctxbench dataset fetch
 
 ---
 
-### S3a — Verified Archive and Release-Asset Acquisition
+### S3a — Verified Archive and Release-Asset Acquisition _(SUPERSEDED by S-A1)_
 
-**Goal**: Support verified dataset materialization from direct `.tar.gz` URLs and GitHub Release
+> **Amendment A1**: The CLI surface in S3a (release tag URL + `--asset-name`) is superseded. Archive download and checksum verification logic is preserved as prior work. S-A1 replaces the argument model with `--dataset-url`/`--sha256`/`--sha256-url`.
+
+**Goal** _(prior work — archived for reference)_: Support verified dataset materialization from direct `.tar.gz` URLs and GitHub Release
 tag URLs plus explicit asset names.
 
 **Responsibilities**:
@@ -486,9 +500,11 @@ pytest tests/test_dataset_archive_fetch.py
 
 ---
 
-### S3b — Safe Extraction and Manifest Discovery
+### S3b — Safe Extraction and Manifest Discovery _(PARTIALLY SUPERSEDED by S-A1)_
 
-**Goal**: Safely extract verified archives and locate exactly one dataset package manifest before
+> **Amendment A1**: Archive safety logic (path traversal rejection, unsafe link rejection, device node rejection) remains valid. Manifest discovery is superseded: the target manifest name changes to `ctxbench.dataset.json` (from an unspecified name). Identity/version validation changes: values now come from the manifest, not from CLI args. S-A1 implements the updated manifest discovery.
+
+**Goal** _(prior work — archive safety remains valid; manifest discovery superseded)_: Safely extract verified archives and locate exactly one dataset package manifest before
 cache materialization.
 
 **Responsibilities**:
@@ -513,6 +529,97 @@ tests/test_dataset_manifest_discovery.py
 ```bash
 pytest tests/test_dataset_archive_safety.py
 pytest tests/test_dataset_manifest_discovery.py
+```
+
+---
+
+### S-A1a — Simplified Fetch Surface and Manifest-Driven Identity (Amendment A1)
+
+**Goal**: Replace the verbose `ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>` CLI surface (implemented in S3/S3a/S3b) with the simplified source-selector UX defined by Amendment A1. Read dataset identity and `datasetVersion` from `ctxbench.dataset.json` during fetch and print the materialized path.
+
+**Supersedes**: CLI surface of S3, argument handling in S3a, manifest discovery target in S3b. Core archive safety logic from S3b/S3e-S3i remains valid.
+
+**Key changes**:
+
+1. `cli.py` fetch parser: remove positional `<dataset-id>`, `--origin`, and mandatory `--version`; add a mutually exclusive `--dataset-url` / `--dataset-file` / `--dataset-dir` selector; add `--sha256-file`; keep `--sha256` and `--sha256-url`; add optional `--id` / `--version` only as validation overrides if implemented.
+2. `acquisition.py`: update source classification and checksum handling to use `--dataset-url` / `--dataset-file` / `--dataset-dir` as the primary selector and enforce FR-019a/b/c/d.
+3. `archive.py`: discover `ctxbench.dataset.json` as the canonical dataset package manifest and validate identity/version from the manifest, not from required CLI args.
+4. `commands/dataset.py` fetch path: dispatch by source type, read identity and `datasetVersion` from the discovered manifest, validate optional `--id` / `--version` overrides when supported, and print identity, `datasetVersion`, verified checksum, and materialized path.
+
+**Likely files**:
+
+```text
+src/ctxbench/cli.py
+src/ctxbench/commands/dataset.py
+src/ctxbench/dataset/acquisition.py
+src/ctxbench/dataset/archive.py
+tests/test_dataset_fetch.py
+tests/test_dataset_archive_fetch.py
+tests/test_dataset_manifest_discovery.py
+tests/test_dataset_archive_safety.py
+```
+
+**Validation**:
+
+```bash
+pytest tests/test_dataset_fetch.py
+pytest tests/test_dataset_archive_fetch.py
+pytest tests/test_dataset_manifest_discovery.py
+pytest tests/test_dataset_archive_safety.py
+```
+
+**Dependencies**: S2 (cache), S3 (parser wiring base)
+
+**Commit**:
+
+```text
+feat(cli): simplify ctxbench dataset fetch UX (Amendment A1)
+```
+
+### S-A1b — Shared Cache Root and Materialization Compatibility (Amendment A1)
+
+**Goal**: Add shared cache-root selection for dataset-resolving commands and keep materialization metadata consistent with Amendment A1 without broad schema churn.
+
+**Key changes**:
+
+1. `cli.py`: add `--cache-dir` to `ctxbench dataset inspect` and `ctxbench plan`, and ensure `ctxbench dataset fetch` passes it through.
+2. `cache.py`: `DatasetCache` accepts an optional cache root and resolves it in the order constructor arg → `CTXBENCH_DATASET_CACHE` → default location.
+3. `commands/dataset.py` inspect path and `commands/plan.py`: construct `DatasetCache` with the resolved cache root.
+4. `materialization.py`: add `datasetVersion` as the authoritative dataset package version while keeping `requestedVersion` compatibility explicit and scoped to existing cache and resolver behavior.
+5. Update docs/contracts for the simplified fetch UX and shared cache-root behavior.
+
+**Likely files**:
+
+```text
+src/ctxbench/cli.py
+src/ctxbench/commands/dataset.py
+src/ctxbench/commands/plan.py
+src/ctxbench/dataset/cache.py
+src/ctxbench/dataset/materialization.py
+tests/test_dataset_cache.py
+tests/test_dataset_inspect.py
+tests/test_fake_dataset_workflow.py
+tests/test_dataset_distribution_workflow.py
+docs/datasets/using-external-datasets.md
+specs/003-dataset-distribution/contracts/dataset-commands.md
+README.md
+```
+
+**Validation**:
+
+```bash
+pytest tests/test_dataset_cache.py
+pytest tests/test_dataset_inspect.py
+pytest tests/test_fake_dataset_workflow.py
+pytest tests/test_dataset_distribution_workflow.py -k "plan or inspect"
+```
+
+**Dependencies**: S-A1a
+
+**Commit**:
+
+```text
+feat(cache): share dataset cache root across fetch inspect and plan
 ```
 
 ---
@@ -1023,12 +1130,14 @@ specs/003-dataset-distribution/contracts/dataset-commands.md
 
 #### `docs/datasets/using-external-datasets.md`
 
+> **Amendment A1**: Must use the simplified source-selector UX, not the old `<dataset-id> --origin --version` form.
+
 Must explain:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes \
-  --version v0.1.0
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0/lattes.tar.gz \
+  --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0/lattes.tar.gz.sha256
 
 ctxbench dataset inspect ctxbench/lattes@v0.1.0
 
@@ -1244,6 +1353,8 @@ Satisfied by required strategy descriptor comparability fields for dataset-contr
 feat(dataset): add dataset package distribution envelope
 feat(dataset): add local materialization cache
 feat(cli): add ctxbench dataset fetch
+feat(dataset): add verified archive acquisition sources
+feat(dataset): add safe archive extraction and manifest discovery
 feat(dataset): resolve cached datasets and reject ambiguous references
 feat(cli): add ctxbench dataset inspect
 refactor(plan): resolve dataset package before trial planning
@@ -1252,4 +1363,5 @@ test(dataset): enforce no implicit dataset fetch during lifecycle commands
 test(lattes): add provider-free lattes package conformance workflow
 test(dataset): add fake dataset provider-free workflow
 docs(dataset): document external dataset workflow and authoring guide
+feat(cli): simplify ctxbench dataset fetch UX (Amendment A1)
 ```

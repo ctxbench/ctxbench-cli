@@ -2,7 +2,8 @@
 
 **Spec**: `specs/003-dataset-distribution/spec.md`  
 **Plan**: `specs/003-dataset-distribution/plan.md`  
-**Branch**: `feat/dataset-distribution`
+**Branch**: `feat/dataset-distribution`  
+**Amendment**: `specs/003-dataset-distribution/simplified-fetch-ux.md` — adds Slice S-A1
 
 ## Task Format
 
@@ -82,7 +83,9 @@ refuse silent overwrites.
 
 ---
 
-## Slice S3 — `ctxbench dataset fetch`
+## Slice S3 — `ctxbench dataset fetch` _(SUPERSEDED by S-A1 for CLI surface)_
+
+> **Amendment A1**: CLI surface (positional `<dataset-id>`, `--origin`, `--version`) superseded by S-A1. Parser wiring and `file-copy` dispatch remain as prior work. Do not use S3 command examples as the canonical reference.
 
 **Goal**: Implement explicit dataset acquisition command supporting `file-copy` and `git-clone`
 methods; wire nested subparser per D10; write manifest.  
@@ -107,7 +110,9 @@ methods; wire nested subparser per D10; write manifest.
 
 ---
 
-## Slice S3a — Verified Archive and Release-Asset Acquisition
+## Slice S3a — Verified Archive and Release-Asset Acquisition _(SUPERSEDED by S-A1 for argument model)_
+
+> **Amendment A1**: The `--asset-name` flag and release tag URL + asset name form are superseded. Archive download and checksum verification logic preserved. S-A1 replaces the argument model with `--dataset-url`/`--sha256`/`--sha256-url`.
 
 **Goal**: Support dataset acquisition from direct `.tar.gz` archive URLs and GitHub Release tag URLs
 plus explicit asset names, with checksum verification required before extraction.  
@@ -131,7 +136,9 @@ plus explicit asset names, with checksum verification required before extraction
 
 ---
 
-## Slice S3b — Safe Extraction and Manifest Discovery
+## Slice S3b — Safe Extraction and Manifest Discovery _(PARTIALLY SUPERSEDED by S-A1)_
+
+> **Amendment A1**: Archive safety logic remains valid. Manifest discovery is superseded: target name changes to `ctxbench.dataset.json` and identity/version are read from the manifest rather than validated against CLI args. S-A1 updates manifest discovery.
 
 **Goal**: Safely extract verified `.tar.gz` archives, discover exactly one dataset manifest, and
 validate identity/version before cache materialization.  
@@ -426,10 +433,70 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 
 ---
 
+---
+
+## Slice S-A1a — Simplified Fetch Surface and Manifest-Driven Identity (Amendment A1)
+
+**Goal**: Replace the verbose `ctxbench dataset fetch <dataset-id> --origin --version` CLI surface with the simplified source-selector UX. Read identity and `datasetVersion` from `ctxbench.dataset.json` during fetch and print the materialized path.  
+**Validation**: `pytest tests/test_dataset_fetch.py tests/test_dataset_archive_fetch.py tests/test_dataset_manifest_discovery.py tests/test_dataset_archive_safety.py`  
+**Depends on**: S2, S3  
+**Suggested commit**: `feat(cli): simplify ctxbench dataset fetch UX (Amendment A1)`
+
+### Tasks
+
+- [x] T-A1a-1 [S-A1a] Update the `fetch` subparser in `src/ctxbench/cli.py`: remove positional `<dataset-id>`, `--origin`, mandatory `--version`, and public `--asset-name`; add `--dataset-url`, `--dataset-file`, and `--dataset-dir` as a mutually exclusive group (exactly one required); add `--sha256-file`; keep `--sha256` and `--sha256-url`; add optional `--id` / `--version` only if they are implemented strictly as validation overrides per FR-019f.
+- [x] T-A1a-2 [P] [S-A1a] Update acquisition and manifest handling in `src/ctxbench/dataset/acquisition.py` and `src/ctxbench/dataset/archive.py` to use `--dataset-url` / `--dataset-file` / `--dataset-dir` as the primary source selector; enforce checksum requirements per FR-019a/b/c/d; target `ctxbench.dataset.json` as the canonical manifest; read identity and `datasetVersion` from the discovered manifest; validate optional `--id` / `--version` overrides only if `T-A1a-1` adds them.
+- [x] T-A1a-3 [S-A1a] Update `fetch_command()` and `fetch_command_from_args()` in `src/ctxbench/commands/dataset.py` to dispatch on source type (`--dataset-url` → archive-download, `--dataset-file` → local archive, `--dataset-dir` → directory import); remove the old `<dataset-id> --origin --version` primary flow; preserve archive safety logic; print identity, `datasetVersion`, verified checksum (when available), and final materialized path after successful materialization.
+- [x] T-A1a-4 [S-A1a] Update `tests/test_dataset_fetch.py` for the new parser and fetch behavior: cover `--dataset-url` + `--sha256-url`, `--dataset-file` + `--sha256-file`, `--dataset-dir`, no source flag error, multiple source flag error, missing checksum rejection for `--dataset-url`, missing checksum rejection for `--dataset-file`, and fetch output containing identity, `datasetVersion`, and materialized path.
+- [x] T-A1a-5 [P] [S-A1a] Update `tests/test_dataset_archive_fetch.py` and `tests/test_dataset_manifest_discovery.py` to use the source-selector argument form and `ctxbench.dataset.json`; remove tests that treat `--origin` / `--asset-name` or release-tag URL + asset-name as the canonical CLI surface; keep `tests/test_dataset_archive_safety.py` as validation-only because archive safety logic is unchanged.
+
+### Checkpoint
+
+- [x] `pytest tests/test_dataset_fetch.py` passes with source-selector UX.
+- [x] `pytest tests/test_dataset_archive_fetch.py` passes with updated argument form.
+- [x] `pytest tests/test_dataset_manifest_discovery.py` passes targeting `ctxbench.dataset.json`.
+- [x] `pytest tests/test_dataset_archive_safety.py` passes unchanged.
+- [x] `ctxbench dataset fetch --help` shows `--dataset-url`, `--dataset-file`, and `--dataset-dir`; does NOT show positional `<dataset-id>`, `--origin`, or `--asset-name` as the primary flow.
+- [x] `ctxbench dataset fetch` without a source flag prints an argparse error, not a traceback.
+- [x] No provider calls; no real remote fetches.
+- [x] Diff is reviewable.
+
+---
+
+## Slice S-A1b — Shared Cache Root and Materialization Compatibility (Amendment A1)
+
+**Goal**: Add shared cache-root selection for dataset-resolving commands and keep materialization metadata aligned with Amendment A1 without opportunistic schema refactors.  
+**Validation**: `pytest tests/test_dataset_cache.py tests/test_dataset_inspect.py tests/test_fake_dataset_workflow.py tests/test_dataset_distribution_workflow.py -k "plan or inspect"`  
+**Depends on**: S-A1a  
+**Suggested commit**: `feat(cache): share dataset cache root across fetch inspect and plan`
+
+### Tasks
+
+- [ ] T-A1b-1 [S-A1b] Update `src/ctxbench/cli.py` so `ctxbench dataset inspect` and `ctxbench plan` accept `--cache-dir`; ensure `ctxbench dataset fetch` passes `--cache-dir` through its args path as part of the shared cache-root contract in D14 / FR-019j.
+- [ ] T-A1b-2 [P] [S-A1b] Update `DatasetCache` in `src/ctxbench/dataset/cache.py` to accept an optional cache root and resolve it in this order: constructor arg → `CTXBENCH_DATASET_CACHE` env var → default location (D13 / FR-019h). Keep the change scoped to cache-root resolution; do not refactor unrelated cache semantics.
+- [ ] T-A1b-3 [P] [S-A1b] Update `src/ctxbench/commands/dataset.py`, `src/ctxbench/commands/plan.py`, and `src/ctxbench/dataset/materialization.py` so inspect and plan construct `DatasetCache` with the resolved cache root and materialization metadata records `datasetVersion` as authoritative while keeping `requestedVersion` compatibility explicit and narrow.
+- [ ] T-A1b-4 [S-A1b] Add focused provider-free tests in `tests/test_dataset_cache.py`, `tests/test_dataset_inspect.py`, `tests/test_fake_dataset_workflow.py`, and `tests/test_dataset_distribution_workflow.py` for: `--cache-dir` overrides default, `CTXBENCH_DATASET_CACHE` overrides default, explicit `--cache-dir` takes priority over the env var, and `ctxbench dataset inspect` / `ctxbench plan` resolve datasets from the same non-default cache root.
+- [ ] T-A1b-5 [P] [S-A1b] Update `docs/datasets/using-external-datasets.md`, `specs/003-dataset-distribution/contracts/dataset-commands.md`, and `README.md` to document the simplified source-selector fetch UX and shared `--cache-dir` behavior without introducing any new dataset commands.
+
+### Checkpoint
+
+- [ ] `pytest tests/test_dataset_cache.py` passes.
+- [ ] `pytest tests/test_dataset_inspect.py` passes.
+- [ ] `pytest tests/test_fake_dataset_workflow.py` passes.
+- [ ] `pytest tests/test_dataset_distribution_workflow.py -k "plan or inspect"` passes.
+- [ ] `ctxbench dataset inspect --help` and `ctxbench plan --help` show `--cache-dir`.
+- [ ] `CTXBENCH_DATASET_CACHE` and explicit `--cache-dir` precedence are both covered by focused provider-free tests.
+- [ ] No provider calls; no real remote fetches.
+- [ ] Diff is reviewable.
+
+---
+
 ## Final Audit
 
 - [x] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
 - [x] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
+- [x] T064b [Audit] After S-A1a: re-run the full fetch/archive/manifest test suite with the simplified source-selector UX: `pytest tests/test_dataset_fetch.py tests/test_dataset_archive_fetch.py tests/test_dataset_manifest_discovery.py tests/test_dataset_archive_safety.py` — all must pass with the new argument form.
+- [ ] T064c [Audit] After S-A1b: run focused provider-free cache-root and compatibility validation: `pytest tests/test_dataset_cache.py tests/test_dataset_inspect.py tests/test_fake_dataset_workflow.py tests/test_dataset_distribution_workflow.py -k "plan or inspect"` — all must pass with shared `--cache-dir` / `CTXBENCH_DATASET_CACHE` behavior.
 - [x] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
 - [x] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
 - [x] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
@@ -441,9 +508,11 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 ```text
 S1  ──────────────────────────────────────────────┐
 S2                                                 │
-S3 (needs S2)                                     │
-S3a (needs S2, S3)                                │
-S3b (needs S2, S3a)                               │
+S3 (needs S2)              [superseded CLI surface]│
+S3a (needs S2, S3)         [superseded arg model] │
+S3b (needs S2, S3a)        [manifest name updated]│
+S-A1a (needs S2, S3)       [fetch UX + manifest]  │
+S-A1b (needs S-A1a)        [shared cache root]    │
 S4 (needs S1, S2)                                 │
 S5 (needs S1, S4)                                 │
 S6 (needs S4, S5)                                 │
@@ -454,10 +523,12 @@ S10 (needs S1, S4, S6)                            │
 S11 (needs S1, S4, S5, S7)                        │
 S12 (needs S7, S8, S10) ──────────────────────────┤
 S13 (needs S1–S12)    ────────────────────────────┘
-Audit (needs all slices complete)
+Audit (needs all slices complete, including S-A1a/S-A1b)
 ```
 
 S3 and S4 may begin in parallel once S2 is complete (disjoint files).  
+S-A1a may begin once S3 is complete (amends S3 files).  
+S-A1b may begin once S-A1a is complete (shared cache-root and compatibility follow-on).  
 S8 and S9 may begin in parallel once S7 is complete (disjoint files).  
 S10 and S11 may begin in parallel once S7 is complete (disjoint files).  
 Within S13, all [P]-marked tasks may run in parallel.

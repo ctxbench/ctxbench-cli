@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import asdict
 import json
 from pathlib import Path
-import subprocess
 import tempfile
 
 from ctxbench.dataset.archive import determine_package_root, safe_extract_tar_gz
@@ -15,7 +14,7 @@ from ctxbench.dataset.acquisition import (
     classify_acquisition_source,
     discover_and_validate_manifest,
     download_bytes,
-    require_checksum_for_remote_archive,
+    require_checksum_for_archive_source,
     resolve_archive_source,
     resolve_expected_sha256,
     verify_downloaded_bytes,
@@ -24,76 +23,70 @@ from ctxbench.dataset.materialization import MaterializationManifest
 from ctxbench.dataset.resolver import DatasetResolver
 
 
-def _is_git_origin(origin: str) -> bool:
-    return origin.startswith(("http://", "https://")) or origin.endswith(".git")
+def _coerce_dataset_version(value: object) -> str:
+    if not isinstance(value, str) or not value:
+        raise ValueError("Dataset manifest is missing a non-empty datasetVersion.")
+    return value
 
 
-def _resolve_git_revision(origin: str, version: str) -> str | None:
-    try:
-        result = subprocess.run(
-            ["git", "ls-remote", origin, version],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        return None
-    for line in result.stdout.splitlines():
-        if not line.strip():
-            continue
-        return line.split()[0]
-    return None
+def _load_persisted_manifest(cache: DatasetCache, dataset_id: str, version: str) -> MaterializationManifest:
+    matches = cache.lookup(dataset_id, version)
+    if not matches:
+        raise ValueError(f"Materialized dataset not found in cache after fetch: {dataset_id}@{version}")
+    return matches[0]
 
 
 def fetch_command(
-    dataset_id: str,
-    origin: str,
-    version: str,
+    dataset_id: str | None = None,
+    origin: str | None = None,
+    version: str | None = None,
     *,
-    asset_name: str | None = None,
+    dataset_url: str | None = None,
+    dataset_file: str | None = None,
+    dataset_dir: str | None = None,
     sha256: str | None = None,
     sha256_url: str | None = None,
+    sha256_file: str | None = None,
     cache_dir: Path | None = None,
 ) -> None:
     cache = DatasetCache(cache_dir=cache_dir)
-    source_path = Path(origin).expanduser()
+    expected_dataset_id = dataset_id
+    expected_version = version
+    if not any((dataset_url, dataset_file, dataset_dir)) and origin is not None:
+        legacy_source = Path(origin).expanduser()
+        if legacy_source.exists() and legacy_source.is_dir():
+            dataset_dir = origin
+        elif legacy_source.exists() and legacy_source.is_file():
+            dataset_file = origin
+        else:
+            dataset_url = origin
     source = classify_acquisition_source(
-        origin=origin,
-        asset_name=asset_name,
+        dataset_url=dataset_url,
+        dataset_file=dataset_file,
+        dataset_dir=dataset_dir,
         sha256=sha256,
         sha256_url=sha256_url,
+        sha256_file=sha256_file,
     )
-    require_checksum_for_remote_archive(source)
+    require_checksum_for_archive_source(source)
 
-    if source.source_type == "git-origin":
-        fetch_method = "git-clone"
-        resolved_revision = _resolve_git_revision(origin, version)
-    elif source.source_type == "local-path":
+    if source.source_type == "local-directory":
         fetch_method = "file-copy"
-        resolved_revision = None
+        source_path = Path(source.origin).expanduser()
         if not source_path.exists() or not source_path.is_dir():
-            raise FileNotFoundError(f"Dataset origin path not found: {origin}")
-    else:
-        fetch_method = "archive-download"
-        resolved_revision = None
-        resolved_archive = resolve_archive_source(source)
-        expected_sha256 = resolve_expected_sha256(source)
-        payload = download_bytes(resolved_archive.archive_url)
-        verified_sha256 = verify_downloaded_bytes(payload, expected_sha256)
-    if fetch_method == "archive-download":
-        manifest = build_archive_materialization_manifest(
-            dataset_id=dataset_id,
-            version=version,
-            source=source,
-            resolved=resolved_archive,
-            verified_sha256=verified_sha256,
+            raise FileNotFoundError(f"Dataset directory not found: {source.origin}")
+        _, payload = discover_and_validate_manifest(
+            source_path,
+            expected_dataset_id=expected_dataset_id,
+            expected_version=expected_version,
         )
-    else:
+        discovered_dataset_id = str(payload["id"])
+        discovered_version = _coerce_dataset_version(payload.get("datasetVersion", payload.get("version")))
         manifest = MaterializationManifest(
-            datasetId=dataset_id,
-            requestedVersion=version,
-            resolvedRevision=resolved_revision,
-            origin=origin,
+            datasetId=discovered_dataset_id,
+            requestedVersion=discovered_version,
+            resolvedRevision=None,
+            origin=source.origin,
             materializedPath="",
             contentHash=None,
             fetchedAt="unavailable",
@@ -102,29 +95,52 @@ def fetch_command(
             sourceType=source.source_type,
             archiveUrl=None,
             releaseTagUrl=None,
-            assetName=asset_name,
-            verifiedSha256=sha256,
+            assetName=None,
+            verifiedSha256=None,
         )
-
-    if fetch_method == "git-clone":
-        raise NotImplementedError(
-            "git-clone materialization is not implemented in the provider-free S3 slice."
-        )
-    if fetch_method == "archive-download":
+        cache.store(manifest, source_path)
+        persisted = _load_persisted_manifest(cache, discovered_dataset_id, discovered_version)
+    else:
+        resolved_archive = resolve_archive_source(source)
+        expected_sha256 = resolve_expected_sha256(source)
+        if resolved_archive.archive_url is not None:
+            payload = download_bytes(resolved_archive.archive_url)
+        elif resolved_archive.archive_path is not None:
+            payload = resolved_archive.archive_path.read_bytes()
+        else:
+            raise ValueError(f"Archive source is incomplete: {source.origin}")
+        verified_sha256 = verify_downloaded_bytes(payload, expected_sha256)
         with tempfile.TemporaryDirectory(prefix="ctxbench-archive-") as tmpdir:
             extraction_root = Path(tmpdir) / "extract"
             safe_extract_tar_gz(payload, extraction_root)
-            discover_and_validate_manifest(
+            _, manifest_payload = discover_and_validate_manifest(
                 extraction_root,
-                expected_dataset_id=dataset_id,
-                expected_version=version,
+                expected_dataset_id=expected_dataset_id,
+                expected_version=expected_version,
             )
             package_root = determine_package_root(extraction_root)
+            discovered_dataset_id = str(manifest_payload["id"])
+            discovered_version = _coerce_dataset_version(
+                manifest_payload.get("datasetVersion", manifest_payload.get("version"))
+            )
+            manifest = build_archive_materialization_manifest(
+                dataset_id=discovered_dataset_id,
+                version=discovered_version,
+                source=source,
+                resolved=resolved_archive,
+                verified_sha256=verified_sha256,
+            )
             manifest.contentHash = manifest.verifiedSha256
             cache.store(manifest, package_root)
-        return
+        persisted = _load_persisted_manifest(cache, discovered_dataset_id, discovered_version)
 
-    cache.store(manifest, source_path)
+    print(f"identity: {persisted.datasetId}")
+    print(f"datasetVersion: {persisted.requestedVersion}")
+    if persisted.verifiedSha256:
+        print(f"verifiedSha256: {persisted.verifiedSha256}")
+    elif persisted.contentHash:
+        print(f"contentHash: {persisted.contentHash}")
+    print(f"materializedPath: {persisted.materializedPath}")
 
 
 def _parse_dataset_ref(dataset_ref: str) -> str | dict[str, str]:
@@ -169,19 +185,13 @@ def inspect_command(
 
 
 def fetch_command_from_args(args: object) -> int:
-    dataset_id = str(getattr(args, "dataset_id"))
-    origin = str(getattr(args, "origin"))
-    version = str(getattr(args, "version"))
-    asset_name = getattr(args, "asset_name", None)
-    sha256 = getattr(args, "sha256", None)
-    sha256_url = getattr(args, "sha256_url", None)
     fetch_command(
-        dataset_id,
-        origin,
-        version,
-        asset_name=asset_name,
-        sha256=sha256,
-        sha256_url=sha256_url,
+        dataset_url=getattr(args, "dataset_url", None),
+        dataset_file=getattr(args, "dataset_file", None),
+        dataset_dir=getattr(args, "dataset_dir", None),
+        sha256=getattr(args, "sha256", None),
+        sha256_url=getattr(args, "sha256_url", None),
+        sha256_file=getattr(args, "sha256_file", None),
     )
     return 0
 

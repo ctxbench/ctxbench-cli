@@ -106,13 +106,29 @@ ctxbench status
 
 Datasets that live in external repositories are not fetched implicitly.
 
-A researcher obtains a remote dataset explicitly:
+A researcher obtains a remote dataset explicitly using source-selector flags. Dataset identity and version are read from the dataset package manifest (`ctxbench.dataset.json`). Canonical workflows:
 
+**Remote archive:**
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes \
-  --version v0.1.0
+ctxbench dataset fetch \
+  --dataset-url <dataset.tar.gz-url> \
+  --sha256-url <dataset.sha256-url>
 ```
+
+**Local archive:**
+```bash
+ctxbench dataset fetch \
+  --dataset-file <dataset.tar.gz> \
+  --sha256-file <dataset.sha256>
+```
+
+**Local unpacked directory:**
+```bash
+ctxbench dataset fetch \
+  --dataset-dir <dataset-root>
+```
+
+The old form `ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>` is **superseded by Amendment A1** and MUST NOT be the canonical workflow. See D9–D15 below.
 
 The fetch command materializes the dataset into a local CTXBench dataset cache and records acquisition provenance.
 
@@ -191,6 +207,64 @@ This spec MUST NOT introduce parallel task/instance models that duplicate existi
 
 For this spec, the implementation may use aliases or adapter-facing wrappers over current models. Renaming or replacing task/instance models belongs to the domain-boundary implementation work, not to this distribution slice.
 
+### D9 — Dataset identity and version come from the manifest (Amendment A1)
+
+Dataset identity MUST be read from the dataset package manifest (`ctxbench.dataset.json`).
+Dataset version (`datasetVersion`) MUST be read from the dataset package manifest.
+
+Neither identity nor version must be required as positional arguments or mandatory CLI flags in the common `fetch` workflow. Optional user-provided `--id` or `--version` flags MAY exist only as validation overrides, not as the source of truth.
+
+### D10 — Dataset package manifest is named `ctxbench.dataset.json` (Amendment A1)
+
+The canonical dataset package manifest MUST be named `ctxbench.dataset.json` to avoid confusion with the benchmark lifecycle `manifest.json`.
+
+### D11 — Version terminology is explicit and unambiguous (Amendment A1)
+
+The spec distinguishes:
+
+- `datasetVersion`: authoritative version of the dataset package contents; read from `ctxbench.dataset.json`;
+- `manifestSchemaVersion`: version of the `ctxbench.dataset.json` schema format;
+- `ctxbenchVersion`: version of the CTXBench CLI/framework;
+- `releaseTag`: distribution tag associated with an archive or release asset; not the authoritative dataset version;
+- `contentHash` / `verifiedSha256`: integrity and exact content identity, not semantic version.
+
+The field name `version` in experiment references means `datasetVersion`.
+
+### D12 — Fetch source selection is exclusive (Amendment A1)
+
+Exactly one of the following source flags MUST be provided to `ctxbench dataset fetch`:
+
+```text
+--dataset-url   — remote .tar.gz archive URL
+--dataset-file  — local .tar.gz archive path
+--dataset-dir   — local unpacked dataset directory
+```
+
+Providing none or more than one is an error.
+
+### D13 — User chooses the cache root, not the final internal path (Amendment A1)
+
+Dataset materialization happens inside a dataset cache.
+
+The user may choose the cache root using `--cache-dir <path>` or the environment variable `CTXBENCH_DATASET_CACHE`. If neither is provided, CTXBench uses its default dataset cache location.
+
+The final materialized path is computed by CTXBench from dataset identity, `datasetVersion`, and content identity. The user must not be required to provide the exact final materialized directory.
+
+### D14 — Cache root selection is shared across dataset commands (Amendment A1)
+
+The same cache root selection mechanism must be available to all commands that resolve cached datasets. At minimum: `ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan` must support cache root selection consistently.
+
+`export` and `status` are artifact-only commands and must not require dataset cache access when sufficient provenance is already present in lifecycle artifacts.
+
+### D15 — Fetch must report the materialized path (Amendment A1)
+
+After successful materialization, `ctxbench dataset fetch` MUST print:
+
+- dataset identity;
+- `datasetVersion`;
+- verified checksum or content hash when available;
+- final materialized path.
+
 ## Requirements
 
 ### Core vs. External Distribution
@@ -224,29 +298,57 @@ The dataset package MUST expose the following responsibilities. The concrete imp
 
 ### Dataset Acquisition and Materialization
 
-- **FR-019**: `ctxbench-cli` MUST provide an explicit dataset acquisition command:
- - **FR-019**: `ctxbench-cli` MUST provide an explicit dataset acquisition command:
+- **FR-019**: `ctxbench-cli` MUST provide an explicit dataset acquisition command `ctxbench dataset fetch` using source-selector flags. The canonical forms are:
 
   ```bash
-  ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>
+  # Remote archive
+  ctxbench dataset fetch --dataset-url <url> --sha256-url <sha256-url>
+  ctxbench dataset fetch --dataset-url <url> --sha256 <hex>
+
+  # Local archive
+  ctxbench dataset fetch --dataset-file <path> --sha256-file <path>
+  ctxbench dataset fetch --dataset-file <path> --sha256 <hex>
+
+  # Local unpacked directory
+  ctxbench dataset fetch --dataset-dir <path>
   ```
+
+  The form `ctxbench dataset fetch <dataset-id> --origin <origin> --version <version>` is **superseded by Amendment A1** and MUST NOT be the canonical workflow.
+
+- **FR-019a**: Exactly one source flag (`--dataset-url`, `--dataset-file`, or `--dataset-dir`) MUST be provided; providing none or more than one is an error.
+
+- **FR-019b**: `--dataset-url` MUST require either `--sha256` (inline hex string) or `--sha256-url` (URL to a checksum file).
+
+- **FR-019c**: `--dataset-file` MUST require either `--sha256` (inline hex string) or `--sha256-file` (path to a local checksum file).
+
+- **FR-019d**: `--dataset-dir` does NOT require checksum material but the directory MUST contain a valid `ctxbench.dataset.json` manifest.
+
+- **FR-019e**: The canonical dataset package manifest MUST be named `ctxbench.dataset.json`.
+
+- **FR-019f**: Dataset identity and `datasetVersion` MUST be read from `ctxbench.dataset.json` after extraction or discovery. The user MUST NOT be required to provide identity or version as CLI flags in the common workflow. Optional `--id` and `--version` flags MAY exist only as validation overrides.
+
+- **FR-019g**: `datasetVersion` is the authoritative version of the dataset package contents as declared in `ctxbench.dataset.json`. It MUST be clearly distinguished from `manifestSchemaVersion`, `ctxbenchVersion`, `releaseTag`, and `contentHash`.
+
+- **FR-019h**: The user may specify a custom cache root using `--cache-dir` or the environment variable `CTXBENCH_DATASET_CACHE`. When neither is provided, CTXBench uses its default cache location.
+
+- **FR-019i**: After successful materialization, `ctxbench dataset fetch` MUST print the dataset identity, `datasetVersion`, verified checksum (when available), and the final materialized path.
+
+- **FR-019j**: The cache root selection mechanism (D14) MUST be consistently available to `ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan`.
 
 - **FR-020**: Dataset acquisition MUST materialize the dataset into a local CTXBench dataset cache.
 - **FR-021**: Dataset acquisition MUST record a materialization manifest containing at least:
-  - dataset identity;
-  - requested version;
-  - resolved version or resolved revision;
-  - origin;
+  - dataset identity (read from `ctxbench.dataset.json`);
+  - `datasetVersion` (authoritative version read from `ctxbench.dataset.json`);
+  - resolved revision or content identity;
+  - origin (source URL or path used for acquisition);
   - acquisition source type;
   - materialized path;
-  - content hash when available;
+  - verified SHA-256 or content hash when available;
   - acquisition timestamp;
-  - CTXBench version;
+  - CTXBench version (`ctxbenchVersion`);
   - fetch method.
 - **FR-022**: Dataset acquisition MUST NOT execute code from the remote dataset repository/package.
-- **FR-022a**: When acquisition uses a `.tar.gz` archive URL or release asset, the archive MUST be
-  downloaded before extraction and MUST require explicit SHA-256 verification through either
-  `--sha256` or `--sha256-url`.
+- **FR-022a**: When acquisition uses `--dataset-url`, the archive MUST be downloaded before extraction and MUST require explicit SHA-256 verification through either `--sha256` (inline hex) or `--sha256-url` (URL to a checksum file). When acquisition uses `--dataset-file`, SHA-256 verification MUST be required through either `--sha256` or `--sha256-file` (path to a local checksum file).
 - **FR-022b**: Archive acquisition MUST fail before extraction if checksum material is missing,
   cannot be obtained, or does not match the downloaded bytes.
 - **FR-022c**: Archive extraction MUST reject:
@@ -257,11 +359,8 @@ The dataset package MUST expose the following responsibilities. The concrete imp
   - device nodes;
   - FIFOs;
   - sockets or other special files.
-- **FR-022d**: After safe extraction, CTXBench MUST locate exactly one dataset package manifest.
-  It MUST support either a single top-level directory or files extracted directly at archive root.
-  It MUST fail when no manifest is found or when multiple manifests are found.
-- **FR-022e**: After manifest discovery, CTXBench MUST validate dataset identity and version against
-  the requested acquisition arguments before materialization.
+- **FR-022d**: After safe extraction, CTXBench MUST locate exactly one `ctxbench.dataset.json` dataset package manifest. It MUST support either a single top-level directory or files extracted directly at archive root. It MUST fail when no manifest is found or when multiple manifests are found.
+- **FR-022e**: After manifest discovery, CTXBench MUST read dataset identity and `datasetVersion` from `ctxbench.dataset.json`. If the user provided optional `--id` or `--version` override flags, CTXBench MUST validate the manifest values against those overrides and fail on mismatch before materialization.
 - **FR-022f**: Archive or release-asset acquisition MUST record archive provenance in the
   materialization manifest, including the verified SHA-256 and enough source information to
   reproduce the exact downloaded asset.
@@ -328,10 +427,7 @@ The dataset package MUST expose the following responsibilities. The concrete imp
 - **FR-039**: When ambiguity is detected, `ctxbench dataset inspect` and `ctxbench plan` MUST fail with an explicit error listing conflicting candidates and requiring disambiguation by origin or resolved revision.
 - **FR-040**: If a dataset identity/version pair is materialized again and resolves to different content, the command MUST not silently overwrite the existing materialization. It MUST either fail, store a distinct materialization keyed by resolved revision/content hash, or require an explicit force/update flag.
 - **FR-041**: Tags or mutable version references MUST be resolved to immutable revisions when possible, and the immutable revision MUST be recorded in provenance.
-- **FR-041a**: For GitHub Release asset acquisition, a release tag URL plus explicit asset name is a
-  valid acquisition source. CTXBench MUST resolve exactly one asset for the requested tag+asset
-  tuple and MUST record both the release tag URL and the resolved asset identity in acquisition
-  provenance.
+- **FR-041a**: _(Superseded by Amendment A1)_ Under the simplified fetch UX, GitHub Release asset acquisition uses `--dataset-url` with a direct asset download URL. The release tag URL + `--asset-name` form is no longer a first-class CLI surface. If a release tag URL is provided as `--dataset-url`, the behavior is acquisition-layer implementation detail and is not required by the CLI contract. CTXBench MUST record enough source information in the materialization manifest to reproduce the exact downloaded asset.
 - **FR-041b**: Direct archive URL acquisition is a valid acquisition source when checksum
   verification succeeds.
 
@@ -380,54 +476,77 @@ The dataset package MUST expose the following responsibilities. The concrete imp
   - dataset origin;
   - resolved revision;
   - content hash;
-  - single-dataset experiment.
+  - single-dataset experiment;
+  - `datasetVersion` (authoritative version of dataset package contents, from `ctxbench.dataset.json`);
+  - `ctxbench.dataset.json` (canonical dataset package manifest name);
+  - `manifestSchemaVersion` (version of the `ctxbench.dataset.json` schema format, distinct from `datasetVersion`).
 - **FR-058**: Documentation MUST describe dataset conflict/ambiguity errors and how to resolve them.
 
 ## Acceptance Scenarios
 
-### External Dataset Acquisition
+### External Dataset Acquisition (Remote Archive)
 
-Given a researcher wants to use `ctxbench/lattes` and the dataset is not in the `ctxbench-cli` repository,  
+Given a researcher wants to use `ctxbench/lattes` and has a remote `.tar.gz` archive URL and checksum URL,  
 When they run:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes --origin https://github.com/ctxbench/lattes --version v0.1.0
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0/lattes.tar.gz \
+  --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0/lattes.tar.gz.sha256
 ```
 
-Then the dataset is materialized into the local dataset cache and a materialization manifest records identity, origin, requested version, resolved revision, materialized path, and content hash when available.
+Then CTXBench downloads the archive, verifies SHA-256 before extraction, safely extracts it, reads dataset identity and `datasetVersion` from `ctxbench.dataset.json`, materializes the dataset into the local cache, records a materialization manifest with identity, origin, `datasetVersion`, verified SHA-256, materialized path, and acquisition timestamp, and prints the final materialized path.
 
-### Archive Acquisition
+### Archive Acquisition (Inline Checksum)
 
-Given a researcher has a direct `.tar.gz` dataset archive URL and a trusted SHA-256 value,  
+Given a researcher has a direct `.tar.gz` dataset archive URL and a trusted SHA-256 hex value,  
 When they run:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --version v0.1.0 \
-  --sha256 <sha256>
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0/lattes.tar.gz \
+  --sha256 <hex>
 ```
 
-Then CTXBench downloads the archive, verifies SHA-256 before extraction, safely extracts it,
-discovers exactly one dataset package manifest, validates dataset identity/version, and
-materializes the dataset into the local cache.
+Then CTXBench downloads the archive, verifies SHA-256 before extraction, safely extracts it, discovers exactly one `ctxbench.dataset.json` manifest, reads identity and `datasetVersion` from the manifest, and materializes the dataset into the local cache.
 
-### Release Asset Acquisition
+### Local Archive Acquisition
 
-Given a researcher has a GitHub Release tag URL and explicit asset name,  
+Given a researcher has a locally downloaded `.tar.gz` dataset archive and a SHA-256 checksum file,  
 When they run:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset \
-  --asset-name ctxbench-lattes-v0.1.0.tar.gz \
-  --version v0.1.0 \
-  --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz.sha256
+ctxbench dataset fetch \
+  --dataset-file /path/to/lattes.tar.gz \
+  --sha256-file /path/to/lattes.tar.gz.sha256
 ```
 
-Then CTXBench resolves exactly that release asset, downloads it, verifies checksum before
-extraction, safely extracts it, discovers exactly one dataset manifest, validates
-identity/version, and records release+asset provenance in the materialization manifest.
+Then CTXBench reads the checksum file, verifies SHA-256 before extraction, safely extracts the archive, discovers exactly one `ctxbench.dataset.json` manifest, reads identity and `datasetVersion`, and materializes the dataset into the local cache.
+
+### Local Directory Acquisition
+
+Given a researcher has an already-unpacked dataset directory,  
+When they run:
+
+```bash
+ctxbench dataset fetch --dataset-dir /path/to/lattes
+```
+
+Then CTXBench locates `ctxbench.dataset.json` in the directory, reads identity and `datasetVersion`, and materializes the dataset into the local cache. No checksum material is required, but the manifest must be valid.
+
+### Custom Cache Root
+
+Given a researcher wants to use a project-local cache,  
+When they run:
+
+```bash
+ctxbench dataset fetch \
+  --dataset-file lattes.tar.gz \
+  --sha256-file lattes.tar.gz.sha256 \
+  --cache-dir ./.ctxbench/datasets
+```
+
+Then CTXBench materializes the dataset under `./.ctxbench/datasets` and prints the final materialized path. Subsequent `ctxbench dataset inspect` and `ctxbench plan` commands using the same `--cache-dir` find the materialized dataset.
 
 ### Unsafe Archive Rejection
 

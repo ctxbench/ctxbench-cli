@@ -15,84 +15,65 @@ from ctxbench.dataset.materialization import MaterializationManifest
 class AcquisitionSource:
     source_type: str
     origin: str
-    asset_name: str | None = None
     sha256: str | None = None
     sha256_url: str | None = None
+    sha256_file: str | None = None
 
 
 @dataclass(slots=True)
 class ResolvedArchiveSource:
     source_type: str
     origin: str
-    archive_url: str
-    asset_name: str | None = None
-    release_tag_url: str | None = None
-
-
-def is_archive_url(origin: str) -> bool:
-    return origin.startswith(("http://", "https://")) and origin.endswith(".tar.gz")
-
-
-def is_release_tag_url(origin: str) -> bool:
-    return origin.startswith(("http://", "https://")) and "/releases/tag/" in origin
+    archive_url: str | None = None
+    archive_path: Path | None = None
 
 
 def classify_acquisition_source(
     *,
-    origin: str,
-    asset_name: str | None = None,
+    dataset_url: str | None = None,
+    dataset_file: str | None = None,
+    dataset_dir: str | None = None,
     sha256: str | None = None,
     sha256_url: str | None = None,
+    sha256_file: str | None = None,
 ) -> AcquisitionSource:
-    if is_release_tag_url(origin):
-        return AcquisitionSource(
-            source_type="github-release-tag",
-            origin=origin,
-            asset_name=asset_name,
-            sha256=sha256,
-            sha256_url=sha256_url,
+    provided_sources = [
+        ("archive-url", dataset_url),
+        ("local-archive", dataset_file),
+        ("local-directory", dataset_dir),
+    ]
+    selected = [(source_type, value) for source_type, value in provided_sources if value]
+    if len(selected) != 1:
+        raise ValueError(
+            "Exactly one dataset source must be provided: "
+            "--dataset-url, --dataset-file, or --dataset-dir."
         )
-    if is_archive_url(origin):
-        return AcquisitionSource(
-            source_type="archive-url",
-            origin=origin,
-            asset_name=asset_name,
-            sha256=sha256,
-            sha256_url=sha256_url,
-        )
+    source_type, origin = selected[0]
     return AcquisitionSource(
-        source_type="local-path" if Path(origin).expanduser().exists() else "git-origin",
+        source_type=source_type,
         origin=origin,
-        asset_name=asset_name,
         sha256=sha256,
         sha256_url=sha256_url,
+        sha256_file=sha256_file,
     )
 
 
-def require_checksum_for_remote_archive(source: AcquisitionSource) -> None:
-    if source.source_type not in {"archive-url", "github-release-tag"}:
+def require_checksum_for_archive_source(source: AcquisitionSource) -> None:
+    if source.source_type not in {"archive-url", "local-archive"}:
         return
-    if not source.sha256 and not source.sha256_url:
+    if source.source_type == "archive-url" and not source.sha256 and not source.sha256_url:
         raise ValueError(
-            "Archive or release-asset acquisition requires --sha256 or --sha256-url."
+            "Remote archive acquisition requires --sha256 or --sha256-url."
         )
-    if source.source_type == "github-release-tag" and not source.asset_name:
+    if source.source_type == "local-archive" and not source.sha256 and not source.sha256_file:
         raise ValueError(
-            "GitHub Release tag acquisition requires --asset-name."
+            "Local archive acquisition requires --sha256 or --sha256-file."
         )
 
 
-def resolve_release_asset_url(release_tag_url: str, asset_name: str) -> str:
-    prefix = "https://github.com/"
-    if not release_tag_url.startswith(prefix):
-        raise ValueError(f"Unsupported GitHub Release tag URL: {release_tag_url}")
-    marker = "/releases/tag/"
-    if marker not in release_tag_url:
-        raise ValueError(f"Unsupported GitHub Release tag URL: {release_tag_url}")
-    repo_part, tag = release_tag_url[len(prefix):].split(marker, 1)
-    if not repo_part or not tag:
-        raise ValueError(f"Unsupported GitHub Release tag URL: {release_tag_url}")
-    return f"{prefix}{repo_part}/releases/download/{tag}/{asset_name}"
+def require_checksum_for_remote_archive(source: AcquisitionSource) -> None:
+    """Compatibility wrapper retained for provider-free lifecycle tests."""
+    require_checksum_for_archive_source(source)
 
 
 def resolve_archive_source(source: AcquisitionSource) -> ResolvedArchiveSource:
@@ -102,15 +83,14 @@ def resolve_archive_source(source: AcquisitionSource) -> ResolvedArchiveSource:
             origin=source.origin,
             archive_url=source.origin,
         )
-    if source.source_type == "github-release-tag":
-        if not source.asset_name:
-            raise ValueError("GitHub Release tag acquisition requires --asset-name.")
+    if source.source_type == "local-archive":
+        archive_path = Path(source.origin).expanduser()
+        if not archive_path.exists() or not archive_path.is_file():
+            raise FileNotFoundError(f"Dataset archive not found: {source.origin}")
         return ResolvedArchiveSource(
             source_type=source.source_type,
             origin=source.origin,
-            archive_url=resolve_release_asset_url(source.origin, source.asset_name),
-            asset_name=source.asset_name,
-            release_tag_url=source.origin,
+            archive_path=archive_path,
         )
     raise ValueError(f"Archive resolution does not apply to source type: {source.source_type}")
 
@@ -145,12 +125,17 @@ def resolve_expected_sha256(
     *,
     download_text_fn=download_text,
 ) -> str:
-    require_checksum_for_remote_archive(source)
+    require_checksum_for_archive_source(source)
     if source.sha256:
         return normalize_sha256(source.sha256)
-    if source.sha256_url:
+    if source.source_type == "archive-url" and source.sha256_url:
         return parse_sha256_text(download_text_fn(source.sha256_url))
-    raise ValueError("Archive or release-asset acquisition requires --sha256 or --sha256-url.")
+    if source.source_type == "local-archive" and source.sha256_file:
+        payload = Path(source.sha256_file).expanduser().read_text(encoding="utf-8")
+        return parse_sha256_text(payload)
+    if source.source_type == "archive-url":
+        raise ValueError("Remote archive acquisition requires --sha256 or --sha256-url.")
+    raise ValueError("Local archive acquisition requires --sha256 or --sha256-file.")
 
 
 def verify_downloaded_bytes(payload: bytes, expected_sha256: str) -> str:
@@ -183,8 +168,8 @@ def build_archive_materialization_manifest(
         fetchMethod="archive-download",
         sourceType=source.source_type,
         archiveUrl=resolved.archive_url,
-        releaseTagUrl=resolved.release_tag_url,
-        assetName=resolved.asset_name,
+        releaseTagUrl=None,
+        assetName=None,
         verifiedSha256=verified_sha256,
     )
 
@@ -192,19 +177,23 @@ def build_archive_materialization_manifest(
 def validate_discovered_manifest(
     manifest_path: Path,
     *,
-    expected_dataset_id: str,
-    expected_version: str,
+    expected_dataset_id: str | None = None,
+    expected_version: str | None = None,
 ) -> dict[str, object]:
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"Invalid dataset manifest payload: {manifest_path}")
     dataset_id = payload.get("id")
-    version = payload.get("version")
-    if dataset_id != expected_dataset_id:
+    version = payload.get("datasetVersion", payload.get("version"))
+    if not isinstance(dataset_id, str) or not dataset_id:
+        raise ValueError(f"Dataset manifest missing string 'id': {manifest_path}")
+    if not isinstance(version, str) or not version:
+        raise ValueError(f"Dataset manifest missing string 'datasetVersion': {manifest_path}")
+    if expected_dataset_id is not None and dataset_id != expected_dataset_id:
         raise ValueError(
             f"Dataset identity mismatch: expected {expected_dataset_id!r}, got {dataset_id!r}."
         )
-    if version != expected_version:
+    if expected_version is not None and version != expected_version:
         raise ValueError(
             f"Dataset version mismatch: expected {expected_version!r}, got {version!r}."
         )
@@ -214,13 +203,13 @@ def validate_discovered_manifest(
 def discover_and_validate_manifest(
     extraction_root: Path,
     *,
-    expected_dataset_id: str,
-    expected_version: str,
-) -> Path:
+    expected_dataset_id: str | None = None,
+    expected_version: str | None = None,
+) -> tuple[Path, dict[str, object]]:
     manifest_path = discover_dataset_manifest(extraction_root)
-    validate_discovered_manifest(
+    payload = validate_discovered_manifest(
         manifest_path,
         expected_dataset_id=expected_dataset_id,
         expected_version=expected_version,
     )
-    return manifest_path
+    return manifest_path, payload
