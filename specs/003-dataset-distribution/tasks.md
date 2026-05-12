@@ -383,18 +383,18 @@ authoring; verify S11 checklist from `plan.md` passes.
 
 ### Tasks
 
-- [ ] T053 [P] [S13] Create `docs/datasets/using-external-datasets.md`: remote dataset workflow (`ctxbench dataset fetch` → `ctxbench dataset inspect` → `ctxbench plan` → `execute` → `eval` → `export`); local-path dataset shortcut; conflict and ambiguity error resolution steps; no-implicit-network rule (FR-050, FR-051, FR-052, FR-058).
-- [ ] T054 [P] [S13] Create `docs/datasets/creating-a-dataset.md`: dataset author guide covering all mandatory extension points (FR-005–FR-015), optional extension points (FR-016–FR-018), fixture requirement (FR-015), `StrategyDescriptor` nine-field requirement (FR-029), provider-free validation with `ctxbench dataset inspect`, identity/version conflict avoidance (FR-053), and archive packaging/release asset guidance.
-- [ ] T055 [P] [S13] Update `docs/architecture/vocabulary.md` with all ten new terms from FR-057: `dataset repository`, `dataset package`, `dataset materialization`, `dataset cache`, `dataset resolver`, `dataset capability report`, `dataset origin`, `resolved revision`, `content hash`, `single-dataset experiment`.
-- [ ] T056 [P] [S13] Update `docs/architecture/workflow.md` canonical workflow diagram to include dataset acquisition and cache step before `ctxbench plan` for remote datasets; add local-path shortcut note.
-- [ ] T057 [P] [S13] Update `docs/architecture/cli-architecture.md` to explicitly separate lifecycle commands (`plan`, `execute`, `eval`, `export`, `status`) from dataset-management commands (`dataset fetch`, `dataset inspect`) per D10 nested subparser structure (FR-055).
-- [ ] T058 [P] [S13] Update `docs/architecture/container.md` to show: remote dataset repository, local dataset materialization cache, `DatasetResolver`, `DatasetPackage` boundary, benchmark lifecycle, artifact store (FR-054).
-- [ ] T059 [P] [S13] Update `docs/architecture/component.md` Mermaid diagram to show `DatasetResolver`, `DatasetPackage` boundary, and dataset cache as distinct components (FR-054).
-- [ ] T060 [P] [S13] Update `docs/architecture/dynamic.md` to include flows: (a) successful remote dataset fetch; (b) inspect reporting non-conformant package; (c) plan rejected on missing dataset; (d) plan rejected on ambiguous dataset (FR-054).
-- [ ] T061 [S13] Update `README.md` quickstart section to include `ctxbench dataset fetch` and `ctxbench dataset inspect` steps for remote datasets before `ctxbench plan`; add note that local-path datasets skip the fetch step.
-- [ ] T062 [P] [S13] Create `specs/003-dataset-distribution/quickstart.md` with provider-free validation steps: fetch fixture, inspect, plan, execute (monkeypatched), eval (monkeypatched), export; expected outputs at each step.
-- [ ] T063 [P] [S13] Create `specs/003-dataset-distribution/contracts/dataset-commands.md` documenting the dataset command contract: subcommand surface, argument schemas, exit codes, error message formats, and the nested subparser registration pattern (D10).
-- [ ] T063a [P] [S13] Document verified archive acquisition examples in `docs/datasets/using-external-datasets.md` and `specs/003-dataset-distribution/contracts/dataset-commands.md`, including:
+- [x] T053 [P] [S13] Create `docs/datasets/using-external-datasets.md`: remote dataset workflow (`ctxbench dataset fetch` → `ctxbench dataset inspect` → `ctxbench plan` → `execute` → `eval` → `export`); local-path dataset shortcut; conflict and ambiguity error resolution steps; no-implicit-network rule (FR-050, FR-051, FR-052, FR-058).
+- [x] T054 [P] [S13] Create `docs/datasets/creating-a-dataset.md`: dataset author guide covering all mandatory extension points (FR-005–FR-015), optional extension points (FR-016–FR-018), fixture requirement (FR-015), `StrategyDescriptor` nine-field requirement (FR-029), provider-free validation with `ctxbench dataset inspect`, identity/version conflict avoidance (FR-053), and archive packaging/release asset guidance.
+- [x] T055 [P] [S13] Update `docs/architecture/vocabulary.md` with all ten new terms from FR-057: `dataset repository`, `dataset package`, `dataset materialization`, `dataset cache`, `dataset resolver`, `dataset capability report`, `dataset origin`, `resolved revision`, `content hash`, `single-dataset experiment`.
+- [x] T056 [P] [S13] Update `docs/architecture/workflow.md` canonical workflow diagram to include dataset acquisition and cache step before `ctxbench plan` for remote datasets; add local-path shortcut note.
+- [x] T057 [P] [S13] Update `docs/architecture/cli-architecture.md` to explicitly separate lifecycle commands (`plan`, `execute`, `eval`, `export`, `status`) from dataset-management commands (`dataset fetch`, `dataset inspect`) per D10 nested subparser structure (FR-055).
+- [x] T058 [P] [S13] Update `docs/architecture/container.md` to show: remote dataset repository, local dataset materialization cache, `DatasetResolver`, `DatasetPackage` boundary, benchmark lifecycle, artifact store (FR-054).
+- [x] T059 [P] [S13] Update `docs/architecture/component.md` Mermaid diagram to show `DatasetResolver`, `DatasetPackage` boundary, and dataset cache as distinct components (FR-054).
+- [x] T060 [P] [S13] Update `docs/architecture/dynamic.md` to include flows: (a) successful remote dataset fetch; (b) inspect reporting non-conformant package; (c) plan rejected on missing dataset; (d) plan rejected on ambiguous dataset (FR-054).
+- [x] T061 [S13] Update `README.md` quickstart section to include `ctxbench dataset fetch` and `ctxbench dataset inspect` steps for remote datasets before `ctxbench plan`; add note that local-path datasets skip the fetch step.
+- [x] T062 [P] [S13] Create `specs/003-dataset-distribution/quickstart.md` with provider-free validation steps: fetch fixture, inspect, plan, execute (monkeypatched), eval (monkeypatched), export; expected outputs at each step.
+- [x] T063 [P] [S13] Create `specs/003-dataset-distribution/contracts/dataset-commands.md` documenting the dataset command contract: subcommand surface, argument schemas, exit codes, error message formats, and the nested subparser registration pattern (D10).
+- [x] T063a [P] [S13] Document verified archive acquisition examples in `docs/datasets/using-external-datasets.md` and `specs/003-dataset-distribution/contracts/dataset-commands.md`, including:
   - direct `.tar.gz` URL + `--sha256`;
   - release tag URL + `--asset-name` + `--sha256-url`;
   - failure behavior for missing/invalid checksums;
@@ -403,17 +403,17 @@ authoring; verify S11 checklist from `plan.md` passes.
 ### Checkpoint
 
 ```text
-[ ] README quickstart includes dataset fetch/inspect for remote datasets.
-[ ] workflow.md diagram includes dataset acquisition and cache.
-[ ] cli-architecture.md separates lifecycle from dataset-management commands.
-[ ] container.md shows remote dataset repository and local dataset cache.
-[ ] component.md shows DatasetResolver, DatasetPackage boundary, and artifact store.
-[ ] dynamic.md includes fetch, inspect, missing dataset, ambiguous dataset flows.
-[ ] vocabulary.md defines all ten new dataset distribution terms.
-[ ] artifact-contracts.md documents dataset provenance fields (updated in S8).
-[ ] using-external-datasets.md exists.
-[ ] creating-a-dataset.md exists.
-[ ] Spec 004 ownership of internal boundaries is referenced in creating-a-dataset.md.
+[x] README quickstart includes dataset fetch/inspect for remote datasets.
+[x] workflow.md diagram includes dataset acquisition and cache.
+[x] cli-architecture.md separates lifecycle from dataset-management commands.
+[x] container.md shows remote dataset repository and local dataset cache.
+[x] component.md shows DatasetResolver, DatasetPackage boundary, and artifact store.
+[x] dynamic.md includes fetch, inspect, missing dataset, ambiguous dataset flows.
+[x] vocabulary.md defines all ten new dataset distribution terms.
+[x] artifact-contracts.md documents dataset provenance fields (updated in S8).
+[x] using-external-datasets.md exists.
+[x] creating-a-dataset.md exists.
+[x] Spec 004 ownership of internal boundaries is referenced in creating-a-dataset.md.
 ```
 
 ```bash

@@ -2,25 +2,36 @@
 
 ## Overview
 
-The diagram below depicts the flow for executing an experiment. First you have to design your experiment describing the dataset you're going to use, the models executing the tasks and how the responses should be evaluated. The `plan` command generates `trials` to be executed posterior. This summarizes the *Planning* phase.
-During *Execution*, the benchmark runs the planned `trials` and stores the `responses`. The benchmark logs the execution in `traces` that could map to `trials`. For each `trial` there is a `trace` that *tells the story* about the execution of that particular `trial`. Finally, the configured `judges` evaluate the responses of the `trials` in the *Evaluation* phase.
+CTXBench has two related flows:
+
+1. dataset acquisition and inspection
+2. benchmark lifecycle
+
+Remote datasets are fetched explicitly before planning. Local-path datasets can skip the fetch
+step and go straight to inspection or planning.
 
 ```mermaid
 flowchart LR
-    A["experiment.json"] --> B["ctxbench plan"]
-    B --> C["trials.jsonl<br/>manifest.json"]
-    C --> D["ctxbench execute"]
-    D --> E["responses.jsonl<br/>traces/executions/"]
-    E --> F["ctxbench eval"]
-    F --> G["evals.jsonl<br/>judge_votes.jsonl<br/>evals-summary.json<br/>traces/evals/"]
-    G --> H["ctxbench export"]
-    H --> I["results.csv"]
+    A["remote dataset repository"] --> B["ctxbench dataset fetch"]
+    B --> C["local dataset cache"]
+    C --> D["ctxbench dataset inspect"]
+    E["local dataset root"] --> D
+    C --> F["ctxbench plan"]
+    E --> F
+    G["experiment.json"] --> F
+    F --> H["trials.jsonl<br/>manifest.json"]
+    H --> I["ctxbench execute"]
+    I --> J["responses.jsonl<br/>traces/executions/"]
+    J --> K["ctxbench eval"]
+    K --> L["evals.jsonl<br/>judge_votes.jsonl<br/>evals-summary.json<br/>traces/evals/"]
+    L --> M["ctxbench export"]
+    M --> N["results.csv"]
 ```
 
 ## Planning
 
 ```bash
-ctxbench plan experiments/lattes_baseline_001.json   --output outputs/lattes_baseline_001
+ctxbench plan experiments/lattes_baseline_001.json --output outputs/lattes_baseline_001
 ```
 
 Produces:
@@ -61,7 +72,7 @@ evals-summary.json
 ## Export
 
 ```bash
-ctxbench export outputs/lattes_baseline_001/evals.jsonl   --to csv   --output outputs/lattes_baseline_001/results.csv
+ctxbench export outputs/lattes_baseline_001/evals.jsonl --format csv --output outputs/lattes_baseline_001/results.csv
 ```
 
 Produces:
@@ -77,6 +88,20 @@ ctxbench status outputs/lattes_baseline_001
 ctxbench status outputs/lattes_baseline_001 --by judge
 ```
 
+## Local-path shortcut
+
+If the experiment uses `dataset.root`, the workflow becomes:
+
+```text
+ctxbench dataset inspect <dataset-root>
+ctxbench plan
+ctxbench execute
+ctxbench eval
+ctxbench export
+```
+
+No fetch step is required.
+
 ## Strategies
 
 | Strategy | Description |
@@ -84,7 +109,7 @@ ctxbench status outputs/lattes_baseline_001 --by judge
 | `inline` | Inserts the selected context artifact directly into the model input. |
 | `local_function` | Exposes local Python functions while CTXBench controls the tool loop. |
 | `local_mcp` | Exposes tools through a local MCP runtime while CTXBench controls the loop. |
-| `remote_mcp` | Uses a remote MCP server; provider/remote integration may control part of the loop. |
+| `remote_mcp` | Uses a remote MCP server; provider or remote integration may control part of the loop. |
 
 For detailed runtime flows, see `dynamic.md`.
 

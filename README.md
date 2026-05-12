@@ -238,6 +238,25 @@ This keeps the benchmark simpler and makes tool usage easier to compare across s
 
 The installed CLI command is `ctxbench`.
 
+### Fetch or Inspect a Dataset
+
+For remote or cached datasets, use the dataset-management commands first:
+
+```bash
+ctxbench dataset fetch ctxbench/lattes \
+  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --version 2026-04-28 \
+  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+
+ctxbench dataset inspect ctxbench/lattes@2026-04-28
+```
+
+If your experiment already points to a local dataset root, skip fetch and inspect the root directly:
+
+```bash
+ctxbench dataset inspect datasets/lattes
+```
+
 ### Plan an Experiment
 
 ```bash
@@ -304,7 +323,7 @@ This writes:
 ### Export Analysis-Ready Results
 
 ```bash
-ctxbench export outputs/lattes_baseline_001/evals.jsonl --to csv --output outputs/lattes_baseline_001/results.csv
+ctxbench export outputs/lattes_baseline_001/evals.jsonl --format csv --output outputs/lattes_baseline_001/results.csv
 ```
 
 ### Inspect Progress
