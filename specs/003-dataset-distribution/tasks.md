@@ -238,18 +238,18 @@ persist dataset provenance in `manifest.json`; reject missing and ambiguous data
 
 ### Tasks
 
-- [ ] T026 [S7] In `src/ctxbench/commands/plan.py`, add dataset resolution at the top of `plan_command`: call `DatasetResolver.resolve(experiment.dataset, cache)`. On `DatasetNotFoundError`, re-raise with remediation message. On `AmbiguousDatasetError`, re-raise listing candidates. On `MultiDatasetError`, re-raise with explicit error per FR-034.
-- [ ] T027 [S7] In `src/ctxbench/commands/plan.py`, after resolution call `validation.validate_package(package)` (shared with inspect per FR-028) and log the capability summary before proceeding to trial generation.
-- [ ] T028 [S7] In `src/ctxbench/commands/plan.py`, persist dataset provenance in `manifest.json` under a nested `dataset` key with fields: `id`, `version`, `origin`, `resolvedRevision`, `contentHash`. Provenance is read from the resolved manifest or from the package metadata for local-path datasets.
-- [ ] T029 [P] [S7] Update `src/ctxbench/benchmark/runspec_generator.py` to accept a resolved package/adapter argument instead of reconstructing from a raw path. It must preserve current planning semantics for question text, tags, validation type, context blocks, and instance-level parameters; do not widen the generic `DatasetPackage` protocol just to mirror legacy provider internals.
-- [ ] T030 [S7] Write integration test in `tests/test_dataset_distribution_workflow.py` covering four sub-cases (use `@pytest.mark.parametrize` or separate functions, all with fake dataset fixture): (a) plan with fake local-path dataset resolves, writes `manifest.json` with `dataset.id` field, writes `trials.jsonl`; (b) plan with missing dataset raises with a message containing "ctxbench dataset fetch"; (c) plan with two conflicting materializations raises `AmbiguousDatasetError`; (d) `dataset: "path"` and `dataset: { "root": ... }` produce equivalent planning output.
+- [x] T026 [S7] In `src/ctxbench/commands/plan.py`, add dataset resolution at the top of `plan_command`: call `DatasetResolver.resolve(experiment.dataset, cache)`. On `DatasetNotFoundError`, re-raise with remediation message. On `AmbiguousDatasetError`, re-raise listing candidates. On `MultiDatasetError`, re-raise with explicit error per FR-034.
+- [x] T027 [S7] In `src/ctxbench/commands/plan.py`, after resolution call `validation.validate_package(package)` (shared with inspect per FR-028) and log the capability summary before proceeding to trial generation.
+- [x] T028 [S7] In `src/ctxbench/commands/plan.py`, persist dataset provenance in `manifest.json` under a nested `dataset` key with fields: `id`, `version`, `origin`, `resolvedRevision`, `contentHash`. Provenance is read from the resolved manifest or from the package metadata for local-path datasets.
+- [x] T029 [P] [S7] Update `src/ctxbench/benchmark/runspec_generator.py` to accept a resolved package/adapter argument instead of reconstructing from a raw path. It must preserve current planning semantics for question text, tags, validation type, context blocks, and instance-level parameters; do not widen the generic `DatasetPackage` protocol just to mirror legacy provider internals.
+- [x] T030 [S7] Write integration test in `tests/test_dataset_distribution_workflow.py` covering four sub-cases (use `@pytest.mark.parametrize` or separate functions, all with fake dataset fixture): (a) plan with fake local-path dataset resolves, writes `manifest.json` with `dataset.id` field, writes `trials.jsonl`; (b) plan with missing dataset raises with a message containing "ctxbench dataset fetch"; (c) plan with two conflicting materializations raises `AmbiguousDatasetError`; (d) `dataset: "path"` and `dataset: { "root": ... }` produce equivalent planning output.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_distribution_workflow.py -k plan` passes.
-- [ ] `manifest.json` written by test contains `dataset.id` and `dataset.version`.
-- [ ] No provider calls.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_distribution_workflow.py -k plan` passes.
+- [x] `manifest.json` written by test contains `dataset.id` and `dataset.version`.
+- [x] No provider calls.
+- [x] Diff is reviewable.
 
 ---
 

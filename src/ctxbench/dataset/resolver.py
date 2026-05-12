@@ -131,7 +131,17 @@ class DatasetResolver:
                     f"Dataset {dataset_ref.id}@{dataset_ref.version} was not found in the local cache. "
                     "Run ctxbench dataset fetch to materialize it first."
                 )
-            return ResolvedDatasetPackage(reference=dataset_ref, manifest=matches[0])
+            manifest = matches[0]
+            materialized_root = Path(manifest.materializedPath) if manifest.materializedPath else None
+            if materialized_root is not None and (materialized_root / "questions.json").exists():
+                materialized_dataset = ExperimentDataset(
+                    root=str(materialized_root),
+                    id=manifest.datasetId,
+                    version=manifest.requestedVersion,
+                    origin=manifest.origin,
+                )
+                return LocalDatasetPackage.from_dataset(materialized_dataset)
+            return ResolvedDatasetPackage(reference=dataset_ref, manifest=manifest)
 
         raise DatasetNotFoundError(
             "Dataset reference is incomplete. Provide a local dataset root or an id/version pair."

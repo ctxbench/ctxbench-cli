@@ -5,10 +5,25 @@ from pathlib import Path
 from ctxbench.benchmark.experiment_loader import load_experiment
 from ctxbench.benchmark.paths import resolve_output_root, resolve_trials_path
 from ctxbench.benchmark.runspec_generator import generate_runspecs
-from ctxbench.dataset.provider import DatasetProvider
+from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.conflicts import AmbiguousDatasetError
+from ctxbench.dataset.provider import LocalDatasetPackage
+from ctxbench.dataset.resolver import DatasetNotFoundError, DatasetResolver, MultiDatasetError
+from ctxbench.dataset.validation import validate_package
 from ctxbench.util.fs import ensure_dir, write_json
 from ctxbench.util.jsonl import write_jsonl
 from ctxbench.util.logging import PhaseLogger, ProgressTracker
+
+
+def _dataset_manifest_payload(package: LocalDatasetPackage) -> dict[str, str | None]:
+    capability_report = package.capability_report()
+    return {
+        "id": package.identity(),
+        "version": package.version(),
+        "origin": package.origin(),
+        "resolvedRevision": capability_report.resolved_revision,
+        "contentHash": capability_report.content_hash,
+    }
 
 
 def plan_command(
@@ -17,21 +32,46 @@ def plan_command(
     *,
     verbose: bool = False,
     progress: bool = False,
+    cache_dir: Path | None = None,
 ) -> int:
     logger = PhaseLogger(verbose=verbose)
     logger.phase("LOAD", "Loading experiment", path=path)
     experiment = load_experiment(path)
     base_dir = Path(path).resolve().parent
-    provider = DatasetProvider.from_experiment(experiment, base_dir)
+    cache = DatasetCache(cache_dir=cache_dir)
+    resolver = DatasetResolver()
+    try:
+        package = resolver.resolve(experiment.dataset, cache)
+    except DatasetNotFoundError as exc:
+        raise DatasetNotFoundError(str(exc)) from exc
+    except AmbiguousDatasetError as exc:
+        raise AmbiguousDatasetError(str(exc)) from exc
+    except MultiDatasetError as exc:
+        raise MultiDatasetError(
+            "Experiment references to multiple datasets are not supported."
+        ) from exc
+    if not isinstance(package, LocalDatasetPackage):
+        raise ValueError("Planning requires a locally materialized dataset package.")
+    capability_report = validate_package(package)
     logger.phase(
         "LOAD",
-        "Dataset loaded",
-        questions=len(provider.list_question_ids()),
-        instances=len(provider.list_instance_ids()),
+        "Dataset resolved",
+        dataset=capability_report.identity,
+        version=capability_report.version,
+        questions=len(package.list_question_ids()),
+        instances=len(package.list_instance_ids()),
+    )
+    logger.phase(
+        "LOAD",
+        "Dataset capability check",
+        conformant=capability_report.conformant,
+        missingMandatory=len(capability_report.missing_mandatory),
+        nonconformantDescriptors=len(capability_report.nonconformant_descriptors),
     )
     runspecs = generate_runspecs(
         experiment,
         base_dir,
+        package,
         experiment_path=path,
         on_warning=lambda message, **fields: logger.warn(message, **fields),
     )
@@ -59,6 +99,7 @@ def plan_command(
     manifest = {
         "experimentId": experiment.id,
         "experimentPath": str(Path(path).resolve()),
+        "dataset": _dataset_manifest_payload(package),
         "evaluation": {
             "enabled": experiment.evaluation.enabled,
             "judges": [item.model_dump(mode="json") for item in experiment.evaluation.judges],
