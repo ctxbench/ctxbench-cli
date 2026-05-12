@@ -21,7 +21,10 @@ def _model_dump_value(value: Any, mode: str) -> Any:
 
 
 class ExperimentDataset(BaseModel):
-    root: str
+    root: str | None = None
+    id: str | None = None
+    version: str | None = None
+    origin: str | None = None
 
     @classmethod
     def model_validate(cls, data: Any) -> "ExperimentDataset":
@@ -31,7 +34,19 @@ class ExperimentDataset(BaseModel):
             return cls(root=data)
         if isinstance(data, dict):
             if "root" in data:
-                return cls(root=str(data["root"]))
+                return cls(
+                    root=str(data["root"]),
+                    id=str(data["id"]) if data.get("id") is not None else None,
+                    version=str(data["version"]) if data.get("version") is not None else None,
+                    origin=str(data["origin"]) if data.get("origin") is not None else None,
+                )
+            if "id" in data:
+                return cls(
+                    root=str(data["root"]) if data.get("root") is not None else None,
+                    id=str(data["id"]),
+                    version=str(data["version"]) if data.get("version") is not None else None,
+                    origin=str(data["origin"]) if data.get("origin") is not None else None,
+                )
             legacy_paths = {"questions", "contexts", "question_instances"}
             if legacy_paths & set(data):
                 raise ValidationError(
@@ -39,18 +54,36 @@ class ExperimentDataset(BaseModel):
                     "Put questions.json and questions.instance.json in the dataset root "
                     "and context files in <dataset>/context."
                 )
-        raise ValidationError("ExperimentDataset requires a dataset directory path.")
+        raise ValidationError(
+            "ExperimentDataset requires either a dataset directory path/root or an id/version reference."
+        )
+
+    def _validate_model(self) -> None:
+        has_root = bool(self.root)
+        has_id = bool(self.id)
+        if not has_root and not has_id:
+            raise ValidationError(
+                "ExperimentDataset requires either a dataset directory path/root or an id/version reference."
+            )
+        if has_id and not self.version:
+            raise ValidationError("ExperimentDataset id references require a version.")
 
     @property
     def questions(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset questions path is only available for local-root datasets.")
         return str(Path(self.root) / "questions.json")
 
     @property
     def contexts(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset contexts path is only available for local-root datasets.")
         return str(Path(self.root) / "context")
 
     @property
     def question_instances(self) -> str:
+        if not self.root:
+            raise ValueError("Dataset question_instances path is only available for local-root datasets.")
         return str(Path(self.root) / "questions.instance.json")
 
 

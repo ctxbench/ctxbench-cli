@@ -1,0 +1,137 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from ctxbench.benchmark.models import ExperimentDataset
+from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.capabilities import DatasetCapabilityReport
+from ctxbench.dataset.conflicts import DatasetConflictDetector
+from ctxbench.dataset.materialization import MaterializationManifest
+from ctxbench.dataset.package import DatasetMetadata, DatasetPackage
+
+
+class DatasetNotFoundError(FileNotFoundError):
+    """Raised when a dataset reference cannot be resolved locally."""
+
+
+class MultiDatasetError(ValueError):
+    """Raised when a dataset reference attempts to use multiple datasets."""
+
+
+@dataclass(slots=True)
+class ResolvedDatasetPackage:
+    reference: ExperimentDataset
+    manifest: MaterializationManifest | None = None
+
+    def metadata(self) -> DatasetMetadata:
+        identity = self.identity()
+        return DatasetMetadata(
+            name=identity,
+            description="Resolved dataset reference.",
+            domain="unknown",
+            intended_uses="Resolver-level reference handling.",
+            limitations="Planning/runtime capabilities are not available until a concrete package adapter is used.",
+            license_url=None,
+            citation_url=None,
+        )
+
+    def identity(self) -> str:
+        if self.reference.id:
+            return self.reference.id
+        if self.manifest is not None:
+            return self.manifest.datasetId
+        if self.reference.root:
+            return Path(self.reference.root).name or self.reference.root
+        return "unknown"
+
+    def version(self) -> str:
+        if self.reference.version:
+            return self.reference.version
+        if self.manifest is not None:
+            return self.manifest.requestedVersion
+        return "local"
+
+    def origin(self) -> str | None:
+        if self.reference.origin:
+            return self.reference.origin
+        if self.manifest is not None:
+            return self.manifest.origin
+        return self.reference.root
+
+    def list_instance_ids(self) -> list[str]:
+        return []
+
+    def list_task_ids(self) -> list[str]:
+        return []
+
+    def get_context_artifact(
+        self,
+        instance_id: str,
+        task_id: str,
+        strategy: str,
+        format_name: str,
+    ) -> object:
+        raise NotImplementedError("Dataset artifacts are not available from the S4 resolver package wrapper.")
+
+    def get_evidence_artifact(self, instance_id: str, task_id: str) -> object:
+        raise NotImplementedError("Dataset artifacts are not available from the S4 resolver package wrapper.")
+
+    def fixtures(self) -> object:
+        return {}
+
+    def capability_report(self) -> DatasetCapabilityReport:
+        return DatasetCapabilityReport(
+            identity=self.identity(),
+            version=self.version(),
+            origin=self.origin(),
+            resolved_revision=self.manifest.resolvedRevision if self.manifest is not None else None,
+            materialized_path=self.manifest.materializedPath if self.manifest is not None else self.reference.root,
+            content_hash=self.manifest.contentHash if self.manifest is not None else None,
+            metadata=self.metadata(),
+            mandatory_capabilities={},
+            optional_capabilities={},
+            contributed_tools=None,
+            evaluation_helpers=None,
+            strategy_descriptors=[],
+            missing_mandatory=[],
+            nonconformant_descriptors=[],
+            conformant=False,
+        )
+
+    def tool_provider(self) -> object | None:
+        return None
+
+    def evaluation_helpers(self) -> object | None:
+        return None
+
+    def strategy_descriptors(self) -> list[object] | None:
+        return None
+
+
+class DatasetResolver:
+    def resolve(self, ref: ExperimentDataset | dict[str, Any] | list[Any], cache: DatasetCache) -> DatasetPackage:
+        if isinstance(ref, list):
+            raise MultiDatasetError("Multiple datasets are not supported.")
+        if isinstance(ref, dict) and "datasets" in ref:
+            raise MultiDatasetError("Multiple datasets are not supported.")
+
+        dataset_ref = ExperimentDataset.model_validate(ref)
+
+        if dataset_ref.root:
+            return ResolvedDatasetPackage(reference=dataset_ref)
+
+        if dataset_ref.id and dataset_ref.version:
+            DatasetConflictDetector.check(dataset_ref.id, dataset_ref.version, cache)
+            matches = cache.lookup(dataset_ref.id, dataset_ref.version)
+            if not matches:
+                raise DatasetNotFoundError(
+                    f"Dataset {dataset_ref.id}@{dataset_ref.version} was not found in the local cache. "
+                    "Run ctxbench dataset fetch to materialize it first."
+                )
+            return ResolvedDatasetPackage(reference=dataset_ref, manifest=matches[0])
+
+        raise DatasetNotFoundError(
+            "Dataset reference is incomplete. Provide a local dataset root or an id/version pair."
+        )

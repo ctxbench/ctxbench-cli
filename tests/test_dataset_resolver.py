@@ -1,0 +1,77 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+
+from ctxbench.benchmark.models import ExperimentDataset
+from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.materialization import MaterializationManifest
+from ctxbench.dataset.package import DatasetPackage
+from ctxbench.dataset.resolver import DatasetNotFoundError, DatasetResolver, MultiDatasetError
+
+
+def _manifest() -> MaterializationManifest:
+    return MaterializationManifest(
+        datasetId="ctxbench/fake",
+        requestedVersion="0.1.0",
+        resolvedRevision="rev-a",
+        origin="/tmp/source-a",
+        materializedPath="/tmp/placeholder",
+        contentHash="sha256:same",
+        fetchedAt="2026-05-12T00:00:00Z",
+        ctxbenchVersion="0.1.0",
+        fetchMethod="archive-download",
+        sourceType="archive-url",
+        archiveUrl="https://example.invalid/fake.tar.gz",
+        verifiedSha256="sha256:verified",
+    )
+
+
+def _write_source(path: Path) -> Path:
+    path.mkdir(parents=True, exist_ok=True)
+    (path / "payload.txt").write_text("fixture", encoding="utf-8")
+    return path
+
+
+def test_resolver_local_path_returns_dataset_package_compatible_object(tmp_path: Path) -> None:
+    resolver = DatasetResolver()
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    dataset_root = tmp_path / "dataset"
+    dataset_root.mkdir()
+
+    package = resolver.resolve(ExperimentDataset(root=str(dataset_root)), cache)
+
+    assert isinstance(package, DatasetPackage)
+    assert package.origin() == str(dataset_root)
+
+
+def test_resolver_cached_id_version_returns_single_materialization(tmp_path: Path) -> None:
+    resolver = DatasetResolver()
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    cache.store(_manifest(), _write_source(tmp_path / "source-a"))
+
+    package = resolver.resolve(ExperimentDataset(id="ctxbench/fake", version="0.1.0"), cache)
+
+    assert isinstance(package, DatasetPackage)
+    assert package.identity() == "ctxbench/fake"
+    assert package.version() == "0.1.0"
+    assert package.origin() == "/tmp/source-a"
+
+
+def test_resolver_missing_dataset_suggests_fetch(tmp_path: Path) -> None:
+    resolver = DatasetResolver()
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+
+    with pytest.raises(DatasetNotFoundError) as excinfo:
+        resolver.resolve(ExperimentDataset(id="ctxbench/missing", version="9.9.9"), cache)
+
+    assert "ctxbench dataset fetch" in str(excinfo.value)
+
+
+def test_resolver_rejects_multi_dataset_reference(tmp_path: Path) -> None:
+    resolver = DatasetResolver()
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+
+    with pytest.raises(MultiDatasetError):
+        resolver.resolve({"datasets": [{"id": "ctxbench/a", "version": "0.1.0"}]}, cache)

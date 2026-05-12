@@ -166,18 +166,18 @@ detect and reject ambiguous references; extend `ExperimentDataset` with provenan
 
 ### Tasks
 
-- [ ] T014 [S4] Add optional fields `id: str | None`, `version: str | None`, `origin: str | None` to `ExperimentDataset` in `src/ctxbench/benchmark/models.py`. Keep existing `root: str | None` for local-path compat (D11). Both forms remain valid: `{"root": "..."}` and `{"id": "...", "version": "..."}`.
-- [ ] T015 [P] [S4] Implement `DatasetConflictDetector.check(dataset_id, version, cache: DatasetCache) -> None` in `src/ctxbench/dataset/conflicts.py`: when `cache.lookup(dataset_id, version)` returns more than one manifest, raise `AmbiguousDatasetError` with a message listing each conflicting `origin` and `resolvedRevision`.
-- [ ] T016 [P] [S4] Implement `DatasetResolver` in `src/ctxbench/dataset/resolver.py` with method `resolve(ref: ExperimentDataset, cache: DatasetCache) -> DatasetPackage`. Logic: (a) if `ref` is a multi-dataset reference (a list or `datasets` key), raise `MultiDatasetError`; (b) if `ref.root` is set, load from local path without cache lookup; (c) if `ref.id` is set, call conflict detector then return the single matching materialization; (d) if not found, raise `DatasetNotFoundError` with a message suggesting `ctxbench dataset fetch`. MUST NOT make network calls (D4).
-- [ ] T017 [S4] Write `tests/test_dataset_resolver.py` asserting: (a) local-path `ExperimentDataset` resolves to a `DatasetPackage`-compatible object; (b) cached id+version resolves when exactly one materialization exists; (c) missing dataset raises `DatasetNotFoundError` whose message contains "ctxbench dataset fetch"; (d) multi-dataset reference raises `MultiDatasetError`.
-- [ ] T018 [S4] Write `tests/test_dataset_conflicts.py` asserting: (a) single materialization passes check without error; (b) two materializations for the same id+version with different origins raise `AmbiguousDatasetError` listing both candidates; (c) `DatasetResolver.resolve()` calls the conflict detector before returning.
+- [x] T014 [S4] Add optional fields `id: str | None`, `version: str | None`, `origin: str | None` to `ExperimentDataset` in `src/ctxbench/benchmark/models.py`. Keep existing `root: str | None` for local-path compat (D11). Both forms remain valid: `{"root": "..."}` and `{"id": "...", "version": "..."}`.
+- [x] T015 [P] [S4] Implement `DatasetConflictDetector.check(dataset_id, version, cache: DatasetCache) -> None` in `src/ctxbench/dataset/conflicts.py`: when `cache.lookup(dataset_id, version)` returns more than one manifest, raise `AmbiguousDatasetError` with a message listing each conflicting `origin` and `resolvedRevision`.
+- [x] T016 [P] [S4] Implement `DatasetResolver` in `src/ctxbench/dataset/resolver.py` with method `resolve(ref: ExperimentDataset, cache: DatasetCache) -> DatasetPackage`. Logic: (a) if `ref` is a multi-dataset reference (a list or `datasets` key), raise `MultiDatasetError`; (b) if `ref.root` is set, load from local path without cache lookup; (c) if `ref.id` is set, call conflict detector then return the single matching materialization; (d) if not found, raise `DatasetNotFoundError` with a message suggesting `ctxbench dataset fetch`. MUST NOT make network calls (D4).
+- [x] T017 [S4] Write `tests/test_dataset_resolver.py` asserting: (a) local-path `ExperimentDataset` resolves to a `DatasetPackage`-compatible object; (b) cached id+version resolves when exactly one materialization exists; (c) missing dataset raises `DatasetNotFoundError` whose message contains "ctxbench dataset fetch"; (d) multi-dataset reference raises `MultiDatasetError`.
+- [x] T018 [S4] Write `tests/test_dataset_conflicts.py` asserting: (a) single materialization passes check without error; (b) two materializations for the same id+version with different origins raise `AmbiguousDatasetError` listing both candidates; (c) `DatasetResolver.resolve()` calls the conflict detector before returning.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_resolver.py tests/test_dataset_conflicts.py` passes.
-- [ ] No provider calls; no network access in resolver.
-- [ ] No Lattes-specific imports in `resolver.py` or `conflicts.py`.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_resolver.py tests/test_dataset_conflicts.py` passes.
+- [x] No provider calls; no network access in resolver.
+- [x] No Lattes-specific imports in `resolver.py` or `conflicts.py`.
+- [x] Diff is reviewable.
 
 ---
 
