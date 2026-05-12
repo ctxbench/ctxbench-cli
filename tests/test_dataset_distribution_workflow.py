@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from ctxbench.cli import build_parser
 from ctxbench.commands.plan import plan_command
 from ctxbench.dataset.cache import DatasetCache
 from ctxbench.dataset.materialization import MaterializationManifest
@@ -77,6 +78,7 @@ def _manifest(*, origin: str, revision: str) -> MaterializationManifest:
     return MaterializationManifest(
         datasetId="ctxbench/local-fixture",
         requestedVersion="0.1.0",
+        datasetVersion="0.1.0",
         resolvedRevision=revision,
         origin=origin,
         materializedPath="",
@@ -167,3 +169,33 @@ def test_plan_string_and_root_dataset_forms_are_equivalent(
     assert len(rows) == 1
     assert rows[0]["question"] == "In which year did CV Demo obtain their PhD?"
     assert rows[0]["parameters"] == {"researcher_name": "CV Demo"}
+
+
+def test_plan_with_cached_dataset_uses_explicit_cache_dir(tmp_path: Path) -> None:
+    dataset_root = _write_local_dataset(tmp_path / "dataset")
+    cache_root = tmp_path / "custom-cache"
+    cache = DatasetCache(cache_dir=cache_root)
+    cache.store(_manifest(origin=str(dataset_root), revision="rev-a"), dataset_root)
+    experiment_path = _write_experiment(
+        tmp_path / "experiment-cached.json",
+        {"id": "ctxbench/local-fixture", "version": "0.1.0"},
+    )
+    output_root = tmp_path / "planned-cached"
+
+    assert plan_command(str(experiment_path), output=str(output_root), cache_dir=cache_root) == 0
+
+    manifest = json.loads((output_root / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["dataset"]["id"] == "ctxbench/local-fixture"
+    assert manifest["dataset"]["materializedPath"]
+
+
+def test_plan_help_includes_cache_dir(capsys: pytest.CaptureFixture[str]) -> None:
+    parser = build_parser()
+
+    with pytest.raises(SystemExit):
+        parser.parse_args(["plan", "--help"])
+
+    captured = capsys.readouterr()
+    assert "usage:" in captured.out
+    assert "ctxbench plan" in captured.out
+    assert "--cache-dir" in captured.out

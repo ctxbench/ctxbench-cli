@@ -23,7 +23,7 @@ def _package_for_validation(
     dataset = ExperimentDataset(
         root=str(materialized_path),
         id=manifest.datasetId,
-        version=manifest.requestedVersion,
+        version=manifest.datasetVersion,
         origin=manifest.origin,
     )
     return LocalDatasetPackage.from_dataset(dataset)
@@ -39,7 +39,7 @@ def build_inspect_result(
     return replace(
         report,
         identity=manifest.datasetId,
-        version=manifest.requestedVersion,
+        version=manifest.datasetVersion,
         origin=manifest.origin,
         resolved_revision=manifest.resolvedRevision,
         materialized_path=manifest.materializedPath,

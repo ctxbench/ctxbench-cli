@@ -140,6 +140,7 @@ def _manifest(*, origin: str, revision: str) -> MaterializationManifest:
     return MaterializationManifest(
         datasetId="ctxbench/fake",
         requestedVersion="0.1.0",
+        datasetVersion="0.1.0",
         resolvedRevision=revision,
         origin=origin,
         materializedPath="",
@@ -224,3 +225,21 @@ def test_dataset_inspect_help_prints_usage(capsys: pytest.CaptureFixture[str]) -
     assert "usage:" in captured.out
     assert "dataset inspect" in captured.out
     assert "--json" in captured.out
+    assert "--cache-dir" in captured.out
+
+
+def test_inspect_command_explicit_cache_dir_overrides_env_var(
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    dataset_root = _write_local_dataset(tmp_path / "dataset")
+    explicit_cache = DatasetCache(cache_dir=tmp_path / "explicit-cache")
+    explicit_cache.store(_manifest(origin=str(dataset_root), revision="rev-a"), dataset_root)
+    monkeypatch.setenv("CTXBENCH_DATASET_CACHE", str(tmp_path / "env-cache"))
+
+    inspect_command("ctxbench/fake@0.1.0", cache_dir=tmp_path / "explicit-cache")
+
+    captured = capsys.readouterr()
+    assert "identity: ctxbench/fake" in captured.out
+    assert "version: 0.1.0" in captured.out

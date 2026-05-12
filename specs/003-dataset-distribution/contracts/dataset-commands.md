@@ -32,53 +32,64 @@ ctxbench
 
 ### Purpose
 
-Materialize a dataset into the local cache from a declared origin and version.
+Materialize a dataset into the local cache from an explicit source selector.
 
 ### Arguments
 
 Required:
 
-- positional `dataset_id`
-- `--origin`
-- `--version`
+- exactly one of `--dataset-url`, `--dataset-file`, or `--dataset-dir`
 
 Optional:
 
-- `--asset-name`
 - `--sha256`
 - `--sha256-url`
+- `--sha256-file`
+- `--cache-dir`
 
 ### Accepted source forms
 
-1. local path
-2. direct `.tar.gz` archive URL
-3. GitHub release tag URL with explicit `--asset-name`
-4. git-like origin recognition path
+1. direct `.tar.gz` archive URL via `--dataset-url`
+2. local `.tar.gz` archive path via `--dataset-file`
+3. local unpacked dataset directory via `--dataset-dir`
 
 ### Verified archive acquisition examples
 
 Direct archive URL plus `--sha256`:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --version 2026-04-28 \
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
   --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
-Release tag URL plus `--asset-name` and `--sha256-url`:
+Direct archive URL plus `--sha256-url`:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset \
-  --version 2026-04-28 \
-  --asset-name ctxbench-lattes-v0.1.0.tar.gz \
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
   --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.sha256
+```
+
+Local archive plus `--sha256-file`:
+
+```bash
+ctxbench dataset fetch \
+  --dataset-file ./downloads/ctxbench-lattes-v0.1.0.tar.gz \
+  --sha256-file ./downloads/ctxbench-lattes-v0.1.0.sha256
+```
+
+Local unpacked directory:
+
+```bash
+ctxbench dataset fetch --dataset-dir ./datasets/lattes
 ```
 
 ### Failure rules
 
-- archive or release acquisition without `--sha256` or `--sha256-url` fails
+- missing or multiple source-selector flags fail in argparse before command execution
+- `--dataset-url` without `--sha256` or `--sha256-url` fails
+- `--dataset-file` without `--sha256` or `--sha256-file` fails
 - checksum mismatch fails before extraction
 - no manifest or multiple manifests after extraction fails
 - manifest identity/version mismatch fails
@@ -117,6 +128,7 @@ Required:
 Optional:
 
 - `--json`
+- `--cache-dir`
 
 ### Accepted reference forms
 
@@ -139,6 +151,15 @@ JSON output is intended for conformant reports whose payload is JSON-serializabl
 
 - succeeds for a resolvable local or cached dataset reference
 - fails for missing datasets, ambiguous cached references, or invalid package layout
+
+## Shared cache-root selection
+
+`ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan` share the same cache-root
+selection rules:
+
+1. `--cache-dir` takes highest precedence
+2. `CTXBENCH_DATASET_CACHE` is used when `--cache-dir` is omitted
+3. otherwise CTXBench uses the default dataset cache location
 
 ## Error message expectations
 

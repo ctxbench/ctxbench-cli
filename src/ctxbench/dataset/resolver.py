@@ -51,7 +51,7 @@ class ResolvedDatasetPackage:
         if self.reference.version:
             return self.reference.version
         if self.manifest is not None:
-            return self.manifest.requestedVersion
+            return self.manifest.datasetVersion
         return "local"
 
     def origin(self) -> str | None:
@@ -145,7 +145,7 @@ class DatasetResolver:
                 materialized_dataset = ExperimentDataset(
                     root=str(materialized_root),
                     id=manifest.datasetId,
-                    version=manifest.requestedVersion,
+                    version=manifest.datasetVersion,
                     origin=manifest.origin,
                 )
                 return LocalDatasetPackage.from_dataset(materialized_dataset)

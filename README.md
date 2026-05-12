@@ -243,12 +243,12 @@ The installed CLI command is `ctxbench`.
 For remote or cached datasets, use the dataset-management commands first:
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --version 2026-04-28 \
-  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+  --cache-dir ./.ctxbench/datasets
 
-ctxbench dataset inspect ctxbench/lattes@2026-04-28
+ctxbench dataset inspect ctxbench/lattes@2026-04-28 --cache-dir ./.ctxbench/datasets
 ```
 
 If your experiment already points to a local dataset root, skip fetch and inspect the root directly:
@@ -260,7 +260,9 @@ ctxbench dataset inspect datasets/lattes
 ### Plan an Experiment
 
 ```bash
-ctxbench plan datasets/lattes/experiment.json --output outputs/lattes_baseline_001
+ctxbench plan datasets/lattes/experiment.json \
+  --output outputs/lattes_baseline_001 \
+  --cache-dir ./.ctxbench/datasets
 ```
 
 This writes:

@@ -17,14 +17,16 @@ Lifecycle commands are local-only. They do not fetch, clone, or download dataset
 Use this path when the experiment references a dataset by `id` and `version`.
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --version 2026-04-28 \
-  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+  --cache-dir ./.ctxbench/datasets
 
-ctxbench dataset inspect ctxbench/lattes@2026-04-28
+ctxbench dataset inspect ctxbench/lattes@2026-04-28 --cache-dir ./.ctxbench/datasets
 
-ctxbench plan tests/fixtures/lattes_provider_free/experiment.json --output outputs/lattes_example
+ctxbench plan tests/fixtures/lattes_provider_free/experiment.json \
+  --output outputs/lattes_example \
+  --cache-dir ./.ctxbench/datasets
 ctxbench execute outputs/lattes_example/trials.jsonl
 ctxbench eval outputs/lattes_example/responses.jsonl
 ctxbench export outputs/lattes_example/evals.jsonl --format csv --output outputs/lattes_example/results.csv
@@ -64,25 +66,38 @@ ctxbench plan experiment.json --output outputs/local_example
 ### Direct archive URL with `--sha256`
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
-  --version 2026-04-28 \
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
   --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
-### Release tag URL with `--asset-name` and `--sha256-url`
+### Direct archive URL with `--sha256-url`
 
 ```bash
-ctxbench dataset fetch ctxbench/lattes \
-  --origin https://github.com/ctxbench/lattes/releases/tag/v0.1.0-dataset \
-  --version 2026-04-28 \
-  --asset-name ctxbench-lattes-v0.1.0.tar.gz \
+ctxbench dataset fetch \
+  --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
   --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.sha256
+```
+
+### Local archive with `--sha256-file`
+
+```bash
+ctxbench dataset fetch \
+  --dataset-file ./downloads/ctxbench-lattes-v0.1.0.tar.gz \
+  --sha256-file ./downloads/ctxbench-lattes-v0.1.0.sha256
+```
+
+### Local unpacked directory
+
+```bash
+ctxbench dataset fetch --dataset-dir ./datasets/lattes
 ```
 
 Rules:
 
-- archive and release acquisition require either `--sha256` or `--sha256-url`
+- `--dataset-url` requires either `--sha256` or `--sha256-url`
+- `--dataset-file` requires either `--sha256` or `--sha256-file`
+- `--dataset-dir` does not require checksum material
 - checksum verification happens before extraction
 - missing checksum input fails fast
 - invalid checksum fails before extraction or materialization
@@ -111,7 +126,7 @@ It fails if there is no manifest, or more than one manifest.
 If `ctxbench plan` cannot resolve `dataset.id@version` locally, it fails and tells you to run:
 
 ```bash
-ctxbench dataset fetch <dataset-id> --origin ... --version ...
+ctxbench dataset fetch --dataset-url <url> --sha256-url <url>
 ```
 
 ### Ambiguous dataset
@@ -156,6 +171,17 @@ Dataset provenance is preserved across canonical artifacts as a nested `dataset`
 - `resolvedRevision`
 - `contentHash`
 - `materializedPath`
+
+## Cache root selection
+
+Dataset commands share the same cache-root selection rules:
+
+- `--cache-dir <path>` overrides everything else
+- `CTXBENCH_DATASET_CACHE` applies when `--cache-dir` is omitted
+- otherwise CTXBench uses the default dataset cache location
+
+Use the same cache root for `ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan`
+when you are not using the default location.
 
 Flat export adds:
 

@@ -85,6 +85,7 @@ def fetch_command(
         manifest = MaterializationManifest(
             datasetId=discovered_dataset_id,
             requestedVersion=discovered_version,
+            datasetVersion=discovered_version,
             resolvedRevision=None,
             origin=source.origin,
             materializedPath="",
@@ -135,7 +136,7 @@ def fetch_command(
         persisted = _load_persisted_manifest(cache, discovered_dataset_id, discovered_version)
 
     print(f"identity: {persisted.datasetId}")
-    print(f"datasetVersion: {persisted.requestedVersion}")
+    print(f"datasetVersion: {persisted.datasetVersion}")
     if persisted.verifiedSha256:
         print(f"verifiedSha256: {persisted.verifiedSha256}")
     elif persisted.contentHash:
@@ -192,6 +193,7 @@ def fetch_command_from_args(args: object) -> int:
         sha256=getattr(args, "sha256", None),
         sha256_url=getattr(args, "sha256_url", None),
         sha256_file=getattr(args, "sha256_file", None),
+        cache_dir=getattr(args, "cache_dir", None),
     )
     return 0
 
@@ -200,5 +202,6 @@ def inspect_command_from_args(args: object) -> int:
     inspect_command(
         str(getattr(args, "dataset_ref")),
         json_output=bool(getattr(args, "json_output", False)),
+        cache_dir=getattr(args, "cache_dir", None),
     )
     return 0

@@ -24,6 +24,7 @@ def _manifest(
     return MaterializationManifest(
         datasetId=dataset_id,
         requestedVersion=version,
+        datasetVersion=version,
         resolvedRevision=revision,
         origin="/tmp/source",
         materializedPath="/tmp/placeholder",
@@ -56,6 +57,7 @@ def test_dataset_cache_store_and_lookup_round_trip(tmp_path: Path) -> None:
     assert len(items) == 1
     assert items[0].datasetId == "ctxbench/fake-dataset"
     assert items[0].requestedVersion == "0.1.0"
+    assert items[0].datasetVersion == "0.1.0"
     assert Path(items[0].materializedPath).exists()
     assert (Path(items[0].materializedPath) / "payload.txt").read_text(encoding="utf-8") == "fixture"
 
@@ -185,3 +187,57 @@ def test_dataset_cache_directory_is_configurable(tmp_path: Path) -> None:
     cache = DatasetCache(cache_dir=configured)
 
     assert cache.cache_dir() == configured
+
+
+def test_dataset_cache_directory_uses_env_var(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    configured = tmp_path / "env-cache"
+    monkeypatch.setenv("CTXBENCH_DATASET_CACHE", str(configured))
+
+    cache = DatasetCache()
+
+    assert cache.cache_dir() == configured
+
+
+def test_dataset_cache_explicit_directory_overrides_env_var(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setenv("CTXBENCH_DATASET_CACHE", str(tmp_path / "env-cache"))
+    configured = tmp_path / "explicit-cache"
+
+    cache = DatasetCache(cache_dir=configured)
+
+    assert cache.cache_dir() == configured
+
+
+def test_dataset_cache_read_manifest_backfills_dataset_version_for_legacy_payload(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "manifest.json"
+    path.write_text(
+        """
+        {
+          "datasetId": "ctxbench/fake-dataset",
+          "requestedVersion": "0.1.0",
+          "resolvedRevision": "rev-001",
+          "origin": "/tmp/source",
+          "materializedPath": "/tmp/materialized",
+          "contentHash": "sha256:abc123",
+          "fetchedAt": "2026-05-12T00:00:00Z",
+          "ctxbenchVersion": "0.1.0",
+          "fetchMethod": "file-copy",
+          "sourceType": null,
+          "archiveUrl": null,
+          "releaseTagUrl": null,
+          "assetName": null,
+          "verifiedSha256": null
+        }
+        """.strip(),
+        encoding="utf-8",
+    )
+
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    manifest = cache.read_manifest(path)
+
+    assert manifest.requestedVersion == "0.1.0"
+    assert manifest.datasetVersion == "0.1.0"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, replace
+import os
 from pathlib import Path
 import json
 import shutil
@@ -14,9 +15,14 @@ class DatasetConflictError(ValueError):
 
 class DatasetCache:
     def __init__(self, cache_dir: Path | str | None = None) -> None:
-        self._cache_dir = Path(cache_dir).expanduser() if cache_dir is not None else (
-            Path("~/.cache/ctxbench/datasets").expanduser()
-        )
+        if cache_dir is not None:
+            self._cache_dir = Path(cache_dir).expanduser()
+            return
+        env_cache_dir = os.getenv("CTXBENCH_DATASET_CACHE")
+        if env_cache_dir:
+            self._cache_dir = Path(env_cache_dir).expanduser()
+            return
+        self._cache_dir = Path("~/.cache/ctxbench/datasets").expanduser()
 
     def cache_dir(self) -> Path:
         return self._cache_dir

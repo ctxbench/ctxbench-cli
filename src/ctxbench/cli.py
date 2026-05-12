@@ -168,12 +168,14 @@ def build_parser() -> argparse.ArgumentParser:
     fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for dataset archive content")
     fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for a remote archive")
     fetch_parser.add_argument("--sha256-file", help="Local file containing trusted SHA-256 for a local archive")
+    fetch_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
     fetch_parser.set_defaults(func=fetch_command_from_args)
     inspect_parser = dataset_sub.add_parser(
         "inspect", help="Inspect a local or cached dataset reference"
     )
     inspect_parser.add_argument("dataset_ref", help="Dataset reference path or <dataset-id>@<version>")
     inspect_parser.add_argument("--json", action="store_true", dest="json_output", help="Emit JSON output")
+    inspect_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
     inspect_parser.set_defaults(func=inspect_command_from_args)
 
     # ── ctxbench plan ──────────────────────────────────────────────────────
@@ -185,12 +187,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", metavar="DIR",
         help="Override output directory (default: experiment.output/<id>/)",
     )
+    plan_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
     plan_parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     plan_parser.add_argument("--progress", action="store_true", help="Show progress bar")
     plan_parser.set_defaults(
         func=lambda args: plan_command(
             args.path,
             output=args.output,
+            cache_dir=args.cache_dir,
             verbose=args.verbose,
             progress=args.progress,
         )

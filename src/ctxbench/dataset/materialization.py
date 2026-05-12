@@ -17,6 +17,7 @@ class MaterializationManifest:
     fetchedAt: str
     ctxbenchVersion: str
     fetchMethod: str
+    datasetVersion: str | None = None
     sourceType: str | None = None
     archiveUrl: str | None = None
     releaseTagUrl: str | None = None
@@ -24,6 +25,12 @@ class MaterializationManifest:
     verifiedSha256: str | None = None
 
     def __post_init__(self) -> None:
+        if self.datasetVersion is None:
+            self.datasetVersion = self.requestedVersion
+        elif self.requestedVersion != self.datasetVersion:
+            raise ValueError(
+                "Materialization manifest requestedVersion must match datasetVersion when both are present."
+            )
         if self.fetchMethod not in VALID_FETCH_METHODS:
             raise ValueError(
                 f"Unsupported fetchMethod '{self.fetchMethod}'. "

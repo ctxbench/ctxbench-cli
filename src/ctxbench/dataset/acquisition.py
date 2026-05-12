@@ -159,6 +159,7 @@ def build_archive_materialization_manifest(
     return MaterializationManifest(
         datasetId=dataset_id,
         requestedVersion=version,
+        datasetVersion=version,
         resolvedRevision=None,
         origin=source.origin,
         materializedPath="",

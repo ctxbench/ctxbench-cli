@@ -472,22 +472,22 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 
 ### Tasks
 
-- [ ] T-A1b-1 [S-A1b] Update `src/ctxbench/cli.py` so `ctxbench dataset inspect` and `ctxbench plan` accept `--cache-dir`; ensure `ctxbench dataset fetch` passes `--cache-dir` through its args path as part of the shared cache-root contract in D14 / FR-019j.
-- [ ] T-A1b-2 [P] [S-A1b] Update `DatasetCache` in `src/ctxbench/dataset/cache.py` to accept an optional cache root and resolve it in this order: constructor arg → `CTXBENCH_DATASET_CACHE` env var → default location (D13 / FR-019h). Keep the change scoped to cache-root resolution; do not refactor unrelated cache semantics.
-- [ ] T-A1b-3 [P] [S-A1b] Update `src/ctxbench/commands/dataset.py`, `src/ctxbench/commands/plan.py`, and `src/ctxbench/dataset/materialization.py` so inspect and plan construct `DatasetCache` with the resolved cache root and materialization metadata records `datasetVersion` as authoritative while keeping `requestedVersion` compatibility explicit and narrow.
-- [ ] T-A1b-4 [S-A1b] Add focused provider-free tests in `tests/test_dataset_cache.py`, `tests/test_dataset_inspect.py`, `tests/test_fake_dataset_workflow.py`, and `tests/test_dataset_distribution_workflow.py` for: `--cache-dir` overrides default, `CTXBENCH_DATASET_CACHE` overrides default, explicit `--cache-dir` takes priority over the env var, and `ctxbench dataset inspect` / `ctxbench plan` resolve datasets from the same non-default cache root.
-- [ ] T-A1b-5 [P] [S-A1b] Update `docs/datasets/using-external-datasets.md`, `specs/003-dataset-distribution/contracts/dataset-commands.md`, and `README.md` to document the simplified source-selector fetch UX and shared `--cache-dir` behavior without introducing any new dataset commands.
+- [x] T-A1b-1 [S-A1b] Update `src/ctxbench/cli.py` so `ctxbench dataset inspect` and `ctxbench plan` accept `--cache-dir`; ensure `ctxbench dataset fetch` passes `--cache-dir` through its args path as part of the shared cache-root contract in D14 / FR-019j.
+- [x] T-A1b-2 [P] [S-A1b] Update `DatasetCache` in `src/ctxbench/dataset/cache.py` to accept an optional cache root and resolve it in this order: constructor arg → `CTXBENCH_DATASET_CACHE` env var → default location (D13 / FR-019h). Keep the change scoped to cache-root resolution; do not refactor unrelated cache semantics.
+- [x] T-A1b-3 [P] [S-A1b] Update `src/ctxbench/commands/dataset.py`, `src/ctxbench/commands/plan.py`, and `src/ctxbench/dataset/materialization.py` so inspect and plan construct `DatasetCache` with the resolved cache root and materialization metadata records `datasetVersion` as authoritative while keeping `requestedVersion` compatibility explicit and narrow.
+- [x] T-A1b-4 [S-A1b] Add focused provider-free tests in `tests/test_dataset_cache.py`, `tests/test_dataset_inspect.py`, `tests/test_fake_dataset_workflow.py`, and `tests/test_dataset_distribution_workflow.py` for: `--cache-dir` overrides default, `CTXBENCH_DATASET_CACHE` overrides default, explicit `--cache-dir` takes priority over the env var, and `ctxbench dataset inspect` / `ctxbench plan` resolve datasets from the same non-default cache root.
+- [x] T-A1b-5 [P] [S-A1b] Update `docs/datasets/using-external-datasets.md`, `specs/003-dataset-distribution/contracts/dataset-commands.md`, and `README.md` to document the simplified source-selector fetch UX and shared `--cache-dir` behavior without introducing any new dataset commands.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_cache.py` passes.
-- [ ] `pytest tests/test_dataset_inspect.py` passes.
-- [ ] `pytest tests/test_fake_dataset_workflow.py` passes.
-- [ ] `pytest tests/test_dataset_distribution_workflow.py -k "plan or inspect"` passes.
-- [ ] `ctxbench dataset inspect --help` and `ctxbench plan --help` show `--cache-dir`.
-- [ ] `CTXBENCH_DATASET_CACHE` and explicit `--cache-dir` precedence are both covered by focused provider-free tests.
-- [ ] No provider calls; no real remote fetches.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_cache.py` passes.
+- [x] `pytest tests/test_dataset_inspect.py` passes.
+- [x] `pytest tests/test_fake_dataset_workflow.py` passes.
+- [x] `pytest tests/test_dataset_distribution_workflow.py -k "plan or inspect"` passes.
+- [x] `ctxbench dataset inspect --help` and `ctxbench plan --help` show `--cache-dir`.
+- [x] `CTXBENCH_DATASET_CACHE` and explicit `--cache-dir` precedence are both covered by focused provider-free tests.
+- [x] No provider calls; no real remote fetches.
+- [x] Diff is reviewable.
 
 ---
 
@@ -496,7 +496,7 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 - [x] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
 - [x] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
 - [x] T064b [Audit] After S-A1a: re-run the full fetch/archive/manifest test suite with the simplified source-selector UX: `pytest tests/test_dataset_fetch.py tests/test_dataset_archive_fetch.py tests/test_dataset_manifest_discovery.py tests/test_dataset_archive_safety.py` — all must pass with the new argument form.
-- [ ] T064c [Audit] After S-A1b: run focused provider-free cache-root and compatibility validation: `pytest tests/test_dataset_cache.py tests/test_dataset_inspect.py tests/test_fake_dataset_workflow.py tests/test_dataset_distribution_workflow.py -k "plan or inspect"` — all must pass with shared `--cache-dir` / `CTXBENCH_DATASET_CACHE` behavior.
+- [x] T064c [Audit] After S-A1b: run focused provider-free cache-root and compatibility validation: `pytest tests/test_dataset_cache.py tests/test_dataset_inspect.py tests/test_fake_dataset_workflow.py tests/test_dataset_distribution_workflow.py -k "plan or inspect"` — all must pass with shared `--cache-dir` / `CTXBENCH_DATASET_CACHE` behavior.
 - [x] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
 - [x] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
 - [x] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
