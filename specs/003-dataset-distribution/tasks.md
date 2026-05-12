@@ -428,11 +428,11 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 
 ## Final Audit
 
-- [ ] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
-- [ ] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
-- [ ] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
-- [ ] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
-- [ ] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
+- [x] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
+- [x] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
+- [x] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
+- [x] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
+- [x] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
 
 ---
 
