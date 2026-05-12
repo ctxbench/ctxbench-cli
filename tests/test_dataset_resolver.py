@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 
 import pytest
 
@@ -34,11 +35,49 @@ def _write_source(path: Path) -> Path:
     return path
 
 
+def _write_local_dataset(path: Path) -> Path:
+    instance_dir = path / "context" / "cv-demo"
+    instance_dir.mkdir(parents=True, exist_ok=True)
+    (path / "questions.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "ctxbench/local-fixture",
+                "questions": [
+                    {
+                        "id": "q_year",
+                        "question": "When?",
+                        "tags": [],
+                        "validation": {"type": "judge"},
+                        "contextBlock": ["summary"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (path / "questions.instance.json").write_text(
+        json.dumps(
+            {
+                "datasetId": "ctxbench/local-fixture",
+                "instances": [
+                    {
+                        "instanceId": "cv-demo",
+                        "questions": [{"id": "q_year"}],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (instance_dir / "parsed.json").write_text(json.dumps({"answers": {"q_year": 2020}}), encoding="utf-8")
+    (instance_dir / "blocks.json").write_text(json.dumps({"summary": "ok"}), encoding="utf-8")
+    return path
+
+
 def test_resolver_local_path_returns_dataset_package_compatible_object(tmp_path: Path) -> None:
     resolver = DatasetResolver()
     cache = DatasetCache(cache_dir=tmp_path / "cache")
-    dataset_root = tmp_path / "dataset"
-    dataset_root.mkdir()
+    dataset_root = _write_local_dataset(tmp_path / "dataset")
 
     package = resolver.resolve(ExperimentDataset(root=str(dataset_root)), cache)
 

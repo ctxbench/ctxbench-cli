@@ -10,6 +10,7 @@ from ctxbench.dataset.capabilities import DatasetCapabilityReport
 from ctxbench.dataset.conflicts import DatasetConflictDetector
 from ctxbench.dataset.materialization import MaterializationManifest
 from ctxbench.dataset.package import DatasetMetadata, DatasetPackage
+from ctxbench.dataset.provider import LocalDatasetPackage
 
 
 class DatasetNotFoundError(FileNotFoundError):
@@ -120,7 +121,7 @@ class DatasetResolver:
         dataset_ref = ExperimentDataset.model_validate(ref)
 
         if dataset_ref.root:
-            return ResolvedDatasetPackage(reference=dataset_ref)
+            return LocalDatasetPackage.from_dataset(dataset_ref)
 
         if dataset_ref.id and dataset_ref.version:
             DatasetConflictDetector.check(dataset_ref.id, dataset_ref.version, cache)

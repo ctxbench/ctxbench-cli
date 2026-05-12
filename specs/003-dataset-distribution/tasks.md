@@ -191,16 +191,16 @@ detect and reject ambiguous references; extend `ExperimentDataset` with provenan
 
 ### Tasks
 
-- [ ] T019 [S5] Implement `LocalDatasetPackage` in `src/ctxbench/dataset/provider.py` or `src/ctxbench/dataset/local_package.py` as the compatibility adapter for current local dataset roots. It must expose enough information for current planning semantics: question text, question tags, validation type, context blocks, instance-level question parameters, context artifact lookup, and evidence lookup.
-- [ ] T020 [S5] Update `DatasetResolver.resolve()` in `src/ctxbench/dataset/resolver.py` so `ref.root` returns `LocalDatasetPackage` rather than a bare path or legacy provider object.
-- [ ] T021 [S5] Write `tests/test_dataset_local_package.py` asserting: (a) a real temporary local dataset root resolves to a `DatasetPackage`-compatible object; (b) the adapter preserves current question/template/instance parameter semantics needed by planning; (c) both `dataset: "path"` and `dataset: { "root": "path" }` resolve equivalently.
+- [x] T019 [S5] Implement `LocalDatasetPackage` in `src/ctxbench/dataset/provider.py` or `src/ctxbench/dataset/local_package.py` as the compatibility adapter for current local dataset roots. It must expose enough information for current planning semantics: question text, question tags, validation type, context blocks, instance-level question parameters, context artifact lookup, and evidence lookup.
+- [x] T020 [S5] Update `DatasetResolver.resolve()` in `src/ctxbench/dataset/resolver.py` so `ref.root` returns `LocalDatasetPackage` rather than a bare path or legacy provider object.
+- [x] T021 [S5] Write `tests/test_dataset_local_package.py` asserting: (a) a real temporary local dataset root resolves to a `DatasetPackage`-compatible object; (b) the adapter preserves current question/template/instance parameter semantics needed by planning; (c) both `dataset: "path"` and `dataset: { "root": "path" }` resolve equivalently.
 
 ### Checkpoint
 
-- [ ] `pytest tests/test_dataset_local_package.py` passes.
-- [ ] No provider calls; no network access.
-- [ ] No Lattes-specific imports.
-- [ ] Diff is reviewable.
+- [x] `pytest tests/test_dataset_local_package.py` passes.
+- [x] No provider calls; no network access.
+- [x] No Lattes-specific imports.
+- [x] Diff is reviewable.
 
 ---
 
