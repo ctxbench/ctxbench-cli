@@ -124,7 +124,7 @@ def test_plan_with_missing_cached_dataset_suggests_fetch(tmp_path: Path) -> None
     assert "ctxbench dataset fetch" in str(excinfo.value)
 
 
-def test_plan_with_ambiguous_cached_dataset_raises(tmp_path: Path) -> None:
+def test_plan_with_semantic_cached_dataset_uses_latest_materialization(tmp_path: Path) -> None:
     cache = DatasetCache(cache_dir=tmp_path / "cache")
     dataset_a = _write_local_dataset(tmp_path / "dataset-a")
     dataset_b = _write_local_dataset(tmp_path / "dataset-b")
@@ -135,10 +135,13 @@ def test_plan_with_ambiguous_cached_dataset_raises(tmp_path: Path) -> None:
         {"id": "ctxbench/local-fixture", "version": "0.1.0"},
     )
 
-    with pytest.raises(Exception) as excinfo:
-        plan_command(str(experiment_path), output=str(tmp_path / "planned"), cache_dir=tmp_path / "cache")
+    output_root = tmp_path / "planned"
 
-    assert "Ambiguous dataset reference" in str(excinfo.value)
+    assert plan_command(str(experiment_path), output=str(output_root), cache_dir=tmp_path / "cache") == 0
+
+    manifest = json.loads((output_root / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["dataset"]["origin"] == str(dataset_b)
+    assert manifest["dataset"]["resolvedRevision"] is None
 
 
 @pytest.mark.parametrize(

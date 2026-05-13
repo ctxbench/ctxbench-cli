@@ -3,7 +3,7 @@
 **Spec**: `specs/003-dataset-distribution/spec.md`  
 **Plan**: `specs/003-dataset-distribution/plan.md`  
 **Branch**: `feat/dataset-distribution`  
-**Amendment**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md` — adds Slice S-A1
+**Amendments**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md` (Slice S-A1), `specs/003-dataset-distribution/amendments/descriptor-and-cache-reuse.md` (Slice S-A1-R1)
 
 ## Task Format
 
@@ -31,6 +31,12 @@
   the slices that explicitly name those files.
 - Archive and release-asset acquisition require verified SHA-256 before extraction.
 - Lifecycle commands must not depend on archive/release acquisition code paths.
+- `--descriptor-url` and `--descriptor-file` are self-describing; no `--id`/`--version` required.
+- `--dataset-url` and `--dataset-file` are opaque; `--id` and `--version` are required at dispatch.
+- Cache pre-check must happen before any archive download or extraction for all source types.
+- `--force` does not bypass checksum verification, safe extraction, or manifest validation.
+- Materialized paths are semantic: `<cache-dir>/<dataset-id>/<datasetVersion>/` (no hash in path).
+- Content hash is recorded in provenance only; not used as part of the materialized path.
 
 ---
 
@@ -491,12 +497,63 @@ grep -R "single-dataset" docs/architecture/vocabulary.md
 
 ---
 
+## Slice S-A1-R1 — Descriptor Acquisition and Cache Reuse (Amendment A1-R1)
+
+**Goal**: Add the distribution descriptor source, cache pre-check, no-op reuse, conflict/force behavior, descriptor-vs-manifest validation, semantic materialization paths, and provenance additions.  
+**Validation**: `pytest tests/test_dataset_descriptor.py tests/test_dataset_fetch.py tests/test_dataset_cache.py tests/test_dataset_archive_fetch.py`  
+**Depends on**: S-A1b (all prior fetch slices)  
+**Suggested commit**: `feat(fetch): add descriptor-based acquisition and cache reuse (A1-R1)`
+
+### Tasks
+
+- [x] T-R1-1 [S-A1-R1] Update the `fetch` subparser in `src/ctxbench/cli.py` to add `--descriptor-url` and `--descriptor-file` to the mutually exclusive source group (group now has 5 members: `--descriptor-url`, `--descriptor-file`, `--dataset-url`, `--dataset-file`, `--dataset-dir`). Add `--id` and `--version` as optional standalone validation overrides for opaque archive sources, add `--force` for conflict replacement, and keep `--sha256`, `--sha256-url`, and `--sha256-file` as standalone flags.
+
+- [x] T-R1-2 [S-A1-R1] Create `src/ctxbench/dataset/descriptor.py` with `DistributionDescriptor` dataclass containing required fields (`id`, `datasetVersion`, `descriptorSchemaVersion`, `archive_type`, `archive_url`, `archive_sha256`) and optional fields (`name`, `description`, `release_tag`). Validate all required fields at construction; raise a structured `DescriptorValidationError` on any missing field.
+
+- [x] T-R1-3 [P] [S-A1-R1] Implement `load_descriptor(source: str, *, from_url: bool) -> DistributionDescriptor` in `src/ctxbench/dataset/descriptor.py`. For `from_url=True`: download the JSON from the URL. For `from_url=False`: read from the local file path. Parse into `DistributionDescriptor` and validate required fields before returning.
+
+- [x] T-R1-4 [P] [S-A1-R1] Update `MaterializationManifest` in `src/ctxbench/dataset/materialization.py` to add `descriptorUrl: str | None` and `descriptorSchemaVersion: int | None`. Populate these fields when `--descriptor-url` or `--descriptor-file` is the source. Update manifest serialization/deserialization accordingly.
+
+- [x] T-R1-5 [P] [S-A1-R1] Update `DatasetCache.store()` and its target-path logic in `src/ctxbench/dataset/cache.py` to use the semantic path `<cache_root>/<dataset_id>/<datasetVersion>/`. Remove any content-hash segment from the materialized path. Decide this slice's compatibility rule explicitly in implementation notes and tests; do not expand into a broader cache migration refactor.
+
+- [x] T-R1-6 [P] [S-A1-R1] Add a cache pre-check helper in `src/ctxbench/dataset/cache.py` or `src/ctxbench/dataset/acquisition.py` that accepts dataset identity, version, and expected content identity when available. Return a no-op hit only when the existing materialization matches the requested content identity, return a conflict result when the same id/version exists with different content identity, and return a miss otherwise.
+
+- [x] T-R1-7 [S-A1-R1] In `src/ctxbench/commands/dataset.py`, enforce that `--dataset-url` and `--dataset-file` require both `--id` and `--version` at fetch dispatch time. Raise an error with a clear message naming which required flags are missing before any download or extraction begins, and add dispatch branches for `--descriptor-url` and `--descriptor-file`.
+
+- [x] T-R1-8 [P] [S-A1-R1] In `src/ctxbench/dataset/acquisition.py`, integrate cache pre-check into the fetch flow for self-describing descriptor sources and opaque archive sources only (`--descriptor-url`, `--descriptor-file`, `--dataset-url`, `--dataset-file`). On hit: print the existing materialized path and exit without acquiring. On conflict without `--force`: raise `DatasetConflictError`. On conflict with `--force`: record the conflict, proceed with all validation, then replace the existing materialization after all steps succeed. Keep `--dataset-dir` on its existing validation/store path in this slice.
+
+- [x] T-R1-9 [P] [S-A1-R1] In `src/ctxbench/dataset/acquisition.py`, implement descriptor-vs-manifest validation: after extraction, compare descriptor `id` and `datasetVersion` with the corresponding fields in the discovered `ctxbench.dataset.json`. A mismatch MUST raise a structured error before materialization.
+
+- [x] T-R1-10 [S-A1-R1] Write `tests/test_dataset_descriptor.py` asserting: (a) valid descriptor with all required fields parses without error; (b) descriptor missing any single required field raises `DescriptorValidationError`; (c) `load_descriptor` from a local JSON file returns a valid `DistributionDescriptor`; (d) `load_descriptor` from a URL (mocked HTTP) returns a valid `DistributionDescriptor`; (e) optional fields are accepted when present.
+
+- [x] T-R1-11 [S-A1-R1] Update `tests/test_dataset_fetch.py` to cover A1-R1 additions: (a) `--descriptor-url` triggers descriptor load, cache pre-check, then archive download when miss; (b) `--descriptor-file` triggers local descriptor parse, cache pre-check, then archive download when miss; (c) `--dataset-url` without `--id` fails with clear error; (d) `--dataset-url` without `--version` fails with clear error; (e) `--dataset-file` without `--id` or `--version` fails with clear error; (f) no-op when cache pre-check returns a hit (no download, prints existing path); (g) conflict raises error when `--force` not set; (h) `--force` replaces after successful validation; (i) descriptor `id` or `datasetVersion` mismatch against `ctxbench.dataset.json` fails before materialization; (j) all 5 source flags remain mutually exclusive.
+
+- [x] T-R1-12 [P] [S-A1-R1] Update `tests/test_dataset_cache.py` to cover: (a) cache pre-check returns hit for matching materialization and expected content identity; (b) cache pre-check returns conflict for same id/version with different content; (c) cache pre-check returns miss when no materialization exists; (d) semantic path format (`<id>/<version>/`) is used in `store()`; (e) content hash is recorded in the manifest, not the path; (f) descriptor provenance fields (`descriptorUrl`, `descriptorSchemaVersion`) round-trip through manifest IO.
+
+- [x] T-R1-13 [P] [S-A1-R1] Update `tests/test_dataset_archive_fetch.py` to cover descriptor-driven archive acquisition helpers and provider-free archive-source validation paths needed by A1-R1, without duplicating cache-path assertions already owned by `tests/test_dataset_cache.py`.
+
+- [x] T-R1-14 [P] [S-A1-R1] Update `docs/datasets/using-external-datasets.md` and `specs/003-dataset-distribution/contracts/dataset-commands.md` to document: (a) `--descriptor-url` and `--descriptor-file` as canonical acquisition sources; (b) `--id`/`--version` requirement for opaque archive sources; (c) cache reuse no-op behavior and what is printed; (d) conflict error and `--force` behavior; (e) semantic materialized path structure.
+
+### Checkpoint
+
+- [x] `pytest tests/test_dataset_descriptor.py` passes.
+- [x] `pytest tests/test_dataset_fetch.py` passes with 5-source selector and A1-R1 behaviors.
+- [x] `pytest tests/test_dataset_cache.py` includes cache pre-check and semantic path assertions.
+- [x] `pytest tests/test_dataset_archive_fetch.py` passes with A1-R1 descriptor-driven archive validation tests.
+- [x] `ctxbench dataset fetch --help` shows `--descriptor-url` and `--descriptor-file` as source options; shows `--id` and `--version` as optional flags; shows `--force` for conflict replacement.
+- [x] `ctxbench dataset fetch --descriptor-url <url>` when dataset is already cached: prints existing path, no download.
+- [x] No provider calls; no real remote fetches.
+- [x] Diff is reviewable.
+
+---
+
 ## Final Audit
 
 - [x] T064 [Audit] Run full provider-free test suite: `pytest tests/test_dataset_package_contract.py tests/test_dataset_cache.py tests/test_dataset_fetch.py tests/test_dataset_resolver.py tests/test_dataset_conflicts.py tests/test_dataset_local_package.py tests/test_dataset_inspect.py tests/test_dataset_distribution_workflow.py tests/test_dataset_provenance_artifacts.py tests/test_lifecycle_no_network.py tests/test_lattes_dataset_package.py tests/test_lattes_dataset_conformance.py tests/test_fake_dataset_workflow.py` — all must pass.
 - [x] T064a [Audit] Run archive/provider-free fetch tests: `pytest tests/test_dataset_archive_fetch.py tests/test_dataset_archive_safety.py tests/test_dataset_manifest_discovery.py` — all must pass.
 - [x] T064b [Audit] After S-A1a: re-run the full fetch/archive/manifest test suite with the simplified source-selector UX: `pytest tests/test_dataset_fetch.py tests/test_dataset_archive_fetch.py tests/test_dataset_manifest_discovery.py tests/test_dataset_archive_safety.py` — all must pass with the new argument form.
 - [x] T064c [Audit] After S-A1b: run focused provider-free cache-root and compatibility validation: `pytest tests/test_dataset_cache.py tests/test_dataset_inspect.py tests/test_fake_dataset_workflow.py tests/test_dataset_distribution_workflow.py -k "plan or inspect"` — all must pass with shared `--cache-dir` / `CTXBENCH_DATASET_CACHE` behavior.
+- [x] T064d [Audit] After S-A1-R1: run descriptor and cache-reuse test suite: `pytest tests/test_dataset_descriptor.py tests/test_dataset_fetch.py tests/test_dataset_cache.py tests/test_dataset_archive_fetch.py` — all must pass with descriptor source, cache pre-check, no-op, conflict, and `--force` behaviors.
 - [x] T065 [Audit] Run static leakage grep: `grep -rn "from ctxbench.datasets.lattes" src/ctxbench/benchmark/ src/ctxbench/ai/ src/ctxbench/commands/` — zero hits required.
 - [x] T066 [Audit] Run S13 documentation validation checklist manually; confirm all eleven items pass.
 - [x] T067 [Audit] Update `worklog.md` with final validation summary, decisions made during implementation, and deferred items.
@@ -513,6 +570,7 @@ S3a (needs S2, S3)         [superseded arg model] │
 S3b (needs S2, S3a)        [manifest name updated]│
 S-A1a (needs S2, S3)       [fetch UX + manifest]  │
 S-A1b (needs S-A1a)        [shared cache root]    │
+S-A1-R1 (needs S-A1b)      [descriptor + reuse]   │
 S4 (needs S1, S2)                                 │
 S5 (needs S1, S4)                                 │
 S6 (needs S4, S5)                                 │
@@ -523,12 +581,13 @@ S10 (needs S1, S4, S6)                            │
 S11 (needs S1, S4, S5, S7)                        │
 S12 (needs S7, S8, S10) ──────────────────────────┤
 S13 (needs S1–S12)    ────────────────────────────┘
-Audit (needs all slices complete, including S-A1a/S-A1b)
+Audit (needs all slices complete, including S-A1a/S-A1b/S-A1-R1)
 ```
 
 S3 and S4 may begin in parallel once S2 is complete (disjoint files).  
 S-A1a may begin once S3 is complete (amends S3 files).  
 S-A1b may begin once S-A1a is complete (shared cache-root and compatibility follow-on).  
+S-A1-R1 may begin once S-A1b is complete (adds descriptor layer on top of fetch surface).  
 S8 and S9 may begin in parallel once S7 is complete (disjoint files).  
 S10 and S11 may begin in parallel once S7 is complete (disjoint files).  
 Within S13, all [P]-marked tasks may run in parallel.

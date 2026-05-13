@@ -23,6 +23,8 @@ class MaterializationManifest:
     releaseTagUrl: str | None = None
     assetName: str | None = None
     verifiedSha256: str | None = None
+    descriptorUrl: str | None = None
+    descriptorSchemaVersion: int | None = None
 
     def __post_init__(self) -> None:
         if self.datasetVersion is None:

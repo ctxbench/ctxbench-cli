@@ -8,6 +8,7 @@ import re
 from urllib.request import urlopen
 
 from ctxbench.dataset.archive import discover_dataset_manifest
+from ctxbench.dataset.descriptor import DistributionDescriptor
 from ctxbench.dataset.materialization import MaterializationManifest
 
 
@@ -18,6 +19,8 @@ class AcquisitionSource:
     sha256: str | None = None
     sha256_url: str | None = None
     sha256_file: str | None = None
+    descriptor: DistributionDescriptor | None = None
+    descriptor_source: str | None = None
 
 
 @dataclass(slots=True)
@@ -28,8 +31,14 @@ class ResolvedArchiveSource:
     archive_path: Path | None = None
 
 
+class DescriptorManifestMismatchError(ValueError):
+    """Raised when a descriptor does not match the extracted dataset manifest."""
+
+
 def classify_acquisition_source(
     *,
+    descriptor_url: str | None = None,
+    descriptor_file: str | None = None,
     dataset_url: str | None = None,
     dataset_file: str | None = None,
     dataset_dir: str | None = None,
@@ -38,6 +47,8 @@ def classify_acquisition_source(
     sha256_file: str | None = None,
 ) -> AcquisitionSource:
     provided_sources = [
+        ("descriptor-url", descriptor_url),
+        ("descriptor-file", descriptor_file),
         ("archive-url", dataset_url),
         ("local-archive", dataset_file),
         ("local-directory", dataset_dir),
@@ -46,7 +57,7 @@ def classify_acquisition_source(
     if len(selected) != 1:
         raise ValueError(
             "Exactly one dataset source must be provided: "
-            "--dataset-url, --dataset-file, or --dataset-dir."
+            "--descriptor-url, --descriptor-file, --dataset-url, --dataset-file, or --dataset-dir."
         )
     source_type, origin = selected[0]
     return AcquisitionSource(
@@ -77,6 +88,14 @@ def require_checksum_for_remote_archive(source: AcquisitionSource) -> None:
 
 
 def resolve_archive_source(source: AcquisitionSource) -> ResolvedArchiveSource:
+    if source.source_type in {"descriptor-url", "descriptor-file"}:
+        if source.descriptor is None:
+            raise ValueError(f"Descriptor source is missing descriptor metadata: {source.origin}")
+        return ResolvedArchiveSource(
+            source_type=source.source_type,
+            origin=source.origin,
+            archive_url=source.descriptor.archive_url,
+        )
     if source.source_type == "archive-url":
         return ResolvedArchiveSource(
             source_type=source.source_type,
@@ -125,6 +144,10 @@ def resolve_expected_sha256(
     *,
     download_text_fn=download_text,
 ) -> str:
+    if source.source_type in {"descriptor-url", "descriptor-file"}:
+        if source.descriptor is None:
+            raise ValueError(f"Descriptor source is missing descriptor metadata: {source.origin}")
+        return normalize_sha256(source.descriptor.archive_sha256)
     require_checksum_for_archive_source(source)
     if source.sha256:
         return normalize_sha256(source.sha256)
@@ -172,6 +195,8 @@ def build_archive_materialization_manifest(
         releaseTagUrl=None,
         assetName=None,
         verifiedSha256=verified_sha256,
+        descriptorUrl=source.descriptor_source,
+        descriptorSchemaVersion=source.descriptor.descriptorSchemaVersion if source.descriptor else None,
     )
 
 
@@ -214,3 +239,39 @@ def discover_and_validate_manifest(
         expected_version=expected_version,
     )
     return manifest_path, payload
+
+
+def content_identity_for_source(source: AcquisitionSource) -> str | None:
+    if source.source_type in {"descriptor-url", "descriptor-file"}:
+        if source.descriptor is None:
+            raise ValueError(f"Descriptor source is missing descriptor metadata: {source.origin}")
+        return f"sha256:{normalize_sha256(source.descriptor.archive_sha256)}"
+    if source.source_type == "archive-url":
+        if source.sha256:
+            return f"sha256:{normalize_sha256(source.sha256)}"
+        if source.sha256_url:
+            return f"sha256:{parse_sha256_text(download_text(source.sha256_url))}"
+    if source.source_type == "local-archive":
+        if source.sha256:
+            return f"sha256:{normalize_sha256(source.sha256)}"
+        if source.sha256_file:
+            payload = Path(source.sha256_file).expanduser().read_text(encoding="utf-8")
+            return f"sha256:{parse_sha256_text(payload)}"
+    return None
+
+
+def validate_descriptor_against_manifest(
+    descriptor: DistributionDescriptor,
+    manifest_payload: dict[str, object],
+) -> None:
+    dataset_id = manifest_payload.get("id")
+    version = manifest_payload.get("datasetVersion", manifest_payload.get("version"))
+    if dataset_id != descriptor.id:
+        raise DescriptorManifestMismatchError(
+            f"Descriptor identity mismatch: descriptor={descriptor.id!r}, manifest={dataset_id!r}."
+        )
+    if version != descriptor.datasetVersion:
+        raise DescriptorManifestMismatchError(
+            "Descriptor datasetVersion mismatch: "
+            f"descriptor={descriptor.datasetVersion!r}, manifest={version!r}."
+        )

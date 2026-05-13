@@ -38,28 +38,51 @@ Materialize a dataset into the local cache from an explicit source selector.
 
 Required:
 
-- exactly one of `--dataset-url`, `--dataset-file`, or `--dataset-dir`
+- exactly one of `--descriptor-url`, `--descriptor-file`, `--dataset-url`, `--dataset-file`, or `--dataset-dir`
 
 Optional:
 
+- `--id`
+- `--version`
 - `--sha256`
 - `--sha256-url`
 - `--sha256-file`
+- `--force`
 - `--cache-dir`
 
 ### Accepted source forms
 
-1. direct `.tar.gz` archive URL via `--dataset-url`
-2. local `.tar.gz` archive path via `--dataset-file`
-3. local unpacked dataset directory via `--dataset-dir`
+1. distribution descriptor URL via `--descriptor-url`
+2. local distribution descriptor path via `--descriptor-file`
+3. direct `.tar.gz` archive URL via `--dataset-url`
+4. local `.tar.gz` archive path via `--dataset-file`
+5. local unpacked dataset directory via `--dataset-dir`
 
-### Verified archive acquisition examples
+### Descriptor-first acquisition examples
+
+Canonical remote workflow:
+
+```bash
+ctxbench dataset fetch \
+  --descriptor-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.dataset.json
+```
+
+Offline descriptor workflow:
+
+```bash
+ctxbench dataset fetch \
+  --descriptor-file ./downloads/ctxbench-lattes-v0.1.0.dataset.json
+```
+
+### Opaque archive acquisition examples
 
 Direct archive URL plus `--sha256`:
 
 ```bash
 ctxbench dataset fetch \
   --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --id ctxbench/lattes \
+  --version 0.1.0 \
   --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
@@ -68,6 +91,8 @@ Direct archive URL plus `--sha256-url`:
 ```bash
 ctxbench dataset fetch \
   --dataset-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.tar.gz \
+  --id ctxbench/lattes \
+  --version 0.1.0 \
   --sha256-url https://github.com/ctxbench/lattes/releases/download/v0.1.0-dataset/ctxbench-lattes-v0.1.0.sha256
 ```
 
@@ -76,6 +101,8 @@ Local archive plus `--sha256-file`:
 ```bash
 ctxbench dataset fetch \
   --dataset-file ./downloads/ctxbench-lattes-v0.1.0.tar.gz \
+  --id ctxbench/lattes \
+  --version 0.1.0 \
   --sha256-file ./downloads/ctxbench-lattes-v0.1.0.sha256
 ```
 
@@ -88,12 +115,21 @@ ctxbench dataset fetch --dataset-dir ./datasets/lattes
 ### Failure rules
 
 - missing or multiple source-selector flags fail in argparse before command execution
+- `--descriptor-url` and `--descriptor-file` are self-describing sources
 - `--dataset-url` without `--sha256` or `--sha256-url` fails
 - `--dataset-file` without `--sha256` or `--sha256-file` fails
+- `--dataset-url` and `--dataset-file` without `--id` or `--version` fail before download or extraction
 - checksum mismatch fails before extraction
 - no manifest or multiple manifests after extraction fails
-- manifest identity/version mismatch fails
+- descriptor-vs-manifest identity/version mismatch fails before materialization
 - unsafe tar entries fail
+
+### Cache reuse and replacement
+
+- when cached content identity matches, fetch prints the existing materialized path and exits without acquiring
+- when the same `datasetId@version` exists with conflicting content, fetch fails by default
+- `--force` allows replacement only after all validation steps succeed
+- the user-facing materialized path is `<cache-dir>/<dataset-id>/<datasetVersion>/`
 
 ### Safe extraction guarantees
 

@@ -6,19 +6,22 @@ from pathlib import Path
 import tempfile
 
 from ctxbench.dataset.archive import determine_package_root, safe_extract_tar_gz
-from ctxbench.dataset.cache import DatasetCache
+from ctxbench.dataset.cache import DatasetCache, DatasetConflictError
 from ctxbench.dataset.conflicts import DatasetConflictDetector
 from ctxbench.dataset.inspect import build_inspect_result
 from ctxbench.dataset.acquisition import (
     build_archive_materialization_manifest,
     classify_acquisition_source,
+    content_identity_for_source,
     discover_and_validate_manifest,
     download_bytes,
+    validate_descriptor_against_manifest,
     require_checksum_for_archive_source,
     resolve_archive_source,
     resolve_expected_sha256,
     verify_downloaded_bytes,
 )
+from ctxbench.dataset.descriptor import load_descriptor
 from ctxbench.dataset.materialization import MaterializationManifest
 from ctxbench.dataset.resolver import DatasetResolver
 
@@ -36,11 +39,43 @@ def _load_persisted_manifest(cache: DatasetCache, dataset_id: str, version: str)
     return matches[0]
 
 
+def _print_fetch_result(persisted: MaterializationManifest, *, reused: bool = False) -> None:
+    if reused:
+        print("dataset already exists in cache")
+    print(f"identity: {persisted.datasetId}")
+    print(f"datasetVersion: {persisted.datasetVersion}")
+    if persisted.verifiedSha256:
+        print(f"verifiedSha256: {persisted.verifiedSha256}")
+    elif persisted.contentHash:
+        print(f"contentHash: {persisted.contentHash}")
+    print(f"materializedPath: {persisted.materializedPath}")
+
+
+def _require_opaque_archive_metadata(
+    *,
+    source_type: str,
+    dataset_id: str | None,
+    version: str | None,
+) -> None:
+    if source_type not in {"archive-url", "local-archive"}:
+        return
+    missing: list[str] = []
+    if not dataset_id:
+        missing.append("--id")
+    if not version:
+        missing.append("--version")
+    if missing:
+        joined = ", ".join(missing)
+        raise ValueError(f"Opaque archive sources require {joined} before any download or extraction.")
+
+
 def fetch_command(
     dataset_id: str | None = None,
     origin: str | None = None,
     version: str | None = None,
     *,
+    descriptor_url: str | None = None,
+    descriptor_file: str | None = None,
     dataset_url: str | None = None,
     dataset_file: str | None = None,
     dataset_dir: str | None = None,
@@ -48,11 +83,12 @@ def fetch_command(
     sha256_url: str | None = None,
     sha256_file: str | None = None,
     cache_dir: Path | None = None,
+    force: bool = False,
 ) -> None:
     cache = DatasetCache(cache_dir=cache_dir)
     expected_dataset_id = dataset_id
     expected_version = version
-    if not any((dataset_url, dataset_file, dataset_dir)) and origin is not None:
+    if not any((descriptor_url, descriptor_file, dataset_url, dataset_file, dataset_dir)) and origin is not None:
         legacy_source = Path(origin).expanduser()
         if legacy_source.exists() and legacy_source.is_dir():
             dataset_dir = origin
@@ -61,6 +97,8 @@ def fetch_command(
         else:
             dataset_url = origin
     source = classify_acquisition_source(
+        descriptor_url=descriptor_url,
+        descriptor_file=descriptor_file,
         dataset_url=dataset_url,
         dataset_file=dataset_file,
         dataset_dir=dataset_dir,
@@ -68,7 +106,51 @@ def fetch_command(
         sha256_url=sha256_url,
         sha256_file=sha256_file,
     )
+    if source.source_type == "descriptor-url":
+        source.descriptor = load_descriptor(source.origin, from_url=True)
+        source.descriptor_source = source.origin
+    elif source.source_type == "descriptor-file":
+        source.descriptor = load_descriptor(source.origin, from_url=False)
+        source.descriptor_source = source.origin
+
+    _require_opaque_archive_metadata(
+        source_type=source.source_type,
+        dataset_id=dataset_id,
+        version=version,
+    )
     require_checksum_for_archive_source(source)
+
+    replace_existing = False
+    manifest_validation_dataset_id = expected_dataset_id
+    manifest_validation_version = expected_version
+    if source.source_type in {"descriptor-url", "descriptor-file"} and source.descriptor is not None:
+        precheck = cache.cache_precheck(
+            source.descriptor.id,
+            source.descriptor.datasetVersion,
+            expected_content_identity=content_identity_for_source(source),
+        )
+        if precheck.status == "hit" and precheck.manifest is not None:
+            _print_fetch_result(precheck.manifest, reused=True)
+            return
+        if precheck.status == "conflict":
+            if not force:
+                raise DatasetConflictError(
+                    f"Conflicting dataset materialization for {source.descriptor.id}@{source.descriptor.datasetVersion}."
+                )
+            replace_existing = True
+    elif source.source_type in {"archive-url", "local-archive"}:
+        precheck = cache.cache_precheck(
+            str(dataset_id),
+            str(version),
+            expected_content_identity=content_identity_for_source(source),
+        )
+        if precheck.status == "hit" and precheck.manifest is not None:
+            _print_fetch_result(precheck.manifest, reused=True)
+            return
+        if precheck.status == "conflict":
+            if not force:
+                raise DatasetConflictError(f"Conflicting dataset materialization for {dataset_id}@{version}.")
+            replace_existing = True
 
     if source.source_type == "local-directory":
         fetch_method = "file-copy"
@@ -77,8 +159,8 @@ def fetch_command(
             raise FileNotFoundError(f"Dataset directory not found: {source.origin}")
         _, payload = discover_and_validate_manifest(
             source_path,
-            expected_dataset_id=expected_dataset_id,
-            expected_version=expected_version,
+            expected_dataset_id=manifest_validation_dataset_id,
+            expected_version=manifest_validation_version,
         )
         discovered_dataset_id = str(payload["id"])
         discovered_version = _coerce_dataset_version(payload.get("datasetVersion", payload.get("version")))
@@ -99,7 +181,7 @@ def fetch_command(
             assetName=None,
             verifiedSha256=None,
         )
-        cache.store(manifest, source_path)
+        cache.store(manifest, source_path, replace_existing=force)
         persisted = _load_persisted_manifest(cache, discovered_dataset_id, discovered_version)
     else:
         resolved_archive = resolve_archive_source(source)
@@ -116,9 +198,11 @@ def fetch_command(
             safe_extract_tar_gz(payload, extraction_root)
             _, manifest_payload = discover_and_validate_manifest(
                 extraction_root,
-                expected_dataset_id=expected_dataset_id,
-                expected_version=expected_version,
+                expected_dataset_id=manifest_validation_dataset_id,
+                expected_version=manifest_validation_version,
             )
+            if source.descriptor is not None:
+                validate_descriptor_against_manifest(source.descriptor, manifest_payload)
             package_root = determine_package_root(extraction_root)
             discovered_dataset_id = str(manifest_payload["id"])
             discovered_version = _coerce_dataset_version(
@@ -132,16 +216,10 @@ def fetch_command(
                 verified_sha256=verified_sha256,
             )
             manifest.contentHash = manifest.verifiedSha256
-            cache.store(manifest, package_root)
+            cache.store(manifest, package_root, replace_existing=replace_existing)
         persisted = _load_persisted_manifest(cache, discovered_dataset_id, discovered_version)
 
-    print(f"identity: {persisted.datasetId}")
-    print(f"datasetVersion: {persisted.datasetVersion}")
-    if persisted.verifiedSha256:
-        print(f"verifiedSha256: {persisted.verifiedSha256}")
-    elif persisted.contentHash:
-        print(f"contentHash: {persisted.contentHash}")
-    print(f"materializedPath: {persisted.materializedPath}")
+    _print_fetch_result(persisted)
 
 
 def _parse_dataset_ref(dataset_ref: str) -> str | dict[str, str]:
@@ -187,6 +265,10 @@ def inspect_command(
 
 def fetch_command_from_args(args: object) -> int:
     fetch_command(
+        dataset_id=getattr(args, "dataset_id", None),
+        version=getattr(args, "version", None),
+        descriptor_url=getattr(args, "descriptor_url", None),
+        descriptor_file=getattr(args, "descriptor_file", None),
         dataset_url=getattr(args, "dataset_url", None),
         dataset_file=getattr(args, "dataset_file", None),
         dataset_dir=getattr(args, "dataset_dir", None),
@@ -194,6 +276,7 @@ def fetch_command_from_args(args: object) -> int:
         sha256_url=getattr(args, "sha256_url", None),
         sha256_file=getattr(args, "sha256_file", None),
         cache_dir=getattr(args, "cache_dir", None),
+        force=bool(getattr(args, "force", False)),
     )
     return 0
 

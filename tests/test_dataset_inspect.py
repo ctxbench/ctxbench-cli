@@ -180,12 +180,13 @@ def test_inspect_command_rejects_ambiguous_reference_before_validation(
     tmp_path: Path,
 ) -> None:
     cache = DatasetCache(cache_dir=tmp_path / "cache")
-    dataset_a = _write_local_dataset(tmp_path / "dataset-a")
-    dataset_b = _write_local_dataset(tmp_path / "dataset-b")
-    manifest_a = _manifest(origin=str(dataset_a), revision="rev-a")
-    manifest_b = _manifest(origin=str(dataset_b), revision="rev-b")
-    cache.store(manifest_a, dataset_a)
-    cache.store(manifest_b, dataset_b)
+    version_root = tmp_path / "cache" / "ctxbench" / "fake" / "0.1.0"
+    rev_a = version_root / "rev-a"
+    rev_b = version_root / "rev-b"
+    rev_a.mkdir(parents=True, exist_ok=True)
+    rev_b.mkdir(parents=True, exist_ok=True)
+    cache._write_manifest(rev_a / "manifest.json", _manifest(origin=str(tmp_path / "dataset-a"), revision="rev-a"))  # type: ignore[attr-defined]
+    cache._write_manifest(rev_b / "manifest.json", _manifest(origin=str(tmp_path / "dataset-b"), revision="rev-b"))  # type: ignore[attr-defined]
     calls: list[str] = []
 
     def _unexpected(*args: object, **kwargs: object) -> object:
@@ -198,6 +199,24 @@ def test_inspect_command_rejects_ambiguous_reference_before_validation(
         inspect_command("ctxbench/fake@0.1.0", cache_dir=tmp_path / "cache")
 
     assert calls == []
+
+
+def test_inspect_command_uses_latest_semantic_materialization(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    dataset_a = _write_local_dataset(tmp_path / "dataset-a")
+    dataset_b = _write_local_dataset(tmp_path / "dataset-b")
+    cache.store(_manifest(origin=str(dataset_a), revision="rev-a"), dataset_a)
+    cache.store(_manifest(origin=str(dataset_b), revision="rev-b"), dataset_b)
+
+    inspect_command("ctxbench/fake@0.1.0", cache_dir=tmp_path / "cache")
+
+    output = capsys.readouterr().out
+    assert "identity: ctxbench/fake" in output
+    assert "version: 0.1.0" in output
+    assert f"origin: {dataset_b}" in output
 
 
 def test_inspect_command_json_output_is_valid_json(

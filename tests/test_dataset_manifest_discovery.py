@@ -106,6 +106,8 @@ def test_fetch_command_archive_materializes_verified_package(
 
     fetch_command(
         dataset_url="https://example.invalid/ctxbench-fake-0.1.0.tar.gz",
+        dataset_id="ctxbench/fake",
+        version="0.1.0",
         sha256=digest,
         cache_dir=cache_dir,
     )
