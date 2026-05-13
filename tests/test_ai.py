@@ -734,7 +734,7 @@ def test_gemini_native_mcp_tool_accepts_remote_mcp_and_rejects_mcp():
     tool_payload = tool.model_dump(mode="json") if hasattr(tool, "model_dump") else tool
 
     assert tool_payload["mcp_servers"][0]["name"] == "ctxbench-lattes"
-    assert tool_payload["mcp_servers"][0]["streamableHttpTransport"]["uri"] == "https://example.test/mcp"
+    assert tool_payload["mcp_servers"][0]["streamable_http_transport"]["url"] == "https://example.test/mcp"
 
     with pytest.raises(ValueError, match="unknown strategy: mcp"):
         model.generate(

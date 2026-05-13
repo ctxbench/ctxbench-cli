@@ -421,23 +421,28 @@ class GeminiModel(ModelAdapter):
         headers = self._build_mcp_headers(config)
 
         sdk_types = self._sdk_types()
-        # Build the McpServer as a plain dict with correct camelCase field names.
-        # The SDK (google-genai 1.70.0) has a bug in _Tool_to_mldev: McpServer
-        # objects are serialized via model_dump() which produces snake_case keys
-        # (streamable_http_transport, url) instead of what the API expects
-        # (streamableHttpTransport, uri). Using model_construct bypasses Pydantic
-        # validation so the dict survives intact through convert_to_dict.
-        mcp_server_dict: dict[str, Any] = {
-            "name": server_label,
-            "streamableHttpTransport": {
-                "uri": server_url,
-                **({"headers": headers} if headers else {}),
-            },
-        }
         if sdk_types is None:
-            return {"mcp_servers": [mcp_server_dict]}
+            return {
+                "mcp_servers": [
+                    {
+                        "name": server_label,
+                        "streamable_http_transport": {
+                            "url": server_url,
+                            **({"headers": headers} if headers else {}),
+                        },
+                    }
+                ]
+            }
 
-        return sdk_types.Tool.model_construct(mcp_servers=[mcp_server_dict])
+        transport = sdk_types.StreamableHttpTransport(
+            url=server_url,
+            **({"headers": headers} if headers else {}),
+        )
+        server = sdk_types.McpServer(
+            name=server_label,
+            streamable_http_transport=transport,
+        )
+        return sdk_types.Tool(mcp_servers=[server])
 
     def _build_mcp_headers(self, config: dict[str, Any]) -> dict[str, str]:
         headers = dict(config.get("headers") or {}) if isinstance(config.get("headers"), dict) else {}
