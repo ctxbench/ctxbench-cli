@@ -2,9 +2,9 @@
 
 **Spec**: `specs/003-dataset-distribution/spec.md`  
 **Branch**: `feat/dataset-distribution`  
-**Status**: Draft — Amendment A1 applied (Simplified Fetch UX)  
+**Status**: Draft — Amendment A1 applied (Simplified Fetch UX) — Amendment A1-R1 applied (Descriptor-Based Acquisition and Cache Reuse)  
 **Related specs**: Spec 001, Spec 002, Spec 004  
-**Amendment**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md`
+**Amendments**: `specs/003-dataset-distribution/amendments/001-simplified-fetch-ux.md`, `specs/003-dataset-distribution/amendments/descriptor-and-cache-reuse.md`
 
 ## Summary
 
@@ -79,17 +79,19 @@ Spec 003 keeps the current single-dataset experiment model. Multiple datasets ca
 
 The local dataset cache is a materialization cache keyed by explicit identity/version/origin/revision information. It does not perform plugin discovery, package marketplace behavior, dynamic loading, or adapter registration.
 
-### D6a — Acquisition source types are explicit (amended by A1)
+### D6a — Acquisition source types are explicit (amended by A1, refined by A1-R1)
 
-Dataset acquisition source selection uses three exclusive flags:
+Dataset acquisition source selection uses five exclusive flags:
 
-- `--dataset-url`: download a remote `.tar.gz` archive; requires `--sha256` or `--sha256-url`;
-- `--dataset-file`: use a local `.tar.gz` archive; requires `--sha256` or `--sha256-file`;
-- `--dataset-dir`: import an already-unpacked local directory; manifest must be present.
+- `--descriptor-url`: download and parse a remote distribution descriptor; check cache; download archive only if needed; (canonical remote workflow; A1-R1)
+- `--descriptor-file`: parse a local distribution descriptor; check cache; download archive only if needed; (offline descriptor workflow; A1-R1)
+- `--dataset-url`: download a remote `.tar.gz` archive; requires `--id`, `--version`, `--sha256` or `--sha256-url`; cache pre-check uses `--id`/`--version` before download; (A1-R1 adds `--id`/`--version` requirement)
+- `--dataset-file`: use a local `.tar.gz` archive; requires `--id`, `--version`, `--sha256` or `--sha256-file`; cache pre-check uses `--id`/`--version` before extraction; (A1-R1 adds `--id`/`--version` requirement)
+- `--dataset-dir`: import an already-unpacked local directory; manifest must be present; self-describing.
 
 Exactly one source flag must be provided. Providing none or more than one is an error.
 
-The old positional `<dataset-id> --origin <origin> --version <version>` CLI surface is superseded. The GitHub Release tag URL + `--asset-name` form is also superseded; users should resolve the direct asset download URL themselves and pass it via `--dataset-url`.
+The old positional `<dataset-id> --origin <origin> --version <version>` CLI surface is superseded. The GitHub Release tag URL + `--asset-name` form is also superseded.
 
 Archive and release-asset flows are acquisition-only behaviors. They do not change the no-network rule for lifecycle commands.
 
@@ -112,6 +114,22 @@ Version terminology: `datasetVersion` (from manifest) is distinct from `ctxbench
 ### D9b — Cache root selection is injectable and shared (Amendment A1)
 
 `DatasetCache` accepts an optional `cache_root` parameter. Resolution order: constructor arg → `CTXBENCH_DATASET_CACHE` env var → default location. All of `ctxbench dataset fetch`, `ctxbench dataset inspect`, and `ctxbench plan` must support `--cache-dir` / `CTXBENCH_DATASET_CACHE` consistently.
+
+### D9c — Descriptor model, cache pre-check, semantic paths, and force behavior (Amendment A1-R1)
+
+1. **Descriptor model** (`src/ctxbench/dataset/descriptor.py` — NEW): `DistributionDescriptor` dataclass with required fields (`id`, `datasetVersion`, `descriptorSchemaVersion`, `archive.type`, `archive.url`, `archive.sha256`) and optional fields (`name`, `description`, `releaseTag`). A `load_descriptor(source, *, from_url)` function handles both URL download and local file read. Missing required fields raise a structured validation error before any cache lookup.
+
+2. **Source exclusivity** (`src/ctxbench/cli.py`): Add `--descriptor-url` and `--descriptor-file` to the mutually exclusive fetch source group (5 total). `--id` and `--version` remain optional standalone flags. The `--sha256`, `--sha256-url`, and `--sha256-file` flags remain standalone.
+
+3. **--id/--version enforcement** (`src/ctxbench/commands/dataset.py`): Validated at dispatch time for `--dataset-url` and `--dataset-file` sources; argparse does not enforce cross-flag requirements.
+
+4. **Cache pre-check** (`src/ctxbench/dataset/cache.py` or `acquisition.py`): Before downloading or extracting, call `DatasetCache.lookup(id, version)`. If a materialization with matching content identity exists, return it immediately as a no-op result. If a materialization exists with conflicting content identity, raise `DatasetConflictError`. `--force` flag clears the conflicting entry only after all downstream validation succeeds.
+
+5. **Descriptor-vs-manifest validation** (`src/ctxbench/dataset/acquisition.py`): After extraction, compare descriptor `id` / `datasetVersion` with the discovered `ctxbench.dataset.json`. Mismatch raises a structured error before materialization.
+
+6. **Semantic paths** (`src/ctxbench/dataset/cache.py`): `DatasetCache.materialize()` writes to `<cache_root>/<dataset_id>/<datasetVersion>/`. No content hash in the path. Content hash recorded in the manifest.
+
+7. **Materialization manifest additions** (`src/ctxbench/dataset/materialization.py`): Add `descriptorUrl: str | None` and `descriptorSchemaVersion: int | None`. Record descriptor URL when `--descriptor-url` or `--descriptor-file` is used.
 
 ### D9 — Materialization manifest and artifact provenance use different schemas
 
@@ -374,26 +392,29 @@ src/ctxbench/dataset/materialization.py
 tests/test_dataset_cache.py
 ```
 
-**Manifest example** (all fields required by FR-021):
+**Manifest example** (all fields required by FR-021, updated for A1-R1):
 
 ```json
 {
   "datasetId": "ctxbench/lattes",
-  "requestedVersion": "v0.1.0",
-  "resolvedRevision": "abc123",
-  "origin": "https://github.com/ctxbench/lattes",
-  "sourceType": "git" ,
-  "assetName": null,
-  "releaseTagUrl": null,
-  "archiveUrl": null,
+  "datasetVersion": "0.2.0",
+  "requestedVersion": "0.2.0",
+  "resolvedRevision": null,
+  "origin": "https://github.com/ctxbench/lattes/releases/download/v0.2.0-dataset/ctxbench-lattes-v0.2.0.tar.gz",
+  "sourceType": "archive-download",
+  "descriptorUrl": "https://github.com/ctxbench/lattes/releases/download/v0.2.0-dataset/ctxbench-lattes-v0.2.0.dataset.json",
+  "descriptorSchemaVersion": 1,
+  "archiveUrl": "https://github.com/ctxbench/lattes/releases/download/v0.2.0-dataset/ctxbench-lattes-v0.2.0.tar.gz",
   "verifiedSha256": "sha256:...",
-  "materializedPath": "~/.cache/ctxbench/datasets/ctxbench/lattes/v0.1.0/abc123",
+  "materializedPath": "~/.cache/ctxbench/datasets/ctxbench/lattes/0.2.0",
   "contentHash": "sha256:...",
   "fetchedAt": "2026-05-11T00:00:00Z",
   "ctxbenchVersion": "...",
-  "fetchMethod": "git-clone"
+  "fetchMethod": "archive-download"
 }
 ```
+
+Note: `materializedPath` is now semantic (`<cache_root>/<id>/<datasetVersion>/`); `resolvedRevision` is `null` for archive-based sources without a Git backend. `descriptorUrl` is populated when descriptor source was used.
 
 Valid `fetchMethod` values: `"git-clone"` (clone a git repository by URL), `"file-copy"` (copy
 from a local filesystem path), `"archive-download"` (download and extract a verified archive).
@@ -620,6 +641,86 @@ pytest tests/test_dataset_distribution_workflow.py -k "plan or inspect"
 
 ```text
 feat(cache): share dataset cache root across fetch inspect and plan
+```
+
+---
+
+### S-A1-R1 — Descriptor Acquisition and Cache Reuse (Amendment A1-R1)
+
+**Goal**: Add the distribution descriptor source type, cache pre-check before archive acquisition, no-op behavior when already materialized, conflict detection and `--force` replacement, descriptor-vs-manifest validation, semantic materialization paths, and materialization manifest provenance additions.
+
+**Supersedes/Refines**: Refines S-A1a (CLI surface adds two new source flags) and S-A1b (semantic paths replace content-hash paths). All prior archive safety logic (S3b) and archive-fetch logic (S-A1a) remain valid.
+
+**Key changes**:
+
+1. `src/ctxbench/dataset/descriptor.py` (NEW): `DistributionDescriptor` dataclass with required fields (`id`, `datasetVersion`, `descriptorSchemaVersion`, `archive.type`, `archive.url`, `archive.sha256`) and optional fields. `load_descriptor(source, *, from_url: bool)` handles URL download and local file read. Validates required fields and raises a structured error on missing fields.
+
+2. `src/ctxbench/cli.py`: Add `--descriptor-url` and `--descriptor-file` to the fetch source mutually exclusive group (group now has 5 members). `--id` and `--version` remain optional standalone flags for opaque archive sources.
+
+3. `src/ctxbench/commands/dataset.py`: Enforce `--id`/`--version` at fetch dispatch time when `--dataset-url` or `--dataset-file` is selected. Add dispatch branches for `--descriptor-url` and `--descriptor-file`. Implement no-op reporting when cache pre-check returns a hit.
+
+4. `src/ctxbench/dataset/cache.py`: Update `DatasetCache.materialize()` to use the semantic path `<cache_root>/<dataset_id>/<datasetVersion>/`. Remove content hash from the materialized path. Add `cache_precheck(id, version) -> CacheCheckResult` returning hit (with path), conflict (with conflicting manifest), or miss.
+
+5. `src/ctxbench/dataset/acquisition.py`: After descriptor load or for opaque sources, call `cache_precheck`. On hit: report and return. On conflict without `--force`: raise `DatasetConflictError`. On conflict with `--force`: record conflict, proceed with full validation, then replace after all steps succeed. After extraction: validate descriptor `id`/`datasetVersion` against `ctxbench.dataset.json` (FR-019o).
+
+6. `src/ctxbench/dataset/materialization.py`: Add `descriptorUrl: str | None` and `descriptorSchemaVersion: int | None` to `MaterializationManifest`. Update `fetchMethod` enum if needed. Update manifest read/write.
+
+**Likely files**:
+
+```text
+src/ctxbench/dataset/descriptor.py                   # NEW
+src/ctxbench/cli.py
+src/ctxbench/commands/dataset.py
+src/ctxbench/dataset/acquisition.py
+src/ctxbench/dataset/cache.py
+src/ctxbench/dataset/materialization.py
+tests/test_dataset_descriptor.py                     # NEW
+tests/test_dataset_fetch.py
+tests/test_dataset_cache.py
+tests/test_dataset_archive_fetch.py
+docs/datasets/using-external-datasets.md
+specs/003-dataset-distribution/contracts/dataset-commands.md
+```
+
+**Validation**:
+
+```bash
+pytest tests/test_dataset_descriptor.py
+pytest tests/test_dataset_fetch.py
+pytest tests/test_dataset_cache.py
+pytest tests/test_dataset_archive_fetch.py
+```
+
+`test_dataset_descriptor.py` must assert:
+- Valid descriptor with all required fields parses successfully.
+- Descriptor with any missing required field raises a structured validation error.
+- `load_descriptor` from a local file reads and returns a valid `DistributionDescriptor`.
+- `load_descriptor` from a URL (mocked HTTP) reads and returns a valid `DistributionDescriptor`.
+- Optional fields (`name`, `description`, `releaseTag`) are accepted when present.
+
+`test_dataset_fetch.py` must assert (A1-R1 additions):
+- `--descriptor-url` is accepted; triggers descriptor load, cache pre-check, then archive download when miss.
+- `--descriptor-file` is accepted; triggers local descriptor parse, cache pre-check, then archive download when miss.
+- `--dataset-url` without `--id` or `--version` fails with a clear error before any download.
+- `--dataset-file` without `--id` or `--version` fails with a clear error before any extraction.
+- No-op when cache pre-check returns a hit: no download, no extraction, prints existing path.
+- Conflict error when cache pre-check returns a conflict and `--force` is not set.
+- `--force` proceeds through full validation and replaces the conflicting materialization.
+- All 5 source flags are mutually exclusive.
+
+`test_dataset_cache.py` must assert (A1-R1 additions):
+- `cache_precheck` returns hit when a matching materialization exists.
+- `cache_precheck` returns conflict when same id/version exists with different content identity.
+- `cache_precheck` returns miss when no materialization exists.
+- Semantic path `<cache_root>/<id>/<version>/` is used in `materialize()`.
+- Content hash is recorded in the manifest, not in the path.
+
+**Dependencies**: S-A1b (all prior fetch slices must be complete)
+
+**Commit**:
+
+```text
+feat(fetch): add descriptor-based acquisition and cache reuse (A1-R1)
 ```
 
 ---
@@ -1364,4 +1465,6 @@ test(lattes): add provider-free lattes package conformance workflow
 test(dataset): add fake dataset provider-free workflow
 docs(dataset): document external dataset workflow and authoring guide
 feat(cli): simplify ctxbench dataset fetch UX (Amendment A1)
+feat(cache): share dataset cache root across fetch inspect and plan
+feat(fetch): add descriptor-based acquisition and cache reuse (A1-R1)
 ```

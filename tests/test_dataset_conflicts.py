@@ -43,8 +43,13 @@ def test_conflict_detector_accepts_single_materialization(tmp_path: Path) -> Non
 
 def test_conflict_detector_rejects_multiple_candidates_and_lists_origins(tmp_path: Path) -> None:
     cache = DatasetCache(cache_dir=tmp_path / "cache")
-    cache.store(_manifest(origin="/tmp/source-a", revision="rev-a"), _write_source(tmp_path / "source-a"))
-    cache.store(_manifest(origin="/tmp/source-b", revision="rev-b"), _write_source(tmp_path / "source-b"))
+    version_root = tmp_path / "cache" / "ctxbench" / "fake" / "0.1.0"
+    rev_a = version_root / "rev-a"
+    rev_b = version_root / "rev-b"
+    rev_a.mkdir(parents=True, exist_ok=True)
+    rev_b.mkdir(parents=True, exist_ok=True)
+    cache._write_manifest(rev_a / "manifest.json", _manifest(origin="/tmp/source-a", revision="rev-a"))  # type: ignore[attr-defined]
+    cache._write_manifest(rev_b / "manifest.json", _manifest(origin="/tmp/source-b", revision="rev-b"))  # type: ignore[attr-defined]
 
     with pytest.raises(AmbiguousDatasetError) as excinfo:
         DatasetConflictDetector.check("ctxbench/fake", "0.1.0", cache)
@@ -54,6 +59,18 @@ def test_conflict_detector_rejects_multiple_candidates_and_lists_origins(tmp_pat
     assert "/tmp/source-b" in message
     assert "rev-a" in message
     assert "rev-b" in message
+
+
+def test_semantic_cache_store_keeps_single_materialization_for_same_id_and_version(tmp_path: Path) -> None:
+    cache = DatasetCache(cache_dir=tmp_path / "cache")
+    cache.store(_manifest(origin="/tmp/source-a", revision="rev-a"), _write_source(tmp_path / "source-a"))
+    cache.store(_manifest(origin="/tmp/source-b", revision="rev-b"), _write_source(tmp_path / "source-b"))
+
+    matches = cache.lookup("ctxbench/fake", "0.1.0")
+
+    assert len(matches) == 1
+    assert matches[0].origin == "/tmp/source-b"
+    assert matches[0].resolvedRevision == "rev-b"
 
 
 def test_dataset_resolver_calls_conflict_detector_before_returning(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:

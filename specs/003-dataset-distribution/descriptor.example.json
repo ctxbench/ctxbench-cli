@@ -1,0 +1,14 @@
+{
+  "id": "ctxbench/lattes",
+  "datasetVersion": "0.2.0",
+  "descriptorSchemaVersion": 1,
+  "name": "CTXBench Lattes",
+  "description": "Lattes benchmark dataset for CTXBench.",
+  "releaseTag": "v0.2.0-dataset",
+  "archive": {
+    "type": "tar.gz",
+    "url": "https://github.com/ctxbench/lattes/releases/download/v0.2.0-dataset/ctxbench-lattes-v0.2.0.tar.gz",
+    "sha256": "<replace-with-actual-sha256>",
+    "sizeBytes": null
+  }
+}

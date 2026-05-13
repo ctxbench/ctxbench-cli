@@ -162,12 +162,17 @@ def build_parser() -> argparse.ArgumentParser:
         "fetch", help="Materialize a dataset into the local cache"
     )
     fetch_source_group = fetch_parser.add_mutually_exclusive_group(required=True)
+    fetch_source_group.add_argument("--descriptor-url", help="Remote dataset descriptor URL")
+    fetch_source_group.add_argument("--descriptor-file", help="Local dataset descriptor path")
     fetch_source_group.add_argument("--dataset-url", help="Remote .tar.gz dataset archive URL")
     fetch_source_group.add_argument("--dataset-file", help="Local .tar.gz dataset archive path")
     fetch_source_group.add_argument("--dataset-dir", help="Local unpacked dataset directory")
+    fetch_parser.add_argument("--id", dest="dataset_id", help="Expected dataset identity for opaque archive sources")
+    fetch_parser.add_argument("--version", help="Expected datasetVersion for opaque archive sources")
     fetch_parser.add_argument("--sha256", help="Trusted SHA-256 for dataset archive content")
     fetch_parser.add_argument("--sha256-url", help="URL containing trusted SHA-256 for a remote archive")
     fetch_parser.add_argument("--sha256-file", help="Local file containing trusted SHA-256 for a local archive")
+    fetch_parser.add_argument("--force", action="store_true", help="Replace conflicting cached materialization after validation")
     fetch_parser.add_argument("--cache-dir", help="Override dataset cache root for this command")
     fetch_parser.set_defaults(func=fetch_command_from_args)
     inspect_parser = dataset_sub.add_parser(

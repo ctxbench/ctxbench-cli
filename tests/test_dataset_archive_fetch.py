@@ -9,11 +9,14 @@ from ctxbench.dataset.acquisition import (
     AcquisitionSource,
     build_archive_materialization_manifest,
     classify_acquisition_source,
+    content_identity_for_source,
     require_checksum_for_archive_source,
     resolve_archive_source,
     resolve_expected_sha256,
+    validate_descriptor_against_manifest,
     verify_downloaded_bytes,
 )
+from ctxbench.dataset.descriptor import DistributionDescriptor
 
 
 def test_direct_archive_url_with_sha256() -> None:
@@ -44,6 +47,8 @@ def test_direct_archive_url_with_sha256() -> None:
     assert manifest.releaseTagUrl is None
     assert manifest.assetName is None
     assert manifest.verifiedSha256 == f"sha256:{digest}"
+    assert manifest.descriptorUrl is None
+    assert manifest.descriptorSchemaVersion is None
 
 
 def test_direct_archive_url_with_sha256_url() -> None:
@@ -111,3 +116,54 @@ def test_invalid_checksum_rejected() -> None:
 
     with pytest.raises(ValueError):
         resolve_expected_sha256(source)
+
+
+def test_descriptor_source_resolves_archive_and_expected_sha256() -> None:
+    descriptor = DistributionDescriptor(
+        id="ctxbench/lattes",
+        datasetVersion="0.2.0",
+        descriptorSchemaVersion=1,
+        archive_type="tar.gz",
+        archive_url="https://example.invalid/ctxbench-lattes-v0.2.0.tar.gz",
+        archive_sha256="a" * 64,
+    )
+    source = AcquisitionSource(
+        source_type="descriptor-file",
+        origin="/tmp/ctxbench-lattes.dataset.json",
+        descriptor=descriptor,
+        descriptor_source="/tmp/ctxbench-lattes.dataset.json",
+    )
+
+    resolved = resolve_archive_source(source)
+    expected = resolve_expected_sha256(source)
+    content_identity = content_identity_for_source(source)
+    manifest = build_archive_materialization_manifest(
+        dataset_id=descriptor.id,
+        version=descriptor.datasetVersion,
+        source=source,
+        resolved=resolved,
+        verified_sha256=f"sha256:{expected}",
+    )
+
+    assert resolved.archive_url == descriptor.archive_url
+    assert expected == "a" * 64
+    assert content_identity == "sha256:" + ("a" * 64)
+    assert manifest.descriptorUrl == "/tmp/ctxbench-lattes.dataset.json"
+    assert manifest.descriptorSchemaVersion == 1
+
+
+def test_validate_descriptor_against_manifest_rejects_mismatch() -> None:
+    descriptor = DistributionDescriptor(
+        id="ctxbench/lattes",
+        datasetVersion="0.2.0",
+        descriptorSchemaVersion=1,
+        archive_type="tar.gz",
+        archive_url="https://example.invalid/ctxbench-lattes-v0.2.0.tar.gz",
+        archive_sha256="a" * 64,
+    )
+
+    with pytest.raises(ValueError, match="Descriptor identity mismatch"):
+        validate_descriptor_against_manifest(
+            descriptor,
+            {"id": "ctxbench/other", "datasetVersion": "0.2.0"},
+        )
